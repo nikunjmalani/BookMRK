@@ -5,7 +5,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 Widget CustomAppBar(
-    {width, imagePath, colorPalette, child, color, bool whiteIcon}) {
+    {width,
+    bool blueCartIcon,
+    bool blueBellIcon,
+    imagePath,
+    colorPalette,
+    child,
+    color,
+    bool whiteIcon,
+    onCartTap,
+    onBellTap}) {
   return AppBar(
     automaticallyImplyLeading: false,
     elevation: 0.5,
@@ -23,64 +32,74 @@ Widget CustomAppBar(
         children: [
           child,
           Spacer(),
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              CircleAvatar(
-                child: SvgPicture.asset(
-                  "assets/icons/Cart.svg",
-                  height: 30,
-                  width: 30,
-                  color: whiteIcon == true ? Colors.white : null,
-                ),
-                radius: 25,
-                backgroundColor: Colors.transparent,
-              ),
-              CircleAvatar(
-                radius: 10,
-                child: Text(
-                  '3',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 13,
-                    color: const Color(0xffffffff),
+          GestureDetector(
+            onTap: onCartTap,
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                CircleAvatar(
+                  child: SvgPicture.asset(
+                    "assets/icons/Cart.svg",
+                    height: 30,
+                    width: 30,
+                    color: whiteIcon == true
+                        ? Colors.white
+                        : blueCartIcon == true ? colorPalette.navyBlue : null,
                   ),
-                  textAlign: TextAlign.left,
+                  radius: 25,
+                  backgroundColor: Colors.transparent,
                 ),
-                backgroundColor: colorPalette.pinkOrange,
-              )
-            ],
+                CircleAvatar(
+                  radius: 10,
+                  child: Text(
+                    '3',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 13,
+                      color: const Color(0xffffffff),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  backgroundColor: colorPalette.pinkOrange,
+                )
+              ],
+            ),
           ),
           SizedBox(
             width: 10,
           ),
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              CircleAvatar(
-                child: SvgPicture.asset(
-                  "assets/icons/bell.svg",
-                  height: 30,
-                  width: 30,
-                  color: whiteIcon == true ? Colors.white : null,
-                ),
-                radius: 25,
-                backgroundColor: Colors.transparent,
-              ),
-              CircleAvatar(
-                radius: 10,
-                child: Text(
-                  '8',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 13,
-                    color: const Color(0xffffffff),
+          GestureDetector(
+            onTap: onBellTap,
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                CircleAvatar(
+                  child: SvgPicture.asset(
+                    "assets/icons/bell.svg",
+                    height: 30,
+                    width: 30,
+                    color: whiteIcon == true
+                        ? Colors.white
+                        : blueBellIcon == true ? colorPalette.navyBlue : null,
                   ),
-                  textAlign: TextAlign.left,
+                  radius: 25,
+                  backgroundColor: Colors.transparent,
                 ),
-                backgroundColor: colorPalette.pinkOrange,
-              )
-            ],
+                CircleAvatar(
+                  radius: 10,
+                  child: Text(
+                    '8',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 13,
+                      color: const Color(0xffffffff),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  backgroundColor: colorPalette.pinkOrange,
+                )
+              ],
+            ),
           ),
         ],
       ),

@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Container(
-                  height: height / 2.7,
+                  height: height / 2.3,
                   margin: EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
@@ -110,7 +110,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Container(
-                        height: height / 3.6,
+                        height: height / 3.2,
                         child: ListView.builder(
                           itemCount: 5,
                           scrollDirection: Axis.horizontal,
@@ -136,16 +136,18 @@ class _HomeState extends State<Home> {
                                     padding: EdgeInsets.only(top: 15),
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    height: 3,
                                   ),
-                                  Text(
-                                    'Oswaal NCERT Workbo....',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 12,
-                                      color: const Color(0xff000000),
+                                  Center(
+                                    child: Text(
+                                      'Oswaal NCERT Workbo....',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 12,
+                                        color: const Color(0xff000000),
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    textAlign: TextAlign.left,
                                   ),
                                   SizedBox(
                                     height: 3,
@@ -166,7 +168,7 @@ class _HomeState extends State<Home> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
-                                      top: 5,
+                                      top: 3,
                                       left: 5,
                                       right: 5,
                                     ),

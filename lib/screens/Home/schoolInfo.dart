@@ -113,9 +113,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                   ),
                   Spacer(),
                   GestureDetector(
-                      onTap: () {
-                        data.selectedString = "Category";
-                      },
+                      onTap: () {},
                       child:
                           _tabs(title: "Products", color: Color(0xffb7b7b7))),
                   SizedBox(
