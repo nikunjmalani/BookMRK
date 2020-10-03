@@ -3,9 +3,8 @@ import 'package:bookmrk/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// new push from the backend branch...
 void main() {
-  print("hello test");
-
   runApp(MyApp());
 }
 
