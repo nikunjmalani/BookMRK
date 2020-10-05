@@ -1,7 +1,8 @@
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-Widget OtpBox(context) {
+Widget OtpBox(context, TextEditingController controller, FocusNode fn) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
     height: MediaQuery.of(context).size.width / 7,
@@ -9,6 +10,26 @@ Widget OtpBox(context) {
     decoration: BoxDecoration(
         border: Border.all(color: colorPalette.borderGrey),
         borderRadius: BorderRadius.circular(13)),
+    padding: EdgeInsets.only(bottom: 5.0),
+    alignment: Alignment.center,
+    child: TextFormField(
+      controller: controller,
+      inputFormatters: [LengthLimitingTextInputFormatter(1)],
+      focusNode: fn,
+      cursorColor: colorPalette.navyBlue,
+      style: TextStyle(fontSize: 35.0),
+      onChanged: (value) {
+        if (value.length >= 1) {
+          fn.nextFocus();
+        } else if (value.length <= 0) {
+          fn.previousFocus();
+        }
+      },
+      textAlign: TextAlign.center,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+      ),
+    ),
   );
 }
 
