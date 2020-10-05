@@ -43,7 +43,7 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
                   ),
                 ),
                 SizedBox(
-                  height: height / 15,
+                  height: height / 30,
                 ),
                 Container(
                   padding: EdgeInsets.only(right: 10),
