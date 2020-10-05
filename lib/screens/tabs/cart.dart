@@ -1,6 +1,11 @@
+import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:bookmrk/widgets/buttons.dart';
+import 'package:bookmrk/widgets/priceDetailWidget.dart';
+import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -48,7 +53,10 @@ class _CartState extends State<Cart> {
               Container(
                 width: width / 4.5,
                 child: FlatButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Provider.of<HomeScreenProvider>(context, listen: false)
+                        .selectedString = "ChangeAddress";
+                  },
                   color: colorPalette.navyBlue,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -154,82 +162,19 @@ class _CartState extends State<Cart> {
                     )
                   : Column(
                       children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 20),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          height: height / 4,
+                        PriceDetail(
                           width: width,
-                          color: Colors.white,
-                          child: Column(
-                            children: [
-                              _priceDetail(),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              _priceRow(
-                                  title: "Price (2 Items) :", price: 869.00),
-                              _priceRow(title: "Tax :", price: 00.00),
-                              _priceRow(
-                                  title: "Delivery Charges :", price: 50.00),
-                              Divider(
-                                indent: 10,
-                                thickness: 1,
-                                endIndent: 10,
-                                height: 20,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, top: 5),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Total",
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 18,
-                                        color: const Color(0xff000000),
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      '₹ 919.0',
-                                      style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontSize: 18,
-                                          color: Colors.black),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                          ),
+                          height: height,
+                          itemCount: 2,
+                          totalOfItem: 869.00,
+                          tax: 0.00,
+                          deliverCharge: 50.0,
+                          mainTotal: 919.00,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xff44349A),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          margin:
-                              EdgeInsets.only(bottom: 110, left: 25, right: 25),
-                          height: height / 15,
-                          child: Text(
-                            'PROCEED TO CHECKOUT',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 18,
-                              color: const Color(0xffffffff),
-                              letterSpacing: 0.8999999999999999,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          alignment: Alignment.center,
+                        BlueLongButton(
+                          title: "PROCESS TO CHECKOUT",
+                          height: height,
+                          onTap: () {},
                         )
                       ],
                     );
@@ -240,46 +185,4 @@ class _CartState extends State<Cart> {
       ],
     );
   }
-}
-
-Widget _priceDetail() {
-  return Text(
-    'Price Details',
-    style: TextStyle(
-      fontFamily: 'Roboto',
-      fontSize: 16,
-      color: const Color(0xffb7b7b7),
-    ),
-    textAlign: TextAlign.left,
-  );
-}
-
-Widget _priceRow({String title, var price}) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 10, top: 5),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontSize: 16,
-            color: const Color(0xff000000),
-            fontWeight: FontWeight.w300,
-          ),
-          textAlign: TextAlign.left,
-        ),
-        Text(
-          '₹ ${price}',
-          style: TextStyle(
-            fontFamily: 'Roboto',
-            fontSize: 16,
-            color: const Color(0xffbcbcbc),
-          ),
-          textAlign: TextAlign.left,
-        ),
-      ],
-    ),
-  );
 }

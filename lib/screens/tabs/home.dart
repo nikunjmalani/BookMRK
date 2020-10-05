@@ -62,7 +62,12 @@ class _HomeState extends State<Home> {
                     children: [
                       Header2("Categories"),
                       Spacer(),
-                      ViewAll(onClick: () {})
+                      ViewAll(onClick: () {
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .selectedString = "Category";
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .selectedBottomIndex = 1;
+                      })
                     ],
                   ),
                 ),
@@ -115,100 +120,110 @@ class _HomeState extends State<Home> {
                           itemCount: 5,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(top: 20, left: 10),
-                              height: height / 3.8,
-                              width: width / 2.8,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Color(0xffcfcfcf),
+                            return GestureDetector(
+                              onTap: () {
+                                Provider.of<HomeScreenProvider>(context,
+                                        listen: false)
+                                    .selectedString = "ProductInfo";
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: 20, left: 10, right: 10),
+                                height: height / 3.8,
+                                width: width / 2.8,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: Color(0xffcfcfcf),
+                                  ),
                                 ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Image.asset(
-                                      "assets/images/book.png",
-                                      fit: BoxFit.cover,
-                                    ),
-                                    height: height / 5.6,
-                                    padding: EdgeInsets.only(top: 15),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      'Oswaal NCERT Workbo....',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 12,
-                                        color: const Color(0xff000000),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      child: Image.asset(
+                                        "assets/images/book.png",
+                                        fit: BoxFit.cover,
                                       ),
-                                      textAlign: TextAlign.left,
+                                      height: height / 5.6,
+                                      padding: EdgeInsets.only(top: 15),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Container(
-                                    child: Text(
-                                      'By Circle Enterprises ',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 12,
-                                        color: const Color(0xff777777),
-                                        fontWeight: FontWeight.w300,
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        'Oswaal NCERT Workbo....',
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 12,
+                                          color: const Color(0xff000000),
+                                        ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      textAlign: TextAlign.left,
                                     ),
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(left: 5),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 3,
-                                      left: 5,
-                                      right: 5,
+                                    SizedBox(
+                                      height: 3,
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 15,
-                                          width: 50,
-                                          decoration: BoxDecoration(
-                                            color: colorPalette.pinkOrange,
-                                            borderRadius:
-                                                BorderRadius.circular(30),
+                                    Container(
+                                      child: Text(
+                                        'By Circle Enterprises ',
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 12,
+                                          color: const Color(0xff777777),
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 5),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 3,
+                                        left: 5,
+                                        right: 5,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 15,
+                                            width: 50,
+                                            decoration: BoxDecoration(
+                                              color: colorPalette.pinkOrange,
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                            ),
+                                            child: Text(
+                                              'In Stock',
+                                              style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontSize: 10,
+                                                color: const Color(0xffffffff),
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
-                                          child: Text(
-                                            'In Stock',
+                                          Text(
+                                            '₹ 100.00',
                                             style: TextStyle(
                                               fontFamily: 'Roboto',
                                               fontSize: 10,
-                                              color: const Color(0xffffffff),
+                                              color: const Color(0xff515c6f),
+                                              fontWeight: FontWeight.w700,
                                             ),
                                             textAlign: TextAlign.left,
                                           ),
-                                        ),
-                                        Text(
-                                          '₹ 100.00',
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 10,
-                                            color: const Color(0xff515c6f),
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           },
@@ -223,7 +238,12 @@ class _HomeState extends State<Home> {
                     children: [
                       Header2("Shop by School"),
                       Spacer(),
-                      ViewAll(onClick: () {})
+                      ViewAll(onClick: () {
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .selectedString = "School";
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .selectedBottomIndex = 2;
+                      })
                     ],
                   ),
                 ),
@@ -231,11 +251,18 @@ class _HomeState extends State<Home> {
                   height: height / 5,
                   child: ListView.builder(
                     itemBuilder: (context, index) {
-                      return ImageBox(
-                          height: height,
-                          width: width,
-                          image: "assets/images/school.png",
-                          title: "Central Public Sch...");
+                      return GestureDetector(
+                        onTap: () {
+                          Provider.of<HomeScreenProvider>(context,
+                                  listen: false)
+                              .selectedString = "SchoolInfo";
+                        },
+                        child: ImageBox(
+                            height: height,
+                            width: width,
+                            image: "assets/images/school.png",
+                            title: "Central Public Sch..."),
+                      );
                     },
                     itemCount: 5,
                     scrollDirection: Axis.horizontal,

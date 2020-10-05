@@ -73,3 +73,57 @@ Widget CategoryButtons(width, title, color, borderColor) {
     ),
   );
 }
+
+Widget BlueLongButton({height, title, onTap, color}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      decoration: BoxDecoration(
+        color: color ?? Color(0xff44349A),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      margin: EdgeInsets.only(bottom: 110, left: 25, right: 25),
+      height: height / 15,
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 18,
+          color: const Color(0xffffffff),
+          letterSpacing: 0.8999999999999999,
+          fontWeight: FontWeight.w700,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      alignment: Alignment.center,
+    ),
+  );
+}
+
+Widget BlueOutlineButton({width, onTap, title}) {
+  ColorPalette colorPalette = ColorPalette();
+  return InkWell(
+    onTap: onTap,
+    child: Container(
+      alignment: Alignment.center,
+      height: width / 15,
+      width: width / 5,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          width: 1,
+          color: colorPalette.navyBlue,
+        ),
+      ),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'Roboto',
+          fontSize: 15,
+          color: const Color(0xff301868),
+        ),
+        textAlign: TextAlign.left,
+      ),
+    ),
+  );
+}

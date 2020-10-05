@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => HomeScreenProvider(),
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'BookMRK',
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),
       ),

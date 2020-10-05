@@ -1,6 +1,8 @@
+import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class User extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class _UserState extends State<User> {
   ColorPalette colorPalette = ColorPalette();
   @override
   Widget build(BuildContext context) {
+    var homeProvider = Provider.of<HomeScreenProvider>(context, listen: false);
+
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -57,27 +61,33 @@ class _UserState extends State<User> {
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    height: height / 26,
-                    width: width / 3.5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(
-                        width: 2.8,
-                        color: colorPalette.navyBlue,
+                  GestureDetector(
+                    onTap: () {
+                      Provider.of<HomeScreenProvider>(context, listen: false)
+                          .selectedString = "EditProfile";
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: height / 26,
+                      width: width / 3.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          width: 2.8,
+                          color: colorPalette.navyBlue,
+                        ),
                       ),
-                    ),
-                    child: Text(
-                      'EDIT PROFILE',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 13,
-                        color: const Color(0xff301869),
-                        letterSpacing: 0.72,
-                        fontWeight: FontWeight.w700,
+                      child: Text(
+                        'EDIT PROFILE',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 13,
+                          color: const Color(0xff301869),
+                          letterSpacing: 0.72,
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(
@@ -105,25 +115,32 @@ class _UserState extends State<User> {
                   title: "My Addresses",
                   width: width,
                   asset: "address",
-                  onClick: () {}),
+                  onClick: () {
+                    homeProvider.selectedString = "MyAddress";
+                  }),
               _customDivider(),
               _profileMenus(
                   title: "My Orders",
                   width: width,
                   asset: "allOrder",
-                  onClick: () {}),
+                  onClick: () {
+                    homeProvider.selectedString = "MyOrders";
+                  }),
               _customDivider(),
               _profileMenus(
                   title: "Wishlist",
                   width: width,
                   asset: "heart",
-                  onClick: () {}),
+                  onClick: () {
+                    homeProvider.selectedString = "Wishlist";
+                  }),
               _customDivider(),
               _profileMenus(
-                  title: "Change Password",
-                  width: width,
-                  asset: "key",
-                  onClick: () {}),
+                title: "Change Password",
+                width: width,
+                asset: "key",
+                onClick: () => homeProvider.selectedString = "ChangePassword",
+              ),
               _customDivider(),
               _profileMenus(
                   title: "Terms and Conditions",
@@ -141,13 +158,23 @@ class _UserState extends State<User> {
                   title: "Submit Feedback",
                   width: width,
                   asset: "good",
-                  onClick: () {}),
+                  onClick: () => homeProvider.selectedString = "FeedBack"),
               _customDivider(),
               _profileMenus(
-                  title: "Logout",
-                  width: width,
-                  asset: "logout",
-                  onClick: () {}),
+                title: "Logout",
+                width: width,
+                asset: "logout",
+                onClick: () => showDialog(
+                  context: context,
+                  builder: (context) => LogOutDialog(
+                    width: width,
+                    onCancelTap: () {
+                      Navigator.pop(context);
+                    },
+                    onYesTap: () {},
+                  ),
+                ),
+              ),
             ],
           ),
         )
@@ -192,5 +219,77 @@ Widget _customDivider() {
     indent: 60,
     endIndent: 5,
     thickness: 1.5,
+  );
+}
+
+Widget LogOutDialog({width, onCancelTap, onYesTap}) {
+  ColorPalette colorPalette = ColorPalette();
+
+  return Dialog(
+    elevation: 100,
+    insetPadding: EdgeInsets.symmetric(horizontal: 16),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    child: Container(
+      height: width / 3,
+      width: width - 32,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'Are you Sure ?',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                color: const Color(0xff000000),
+              ),
+              textAlign: TextAlign.left,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: onCancelTap,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: width / 8,
+                    width: width / 2.8,
+                    decoration: BoxDecoration(
+                        color: colorPalette.navyBlue,
+                        borderRadius: BorderRadius.circular(18)),
+                    child: Text(
+                      "CANCEL",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onYesTap,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: width / 8,
+                    width: width / 2.8,
+                    decoration: BoxDecoration(
+                        color: colorPalette.navyBlue.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(18)),
+                    child: Text(
+                      "YES",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    ),
   );
 }

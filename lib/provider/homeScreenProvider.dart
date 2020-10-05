@@ -34,4 +34,22 @@ class HomeScreenProvider extends ChangeNotifier {
     _selectedString = value;
     notifyListeners();
   }
+
+  int _vendorSchoolIndex = 0;
+
+  int get vendorSchoolIndex => _vendorSchoolIndex;
+
+  set vendorSchoolIndex(int value) {
+    _vendorSchoolIndex = value;
+    notifyListeners();
+  }
+
+  int _currentPastOrderIndex = 0;
+
+  int get currentPastOrderIndex => _currentPastOrderIndex;
+
+  set currentPastOrderIndex(int value) {
+    _currentPastOrderIndex = value;
+    notifyListeners();
+  }
 }

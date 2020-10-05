@@ -1,6 +1,9 @@
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:bookmrk/widgets/buttons.dart';
+import 'package:bookmrk/widgets/textfields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class School extends StatefulWidget {
@@ -51,12 +54,25 @@ class _SchoolState extends State<School> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.add_location,
-                    color: colorPalette.navyBlue,
-                    size: 35,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => LocationDialog(
+                          width: width,
+                          onCancelTap: () {
+                            Navigator.pop(context);
+                          },
+                          onSearchTap: () {},
+                        ),
+                      );
+                    },
+                    child: SvgPicture.asset(
+                      "assets/icons/loc.svg",
+                      height: 35,
+                    ),
                   ),
                 )
               ],
@@ -161,4 +177,81 @@ class _SchoolState extends State<School> {
       },
     );
   }
+}
+
+Widget LocationDialog({width, onSearchTap, onCancelTap}) {
+  ColorPalette colorPalette = ColorPalette();
+
+  return Dialog(
+    elevation: 100,
+    insetPadding: EdgeInsets.symmetric(horizontal: 16),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    child: Container(
+      height: width,
+      width: width - 32,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              'Search by Location',
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                color: const Color(0xff000000),
+              ),
+              textAlign: TextAlign.left,
+            ),
+            SimpleTextfield(
+              "Zip Code",
+            ),
+            SimpleTextfield("State"),
+            SimpleTextfield("City"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: onCancelTap,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: width / 8,
+                    width: width / 2.8,
+                    decoration: BoxDecoration(
+                        color: colorPalette.navyBlue.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(18)),
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onSearchTap,
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: width / 8,
+                    width: width / 2.8,
+                    decoration: BoxDecoration(
+                        color: colorPalette.navyBlue,
+                        borderRadius: BorderRadius.circular(18)),
+                    child: Text(
+                      "Search",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    ),
+  );
 }

@@ -30,7 +30,10 @@ Widget CustomAppBar(
       ], color: color),
       child: Row(
         children: [
-          child,
+          Container(
+            width: width / 1.6,
+            child: child,
+          ),
           Spacer(),
           GestureDetector(
             onTap: onCartTap,
@@ -107,31 +110,42 @@ Widget CustomAppBar(
   );
 }
 
-Widget SimpleAppBar({context, onTap, title, icon}) {
+Widget SimpleAppBar({context, onTap, title, icon, actionTap, actionIcon}) {
   ColorPalette colorPalette = ColorPalette();
 
-  return Container(
-    alignment: Alignment.centerLeft,
-    padding: EdgeInsets.only(left: 12, top: 5, right: 12),
-    child: Row(
-      children: [
-        IconButton(
-          onPressed: onTap,
-          iconSize: 40,
-          color: colorPalette.navyBlue,
-          icon: Icon(icon),
-        ),
-        Spacer(
-          flex: 3,
-        ),
-        Text(
-          title,
-          style: TextStyle(color: colorPalette.navyBlue, fontSize: 24),
-        ),
-        Spacer(
-          flex: 6,
-        ),
-      ],
+  return AppBar(
+    elevation: 0.5,
+    backgroundColor: Colors.white,
+    automaticallyImplyLeading: false,
+    flexibleSpace: Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(left: 12, top: 35, right: 12),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: onTap,
+            iconSize: 40,
+            color: colorPalette.navyBlue,
+            icon: Icon(icon),
+          ),
+          Spacer(
+            flex: 3,
+          ),
+          Text(
+            title,
+            style: TextStyle(color: colorPalette.navyBlue, fontSize: 24),
+          ),
+          Spacer(
+            flex: 6,
+          ),
+          IconButton(
+            onPressed: actionTap,
+            iconSize: 40,
+            color: colorPalette.navyBlue,
+            icon: Icon(actionIcon),
+          ),
+        ],
+      ),
     ),
   );
 }
