@@ -20,15 +20,6 @@ class _SearchState extends State<Search> {
 
     return Column(
       children: [
-        SimpleAppBar(
-          icon: Icons.close,
-          title: "Search Products",
-          context: context,
-          onTap: () {
-            Provider.of<HomeScreenProvider>(context, listen: false)
-                .selectedString = "Home";
-          },
-        ),
         SearchBar(title: "Search Products", width: width),
         Expanded(
           child: Padding(

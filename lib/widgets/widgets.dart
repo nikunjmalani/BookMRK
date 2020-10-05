@@ -70,7 +70,8 @@ Widget ImageBox({height, width, image, title}) {
   );
 }
 
-Widget ProductBox({height, width, image, title, description, price, expanded}) {
+Widget ProductBox(
+    {height, width, image, title, description, price, expanded, icon}) {
   ColorPalette colorPalette = ColorPalette();
   return Stack(
     fit: expanded == true ? StackFit.expand : StackFit.loose,
@@ -168,16 +169,137 @@ Widget ProductBox({height, width, image, title, description, price, expanded}) {
         ),
       ),
       Positioned(
-        top: 0,
-        right: 0,
-        child: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.favorite_border,
-            color: colorPalette.navyBlue,
+              top: 0,
+              right: 0,
+              child: Container(
+                height: 50,
+                width: 50,
+                padding: EdgeInsets.all(15),
+                child: icon,
+              )) ??
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.favorite_border,
+                color: colorPalette.navyBlue,
+              ),
+            ),
+          )
+    ],
+  );
+}
+
+Widget Tabs(
+    {height,
+    width,
+    firstTap,
+    secondTap,
+    currentIndex,
+    firstTitle,
+    secondTitle}) {
+  ColorPalette colorPalette = ColorPalette();
+  return Row(
+    children: [
+      GestureDetector(
+        onTap: firstTap,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          alignment: Alignment.center,
+          margin: EdgeInsets.only(top: 15),
+          height: height / 18,
+          width: width / 2,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: currentIndex == 0
+                  ? colorPalette.navyBlue
+                  : Colors.transparent,
+              width: 3,
+            ),
+          ),
+          child: Text(
+            firstTitle,
+            style: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 17,
+              color: const Color(0xff301869),
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: secondTap,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          alignment: Alignment.center,
+          margin: EdgeInsets.only(top: 15),
+          height: height / 18,
+          width: width / 2,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: currentIndex == 1
+                  ? colorPalette.navyBlue
+                  : Colors.transparent,
+              width: 3,
+            ),
+          ),
+          child: Text(
+            secondTitle,
+            style: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 17,
+              color: const Color(0xff000000),
+            ),
+            textAlign: TextAlign.left,
           ),
         ),
       )
     ],
+  );
+}
+
+Widget priceDetail() {
+  return Text(
+    'Price Details',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 16,
+      color: const Color(0xffb7b7b7),
+    ),
+    textAlign: TextAlign.left,
+  );
+}
+
+Widget priceRow({String title, var price}) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 10, top: 5),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 16,
+            color: const Color(0xff000000),
+            fontWeight: FontWeight.w300,
+          ),
+          textAlign: TextAlign.left,
+        ),
+        Text(
+          '₹ ${price}',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 16,
+            color: const Color(0xffbcbcbc),
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ],
+    ),
   );
 }

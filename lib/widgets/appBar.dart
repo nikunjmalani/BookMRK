@@ -5,7 +5,16 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 Widget CustomAppBar(
-    {width, imagePath, colorPalette, child, color, bool whiteIcon}) {
+    {width,
+    bool blueCartIcon,
+    bool blueBellIcon,
+    imagePath,
+    colorPalette,
+    child,
+    color,
+    bool whiteIcon,
+    onCartTap,
+    onBellTap}) {
   return AppBar(
     automaticallyImplyLeading: false,
     elevation: 0.5,
@@ -21,66 +30,79 @@ Widget CustomAppBar(
       ], color: color),
       child: Row(
         children: [
-          child,
+          Container(
+            width: width / 1.6,
+            child: child,
+          ),
           Spacer(),
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              CircleAvatar(
-                child: SvgPicture.asset(
-                  "assets/icons/Cart.svg",
-                  height: 30,
-                  width: 30,
-                  color: whiteIcon == true ? Colors.white : null,
-                ),
-                radius: 25,
-                backgroundColor: Colors.transparent,
-              ),
-              CircleAvatar(
-                radius: 10,
-                child: Text(
-                  '3',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 13,
-                    color: const Color(0xffffffff),
+          GestureDetector(
+            onTap: onCartTap,
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                CircleAvatar(
+                  child: SvgPicture.asset(
+                    "assets/icons/Cart.svg",
+                    height: 30,
+                    width: 30,
+                    color: whiteIcon == true
+                        ? Colors.white
+                        : blueCartIcon == true ? colorPalette.navyBlue : null,
                   ),
-                  textAlign: TextAlign.left,
+                  radius: 25,
+                  backgroundColor: Colors.transparent,
                 ),
-                backgroundColor: colorPalette.pinkOrange,
-              )
-            ],
+                CircleAvatar(
+                  radius: 10,
+                  child: Text(
+                    '3',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 13,
+                      color: const Color(0xffffffff),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  backgroundColor: colorPalette.pinkOrange,
+                )
+              ],
+            ),
           ),
           SizedBox(
             width: 10,
           ),
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              CircleAvatar(
-                child: SvgPicture.asset(
-                  "assets/icons/bell.svg",
-                  height: 30,
-                  width: 30,
-                  color: whiteIcon == true ? Colors.white : null,
-                ),
-                radius: 25,
-                backgroundColor: Colors.transparent,
-              ),
-              CircleAvatar(
-                radius: 10,
-                child: Text(
-                  '8',
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 13,
-                    color: const Color(0xffffffff),
+          GestureDetector(
+            onTap: onBellTap,
+            child: Stack(
+              alignment: Alignment.topRight,
+              children: [
+                CircleAvatar(
+                  child: SvgPicture.asset(
+                    "assets/icons/bell.svg",
+                    height: 30,
+                    width: 30,
+                    color: whiteIcon == true
+                        ? Colors.white
+                        : blueBellIcon == true ? colorPalette.navyBlue : null,
                   ),
-                  textAlign: TextAlign.left,
+                  radius: 25,
+                  backgroundColor: Colors.transparent,
                 ),
-                backgroundColor: colorPalette.pinkOrange,
-              )
-            ],
+                CircleAvatar(
+                  radius: 10,
+                  child: Text(
+                    '8',
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 13,
+                      color: const Color(0xffffffff),
+                    ),
+                    textAlign: TextAlign.left,
+                  ),
+                  backgroundColor: colorPalette.pinkOrange,
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -88,31 +110,42 @@ Widget CustomAppBar(
   );
 }
 
-Widget SimpleAppBar({context, onTap, title, icon}) {
+Widget SimpleAppBar({context, onTap, title, icon, actionTap, actionIcon}) {
   ColorPalette colorPalette = ColorPalette();
 
-  return Container(
-    alignment: Alignment.centerLeft,
-    padding: EdgeInsets.only(left: 12, top: 5, right: 12),
-    child: Row(
-      children: [
-        IconButton(
-          onPressed: onTap,
-          iconSize: 40,
-          color: colorPalette.navyBlue,
-          icon: Icon(icon),
-        ),
-        Spacer(
-          flex: 3,
-        ),
-        Text(
-          title,
-          style: TextStyle(color: colorPalette.navyBlue, fontSize: 24),
-        ),
-        Spacer(
-          flex: 6,
-        ),
-      ],
+  return AppBar(
+    elevation: 0.5,
+    backgroundColor: Colors.white,
+    automaticallyImplyLeading: false,
+    flexibleSpace: Container(
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(left: 12, top: 35, right: 12),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: onTap,
+            iconSize: 40,
+            color: colorPalette.navyBlue,
+            icon: Icon(icon),
+          ),
+          Spacer(
+            flex: 3,
+          ),
+          Text(
+            title,
+            style: TextStyle(color: colorPalette.navyBlue, fontSize: 24),
+          ),
+          Spacer(
+            flex: 6,
+          ),
+          IconButton(
+            onPressed: actionTap,
+            iconSize: 40,
+            color: colorPalette.navyBlue,
+            icon: Icon(actionIcon),
+          ),
+        ],
+      ),
     ),
   );
 }
