@@ -3,6 +3,7 @@ import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/login_provider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/provider/reset_password_provider.dart';
+import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ResetPasswordProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => HomeScreenProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => VendorProvider(),
         ),
       ],
       child: MaterialApp(

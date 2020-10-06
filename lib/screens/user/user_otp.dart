@@ -42,12 +42,12 @@ class _UserOTPState extends State<UserOTP> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
             ],
           ),
         ),

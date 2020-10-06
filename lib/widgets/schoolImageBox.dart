@@ -10,8 +10,10 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
             height: height / 6,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              image:
-                  DecorationImage(image: AssetImage(image), fit: BoxFit.fill),
+              image: DecorationImage(
+                  image:
+                      image != null ? NetworkImage(image) : AssetImage(image),
+                  fit: BoxFit.fill),
             ),
           ),
           Container(

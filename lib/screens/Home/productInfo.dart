@@ -136,7 +136,7 @@ Widget _productCarasoul({height, pageController, onChange, currentPage}) {
                 },
                 onPageChanged: onChange),
           ),
-          Indicators(currentPage: currentPage),
+          Indicators(currentPage: currentPage, pages: 3),
         ],
       ),
       Container(

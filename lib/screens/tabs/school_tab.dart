@@ -1,17 +1,16 @@
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
-import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class School extends StatefulWidget {
+class SchoolTab extends StatefulWidget {
   @override
-  _SchoolState createState() => _SchoolState();
+  _SchoolTabState createState() => _SchoolTabState();
 }
 
-class _SchoolState extends State<School> {
+class _SchoolTabState extends State<SchoolTab> {
   ColorPalette colorPalette = ColorPalette();
   @override
   Widget build(BuildContext context) {

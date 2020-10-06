@@ -1,4 +1,5 @@
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,9 +45,10 @@ Widget ImageBox({height, width, image, title}) {
       border: Border.all(color: Color(0xffcfcfcf)),
       borderRadius: BorderRadius.circular(25),
       image: DecorationImage(
-        image: AssetImage(image),
-        fit: BoxFit.fill,
-      ),
+          image: image != null
+              ? NetworkImage(image)
+              : AssetImage('assets/images/logo.png'),
+          fit: BoxFit.fill),
     ),
     child: Container(
       alignment: Alignment.center,
@@ -71,7 +73,15 @@ Widget ImageBox({height, width, image, title}) {
 }
 
 Widget ProductBox(
-    {height, width, image, title, description, price, expanded, icon}) {
+    {height,
+    width,
+    image,
+    title,
+    description,
+    price,
+    expanded,
+    icon,
+    stock = "In"}) {
   ColorPalette colorPalette = ColorPalette();
   return Stack(
     fit: expanded == true ? StackFit.expand : StackFit.loose,
@@ -89,10 +99,22 @@ Widget ProductBox(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Image.asset(
-                image,
-                fit: BoxFit.fill,
+              child: CachedNetworkImage(
+                imageUrl: image,
                 height: height / 5.2,
+                fit: BoxFit.fill,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                        colorFilter:
+                            ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+                  ),
+                ),
+                placeholder: (context, url) =>
+                    Center(child: Image.asset('assets/images/Sharpner.png')),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
             Container(
@@ -143,7 +165,7 @@ Widget ProductBox(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
-                      'In Stock',
+                      '$stock Stock',
                       style: TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 13,

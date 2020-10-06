@@ -1,7 +1,9 @@
+import 'package:bookmrk/model/home_page_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:bookmrk/widgets/buttons.dart';
+import 'package:bookmrk/widgets/cached_image_view.dart';
 import 'package:bookmrk/widgets/carasoul.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
@@ -10,6 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
+  final HomePageModel homePageModel;
+
+  const Home({this.homePageModel});
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -20,6 +26,7 @@ class _HomeState extends State<Home> {
   int currentPage = 1;
 
   PageController pageController = PageController(initialPage: 1);
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -54,6 +61,7 @@ class _HomeState extends State<Home> {
                       currentPage = value;
                     });
                   },
+                  banners: widget.homePageModel.response[0].homeBanner,
                   pageController: pageController,
                 ),
                 Padding(
@@ -86,38 +94,22 @@ class _HomeState extends State<Home> {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CategoryButtons(
+                          children: List.generate(
+                            widget.homePageModel.response[0].category.length,
+                            (index) => CategoryButtons(
                               width,
-                              "Books",
+                              "${widget.homePageModel.response[0].category[index].categoryName}",
                               colorPalette.navyBlue,
                               Color(0xff6A4B9C),
                             ),
-                            CategoryButtons(
-                              width,
-                              "NoteBooks",
-                              colorPalette.orange,
-                              colorPalette.orange,
-                            ),
-                            CategoryButtons(
-                              width,
-                              "Sketch",
-                              colorPalette.orange,
-                              colorPalette.orange,
-                            ),
-                            CategoryButtons(
-                              width,
-                              "Books",
-                              colorPalette.orange,
-                              colorPalette.orange,
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                       Container(
                         height: height / 3.2,
                         child: ListView.builder(
-                          itemCount: 5,
+                          itemCount:
+                              widget.homePageModel.response[0].product.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return GestureDetector(
@@ -142,9 +134,12 @@ class _HomeState extends State<Home> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Container(
-                                      child: Image.asset(
-                                        "assets/images/book.png",
-                                        fit: BoxFit.cover,
+                                      child: showCachedImage(
+                                        image:
+                                            '${widget.homePageModel.response[0].product[index].productImg}',
+                                        height: height,
+                                        placeHolderImage:
+                                            'assets/images/book.png',
                                       ),
                                       height: height / 5.6,
                                       padding: EdgeInsets.only(top: 15),
@@ -154,7 +149,7 @@ class _HomeState extends State<Home> {
                                     ),
                                     Center(
                                       child: Text(
-                                        'Oswaal NCERT Workbo....',
+                                        '${widget.homePageModel.response[0].product[index].productName}',
                                         style: TextStyle(
                                           fontFamily: 'Roboto',
                                           fontSize: 12,
@@ -168,7 +163,8 @@ class _HomeState extends State<Home> {
                                     ),
                                     Container(
                                       child: Text(
-                                        'By Circle Enterprises ',
+                                        '${widget.homePageModel.response[0].product[index].vendorCompanyName}',
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           fontFamily: 'Roboto',
                                           fontSize: 12,
@@ -178,7 +174,8 @@ class _HomeState extends State<Home> {
                                         textAlign: TextAlign.left,
                                       ),
                                       alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 5),
+                                      padding:
+                                          EdgeInsets.only(left: 5, right: 5),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
@@ -200,7 +197,7 @@ class _HomeState extends State<Home> {
                                                   BorderRadius.circular(30),
                                             ),
                                             child: Text(
-                                              'In Stock',
+                                              '${widget.homePageModel.response[0].product[index].productStockStatus} Stock',
                                               style: TextStyle(
                                                 fontFamily: 'Roboto',
                                                 fontSize: 10,
@@ -210,7 +207,7 @@ class _HomeState extends State<Home> {
                                             ),
                                           ),
                                           Text(
-                                            '₹ 100.00',
+                                            '₹ ${widget.homePageModel.response[0].product[index].productSalePrice}',
                                             style: TextStyle(
                                               fontFamily: 'Roboto',
                                               fontSize: 10,
@@ -260,11 +257,13 @@ class _HomeState extends State<Home> {
                         child: ImageBox(
                             height: height,
                             width: width,
-                            image: "assets/images/school.png",
-                            title: "Central Public Sch..."),
+                            image:
+                                "${widget.homePageModel.response[0].school[index].schoolLogo}",
+                            title:
+                                "${widget.homePageModel.response[0].school[index].schoolName}"),
                       );
                     },
-                    itemCount: 5,
+                    itemCount: widget.homePageModel.response[0].school.length,
                     scrollDirection: Axis.horizontal,
                   ),
                 ),
@@ -295,10 +294,12 @@ class _HomeState extends State<Home> {
                       return ImageBox(
                           height: height,
                           width: width,
-                          image: "assets/images/circle.png",
-                          title: "Raju rastogi");
+                          image:
+                              "${widget.homePageModel.response[0].vendor[index].companyLogo}",
+                          title:
+                              "${widget.homePageModel.response[0].vendor[index].companyName}");
                     },
-                    itemCount: 5,
+                    itemCount: widget.homePageModel.response[0].vendor.length,
                     scrollDirection: Axis.horizontal,
                   ),
                 ),

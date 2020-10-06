@@ -53,7 +53,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
             SizedBox(
               height: 7,
             ),
-            Indicators(currentPage: currentPage),
+            Indicators(currentPage: currentPage, pages: 3),
             SizedBox(
               height: 10,
             ),

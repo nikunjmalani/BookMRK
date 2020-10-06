@@ -45,12 +45,10 @@ class _ChangePasswordState extends State<ChangePassword> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
-              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
+//              OtpBox(context),
             ],
           ),
         ),

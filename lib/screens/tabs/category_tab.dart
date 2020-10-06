@@ -3,12 +3,12 @@ import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Category extends StatefulWidget {
+class CategoryTab extends StatefulWidget {
   @override
-  _CategoryState createState() => _CategoryState();
+  _CategoryTabState createState() => _CategoryTabState();
 }
 
-class _CategoryState extends State<Category> {
+class _CategoryTabState extends State<CategoryTab> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -36,8 +36,7 @@ class _CategoryState extends State<Category> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image:
-                                  AssetImage("assets/images/bookCategory.png"),
+                              image: AssetImage("assets/images/book.png"),
                               fit: BoxFit.cover,
                             ),
                           ),

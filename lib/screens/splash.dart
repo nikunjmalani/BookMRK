@@ -1,6 +1,9 @@
 import 'package:bookmrk/res/images.dart';
-import 'package:bookmrk/screens/onBoarding.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'homePage.dart';
+import 'onBoarding.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -14,8 +17,17 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => OnBoarding())),
+        onTap: () async {
+          SharedPreferences _prefs = await SharedPreferences.getInstance();
+          bool isLogin = _prefs.getBool("isLogin");
+          if (isLogin) {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => HomePage()));
+          } else {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => OnBoarding()));
+          }
+        },
         child: Center(
             child: Container(
           margin: EdgeInsets.symmetric(horizontal: 48),

@@ -1,20 +1,23 @@
+import 'package:bookmrk/api/home_page_api.dart';
+import 'package:bookmrk/model/home_page_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
-import 'package:bookmrk/screens/Home/search.dart';
 import 'package:bookmrk/screens/Home/allVendors.dart';
 import 'package:bookmrk/screens/Home/filter.dart';
 import 'package:bookmrk/screens/Home/productInfo.dart';
 import 'package:bookmrk/screens/Home/schoolInfo.dart';
+import 'package:bookmrk/screens/Home/search.dart';
 import 'package:bookmrk/screens/Home/vendorsInfo.dart';
 import 'package:bookmrk/screens/cart/addAddress.dart';
 import 'package:bookmrk/screens/cart/changeAddress.dart';
 import 'package:bookmrk/screens/cart/editAddress.dart';
 import 'package:bookmrk/screens/tabs/cart.dart';
-import 'package:bookmrk/screens/tabs/category.dart';
+import 'package:bookmrk/screens/tabs/category_tab.dart';
 import 'package:bookmrk/screens/tabs/home.dart';
 import 'package:bookmrk/screens/tabs/notificationPage.dart';
-import 'package:bookmrk/screens/tabs/school.dart';
+import 'package:bookmrk/screens/tabs/school_tab.dart';
 import 'package:bookmrk/screens/tabs/user.dart';
 import 'package:bookmrk/screens/user/change_mobilenumber.dart';
 import 'package:bookmrk/screens/user/change_password.dart';
@@ -45,499 +48,600 @@ class _HomePageState extends State<HomePage> {
   PageController pageController = PageController(initialPage: 0);
   ColorPalette colorPalette = ColorPalette();
   ImagePath imagePath = ImagePath();
+  HomeScreenProvider _setHomeScreenProvider;
+
+  /// get data for home page..
+  Future<HomePageModel> getHomePageDetails() async {
+    dynamic data = await HomePageApi.getHomePageDetails();
+    HomePageModel _homePageDetails = HomePageModel.fromJson(data);
+    return _homePageDetails;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var homeProvider = Provider.of<HomeScreenProvider>(context, listen: false);
+    _setHomeScreenProvider =
+        Provider.of<HomeScreenProvider>(context, listen: false);
 
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
-    return Consumer<HomeScreenProvider>(
-      builder: (context, data, child) {
-        return Scaffold(
-          appBar: data.selectedString == "ChangeAddress" ||
-                  data.selectedString == "AddAddress" ||
-                  data.selectedString == "EditAddress" ||
-                  data.selectedString == "SearchProducts" ||
-                  data.selectedString == "Filter" ||
-                  data.selectedString == "UserEditAddress" ||
-                  data.selectedString == "UserAddAddress" ||
-                  data.selectedString == "OrderTracking"
-              ? SimpleAppBar(
-                  actionIcon: data.selectedString == "AddAddress" ||
-                          data.selectedString == "EditAddress" ||
-                          data.selectedString == "SearchProducts" ||
-                          data.selectedString == "Filter" ||
-                          data.selectedString == "UserEditAddress" ||
-                          data.selectedString == "UserAddAddress" ||
-                          data.selectedString == "OrderTracking"
-                      ? null
-                      : Icons.add,
-                  actionTap: () {
-                    homeProvider.selectedString =
-                        data.selectedString == "ChangeAddress"
+    return FutureBuilder(
+
+        future: getHomePageDetails(),
+        builder: (context, _futureSnapshot) {
+          if (_futureSnapshot.hasData) {
+            _futureSnapshot.data.response.forEach((element) {
+              element.homeBanner.forEach((e) {
+                print(e.text);
+              });
+            });
+            return Consumer<HomeScreenProvider>(
+              builder: (context, _homeScreenProvider, child) {
+                return Scaffold(
+                  appBar: _homeScreenProvider.selectedString ==
+                      "ChangeAddress" ||
+                      _homeScreenProvider.selectedString == "AddAddress" ||
+                      _homeScreenProvider.selectedString == "EditAddress" ||
+                      _homeScreenProvider.selectedString == "SearchProducts" ||
+                      _homeScreenProvider.selectedString == "Filter" ||
+                      _homeScreenProvider.selectedString == "UserEditAddress" ||
+                      _homeScreenProvider.selectedString == "UserAddAddress" ||
+                      _homeScreenProvider.selectedString == "OrderTracking"
+                      ? SimpleAppBar(
+                      actionIcon: _homeScreenProvider.selectedString ==
+                          "AddAddress" ||
+                          _homeScreenProvider.selectedString == "EditAddress" ||
+                          _homeScreenProvider.selectedString ==
+                              "SearchProducts" ||
+                          _homeScreenProvider.selectedString == "Filter" ||
+                          _homeScreenProvider.selectedString ==
+                              "UserEditAddress" ||
+                          _homeScreenProvider.selectedString ==
+                              "UserAddAddress" ||
+                          _homeScreenProvider.selectedString == "OrderTracking"
+                          ? null
+                          : Icons.add,
+                      actionTap: () {
+                        _setHomeScreenProvider.selectedString =
+                        _homeScreenProvider.selectedString == "ChangeAddress"
                             ? "AddAddress"
                             : "Cart";
-                  },
-                  context: context,
-                  onTap: () {
-                    homeProvider.selectedString = data.selectedString ==
+                      },
+                      context: context,
+                      onTap: () {
+                        _setHomeScreenProvider.selectedString =
+                        _homeScreenProvider.selectedString ==
                             "AddAddress"
-                        ? "ChangeAddress"
-                        : data.selectedString == "EditAddress"
                             ? "ChangeAddress"
-                            : data.selectedString == "SearchProducts"
-                                ? "Home"
-                                : data.selectedString == "Filter"
-                                    ? "VendorInfo"
-                                    : data.selectedString ==
-                                                "UserEditAddress" ||
-                                            data.selectedString ==
-                                                "UserAddAddress"
-                                        ? "MyAddress"
-                                        : data.selectedString == "OrderTracking"
-                                            ? "OrderDetails"
-                                            : "Cart";
-                  },
-                  title: data.selectedString == "SearchProducts"
-                      ? "Search Products"
-                      : data.selectedString == "Filter"
+                            : _homeScreenProvider.selectedString ==
+                            "EditAddress"
+                            ? "ChangeAddress"
+                            : _homeScreenProvider.selectedString ==
+                            "SearchProducts"
+                            ? "Home"
+                            : _homeScreenProvider.selectedString == "Filter"
+                            ? "VendorInfo"
+                            : _homeScreenProvider.selectedString ==
+                            "UserEditAddress" ||
+                            _homeScreenProvider.selectedString ==
+                                "UserAddAddress"
+                            ? "MyAddress"
+                            : _homeScreenProvider.selectedString ==
+                            "OrderTracking"
+                            ? "OrderDetails"
+                            : "Cart";
+                      },
+                      title: _homeScreenProvider.selectedString ==
+                          "SearchProducts"
+                          ? "Search Products"
+                          : _homeScreenProvider.selectedString == "Filter"
                           ? "Filter By Categories"
-                          : data.selectedString == "UserEditAddress"
-                              ? "Edit Address"
-                              : data.selectedString == "UserAddAddress"
-                                  ? "Add Address"
-                                  : data.selectedString == "OrderTracking"
-                                      ? "Order Tracking"
-                                      : "",
-                  icon: Icons.close)
-              : CustomAppBar(
-                  blueCartIcon: data.blueCartIcon,
-                  blueBellIcon: data.blueBellIcon,
-                  onBellTap: () {
-                    pageController.jumpToPage(5);
+                          : _homeScreenProvider.selectedString ==
+                          "UserEditAddress"
+                          ? "Edit Address"
+                          : _homeScreenProvider.selectedString ==
+                          "UserAddAddress"
+                          ? "Add Address"
+                          : _homeScreenProvider.selectedString ==
+                          "OrderTracking"
+                          ? "Order Tracking"
+                          : "",
+                      icon: Icons.close)
+                      : CustomAppBar(
+                    blueCartIcon: _homeScreenProvider.blueCartIcon,
+                    blueBellIcon: _homeScreenProvider.blueBellIcon,
+                    onBellTap: () {
+                      pageController.jumpToPage(5);
 
-                    homeProvider.selectedString = "Notifications";
-                    homeProvider.selectedBottomIndex = 5;
-                    homeProvider.blueCartIcon = false;
-                    homeProvider.blueBellIcon = true;
-                  },
-                  onCartTap: () {
-                    pageController.jumpToPage(4);
-
-                    homeProvider.selectedString = "Cart";
-                    homeProvider.selectedBottomIndex = 4;
-                    homeProvider.blueCartIcon = true;
-                    homeProvider.blueBellIcon = false;
-                  },
-                  whiteIcon: data.selectedString == "VendorInfo" ? true : false,
-                  color: data.selectedString == "VendorInfo"
-                      ? colorPalette.purple
-                      : Colors.white,
-                  width: width,
-                  imagePath: imagePath,
-                  colorPalette: colorPalette,
-                  child: Container(
-                    height: width / 6,
-                    width: width / 2,
-                    child: data.selectedBottomIndex == 0 &&
-                            data.selectedString == "Home"
-                        ? imagePath.logo
-                        : data.selectedBottomIndex == 0
-                            ? Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      Icons.arrow_back_ios,
-                                      color: data.selectedString == "VendorInfo"
-                                          ? Colors.white
-                                          : colorPalette.navyBlue,
-                                    ),
-                                    onPressed: () {
-                                      homeProvider.selectedString =
-                                          data.selectedString == "VendorInfo"
-                                              ? "All Vendors"
-                                              : data.selectedString ==
-                                                          "ProductInfo" ||
-                                                      data.selectedString ==
-                                                          "SchoolInfo"
-                                                  ? "VendorInfo"
-                                                  : "Home";
-                                    },
-                                    iconSize: 30,
-                                  ),
-                                  Text(
-                                    data.selectedString == "VendorInfo"
-                                        ? ""
-                                        : data.selectedString ==
-                                                    "ProductInfo" ||
-                                                data.selectedString ==
-                                                    "SchoolInfo"
-                                            ? ""
-                                            : 'All Vendors',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 25,
-                                      color: const Color(0xff301869),
-                                    ),
-                                    textAlign: TextAlign.left,
-                                  ),
-                                ],
-                              )
-                            : data.selectedBottomIndex == 1 &&
-                                        data.selectedString == "Category" ||
-                                    data.selectedString == "CategoryInfo" ||
-                                    data.selectedString == "ProductInfo"
-                                ? leadingAppBar(
-                                    title: data.selectedString == "Category"
-                                        ? "Category"
-                                        : "",
-                                    backButton:
-                                        data.selectedString == "Category"
-                                            ? false
-                                            : true,
-                                    onBackTap: () {
-                                      homeProvider.selectedString =
-                                          data.selectedString == "CategoryInfo"
-                                              ? "Category"
-                                              : "CategoryInfo";
-                                    })
-                                : data.selectedBottomIndex == 2 &&
-                                            data.selectedString == "School" ||
-                                        data.selectedString == "SchoolInfo"
-                                    ? leadingAppBar(
-                                        title: data.selectedString == "School"
-                                            ? "Schools"
-                                            : "",
-                                        backButton:
-                                            data.selectedString == "School"
-                                                ? false
-                                                : true,
-                                        onBackTap: () {
-                                          homeProvider.selectedString =
-                                              data.selectedString ==
-                                                      "SchoolInfo"
-                                                  ? "School"
-                                                  : "School";
-                                        },
-                                      )
-                                    : data.selectedString == "User" ||
-                                            data.selectedString ==
-                                                "EditProfile" ||
-                                            data.selectedString ==
-                                                "ChangeMobile" ||
-                                            data.selectedString == "UserOTP" ||
-                                            data.selectedString == "Wishlist" ||
-                                            data.selectedString ==
-                                                "MyAddress" ||
-                                            data.selectedString == "MyOrders" ||
-                                            data.selectedString ==
-                                                "OrderDetails" ||
-                                            data.selectedString ==
-                                                "OrderTracking" ||
-                                            data.selectedString ==
-                                                "ChangePassword" ||
-                                            data.selectedString == "NewPassword" ||
-                        data.selectedString ==
-                            "FeedBack"
-                                        ? leadingAppBar(
-                                            title: data.selectedString == "User"
-                                                ? "Account"
-                                                : data.selectedString ==
-                                                        "EditProfile"
-                                                    ? "Edit Profile"
-                                                    : data.selectedString ==
-                                                                "ChangeMobile" ||
-                                                            data.selectedString ==
-                                                                "UserOTP"
-                                                        ? "Change Mobile Number"
-                                                        : data.selectedString ==
-                                                                "Wishlist"
-                                                            ? "Wishlist"
-                                                            : data.selectedString ==
-                                                                    "MyAddress"
-                                                                ? "My Addresses"
-                                                                : data.selectedString ==
-                                                                            "MyOrders" ||
-                                                                        data.selectedString ==
-                                                                            "OrderDetails"
-                                                                    ? "My Orders"
-                                                                    : data.selectedString == "ChangePassword" ||
-                                                                            data.selectedString ==
-                                                                                "NewPassword"
-                                                                        ? "Change Password"
-                                                                        : data.selectedString ==
-                                                "FeedBack"?"Submit Feedback":"",
-                                            backButton:
-                                                data.selectedString == "User"
-                                                    ? false
-                                                    : true,
-                                            onBackTap: () {
-                                              homeProvider.selectedString = data
-                                                          .selectedString ==
-                                                      "EditProfile"
-                                                  ? "User"
-                                                  : data
-                                                              .selectedString ==
-                                                          "ChangeMobile"
-                                                      ? "EditProfile"
-                                                      : data.selectedString == "UserOTP"
-                                                          ? "ChangeMobile"
-                                                          : data.selectedString ==
-                                                                      "Wishlist" ||
-                                                                  data.selectedString ==
-                                                                      "MyAddress" ||
-                                                                  data.selectedString ==
-                                                                      "MyOrders" ||
-                                                                  data.selectedString ==
-                                                                      "ChangePassword" ||
-                                                                  data.selectedString ==
-                                                                      "FeedBack"
-                                                              ? "User"
-                                                              : data.selectedString ==
-                                                                      "OrderDetails"
-                                                                  ? "MyOrders"
-                                                                  : data.selectedString ==
-                                                                          "NewPassword"
-                                                                      ? "ChangePassword"
-                                                                      : "";
-                                            },
-                                          )
-                                        : data.selectedString == "Cart"
-                                            ? leadingAppBar(
-                                                backButton: false,
-                                                title: "Cart")
-                                            : leadingAppBar(
-                                                backButton: false,
-                                                title: "Notifications"),
-                  ),
-                ),
-          extendBody: true,
-          resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            bottom: false,
-            child: Stack(
-              children: [
-                Container(
-                  child: PageView(
-                    controller: pageController,
-                    children: [
-                      data.selectedString == "Home"
-                          ? Home()
-                          : data.selectedString == "SearchProducts"
-                              ? Search()
-                              : data.selectedString == "VendorInfo"
-                                  ? VendorsInfo()
-                                  : data.selectedString == "ProductInfo"
-                                      ? ProductInfo()
-                                      : data.selectedString == "SchoolInfo"
-                                          ? SchoolInfo()
-                                          : data.selectedString == "Filter"
-                                              ? Filter()
-                                              : data.selectedString == "School"
-                                                  ? School()
-                                                  : data.selectedString=="Category"&& data.selectedBottomIndex==1?Category():data.selectedString=="CategoryInfo"?CategoryInfo():AllVendors(),
-                      data.selectedString == "Category"
-                          ? Category()
-                          : data.selectedString == "ProductInfo"
-                              ? ProductInfo()
-                              : CategoryInfo(),
-                      data.selectedString == "School" ? School() : SchoolInfo(),
-                      data.selectedString == "EditProfile"
-                          ? EditProfile()
-                          : data.selectedString == "ChangeMobile"
-                              ? ChangeMobile()
-                              : data.selectedString == "UserOTP"
-                                  ? UserOTP()
-                                  : data.selectedString == "Wishlist"
-                                      ? WishList()
-                                      : data.selectedString == "MyAddress"
-                                          ? MyAddress()
-                                          : data.selectedString ==
-                                                  "UserEditAddress"
-                                              ? UserEditAddress()
-                                              : data.selectedString ==
-                                                      "UserAddAddress"
-                                                  ? UserAddAddress()
-                                                  : data.selectedString ==
-                                                          "MyOrders"
-                                                      ? MyOrders()
-                                                      : data.selectedString ==
-                                                              "OrderDetails"
-                                                          ? OrderDetails()
-                                                          : data.selectedString ==
-                                                                  "OrderTracking"
-                                                              ? OrderTracking()
-                                                              : data.selectedString ==
-                                                                      "ChangePassword"
-                                                                  ? ChangePassword()
-                                                                  : data.selectedString ==
-                                                                          "NewPassword"
-                                                                      ? NewPassword()
-                                                                      : data.selectedString ==
-                                                                              "FeedBack"
-                                                                          ? FeedBack()
-                                                                          : User(),
-                      data.selectedString == "Cart"
-                          ? Cart()
-                          : data.selectedString == "AddAddress"
-                              ? AddAddress()
-                              : data.selectedString == "EditAddress"
-                                  ? EditAddress()
-                                  : ChangeAddress(),
-                      NotificationPage(),
-                    ],
-                    onPageChanged: (value) {
-                      homeProvider.selectedBottomIndex = value;
+                      _setHomeScreenProvider.selectedString = "Notifications";
+                      _setHomeScreenProvider.selectedBottomIndex = 5;
+                      _setHomeScreenProvider.blueCartIcon = false;
+                      _setHomeScreenProvider.blueBellIcon = true;
                     },
-                    physics: NeverScrollableScrollPhysics(),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: data.selectedString == "AddAddress" ||
-                          data.selectedString == "EditAddress" ||
-                          data.selectedString == "Filter" ||
-                          data.selectedString == "UserEditAddress" ||
-                          data.selectedString == "UserAddAddress"
-                      ? Container(
-                          padding: EdgeInsets.only(bottom: 10),
-                          alignment: Alignment.center,
-                          child: Text(
-                            data.selectedString == "EditAddress" ||
-                                    data.selectedString == "UserEditAddress"
-                                ? "Save Update"
-                                : data.selectedString == "Filter"
-                                    ? "APPLY"
-                                    : 'ADD',
+                    onCartTap: () {
+                      pageController.jumpToPage(4);
+
+                      _setHomeScreenProvider.selectedString = "Cart";
+                      _setHomeScreenProvider.selectedBottomIndex = 4;
+                      _setHomeScreenProvider.blueCartIcon = true;
+                      _setHomeScreenProvider.blueBellIcon = false;
+                    },
+                    whiteIcon: _homeScreenProvider.selectedString ==
+                        "VendorInfo" ? true : false,
+                    color: _homeScreenProvider.selectedString == "VendorInfo"
+                        ? colorPalette.purple
+                        : Colors.white,
+                    width: width,
+                    imagePath: imagePath,
+                    colorPalette: colorPalette,
+                    child: Container(
+                      height: width / 6,
+                      width: width / 2,
+                      child: _homeScreenProvider.selectedBottomIndex == 0 &&
+                          _homeScreenProvider.selectedString == "Home"
+                          ? imagePath.logo
+                          : _homeScreenProvider.selectedBottomIndex == 0
+                          ? Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: _homeScreenProvider.selectedString ==
+                                  "VendorInfo"
+                                  ? Colors.white
+                                  : colorPalette.navyBlue,
+                            ),
+                            onPressed: () {
+                              _setHomeScreenProvider.selectedString =
+                              _homeScreenProvider.selectedString == "VendorInfo"
+                                  ? "All Vendors"
+                                  : _homeScreenProvider.selectedString ==
+                                  "ProductInfo" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "SchoolInfo"
+                                  ? "VendorInfo"
+                                  : "Home";
+                            },
+                            iconSize: 30,
+                          ),
+                          Text(
+                            _homeScreenProvider.selectedString == "VendorInfo"
+                                ? ""
+                                : _homeScreenProvider.selectedString ==
+                                "ProductInfo" ||
+                                _homeScreenProvider.selectedString ==
+                                    "SchoolInfo"
+                                ? ""
+                                : 'All Vendors',
                             style: TextStyle(
                               fontFamily: 'Roboto',
-                              fontSize: 18,
-                              color: const Color(0xffffffff),
-                              fontWeight: FontWeight.w700,
+                              fontSize: 25,
+                              color: const Color(0xff301869),
                             ),
                             textAlign: TextAlign.left,
                           ),
-                          height: width / 5,
-                          color: colorPalette.navyBlue,
-                        )
-                      : data.selectedString == "ChangeAddress"
-                          ? SizedBox()
-                          : Container(
-                              padding: EdgeInsets.only(bottom: 10),
-                              height: 90,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(35)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: Offset(1, -2),
-                                    blurRadius: 8,
-                                    color: Color(0xffE1E1E1),
-                                  )
-                                ],
+                        ],
+                      )
+                          : _homeScreenProvider.selectedBottomIndex == 1 &&
+                          _homeScreenProvider.selectedString == "Category" ||
+                          _homeScreenProvider.selectedString ==
+                              "CategoryInfo" ||
+                          _homeScreenProvider.selectedString == "ProductInfo"
+                          ? leadingAppBar(
+                          title: _homeScreenProvider.selectedString ==
+                              "Category"
+                              ? "Category"
+                              : "",
+                          backButton:
+                          _homeScreenProvider.selectedString == "Category"
+                              ? false
+                              : true,
+                          onBackTap: () {
+                            _setHomeScreenProvider.selectedString =
+                            _homeScreenProvider.selectedString == "CategoryInfo"
+                                ? "Category"
+                                : "CategoryInfo";
+                          })
+                          : _homeScreenProvider.selectedBottomIndex == 2 &&
+                          _homeScreenProvider.selectedString == "School" ||
+                          _homeScreenProvider.selectedString == "SchoolInfo"
+                          ? leadingAppBar(
+                        title: _homeScreenProvider.selectedString == "School"
+                            ? "Schools"
+                            : "",
+                        backButton:
+                        _homeScreenProvider.selectedString == "School"
+                            ? false
+                            : true,
+                        onBackTap: () {
+                          _setHomeScreenProvider.selectedString =
+                          _homeScreenProvider.selectedString ==
+                              "SchoolInfo"
+                              ? "School"
+                              : "School";
+                        },
+                      )
+                          : _homeScreenProvider.selectedString == "User" ||
+                          _homeScreenProvider.selectedString ==
+                              "EditProfile" ||
+                          _homeScreenProvider.selectedString ==
+                              "ChangeMobile" ||
+                          _homeScreenProvider.selectedString == "UserOTP" ||
+                          _homeScreenProvider.selectedString == "Wishlist" ||
+                          _homeScreenProvider.selectedString ==
+                              "MyAddress" ||
+                          _homeScreenProvider.selectedString == "MyOrders" ||
+                          _homeScreenProvider.selectedString ==
+                              "OrderDetails" ||
+                          _homeScreenProvider.selectedString ==
+                              "OrderTracking" ||
+                          _homeScreenProvider.selectedString ==
+                              "ChangePassword" ||
+                          _homeScreenProvider.selectedString == "NewPassword" ||
+                          _homeScreenProvider.selectedString ==
+                              "FeedBack"
+                          ? leadingAppBar(
+                        title: _homeScreenProvider.selectedString == "User"
+                            ? "Account"
+                            : _homeScreenProvider.selectedString ==
+                            "EditProfile"
+                            ? "Edit Profile"
+                            : _homeScreenProvider.selectedString ==
+                            "ChangeMobile" ||
+                            _homeScreenProvider.selectedString ==
+                                "UserOTP"
+                            ? "Change Mobile Number"
+                            : _homeScreenProvider.selectedString ==
+                            "Wishlist"
+                            ? "Wishlist"
+                            : _homeScreenProvider.selectedString ==
+                            "MyAddress"
+                            ? "My Addresses"
+                            : _homeScreenProvider.selectedString ==
+                            "MyOrders" ||
+                            _homeScreenProvider.selectedString ==
+                                "OrderDetails"
+                            ? "My Orders"
+                            : _homeScreenProvider.selectedString ==
+                            "ChangePassword" ||
+                            _homeScreenProvider.selectedString ==
+                                "NewPassword"
+                            ? "Change Password"
+                            : _homeScreenProvider.selectedString ==
+                            "FeedBack" ? "Submit Feedback" : "",
+                        backButton:
+                        _homeScreenProvider.selectedString == "User"
+                            ? false
+                            : true,
+                        onBackTap: () {
+                          _setHomeScreenProvider.selectedString =
+                          _homeScreenProvider
+                              .selectedString ==
+                              "EditProfile"
+                              ? "User"
+                              : _homeScreenProvider
+                              .selectedString ==
+                              "ChangeMobile"
+                              ? "EditProfile"
+                              : _homeScreenProvider.selectedString == "UserOTP"
+                              ? "ChangeMobile"
+                              : _homeScreenProvider.selectedString ==
+                              "Wishlist" ||
+                              _homeScreenProvider.selectedString ==
+                                  "MyAddress" ||
+                              _homeScreenProvider.selectedString ==
+                                  "MyOrders" ||
+                              _homeScreenProvider.selectedString ==
+                                  "ChangePassword" ||
+                              _homeScreenProvider.selectedString ==
+                                  "FeedBack"
+                              ? "User"
+                              : _homeScreenProvider.selectedString ==
+                              "OrderDetails"
+                              ? "MyOrders"
+                              : _homeScreenProvider.selectedString ==
+                              "NewPassword"
+                              ? "ChangePassword"
+                              : "";
+                        },
+                      )
+                          : _homeScreenProvider.selectedString == "Cart"
+                          ? leadingAppBar(
+                          backButton: false,
+                          title: "Cart")
+                          : leadingAppBar(
+                          backButton: false,
+                          title: "Notifications"),
+                    ),
+                  ),
+                  extendBody: true,
+                  resizeToAvoidBottomInset: false,
+                  body: SafeArea(
+                    bottom: false,
+                    child: Stack(
+                      children: [
+                        Container(
+                          child: PageView(
+                            controller: pageController,
+                            children: [
+                              _homeScreenProvider.selectedString == "Home"
+                                  ? Home(homePageModel: _futureSnapshot.data,)
+                                  : _homeScreenProvider.selectedString ==
+                                  "SearchProducts"
+                                  ? Search()
+                                  : _homeScreenProvider.selectedString ==
+                                  "VendorInfo"
+                                  ?Consumer<VendorProvider>(builder: (_, _vendorProvider, child) =>  VendorsInfo(vendorSlug: _vendorProvider.selectedVendorName))
+                                  : _homeScreenProvider.selectedString ==
+                                  "ProductInfo"
+                                  ? ProductInfo()
+                                  : _homeScreenProvider.selectedString ==
+                                  "SchoolInfo"
+                                  ? SchoolInfo()
+                                  : _homeScreenProvider.selectedString ==
+                                  "Filter"
+                                  ? Filter()
+                                  : _homeScreenProvider.selectedString ==
+                                  "School"
+                                  ? SchoolTab()
+                                  : _homeScreenProvider.selectedString ==
+                                  "Category" &&
+                                  _homeScreenProvider.selectedBottomIndex == 1
+                                  ? CategoryTab()
+                                  : _homeScreenProvider.selectedString ==
+                                  "CategoryInfo"
+                                  ? CategoryInfo()
+                                  : AllVendors(),
+                              _homeScreenProvider.selectedString == "Category"
+                                  ? CategoryTab()
+                                  : _homeScreenProvider.selectedString ==
+                                  "ProductInfo"
+                                  ? ProductInfo()
+                                  : CategoryInfo(),
+                              _homeScreenProvider.selectedString == "School"
+                                  ? SchoolTab()
+                                  : SchoolInfo(),
+                              _homeScreenProvider.selectedString ==
+                                  "EditProfile"
+                                  ? EditProfile()
+                                  : _homeScreenProvider.selectedString ==
+                                  "ChangeMobile"
+                                  ? ChangeMobile()
+                                  : _homeScreenProvider.selectedString ==
+                                  "UserOTP"
+                                  ? UserOTP()
+                                  : _homeScreenProvider.selectedString ==
+                                  "Wishlist"
+                                  ? WishList()
+                                  : _homeScreenProvider.selectedString ==
+                                  "MyAddress"
+                                  ? MyAddress()
+                                  : _homeScreenProvider.selectedString ==
+                                  "UserEditAddress"
+                                  ? UserEditAddress()
+                                  : _homeScreenProvider.selectedString ==
+                                  "UserAddAddress"
+                                  ? UserAddAddress()
+                                  : _homeScreenProvider.selectedString ==
+                                  "MyOrders"
+                                  ? MyOrders()
+                                  : _homeScreenProvider.selectedString ==
+                                  "OrderDetails"
+                                  ? OrderDetails()
+                                  : _homeScreenProvider.selectedString ==
+                                  "OrderTracking"
+                                  ? OrderTracking()
+                                  : _homeScreenProvider.selectedString ==
+                                  "ChangePassword"
+                                  ? ChangePassword()
+                                  : _homeScreenProvider.selectedString ==
+                                  "NewPassword"
+                                  ? NewPassword()
+                                  : _homeScreenProvider.selectedString ==
+                                  "FeedBack"
+                                  ? FeedBack()
+                                  : User(),
+                              _homeScreenProvider.selectedString == "Cart"
+                                  ? Cart()
+                                  : _homeScreenProvider.selectedString ==
+                                  "AddAddress"
+                                  ? AddAddress()
+                                  : _homeScreenProvider.selectedString ==
+                                  "EditAddress"
+                                  ? EditAddress()
+                                  : ChangeAddress(),
+                              NotificationPage(),
+                            ],
+                            onPageChanged: (value) {
+                              _setHomeScreenProvider.selectedBottomIndex =
+                                  value;
+                            },
+                            physics: NeverScrollableScrollPhysics(),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: _homeScreenProvider.selectedString ==
+                              "AddAddress" ||
+                              _homeScreenProvider.selectedString ==
+                                  "EditAddress" ||
+                              _homeScreenProvider.selectedString == "Filter" ||
+                              _homeScreenProvider.selectedString ==
+                                  "UserEditAddress" ||
+                              _homeScreenProvider.selectedString ==
+                                  "UserAddAddress"
+                              ? Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            alignment: Alignment.center,
+                            child: Text(
+                              _homeScreenProvider.selectedString ==
+                                  "EditAddress" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "UserEditAddress"
+                                  ? "Save Update"
+                                  : _homeScreenProvider.selectedString ==
+                                  "Filter"
+                                  ? "APPLY"
+                                  : 'ADD',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 18,
+                                color: const Color(0xffffffff),
+                                fontWeight: FontWeight.w700,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      pageController.jumpToPage(0);
-                                      homeProvider.selectedBottomIndex = 0;
-                                      homeProvider.selectedString = "Home";
-                                      homeProvider.blueCartIcon = false;
-                                      homeProvider.blueBellIcon = false;
-                                    },
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          data.selectedBottomIndex == 0
-                                              ? colorPalette.orange
-                                              : Colors.transparent,
-                                      radius: width / 13,
-                                      child: SvgPicture.asset(
-                                        data.selectedBottomIndex == 0
-                                            ? "assets/icons/activeHome.svg"
-                                            : "assets/icons/Home.svg",
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      pageController.jumpToPage(1);
-                                      homeProvider.selectedBottomIndex = 1;
-                                      homeProvider.selectedString = "Category";
-                                      homeProvider.blueCartIcon = false;
-                                      homeProvider.blueBellIcon = false;
-                                    },
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          data.selectedBottomIndex == 1
-                                              ? colorPalette.orange
-                                              : Colors.transparent,
-                                      radius: width / 13,
-                                      child: SvgPicture.asset(
-                                        data.selectedBottomIndex == 1
-                                            ? "assets/icons/activeCategory.svg"
-                                            : "assets/icons/Category.svg",
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      pageController.jumpToPage(2);
-                                      homeProvider.selectedBottomIndex = 2;
-                                      homeProvider.selectedString = "School";
-                                      homeProvider.blueCartIcon = false;
-                                      homeProvider.blueBellIcon = false;
-                                    },
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          data.selectedBottomIndex == 2
-                                              ? colorPalette.orange
-                                              : Colors.transparent,
-                                      radius: width / 13,
-                                      child: SvgPicture.asset(
-                                        data.selectedBottomIndex == 2
-                                            ? "assets/icons/activeSchool.svg"
-                                            : "assets/icons/School.svg",
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      pageController.jumpToPage(3);
-                                      homeProvider.selectedBottomIndex = 3;
-                                      homeProvider.selectedString = "User";
-                                      homeProvider.blueCartIcon = false;
-                                      homeProvider.blueBellIcon = false;
-                                    },
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          data.selectedBottomIndex == 3
-                                              ? colorPalette.orange
-                                              : Colors.transparent,
-                                      radius: width / 13,
-                                      child: SvgPicture.asset(
-                                        data.selectedBottomIndex == 3
-                                            ? "assets/icons/activeUser.svg"
-                                            : "assets/icons/User.svg",
-                                        color: data.selectedBottomIndex == 3
-                                            ? Colors.black
-                                            : null,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              textAlign: TextAlign.left,
                             ),
+                            height: width / 5,
+                            color: colorPalette.navyBlue,
+                          )
+                              : _homeScreenProvider.selectedString ==
+                              "ChangeAddress"
+                              ? SizedBox()
+                              : Container(
+                            padding: EdgeInsets.only(bottom: 10),
+                            height: 90,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(35)),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(1, -2),
+                                  blurRadius: 8,
+                                  color: Color(0xffE1E1E1),
+                                )
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    pageController.jumpToPage(0);
+                                    _setHomeScreenProvider.selectedBottomIndex =
+                                    0;
+                                    _setHomeScreenProvider.selectedString =
+                                    "Home";
+                                    _setHomeScreenProvider.blueCartIcon = false;
+                                    _setHomeScreenProvider.blueBellIcon = false;
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                    _homeScreenProvider.selectedBottomIndex == 0
+                                        ? colorPalette.orange
+                                        : Colors.transparent,
+                                    radius: width / 13,
+                                    child: SvgPicture.asset(
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          0
+                                          ? "assets/icons/activeHome.svg"
+                                          : "assets/icons/Home.svg",
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    pageController.jumpToPage(1);
+                                    _setHomeScreenProvider.selectedBottomIndex =
+                                    1;
+                                    _setHomeScreenProvider.selectedString =
+                                    "Category";
+                                    _setHomeScreenProvider.blueCartIcon = false;
+                                    _setHomeScreenProvider.blueBellIcon = false;
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                    _homeScreenProvider.selectedBottomIndex == 1
+                                        ? colorPalette.orange
+                                        : Colors.transparent,
+                                    radius: width / 13,
+                                    child: SvgPicture.asset(
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          1
+                                          ? "assets/icons/activeCategory.svg"
+                                          : "assets/icons/Category.svg",
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    pageController.jumpToPage(2);
+                                    _setHomeScreenProvider.selectedBottomIndex =
+                                    2;
+                                    _setHomeScreenProvider.selectedString =
+                                    "School";
+                                    _setHomeScreenProvider.blueCartIcon = false;
+                                    _setHomeScreenProvider.blueBellIcon = false;
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                    _homeScreenProvider.selectedBottomIndex == 2
+                                        ? colorPalette.orange
+                                        : Colors.transparent,
+                                    radius: width / 13,
+                                    child: SvgPicture.asset(
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          2
+                                          ? "assets/icons/activeSchool.svg"
+                                          : "assets/icons/School.svg",
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    pageController.jumpToPage(3);
+                                    _setHomeScreenProvider.selectedBottomIndex =
+                                    3;
+                                    _setHomeScreenProvider.selectedString =
+                                    "User";
+                                    _setHomeScreenProvider.blueCartIcon = false;
+                                    _setHomeScreenProvider.blueBellIcon = false;
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                    _homeScreenProvider.selectedBottomIndex == 3
+                                        ? colorPalette.orange
+                                        : Colors.transparent,
+                                    radius: width / 13,
+                                    child: SvgPicture.asset(
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          3
+                                          ? "assets/icons/activeUser.svg"
+                                          : "assets/icons/User.svg",
+                                      color: _homeScreenProvider
+                                          .selectedBottomIndex == 3
+                                          ? Colors.black
+                                          : null,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
                 ),
-              ],
-            ),
-          ),
-        );
-      },
+              ),
+            );
+          }
+        }
     );
   }
 }
@@ -547,12 +651,12 @@ Widget leadingAppBar({bool backButton, title, onBackTap}) {
     children: [
       backButton
           ? IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-              ),
-              onPressed: onBackTap,
-              iconSize: 30,
-            )
+        icon: Icon(
+          Icons.arrow_back_ios,
+        ),
+        onPressed: onBackTap,
+        iconSize: 30,
+      )
           : SizedBox(),
       Text(
         title,
