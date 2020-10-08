@@ -130,7 +130,6 @@ class _MobileVerificationState extends State<MobileVerification> {
                               dynamic response =
                                   await RegisterAPI.verifyMobileNumber(
                                       _mobileVerification.text);
-                              print(response);
 
                               if (response['status'] == 200) {
                                 try {
@@ -151,9 +150,11 @@ class _MobileVerificationState extends State<MobileVerification> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 OtpVerification()));
-                                  }else{
-                                    _registerProvider.isMobileVerificationProcess = false;
-                                    Scaffold.of(context).showSnackBar(getSnackBar('${response['message']}'));
+                                  } else {
+                                    _registerProvider
+                                        .isMobileVerificationProcess = false;
+                                    Scaffold.of(context).showSnackBar(
+                                        getSnackBar('${response['message']}'));
                                   }
                                 } catch (e) {
                                   _registerProvider

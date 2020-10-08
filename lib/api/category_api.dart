@@ -1,0 +1,49 @@
+import 'dart:convert';
+
+import 'package:bookmrk/constant/constant.dart';
+import 'package:http/http.dart' as http;
+
+class CategoryAPI {
+  /// api to list all the categories.
+  static Future getAllCategoryList() async {
+    String url =
+        "$kBaseURL/categories/main_categories/1595922619X5f1fd8bb5f332/MOB/1";
+
+    Map<String, String> header = {
+//      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+//      "User-ID": "1",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    http.Response response = await http.get(
+      url,
+      headers: header,
+    );
+
+    dynamic data = jsonDecode(response.body);
+    return data;
+  }
+
+  /// api to get all products from category..
+  static Future getCategoryProducts(int categoryId) async {
+    String url =
+        "$kBaseURL/categories/categories_by_subcategories_product/1595922619X5f1fd8bb5f332/MOB/1/$categoryId";
+
+    Map<String, String> header = {
+//      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+//      "User-ID": "1",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    http.Response response = await http.get(
+      url,
+      headers: header,
+    );
+    dynamic data = jsonDecode(response.body);
+    return data;
+  }
+}

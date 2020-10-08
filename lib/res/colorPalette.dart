@@ -10,4 +10,5 @@ class ColorPalette {
   Color midGrey = Color(0xffa8a8a8);
   Color pinkOrange = Color(0xffF29A7C);
   Color purple = Color(0xff6A4B9C);
+  Color green = Color(0xff00C133);
 }

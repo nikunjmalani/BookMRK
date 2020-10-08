@@ -115,7 +115,11 @@ class _LoginState extends State<Login> {
                               SharedPreferences _prefs =
                                   await SharedPreferences.getInstance();
                               _prefs.setBool('isLogin', true);
-                              Navigator.push(
+                              _prefs.setInt(
+                                  'userId',
+                                  int.parse(response['data'][0]['user_id']
+                                      .toString()));
+                              Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => HomePage(),
@@ -132,7 +136,7 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.only(top: 30),
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context).push(
+                    onTap: () => Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) => Register())),
                     child: RichText(
                       text: TextSpan(

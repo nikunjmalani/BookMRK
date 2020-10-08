@@ -1,4 +1,5 @@
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,9 +45,10 @@ Widget ImageBox({height, width, image, title}) {
       border: Border.all(color: Color(0xffcfcfcf)),
       borderRadius: BorderRadius.circular(25),
       image: DecorationImage(
-        image: AssetImage(image),
-        fit: BoxFit.fill,
-      ),
+          image: image != null
+              ? NetworkImage(image)
+              : AssetImage('assets/images/logo.png'),
+          fit: BoxFit.fill),
     ),
     child: Container(
       alignment: Alignment.center,
@@ -70,7 +72,16 @@ Widget ImageBox({height, width, image, title}) {
   );
 }
 
-Widget ProductBox({height, width, image, title, description, price, expanded}) {
+Widget ProductBox(
+    {height,
+    width,
+    image,
+    title,
+    description,
+    price,
+    expanded,
+    icon,
+    stock = "In"}) {
   ColorPalette colorPalette = ColorPalette();
   return Stack(
     fit: expanded == true ? StackFit.expand : StackFit.loose,
@@ -88,10 +99,23 @@ Widget ProductBox({height, width, image, title, description, price, expanded}) {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 10),
-              child: Image.asset(
-                image,
-                fit: BoxFit.fill,
+              child: CachedNetworkImage(
+                imageUrl: image,
                 height: height / 5.2,
+                fit: BoxFit.fill,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                        colorFilter: ColorFilter.mode(
+                            Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+                  ),
+                ),
+                placeholder: (context, url) =>
+                    Center(child: Image.asset('assets/images/Sharpner.png')),
+                errorWidget: (context, url, error) =>
+                    Center(child: Image.asset('assets/images/Sharpner.png')),
               ),
             ),
             Container(
@@ -142,7 +166,7 @@ Widget ProductBox({height, width, image, title, description, price, expanded}) {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
-                      'In Stock',
+                      '$stock Stock',
                       style: TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 13,
@@ -168,16 +192,137 @@ Widget ProductBox({height, width, image, title, description, price, expanded}) {
         ),
       ),
       Positioned(
-        top: 0,
-        right: 0,
-        child: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.favorite_border,
-            color: colorPalette.navyBlue,
+              top: 0,
+              right: 0,
+              child: Container(
+                height: 50,
+                width: 50,
+                padding: EdgeInsets.all(15),
+                child: icon,
+              )) ??
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.favorite_border,
+                color: colorPalette.navyBlue,
+              ),
+            ),
+          )
+    ],
+  );
+}
+
+Widget Tabs(
+    {height,
+    width,
+    firstTap,
+    secondTap,
+    currentIndex,
+    firstTitle,
+    secondTitle}) {
+  ColorPalette colorPalette = ColorPalette();
+  return Row(
+    children: [
+      GestureDetector(
+        onTap: firstTap,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          alignment: Alignment.center,
+          margin: EdgeInsets.only(top: 15),
+          height: height / 18,
+          width: width / 2,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: currentIndex == 0
+                  ? colorPalette.navyBlue
+                  : Colors.transparent,
+              width: 3,
+            ),
+          ),
+          child: Text(
+            firstTitle,
+            style: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 17,
+              color: const Color(0xff301869),
+              fontWeight: FontWeight.w700,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: secondTap,
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          alignment: Alignment.center,
+          margin: EdgeInsets.only(top: 15),
+          height: height / 18,
+          width: width / 2,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: currentIndex == 1
+                  ? colorPalette.navyBlue
+                  : Colors.transparent,
+              width: 3,
+            ),
+          ),
+          child: Text(
+            secondTitle,
+            style: TextStyle(
+              fontFamily: 'Roboto',
+              fontSize: 17,
+              color: const Color(0xff000000),
+            ),
+            textAlign: TextAlign.left,
           ),
         ),
       )
     ],
+  );
+}
+
+Widget priceDetail() {
+  return Text(
+    'Price Details',
+    style: TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 16,
+      color: const Color(0xffb7b7b7),
+    ),
+    textAlign: TextAlign.left,
+  );
+}
+
+Widget priceRow({String title, var price}) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 10, top: 5),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 16,
+            color: const Color(0xff000000),
+            fontWeight: FontWeight.w300,
+          ),
+          textAlign: TextAlign.left,
+        ),
+        Text(
+          '₹ ${price}',
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 16,
+            color: const Color(0xffbcbcbc),
+          ),
+          textAlign: TextAlign.left,
+        ),
+      ],
+    ),
   );
 }
