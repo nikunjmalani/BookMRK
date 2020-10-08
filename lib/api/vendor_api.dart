@@ -49,7 +49,6 @@ class VendorAPI extends ChangeNotifier {
 
   /// api to get school information of vendor
   static Future getSchoolInformation(String vendorSlug) async {
-    print(vendorSlug);
     String url =
         "$kBaseURL/app/single_vendor_all_school/1595922619X5f1fd8bb5f332/MOB/1/$vendorSlug";
     Map<String, String> header = {

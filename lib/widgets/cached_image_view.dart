@@ -16,6 +16,7 @@ Widget showCachedImage({String image, double height, String placeHolderImage}) {
       ),
     ),
     placeholder: (context, url) => Center(child: Image.asset(placeHolderImage)),
-    errorWidget: (context, url, error) => Icon(Icons.error),
+    errorWidget: (context, url, error) =>
+        Center(child: Image.asset(placeHolderImage)),
   );
 }

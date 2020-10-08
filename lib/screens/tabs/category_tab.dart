@@ -1,5 +1,10 @@
+import 'package:bookmrk/api/category_api.dart';
+import 'package:bookmrk/model/category_list_model.dart';
+import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
+import 'package:bookmrk/widgets/snackbar_global.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,65 +14,134 @@ class CategoryTab extends StatefulWidget {
 }
 
 class _CategoryTabState extends State<CategoryTab> {
+  Future<CategoryListModel> getCategoryList() async {
+    dynamic categoryDetails = await CategoryAPI.getAllCategoryList();
+    CategoryListModel _categoryListModel =
+        CategoryListModel.fromJson(categoryDetails);
+    return _categoryListModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return Consumer<HomeScreenProvider>(
-      builder: (context, data, child) {
-        return Column(
-          children: [
-            SearchBar(width: width, onTap: () {}, title: "Search Products"),
-            Expanded(
-              child: GridView.builder(
-                itemCount: 9,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 2.3),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      data.selectedString = "CategoryInfo";
-                    },
-                    child: Stack(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 15),
-                          alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.black.withOpacity(0.5),
-                          ),
-                          child: Text(
-                            'Books',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 18,
-                              color: const Color(0xffffffff),
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
+    return FutureBuilder(
+        future: getCategoryList(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Consumer<HomeScreenProvider>(
+              builder: (context, data, child) {
+                return Column(
+                  children: [
+                    SearchBar(
+                        width: width, onTap: () {}, title: "Search Products"),
+                    Expanded(
+                      child: GridView.builder(
+                        itemCount: snapshot.data.response.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: 2.3),
+                        itemBuilder: (context, index) {
+                          return Consumer<CategoryProvider>(
+                              builder: (_, _categoryProvider, child) {
+                            return GestureDetector(
+                              onTap: () {
+                                data.selectedString = "CategoryInfo";
+                                _categoryProvider.selectedCategoryId =
+                                    int.parse(snapshot
+                                        .data.response[index].categoryId
+                                        .toString());
+                              },
+                              child: Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        '${snapshot.data.response[index].categoryImg}',
+                                    height: height / 5.2,
+                                    fit: BoxFit.fill,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      margin: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.fill,
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.red,
+                                                BlendMode.colorBurn)),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) => Container(
+                                      margin: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/bookCategory.png'),
+                                            fit: BoxFit.fill,
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.white,
+                                                BlendMode.colorBurn)),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Container(
+                                      margin: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/bookCategory.png'),
+                                            fit: BoxFit.fill,
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.white,
+                                                BlendMode.colorBurn)),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(left: 15),
+                                    alignment: Alignment.centerLeft,
+                                    margin: EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.black.withOpacity(0.5),
+                                    ),
+                                    child: Text(
+                                      '${snapshot.data.response[index].categoryName}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 18,
+                                        color: const Color(0xffffffff),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
+                        },
+                      ),
+                    )
+                  ],
+                );
+              },
+            );
+          } else {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
+                ),
               ),
-            )
-          ],
-        );
-      },
-    );
+            );
+          }
+        });
   }
 }

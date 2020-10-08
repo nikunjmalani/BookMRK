@@ -1,6 +1,9 @@
 import 'package:bookmrk/api/home_page_api.dart';
 import 'package:bookmrk/model/home_page_model.dart';
+import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/school_provider.dart';
+import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
@@ -76,11 +79,6 @@ class _HomePageState extends State<HomePage> {
         future: getHomePageDetails(),
         builder: (context, _futureSnapshot) {
           if (_futureSnapshot.hasData) {
-            _futureSnapshot.data.response.forEach((element) {
-              element.homeBanner.forEach((e) {
-                print(e.text);
-              });
-            });
             return Consumer<HomeScreenProvider>(
               builder: (context, _homeScreenProvider, child) {
                 return Scaffold(
@@ -377,13 +375,19 @@ class _HomePageState extends State<HomePage> {
                                   ? Search()
                                   : _homeScreenProvider.selectedString ==
                                   "VendorInfo"
-                                  ?Consumer<VendorProvider>(builder: (_, _vendorProvider, child) =>  VendorsInfo(vendorSlug: _vendorProvider.selectedVendorName))
+                                  ? Consumer<VendorProvider>(
+                                  builder: (_, _vendorProvider, child) =>
+                                      VendorsInfo(vendorSlug: _vendorProvider
+                                          .selectedVendorName))
                                   : _homeScreenProvider.selectedString ==
                                   "ProductInfo"
                                   ? ProductInfo()
                                   : _homeScreenProvider.selectedString ==
                                   "SchoolInfo"
-                                  ? SchoolInfo()
+                                  ? Consumer<SchoolProvider>(
+                                  builder: (_, _schoolProvider, child) =>
+                                      SchoolInfo(schoolSlug: _schoolProvider
+                                          .selectedSchoolSlug,))
                                   : _homeScreenProvider.selectedString ==
                                   "Filter"
                                   ? Filter()
@@ -396,17 +400,26 @@ class _HomePageState extends State<HomePage> {
                                   ? CategoryTab()
                                   : _homeScreenProvider.selectedString ==
                                   "CategoryInfo"
-                                  ? CategoryInfo()
+                                  ? Consumer<CategoryProvider>(
+                                builder: (_, _categoryProvider, child) =>
+                                    CategoryInfo(
+                                        _categoryProvider.selectedCategoryId),)
                                   : AllVendors(),
                               _homeScreenProvider.selectedString == "Category"
                                   ? CategoryTab()
                                   : _homeScreenProvider.selectedString ==
                                   "ProductInfo"
                                   ? ProductInfo()
-                                  : CategoryInfo(),
+                                  : Consumer<CategoryProvider>(
+                                builder: (_, _categoryProvider, child) =>
+                                    CategoryInfo(
+                                        _categoryProvider.selectedCategoryId),),
                               _homeScreenProvider.selectedString == "School"
                                   ? SchoolTab()
-                                  : SchoolInfo(),
+                                  : Consumer<SchoolProvider>(
+                                  builder: (_, _schoolProvider, child) =>
+                                      SchoolInfo(schoolSlug: _schoolProvider
+                                          .selectedSchoolSlug)),
                               _homeScreenProvider.selectedString ==
                                   "EditProfile"
                                   ? EditProfile()
@@ -424,7 +437,7 @@ class _HomePageState extends State<HomePage> {
                                   ? MyAddress()
                                   : _homeScreenProvider.selectedString ==
                                   "UserEditAddress"
-                                  ? UserEditAddress()
+                                  ? Consumer<UserProvider>(builder: (_, _userProvider, child)=>UserEditAddress(userAddressId: _userProvider.selectedUserAddressId,))
                                   : _homeScreenProvider.selectedString ==
                                   "UserAddAddress"
                                   ? UserAddAddress()
@@ -473,35 +486,9 @@ class _HomePageState extends State<HomePage> {
                                   "EditAddress" ||
                               _homeScreenProvider.selectedString == "Filter" ||
                               _homeScreenProvider.selectedString ==
-                                  "UserEditAddress" ||
-                              _homeScreenProvider.selectedString ==
-                                  "UserAddAddress"
-                              ? Container(
-                            padding: EdgeInsets.only(bottom: 10),
-                            alignment: Alignment.center,
-                            child: Text(
-                              _homeScreenProvider.selectedString ==
-                                  "EditAddress" ||
-                                  _homeScreenProvider.selectedString ==
-                                      "UserEditAddress"
-                                  ? "Save Update"
-                                  : _homeScreenProvider.selectedString ==
-                                  "Filter"
-                                  ? "APPLY"
-                                  : 'ADD',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 18,
-                                color: const Color(0xffffffff),
-                                fontWeight: FontWeight.w700,
-                              ),
-                              textAlign: TextAlign.left,
-                            ),
-                            height: width / 5,
-                            color: colorPalette.navyBlue,
-                          )
-                              : _homeScreenProvider.selectedString ==
-                              "ChangeAddress"
+                                  "UserEditAddress" || _homeScreenProvider.selectedString ==
+                              "ChangeAddress" || _homeScreenProvider.selectedString ==
+                              "UserAddAddress"
                               ? SizedBox()
                               : Container(
                             padding: EdgeInsets.only(bottom: 10),

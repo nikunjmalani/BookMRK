@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 Widget SchoolImageBox({onTap, height, image, title, description}) {
@@ -5,15 +6,45 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
       onTap: onTap,
       child: Stack(
         children: [
-          Container(
-            margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-            height: height / 6,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              image: DecorationImage(
-                  image:
-                      image != null ? NetworkImage(image) : AssetImage(image),
-                  fit: BoxFit.fill),
+          CachedNetworkImage(
+            imageUrl: '$image',
+            height: height / 5.8,
+            fit: BoxFit.fill,
+            imageBuilder: (context, imageProvider) => Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 7),
+              height: height / 6,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.fill,
+                    colorFilter: ColorFilter.mode(
+                        Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+              ),
+            ),
+            placeholder: (context, url) => Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 7),
+              height: height / 6,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/school.png'),
+                    fit: BoxFit.fill,
+                    colorFilter: ColorFilter.mode(
+                        Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+              ),
+            ),
+            errorWidget: (context, url, error) => Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 7),
+              height: height / 6,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/school.png'),
+                    fit: BoxFit.fill,
+                    colorFilter: ColorFilter.mode(
+                        Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+              ),
             ),
           ),
           Container(

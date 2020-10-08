@@ -108,13 +108,14 @@ Widget ProductBox(
                     image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.fill,
-                        colorFilter:
-                            ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+                        colorFilter: ColorFilter.mode(
+                            Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
                   ),
                 ),
                 placeholder: (context, url) =>
                     Center(child: Image.asset('assets/images/Sharpner.png')),
-                errorWidget: (context, url, error) => Icon(Icons.error),
+                errorWidget: (context, url, error) =>
+                    Center(child: Image.asset('assets/images/Sharpner.png')),
               ),
             ),
             Container(

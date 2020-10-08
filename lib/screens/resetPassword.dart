@@ -185,7 +185,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                                             _resetNewPassword.text,
                                             _resetConfirmPassword.text,
                                           );
-                                          print(response);
                                           if (response['status'] == 200) {
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(

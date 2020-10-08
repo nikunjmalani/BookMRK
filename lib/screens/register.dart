@@ -263,6 +263,7 @@ class _RegisterState extends State<Register> {
                                       // check for fields validation...
                                       if (_formKey.currentState.validate()) {
                                         // call register use API...
+
                                         dynamic response =
                                             await RegisterAPI.registerNewUser(
                                           firstName: _registerFirstName.text,

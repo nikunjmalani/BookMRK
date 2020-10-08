@@ -115,6 +115,10 @@ class _LoginState extends State<Login> {
                               SharedPreferences _prefs =
                                   await SharedPreferences.getInstance();
                               _prefs.setBool('isLogin', true);
+                              _prefs.setInt(
+                                  'userId',
+                                  int.parse(response['data'][0]['user_id']
+                                      .toString()));
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(

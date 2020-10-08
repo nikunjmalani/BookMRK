@@ -1,8 +1,13 @@
+import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/model/user_profile_info_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:bookmrk/screens/onBoarding.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class User extends StatefulWidget {
   @override
@@ -11,6 +16,18 @@ class User extends StatefulWidget {
 
 class _UserState extends State<User> {
   ColorPalette colorPalette = ColorPalette();
+
+  Future getUserInformation() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    int userId = _prefs.getInt('userId');
+    print(userId);
+    dynamic userInformation =
+        await UserAPI.getAllUserInformation(userId.toString());
+    UserProfileInfoModel _userInformationModel =
+        UserProfileInfoModel.fromJson(userInformation);
+    return _userInformationModel;
+  }
+
   @override
   Widget build(BuildContext context) {
     var homeProvider = Provider.of<HomeScreenProvider>(context, listen: false);
@@ -18,168 +35,226 @@ class _UserState extends State<User> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 15, top: 25),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: height / 10,
-                backgroundColor: Colors.transparent,
-                backgroundImage: AssetImage(
-                  'assets/images/photo.png',
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ovi Mahajan',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 30,
-                      color: const Color(0xff515c6f),
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    'OviM@gmail.com',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 15,
-                      color: const Color(0xff515c6f),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Provider.of<HomeScreenProvider>(context, listen: false)
-                          .selectedString = "EditProfile";
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: height / 26,
-                      width: width / 3.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          width: 2.8,
-                          color: colorPalette.navyBlue,
-                        ),
-                      ),
-                      child: Text(
-                        'EDIT PROFILE',
-                        style: TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: 13,
-                          color: const Color(0xff301869),
-                          letterSpacing: 0.72,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 15),
-          height: width * 1.15,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: colorPalette.grey,
-              width: 1,
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _profileMenus(
-                  title: "My Addresses",
-                  width: width,
-                  asset: "address",
-                  onClick: () {
-                    homeProvider.selectedString = "MyAddress";
-                  }),
-              _customDivider(),
-              _profileMenus(
-                  title: "My Orders",
-                  width: width,
-                  asset: "allOrder",
-                  onClick: () {
-                    homeProvider.selectedString = "MyOrders";
-                  }),
-              _customDivider(),
-              _profileMenus(
-                  title: "Wishlist",
-                  width: width,
-                  asset: "heart",
-                  onClick: () {
-                    homeProvider.selectedString = "Wishlist";
-                  }),
-              _customDivider(),
-              _profileMenus(
-                title: "Change Password",
-                width: width,
-                asset: "key",
-                onClick: () => homeProvider.selectedString = "ChangePassword",
-              ),
-              _customDivider(),
-              _profileMenus(
-                  title: "Terms and Conditions",
-                  width: width,
-                  asset: "tc",
-                  onClick: () {}),
-              _customDivider(),
-              _profileMenus(
-                  title: "Privacy Policy",
-                  width: width,
-                  asset: "policy",
-                  onClick: () {}),
-              _customDivider(),
-              _profileMenus(
-                  title: "Submit Feedback",
-                  width: width,
-                  asset: "good",
-                  onClick: () => homeProvider.selectedString = "FeedBack"),
-              _customDivider(),
-              _profileMenus(
-                title: "Logout",
-                width: width,
-                asset: "logout",
-                onClick: () => showDialog(
-                  context: context,
-                  builder: (context) => LogOutDialog(
-                    width: width,
-                    onCancelTap: () {
-                      Navigator.pop(context);
-                    },
-                    onYesTap: () {},
+    return FutureBuilder(
+        future: getUserInformation(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, top: 25),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      snapshot.data.response[0].profilePic == ""
+                          ? CircleAvatar(
+                              radius: height / 10,
+                              backgroundColor: Colors.transparent,
+                              child: Icon(
+                                Icons.person_outline,
+                                size: 100.0,
+                                color: colorPalette.navyBlue,
+                              ),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl:
+                                  '${snapshot.data.response[0].profilePic}',
+                              imageBuilder: (context, imageProvider) =>
+                                  CircleAvatar(
+                                radius: height / 10,
+                                backgroundColor: Colors.transparent,
+                                backgroundImage: imageProvider,
+                              ),
+                              errorWidget: (context, string, stackTrace) =>
+                                  CircleAvatar(
+                                radius: height / 10,
+                                backgroundColor: Colors.transparent,
+                                child: Icon(
+                                  Icons.person_outline,
+                                  size: 100.0,
+                                  color: colorPalette.navyBlue,
+                                ),
+                              ),
+                              placeholder: (context, str) => CircleAvatar(
+                                radius: height / 10,
+                                backgroundColor: Colors.transparent,
+                                child: Icon(
+                                  Icons.person_outline,
+                                  size: 100.0,
+                                  color: colorPalette.navyBlue,
+                                ),
+                              ),
+                            ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${snapshot.data.response[0].fname}',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 30,
+                              color: const Color(0xff515c6f),
+                              fontWeight: FontWeight.w700,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            '${snapshot.data.response[0].email}',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 15,
+                              color: const Color(0xff515c6f),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Provider.of<HomeScreenProvider>(context,
+                                      listen: false)
+                                  .selectedString = "EditProfile";
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: height / 26,
+                              width: width / 3.5,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                border: Border.all(
+                                  width: 2.8,
+                                  color: colorPalette.navyBlue,
+                                ),
+                              ),
+                              child: Text(
+                                'EDIT PROFILE',
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 13,
+                                  color: const Color(0xff301869),
+                                  letterSpacing: 0.72,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  height: width * 1.15,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: colorPalette.grey,
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _profileMenus(
+                          title: "My Addresses",
+                          width: width,
+                          asset: "address",
+                          onClick: () {
+                            homeProvider.selectedString = "MyAddress";
+                          }),
+                      _customDivider(),
+                      _profileMenus(
+                          title: "My Orders",
+                          width: width,
+                          asset: "allOrder",
+                          onClick: () {
+                            homeProvider.selectedString = "MyOrders";
+                          }),
+                      _customDivider(),
+                      _profileMenus(
+                          title: "Wishlist",
+                          width: width,
+                          asset: "heart",
+                          onClick: () {
+                            homeProvider.selectedString = "Wishlist";
+                          }),
+                      _customDivider(),
+                      _profileMenus(
+                        title: "Change Password",
+                        width: width,
+                        asset: "key",
+                        onClick: () =>
+                            homeProvider.selectedString = "ChangePassword",
+                      ),
+                      _customDivider(),
+                      _profileMenus(
+                          title: "Terms and Conditions",
+                          width: width,
+                          asset: "tc",
+                          onClick: () {}),
+                      _customDivider(),
+                      _profileMenus(
+                          title: "Privacy Policy",
+                          width: width,
+                          asset: "policy",
+                          onClick: () {}),
+                      _customDivider(),
+                      _profileMenus(
+                          title: "Submit Feedback",
+                          width: width,
+                          asset: "good",
+                          onClick: () =>
+                              homeProvider.selectedString = "FeedBack"),
+                      _customDivider(),
+                      _profileMenus(
+                        title: "Logout",
+                        width: width,
+                        asset: "logout",
+                        onClick: () => showDialog(
+                          context: context,
+                          builder: (context) => LogOutDialog(
+                            width: width,
+                            onCancelTap: () {
+                              Navigator.pop(context);
+                            },
+                            onYesTap: () async {
+                              SharedPreferences _sharedPref =
+                                  await SharedPreferences.getInstance();
+                              _sharedPref.setBool('isLogin', false);
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) => OnBoarding()),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            );
+          } else {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
+                ),
               ),
-            ],
-          ),
-        )
-      ],
-    );
+            );
+          }
+        });
   }
 }
 
@@ -256,7 +331,7 @@ Widget LogOutDialog({width, onCancelTap, onYesTap}) {
                     height: width / 8,
                     width: width / 2.8,
                     decoration: BoxDecoration(
-                        color: colorPalette.navyBlue,
+                        color: colorPalette.navyBlue.withOpacity(0.7),
                         borderRadius: BorderRadius.circular(18)),
                     child: Text(
                       "CANCEL",
@@ -274,7 +349,7 @@ Widget LogOutDialog({width, onCancelTap, onYesTap}) {
                     height: width / 8,
                     width: width / 2.8,
                     decoration: BoxDecoration(
-                        color: colorPalette.navyBlue.withOpacity(0.5),
+                        color: colorPalette.navyBlue,
                         borderRadius: BorderRadius.circular(18)),
                     child: Text(
                       "YES",

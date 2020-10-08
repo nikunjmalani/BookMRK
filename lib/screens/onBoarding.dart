@@ -132,14 +132,14 @@ class _OnBoardingState extends State<OnBoarding> {
                   NavyBlueButton(
                       context: context,
                       onClick: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => Register()));
                       },
                       title: "SIGN UP"),
                   NavyBlueButton(
                       context: context,
                       onClick: () {
-                        Navigator.of(context).pushReplacement(
+                        Navigator.of(context).push(
                             MaterialPageRoute(builder: (context) => Login()));
                       },
                       title: "SIGN IN"),

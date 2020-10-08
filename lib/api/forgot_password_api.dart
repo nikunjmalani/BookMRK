@@ -5,12 +5,12 @@ import 'package:http/http.dart' as http;
 
 class ForgotPasswordAPI {
   /// api for get otp for forgot password.
-  static Future forgotPassword(String mobileNumber) async {
+  static Future forgotPassword(String mobileNumber, int userId) async {
     String url = "$kBaseURL/login/forgot_password";
     Map<String, String> header = {
       "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
       "Client-Service": "frontend-client",
-      "User-ID": "1",
+      "User-ID": "$userId",
       "Auth-Key": "simplerestapi",
       "Content-Type": "application/x-www-form-urlencoded",
     };

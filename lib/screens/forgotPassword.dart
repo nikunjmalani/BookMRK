@@ -6,6 +6,7 @@ import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'otpVerification.dart';
 
@@ -127,10 +128,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   if (_mobileNumberForgotPassword.text != "" &&
                                       _mobileNumberForgotPassword.text !=
                                           null) {
+                                    SharedPreferences _prefs =
+                                        await SharedPreferences.getInstance();
+                                    int userId = _prefs.getInt('userId');
+
                                     dynamic response =
                                         await ForgotPasswordAPI.forgotPassword(
-                                            _mobileNumberForgotPassword.text);
-                                    print(response);
+                                            _mobileNumberForgotPassword.text,
+                                            userId);
+
                                     if (response['status'] == 200) {
                                       _forgotPasswordProvider
                                               .isMobileNumberCheckingForgotPassword =
