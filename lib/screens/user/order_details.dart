@@ -2,7 +2,6 @@ import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
-import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -240,10 +239,10 @@ class _OrderDetailsState extends State<OrderDetails> {
             width: width,
             height: height,
             itemCount: 2,
-            totalOfItem: 869.00,
-            tax: 0.00,
-            deliverCharge: 50.0,
-            mainTotal: 919.00,
+            totalOfItem: '869.00',
+            tax: '0.00',
+            deliverCharge: '50.0',
+            mainTotal: '919.00',
           ),
           SizedBox(
             height: 80,

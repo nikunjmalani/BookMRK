@@ -152,6 +152,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       _registerProvider
                                               .isOTPVerificationPageFromRegisterUser =
                                           false;
+                                      print(response);
+                                      SharedPreferences _prefs =
+                                          await SharedPreferences.getInstance();
+                                      _prefs.setInt(
+                                          'userId',
+                                          int.parse(
+                                              '${response['response'][0]['user_id'].toString()}'));
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>

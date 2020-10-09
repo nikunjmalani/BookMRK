@@ -77,12 +77,13 @@ class RegisterAPI {
   }
 
   /// API for check otp for mobile verification
-  static Future verifyMobileWithOTP(String mobileNumber, String otp) async {
+  static Future verifyMobileWithOTP(
+      String mobileNumber, String otp, String userId) async {
     String url = "$kBaseURL/otp/validate/0";
     Map<String, String> header = {
       "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
       "Client-Service": "frontend-client",
-      "User-ID": "1",
+      "User-ID": "$userId",
       "Auth-Key": "simplerestapi",
       "Content-Type": "application/x-www-form-urlencoded",
     };
@@ -91,7 +92,7 @@ class RegisterAPI {
       "client_key": "1595922619X5f1fd8bb5f332",
       "device_type": "MOB",
       "mobile": "$mobileNumber",
-      "user_id": "1",
+      "user_id": "$userId",
       "otp": "$otp"
     };
 

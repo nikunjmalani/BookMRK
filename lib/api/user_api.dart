@@ -176,4 +176,23 @@ class UserAPI {
     dynamic data = jsonDecode(response.body);
     return data;
   }
+
+  /// get selected user address for edit
+  static Future getCurrentAddressForEdit(
+      String userId, String userAddressId) async {
+    String url =
+        "$kBaseURL/user/user_address/1595922619X5f1fd8bb5f332/MOB/$userId/$userAddressId";
+
+    Map<String, String> header = {
+//      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+//      "User-ID": "$userId",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    http.Response response = await http.get(url, headers: header);
+    dynamic data = jsonDecode(response.body);
+    return data;
+  }
 }

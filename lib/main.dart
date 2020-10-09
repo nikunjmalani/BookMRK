@@ -1,6 +1,7 @@
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/location_name_provider.dart';
 import 'package:bookmrk/provider/login_provider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/provider/reset_password_provider.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => UserProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LocationProvider(),
         ),
       ],
       child: MaterialApp(

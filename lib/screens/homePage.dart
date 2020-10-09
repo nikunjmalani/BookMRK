@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
     return _homePageDetails;
   }
 
+
   @override
   Widget build(BuildContext context) {
     _setHomeScreenProvider =
@@ -437,7 +438,11 @@ class _HomePageState extends State<HomePage> {
                                   ? MyAddress()
                                   : _homeScreenProvider.selectedString ==
                                   "UserEditAddress"
-                                  ? Consumer<UserProvider>(builder: (_, _userProvider, child)=>UserEditAddress(userAddressId: _userProvider.selectedUserAddressId,))
+                                  ? Consumer<UserProvider>(
+                                  builder: (_, _userProvider, child) =>
+                                      UserEditAddress(
+                                        userAddressId: _userProvider
+                                            .selectedUserAddressId,))
                                   : _homeScreenProvider.selectedString ==
                                   "UserAddAddress"
                                   ? UserAddAddress()
@@ -452,7 +457,11 @@ class _HomePageState extends State<HomePage> {
                                   ? OrderTracking()
                                   : _homeScreenProvider.selectedString ==
                                   "ChangePassword"
-                                  ? ChangePassword()
+                                  ? Consumer<UserProvider>(
+                                builder: (_, _userProvider, child) =>
+                                    ChangePassword(
+                                      userMobileNumber: _userProvider
+                                          .mobileNumberToSendOtp,),)
                                   : _homeScreenProvider.selectedString ==
                                   "NewPassword"
                                   ? NewPassword()
@@ -467,7 +476,10 @@ class _HomePageState extends State<HomePage> {
                                   ? AddAddress()
                                   : _homeScreenProvider.selectedString ==
                                   "EditAddress"
-                                  ? EditAddress()
+                                  ? Consumer<UserProvider>(
+                                  builder: (_, _userProvider, child) =>
+                                      EditAddress(userAddressId: _userProvider
+                                          .selectedUserAddressId,))
                                   : ChangeAddress(),
                               NotificationPage(),
                             ],
@@ -486,8 +498,10 @@ class _HomePageState extends State<HomePage> {
                                   "EditAddress" ||
                               _homeScreenProvider.selectedString == "Filter" ||
                               _homeScreenProvider.selectedString ==
-                                  "UserEditAddress" || _homeScreenProvider.selectedString ==
-                              "ChangeAddress" || _homeScreenProvider.selectedString ==
+                                  "UserEditAddress" || _homeScreenProvider
+                              .selectedString ==
+                              "ChangeAddress" || _homeScreenProvider
+                              .selectedString ==
                               "UserAddAddress"
                               ? SizedBox()
                               : Container(
