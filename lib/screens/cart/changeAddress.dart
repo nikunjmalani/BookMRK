@@ -85,12 +85,20 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                   ),
                                 ],
                               ),
-                              BlueOutlineButton(
-                                width: width,
-                                onTap: () =>
-                                    homeProvider.selectedString = "EditAddress",
-                                title: "EDIT",
-                              ),
+                              Consumer<UserProvider>(
+                                builder: (_, _userProvider, child) =>
+                                    BlueOutlineButton(
+                                  width: width,
+                                  onTap: () {
+                                    _userProvider.selectedUserAddressId =
+                                        snapshot
+                                            .data.response[index].userAddressId
+                                            .toString();
+                                    homeProvider.selectedString = "EditAddress";
+                                  },
+                                  title: "EDIT",
+                                ),
+                              )
                             ],
                           ),
                         ),

@@ -1,5 +1,7 @@
 import 'package:bookmrk/api/cart_api.dart';
+import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/model/carT_details_model.dart';
+import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
@@ -30,6 +32,15 @@ class _CartState extends State<Cart> {
     return _cartDetailModel;
   }
 
+  /// get selected address details...
+  Future getSelectedAddressInCart() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    int userId = _prefs.getInt('userId');
+    dynamic response = await UserAPI.getUserAddress(userId.toString());
+    UserAddressModel _userAddress = UserAddressModel.fromJson(response);
+    return _userAddress;
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -39,56 +50,81 @@ class _CartState extends State<Cart> {
         Container(
           alignment: Alignment.centerLeft,
           margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Deliver to Ovi Mahajan 411037',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 13,
-                      color: const Color(0xff000000),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    '15 B, Near Black Well, Chavhan Nagar, Lacknow',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 12,
-                      color: const Color(0xffa9a9aa),
-                      fontWeight: FontWeight.w300,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              Container(
-                width: width / 4.5,
-                child: FlatButton(
-                  onPressed: () {
-                    Provider.of<HomeScreenProvider>(context, listen: false)
-                        .selectedString = "ChangeAddress";
-                  },
-                  color: colorPalette.navyBlue,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Text(
-                    'CHANGE',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 12,
-                      color: const Color(0xffffffff),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: FutureBuilder(
+              future: getSelectedAddressInCart(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  int selectedAddressIndex = 0;
+                  for (int i = 0; i < snapshot.data.response.length; i++) {
+                    if (snapshot.data.response[i].isSelected == "1") {
+                      selectedAddressIndex = i;
+                    }
+                  }
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Deliver to ${snapshot.data.response[selectedAddressIndex].fname} ${snapshot.data.response[selectedAddressIndex].lname}',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 13,
+                              color: const Color(0xff000000),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(
+                            '${snapshot.data.response[selectedAddressIndex].address1},\n${snapshot.data.response[selectedAddressIndex].city}, ${snapshot.data.response[selectedAddressIndex].state}\n${snapshot.data.response[selectedAddressIndex].pincode} ',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 12,
+                              color: const Color(0xffa9a9aa),
+                              fontWeight: FontWeight.w300,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: width / 4.5,
+                        child: FlatButton(
+                          onPressed: () {
+                            Provider.of<HomeScreenProvider>(context,
+                                    listen: false)
+                                .selectedString = "ChangeAddress";
+                          },
+                          color: colorPalette.navyBlue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text(
+                            'CHANGE',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 12,
+                              color: const Color(0xffffffff),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('Please wait while loading address !'),
+                      CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation(colorPalette.navyBlue),
+                      ),
+                    ],
+                  );
+                }
+              }),
         ),
         Expanded(
           child: FutureBuilder(
