@@ -2,6 +2,7 @@ import 'package:bookmrk/api/vendor_api.dart';
 import 'package:bookmrk/model/vedor_product_info_model.dart';
 import 'package:bookmrk/model/vendor_school_info_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/schoolImageBox.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
@@ -14,6 +15,7 @@ class VendorsInfo extends StatefulWidget {
   final String vendorSlug;
 
   const VendorsInfo({this.vendorSlug});
+
   @override
   _VendorsInfoState createState() => _VendorsInfoState();
 }
@@ -174,26 +176,36 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                         crossAxisSpacing: 10,
                                         mainAxisSpacing: 10),
                                 itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Provider.of<HomeScreenProvider>(context,
-                                              listen: false)
-                                          .selectedString = "ProductInfo";
-                                    },
-                                    child: ProductBox(
-                                        expanded: true,
-                                        height: height,
-                                        width: width,
-                                        title:
-                                            "${snapshot.data[0].response[0].vendorProduct[index].productName}",
-                                        description:
-                                            "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
-                                        price:
-                                            "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
-                                        stock:
-                                            "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
-                                        image:
-                                            "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                  return Consumer<HomeScreenProvider>(
+                                    builder: (_, _homeScreenProvider, child) =>
+                                        Consumer<VendorProvider>(
+                                      builder: (_, _vendorProvider, child) =>
+                                          GestureDetector(
+                                        onTap: () {
+                                          _homeScreenProvider
+                                                  .selectedProductSlug =
+                                              "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
+                                          _vendorProvider.selectedVendorName =
+                                              "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
+                                          _homeScreenProvider.selectedString =
+                                              "ProductInfo";
+                                        },
+                                        child: ProductBox(
+                                            expanded: true,
+                                            height: height,
+                                            width: width,
+                                            title:
+                                                "${snapshot.data[0].response[0].vendorProduct[index].productName}",
+                                            description:
+                                                "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
+                                            price:
+                                                "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                            stock:
+                                                "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
+                                            image:
+                                                "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                      ),
+                                    ),
                                   );
                                 },
                                 itemCount: snapshot

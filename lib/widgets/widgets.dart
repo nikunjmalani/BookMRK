@@ -98,16 +98,15 @@ Widget ProductBox(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 30, bottom: 25.0),
               child: CachedNetworkImage(
                 imageUrl: image,
-                height: height / 5.2,
+                height: height / 8,
                 fit: BoxFit.fill,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.fill,
                         colorFilter: ColorFilter.mode(
                             Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
                   ),
@@ -119,8 +118,10 @@ Widget ProductBox(
               ),
             ),
             Container(
+              height: 20.0,
               child: Text(
                 title,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 16,
@@ -135,8 +136,10 @@ Widget ProductBox(
               height: 3,
             ),
             Container(
+              height: 16.0,
               child: Text(
                 description,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontFamily: 'Roboto',
                   fontSize: 14,

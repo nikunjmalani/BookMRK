@@ -1,10 +1,18 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/model/user_profile_info_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/addressTextfields.dart';
 import 'package:bookmrk/widgets/buttons.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -13,6 +21,60 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   ColorPalette colorPalette = ColorPalette();
+
+  /// TextFields...
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _dateOfBirthController = TextEditingController();
+  TextEditingController _emailAddressController = TextEditingController();
+  TextEditingController _mobileNumberController = TextEditingController();
+  String profileImage = "";
+
+  ///get user details ...
+  Future getCurrentDetailsOfUser() async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    int userId = _prefs.getInt('userId');
+    dynamic response = await UserAPI.getAllUserInformation(userId.toString());
+    UserProfileInfoModel _userProfileModel =
+        UserProfileInfoModel.fromJson(response);
+
+    _firstNameController.text = _userProfileModel.response[0].fname;
+    _lastNameController.text = _userProfileModel.response[0].lname;
+    _dateOfBirthController.text = _userProfileModel.response[0].dob.toString();
+    _emailAddressController.text = _userProfileModel.response[0].email;
+    _mobileNumberController.text = _userProfileModel.response[0].mobile;
+    profileImage = _userProfileModel.response[0].profilePic;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentDetailsOfUser();
+  }
+
+  void uploadImage() async {
+    FilePickerResult pickedFile = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    dynamic bytes = File(pickedFile.files[0].path).readAsBytesSync();
+    dynamic data = base64Encode(bytes);
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    int userId = _prefs.getInt('userId');
+    dynamic response =
+        await UserAPI.updateUserProfileImage(userId.toString(), data);
+
+    print(response);
+    if (response['status'] == 200) {
+      print('upload success !');
+      getCurrentDetailsOfUser();
+      print(profileImage);
+    } else {
+      print('upload failed !');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -24,21 +86,49 @@ class _EditProfileState extends State<EditProfile> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: height / 10,
-              backgroundColor: Colors.transparent,
-              backgroundImage: AssetImage(
-                'assets/images/photo.png',
+            SizedBox(height: 10.0),
+            CachedNetworkImage(
+              imageUrl: profileImage,
+              height: height / 7,
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: height / 12,
+                backgroundColor: colorPalette.navyBlue,
+                backgroundImage: imageProvider,
+              ),
+              placeholder: (context, Str) => CircleAvatar(
+                radius: height / 12,
+                backgroundColor: colorPalette.navyBlue,
+                child: Icon(
+                  Icons.person_outline,
+                  color: Colors.white,
+                  size: 100.0,
+                ),
+              ),
+              errorWidget: (context, err, sTrace) => CircleAvatar(
+                radius: height / 12,
+                backgroundColor: colorPalette.navyBlue,
+                child: Icon(
+                  Icons.person_outline,
+                  color: Colors.white,
+                  size: 100.0,
+                ),
               ),
             ),
-            Text(
-              'Edit',
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 16,
-                color: const Color(0xff301869),
+            SizedBox(height: 5.0),
+            GestureDetector(
+              onTap: () {
+                uploadImage();
+              },
+              child: Text(
+                'Change Profile',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  color: const Color(0xff301869),
+                ),
+                textAlign: TextAlign.left,
               ),
-              textAlign: TextAlign.left,
             ),
             SizedBox(
               height: width / 20,

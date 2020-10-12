@@ -1,6 +1,6 @@
 import 'package:bookmrk/api/cart_api.dart';
 import 'package:bookmrk/api/user_api.dart';
-import 'package:bookmrk/model/carT_details_model.dart';
+import 'package:bookmrk/model/cart_details_model.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
