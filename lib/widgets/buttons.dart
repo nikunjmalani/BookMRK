@@ -79,7 +79,7 @@ Widget BlueLongButton({height, title, onTap, color}) {
     onTap: onTap,
     child: Container(
       decoration: BoxDecoration(
-        color: color ?? Color(0xff44349A),
+        color: onTap == null ? Color(0xff999999) : color ?? Color(0xff44349A),
         borderRadius: BorderRadius.circular(15),
       ),
       margin: EdgeInsets.only(bottom: 110, left: 25, right: 25),

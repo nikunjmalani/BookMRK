@@ -9,6 +9,7 @@ import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpVerification extends StatefulWidget {
   @override
@@ -149,14 +150,21 @@ class _OtpVerificationState extends State<OtpVerification> {
                               if (_registerProvider
                                   .isOTPVerificationPageFromRegisterUser) {
                                 /// when mobile number verification..
-
+                                SharedPreferences _prefs =
+                                    await SharedPreferences.getInstance();
+                                int userId = _prefs.getInt('userId');
                                 dynamic response =
                                     await RegisterAPI.verifyMobileWithOTP(
                                         _registerProvider
                                             .verificationMobileNumberForRegister,
-                                        otp);
+                                        otp,
+                                        userId.toString());
+                                print(response);
 
                                 if (response['status'] == 200) {
+                                  _forgotPasswordProvider
+                                          .forgotPasswordFromPage =
+                                      "MobileVerification";
                                   _forgotPasswordProvider
                                       .isOTPVerificationInProgress = false;
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -171,6 +179,9 @@ class _OtpVerificationState extends State<OtpVerification> {
                                 /// when forgot password !
                                 if (otp ==
                                     _forgotPasswordProvider.forgotPasswordOTP) {
+                                  _forgotPasswordProvider
+                                          .forgotPasswordFromPage =
+                                      "ForgotPassword";
                                   _forgotPasswordProvider
                                       .isOTPVerificationInProgress = false;
                                   Navigator.of(context).push(MaterialPageRoute(

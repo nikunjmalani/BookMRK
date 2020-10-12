@@ -176,4 +176,45 @@ class UserAPI {
     dynamic data = jsonDecode(response.body);
     return data;
   }
+
+  /// get selected user address for edit
+  static Future getCurrentAddressForEdit(
+      String userId, String userAddressId) async {
+    String url =
+        "$kBaseURL/user/user_address/1595922619X5f1fd8bb5f332/MOB/$userId/$userAddressId";
+
+    Map<String, String> header = {
+//      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+//      "User-ID": "$userId",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    http.Response response = await http.get(url, headers: header);
+    dynamic data = jsonDecode(response.body);
+    return data;
+  }
+
+  /// update user profile image...
+  static Future updateUserProfileImage(String userId, String image) async {
+    String url = "$kBaseURL/user/update_user_profile";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "profile_img": "data:image/png;base64,$image",
+    };
+
+    http.Response response = await http.post(url,
+        headers: header, body: body, encoding: Encoding.getByName('utf-8'));
+    return jsonDecode(response.body);
+  }
 }

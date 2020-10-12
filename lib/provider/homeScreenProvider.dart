@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
-  String _selectedString = "Home";
-  int _selectedBottomIndex = 0;
+  /// bell icon...
   bool _blueBellIcon = false;
 
   bool get blueBellIcon => _blueBellIcon;
@@ -12,6 +11,7 @@ class HomeScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// blur cart icon...
   bool _blueCartIcon = false;
 
   bool get blueCartIcon => _blueCartIcon;
@@ -21,12 +21,18 @@ class HomeScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// bottom selected index...
+  int _selectedBottomIndex = 0;
+
   int get selectedBottomIndex => _selectedBottomIndex;
 
   set selectedBottomIndex(int value) {
     _selectedBottomIndex = value;
     notifyListeners();
   }
+
+  /// selected main screen...
+  String _selectedString = "Home";
 
   String get selectedString => _selectedString;
 
@@ -35,6 +41,7 @@ class HomeScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// vendor school index...
   int _vendorSchoolIndex = 0;
 
   int get vendorSchoolIndex => _vendorSchoolIndex;
@@ -44,12 +51,23 @@ class HomeScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// current past order index...
   int _currentPastOrderIndex = 0;
 
   int get currentPastOrderIndex => _currentPastOrderIndex;
 
   set currentPastOrderIndex(int value) {
     _currentPastOrderIndex = value;
+    notifyListeners();
+  }
+
+  /// selected product slug
+  String _selectedProductSlug;
+
+  String get selectedProductSlug => _selectedProductSlug;
+
+  set selectedProductSlug(String value) {
+    _selectedProductSlug = value;
     notifyListeners();
   }
 }

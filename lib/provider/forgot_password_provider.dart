@@ -41,4 +41,14 @@ class ForgotPasswordProvider extends ChangeNotifier {
     _isOTPVerificationInProgress = value;
     notifyListeners();
   }
+
+  /// forgot password from which page ...
+  String _forgotPasswordFromPage;
+
+  String get forgotPasswordFromPage => _forgotPasswordFromPage;
+
+  set forgotPasswordFromPage(String value) {
+    _forgotPasswordFromPage = value;
+    notifyListeners();
+  }
 }

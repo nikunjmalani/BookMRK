@@ -1,5 +1,6 @@
 import 'package:bookmrk/api/reset_password_api.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
+import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/reset_password_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
@@ -25,6 +26,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   ImagePath imagePath = ImagePath();
   ColorPalette colorPalette = ColorPalette();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,38 +169,82 @@ class _ResetPasswordState extends State<ResetPassword> {
                         ),
                       ),
                     ),
-                    Builder(
-                        builder: (context) => Consumer<ForgotPasswordProvider>(
-                              builder: (_, _forgotPasswordProvider, child) =>
-                                  NavyBlueButton(
-                                      context: context,
-                                      onClick: () async {
-                                        // check for the password validation
-                                        if (_formKey.currentState.validate()) {
-                                          dynamic response =
-                                              await ResetPasswordAPI
-                                                  .resetPassword(
-                                            _forgotPasswordProvider
-                                                .forgotPasswordOTP,
-                                            _forgotPasswordProvider
-                                                .forgotPasswordMobile,
-                                            _resetNewPassword.text,
-                                            _resetConfirmPassword.text,
-                                          );
-                                          if (response['status'] == 200) {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        OnBoarding()));
+                    Consumer<HomeScreenProvider>(
+                      builder: (_, _homeScreenProvider, child) => Builder(
+                          builder: (context) =>
+                              Consumer<ForgotPasswordProvider>(
+                                builder: (_, _forgotPasswordProvider, child) =>
+                                    NavyBlueButton(
+                                        context: context,
+                                        onClick: () async {
+                                          _resetPasswordProvider
+                                              .isPasswordResetInProcess = true;
+                                          // check for the password validation
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            dynamic response =
+                                                await ResetPasswordAPI
+                                                    .resetPassword(
+                                              _forgotPasswordProvider
+                                                  .forgotPasswordOTP,
+                                              _forgotPasswordProvider
+                                                  .forgotPasswordMobile,
+                                              _resetNewPassword.text,
+                                              _resetConfirmPassword.text,
+                                            );
+                                            if (response['status'] == 200) {
+                                              if (_forgotPasswordProvider
+                                                      .forgotPasswordFromPage ==
+                                                  "Account") {
+                                                _resetPasswordProvider
+                                                        .isPasswordResetInProcess =
+                                                    false;
+
+                                                _homeScreenProvider
+                                                    .selectedString = "Account";
+                                                Navigator.pop(context);
+                                                print(response['response']);
+                                              } else if (_forgotPasswordProvider
+                                                      .forgotPasswordFromPage ==
+                                                  "ForgotPassword") {
+                                                _resetPasswordProvider
+                                                        .isPasswordResetInProcess =
+                                                    false;
+
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OnBoarding()));
+                                              } else if (_forgotPasswordProvider
+                                                      .forgotPasswordFromPage ==
+                                                  "MobileVerification") {
+                                                _resetPasswordProvider
+                                                        .isPasswordResetInProcess =
+                                                    false;
+
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OnBoarding()));
+                                              }
+                                            } else {
+                                              _resetPasswordProvider
+                                                      .isPasswordResetInProcess =
+                                                  false;
+
+                                              Scaffold.of(context).showSnackBar(
+                                                  getSnackBar(
+                                                      '${response['message']}'));
+                                            }
                                           } else {
-                                            Scaffold.of(context).showSnackBar(
-                                                getSnackBar(
-                                                    '${response['message']}'));
+                                            _resetPasswordProvider
+                                                    .isPasswordResetInProcess =
+                                                false;
                                           }
-                                        }
-                                      },
-                                      title: "RESET"),
-                            ))
+                                        },
+                                        title: "RESET"),
+                              )),
+                    )
                   ],
                 ),
               ),

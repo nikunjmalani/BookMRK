@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/category_api.dart';
 import 'package:bookmrk/model/category_product_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -166,6 +167,13 @@ class _CategoryInfoState extends State<CategoryInfo> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
+                            Provider.of<HomeScreenProvider>(context,
+                                        listen: false)
+                                    .selectedProductSlug =
+                                "${snapshot.data.response[0].product[index].productSlug}";
+                            Provider.of<VendorProvider>(context, listen: false)
+                                    .selectedVendorName =
+                                "${snapshot.data.response[0].product[index].vendorSlug}";
                             Provider.of<HomeScreenProvider>(context,
                                     listen: false)
                                 .selectedString = "ProductInfo";

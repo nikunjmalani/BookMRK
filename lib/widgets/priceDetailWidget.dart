@@ -5,10 +5,10 @@ Widget PriceDetail(
     {height,
     width,
     int itemCount,
-    double totalOfItem,
-    double tax,
-    double deliverCharge,
-    double mainTotal}) {
+    String totalOfItem,
+    String tax,
+    String deliverCharge,
+    String mainTotal}) {
   return Container(
     margin: EdgeInsets.only(top: 20),
     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -46,7 +46,7 @@ Widget PriceDetail(
                 textAlign: TextAlign.left,
               ),
               Text(
-                '₹ ${mainTotal}',
+                '₹ $mainTotal',
                 style: TextStyle(
                     fontFamily: 'Roboto', fontSize: 18, color: Colors.black),
                 textAlign: TextAlign.left,

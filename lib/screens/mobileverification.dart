@@ -144,7 +144,7 @@ class _MobileVerificationState extends State<MobileVerification> {
 
                                     _registerProvider
                                             .isOTPVerificationPageFromRegisterUser =
-                                        true;
+                                        false;
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(

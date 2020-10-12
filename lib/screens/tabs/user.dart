@@ -1,8 +1,12 @@
+import 'package:bookmrk/api/forgot_password_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/model/user_profile_info_model.dart';
+import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/screens/onBoarding.dart';
+import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +30,16 @@ class _UserState extends State<User> {
     UserProfileInfoModel _userInformationModel =
         UserProfileInfoModel.fromJson(userInformation);
     return _userInformationModel;
+  }
+
+  /// send otp on mobile number ...
+  Future sendOTP(String userMobileNumber) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    int userId = _prefs.getInt('userId');
+    dynamic response =
+        await ForgotPasswordAPI.forgotPassword(userMobileNumber, userId);
+    print(response);
+    return response;
   }
 
   @override
@@ -189,12 +203,29 @@ class _UserState extends State<User> {
                             homeProvider.selectedString = "Wishlist";
                           }),
                       _customDivider(),
-                      _profileMenus(
-                        title: "Change Password",
-                        width: width,
-                        asset: "key",
-                        onClick: () =>
-                            homeProvider.selectedString = "ChangePassword",
+                      Consumer<ForgotPasswordProvider>(
+                        builder: (_, _forgotPasswordProvider, child) =>
+                            Consumer<UserProvider>(
+                          builder: (_, _userProvider, child) => _profileMenus(
+                              title: "Change Password",
+                              width: width,
+                              asset: "key",
+                              onClick: () async {
+                                dynamic response = await sendOTP(
+                                    snapshot.data.response[0].mobile);
+                                if (response['status'] == 200) {
+                                  _forgotPasswordProvider
+                                      .forgotPasswordFromPage = "Account";
+                                  _userProvider.mobileNumberToSendOtp =
+                                      snapshot.data.response[0].mobile;
+                                  homeProvider.selectedString =
+                                      "ChangePassword";
+                                } else {
+                                  Scaffold.of(context).showSnackBar(
+                                      getSnackBar('${response['message']}'));
+                                }
+                              }),
+                        ),
                       ),
                       _customDivider(),
                       _profileMenus(
@@ -216,30 +247,36 @@ class _UserState extends State<User> {
                           onClick: () =>
                               homeProvider.selectedString = "FeedBack"),
                       _customDivider(),
-                      _profileMenus(
-                        title: "Logout",
-                        width: width,
-                        asset: "logout",
-                        onClick: () => showDialog(
-                          context: context,
-                          builder: (context) => LogOutDialog(
-                            width: width,
-                            onCancelTap: () {
-                              Navigator.pop(context);
-                            },
-                            onYesTap: () async {
-                              SharedPreferences _sharedPref =
-                                  await SharedPreferences.getInstance();
-                              _sharedPref.setBool('isLogin', false);
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(builder: (_) => OnBoarding()),
-                              );
-                            },
+                      Consumer<HomeScreenProvider>(
+                        builder: (_, _homeScreenProvider, child) =>
+                            _profileMenus(
+                          title: "Logout",
+                          width: width,
+                          asset: "logout",
+                          onClick: () => showDialog(
+                            context: context,
+                            builder: (context) => LogOutDialog(
+                              width: width,
+                              onCancelTap: () {
+                                Navigator.pop(context);
+                              },
+                              onYesTap: () async {
+                                SharedPreferences _sharedPref =
+                                    await SharedPreferences.getInstance();
+                                _sharedPref.setBool('isLogin', false);
+                                _homeScreenProvider.selectedString = "Home";
+                                _homeScreenProvider.selectedBottomIndex = 0;
+                                Navigator.pop(context);
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => OnBoarding()),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 )

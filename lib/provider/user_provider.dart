@@ -30,4 +30,34 @@ class UserProvider extends ChangeNotifier {
     _selectedUserAddressId = value;
     notifyListeners();
   }
+
+  /// changing default address in progress
+  bool _changeAddressInProgress = false;
+
+  bool get changeAddressInProgress => _changeAddressInProgress;
+
+  set changeAddressInProgress(bool value) {
+    _changeAddressInProgress = value;
+    notifyListeners();
+  }
+
+  /// user mobile number to send otp...
+  String _mobileNumberToSendOtp;
+
+  String get mobileNumberToSendOtp => _mobileNumberToSendOtp;
+
+  set mobileNumberToSendOtp(String value) {
+    _mobileNumberToSendOtp = value;
+    notifyListeners();
+  }
+
+  /// feedback in process ...
+  bool _feedbackInProgress = false;
+
+  bool get feedbackInProgress => _feedbackInProgress;
+
+  set feedbackInProgress(bool value) {
+    _feedbackInProgress = value;
+    notifyListeners();
+  }
 }
