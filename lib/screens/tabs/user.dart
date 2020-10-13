@@ -27,8 +27,10 @@ class _UserState extends State<User> {
     print(userId);
     dynamic userInformation =
         await UserAPI.getAllUserInformation(userId.toString());
+
     UserProfileInfoModel _userInformationModel =
         UserProfileInfoModel.fromJson(userInformation);
+
     return _userInformationModel;
   }
 
@@ -75,7 +77,7 @@ class _UserState extends State<User> {
                                   '${snapshot.data.response[0].profilePic}',
                               imageBuilder: (context, imageProvider) =>
                                   CircleAvatar(
-                                radius: height / 10,
+                                radius: height / 12,
                                 backgroundColor: Colors.transparent,
                                 backgroundImage: imageProvider,
                               ),
@@ -99,6 +101,9 @@ class _UserState extends State<User> {
                                 ),
                               ),
                             ),
+                      SizedBox(
+                        width: 30.0,
+                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,6 +170,9 @@ class _UserState extends State<User> {
                       )
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 15),

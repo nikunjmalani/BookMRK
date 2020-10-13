@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/cart_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/model/cart_details_model.dart';
+import 'package:bookmrk/model/no_data_cart_model.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
@@ -28,8 +29,14 @@ class _CartState extends State<Cart> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     int userId = _prefs.getInt('userId');
     dynamic response = await CartAPI.getCartData(userId.toString());
-    CartDetailsModel _cartDetailModel = CartDetailsModel.fromJson(response);
-    return _cartDetailModel;
+    print(response);
+    if (response['response'][0].length == 0) {
+      NoDataCartModel _noDataCart = NoDataCartModel.fromJson(response);
+      return _noDataCart;
+    } else {
+      CartDetailsModel _cartDetailModel = CartDetailsModel.fromJson(response);
+      return _cartDetailModel;
+    }
   }
 
   /// get selected address details...
@@ -131,165 +138,175 @@ class _CartState extends State<Cart> {
               future: getCartDetails(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  totalItem = 0;
-                  return ListView.builder(
-                    itemBuilder: (context, index) {
-                      if (index < snapshot.data.response[0].cart.length) {
-                        totalItem = totalItem +
-                            (int.parse(
-                                '${snapshot.data.response[0].cart[index].qty}'));
-                      }
+                  if (snapshot.data.status != 200) {
+                    return Container(
+                      margin: EdgeInsets.only(top: 50.0),
+                      child: Text(
+                        'Cart is empty !',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                    );
+                  } else {
+                    totalItem = 0;
+                    return ListView.builder(
+                      itemBuilder: (context, index) {
+                        if (index < snapshot.data.response[0].cart.length) {
+                          totalItem = totalItem +
+                              (int.parse(
+                                  '${snapshot.data.response[0].cart[index].qty}'));
+                        }
 
-                      return index < snapshot.data.response[0].cart.length
-                          ? Container(
-                              margin: EdgeInsets.all(10),
-                              height: width / 2.2,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: colorPalette.grey,
+                        return index < snapshot.data.response[0].cart.length
+                            ? Container(
+                                margin: EdgeInsets.all(10),
+                                height: width / 2.2,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: colorPalette.grey,
+                                  ),
                                 ),
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 5, top: 0),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                '${snapshot.data.response[0].cart[index].productImg}',
-                                            height: width / 3.5,
-                                            width: width / 3.5,
-                                            errorWidget: (context, str,
-                                                    stackTrace) =>
-                                                Image.asset(
-                                                    'assets/images/Sharpner.png'),
-                                            placeholder: (context, str) =>
-                                                Image.asset(
-                                                    'assets/images/Sharpner.png'),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, top: 0),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  '${snapshot.data.response[0].cart[index].productImg}',
+                                              height: width / 3.5,
+                                              width: width / 3.5,
+                                              errorWidget: (context, str,
+                                                      stackTrace) =>
+                                                  Image.asset(
+                                                      'assets/images/Sharpner.png'),
+                                              placeholder: (context, str) =>
+                                                  Image.asset(
+                                                      'assets/images/Sharpner.png'),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${snapshot.data.response[0].cart[index].productName}',
-                                            style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 18,
-                                              color: const Color(0xff000000),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${snapshot.data.response[0].cart[index].productName}',
+                                              style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontSize: 18,
+                                                color: const Color(0xff000000),
+                                              ),
+                                              textAlign: TextAlign.left,
                                             ),
-                                            textAlign: TextAlign.left,
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              '${snapshot.data.response[0].cart[index].productName}',
+                                              style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontSize: 16,
+                                                color: const Color(0xffa9a9aa),
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    Divider(
+                                      indent: 20,
+                                      thickness: 1,
+                                      endIndent: 20,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/delete.svg",
+                                            height: 30,
+                                            width: 30,
                                           ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
+                                          SizedBox(width: 10.0),
                                           Text(
-                                            '${snapshot.data.response[0].cart[index].productName}',
+                                            '${snapshot.data.response[0].cart[index].qty} Items',
                                             style: TextStyle(
                                               fontFamily: 'Roboto',
                                               fontSize: 16,
-                                              color: const Color(0xffa9a9aa),
-                                              fontWeight: FontWeight.w300,
+                                              color: const Color(0xff515c6f),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text(
+                                            '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 16,
+                                              color: const Color(0xff515c6f),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text(
+                                            'Total : ${(double.parse('${snapshot.data.response[0].cart[index].productSalePrice}')) * (int.parse('${snapshot.data.response[0].cart[index].qty}'))} ₹',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 16,
+                                              color: const Color(0xff515c6f),
+                                              fontWeight: FontWeight.w700,
                                             ),
                                             textAlign: TextAlign.left,
                                           ),
                                         ],
-                                      )
-                                    ],
-                                  ),
-                                  Divider(
-                                    indent: 20,
-                                    thickness: 1,
-                                    endIndent: 20,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
-                                    child: Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/delete.svg",
-                                          height: 30,
-                                          width: 30,
-                                        ),
-                                        SizedBox(width: 10.0),
-                                        Text(
-                                          '${snapshot.data.response[0].cart[index].qty} Items',
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 16,
-                                            color: const Color(0xff515c6f),
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                        Text(
-                                          '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 16,
-                                            color: const Color(0xff515c6f),
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                        Text(
-                                          'Total : ${(double.parse('${snapshot.data.response[0].cart[index].productSalePrice}')) * (int.parse('${snapshot.data.response[0].cart[index].qty}'))} ₹',
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 16,
-                                            color: const Color(0xff515c6f),
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ],
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Column(
-                              children: [
-                                PriceDetail(
-                                  width: width,
-                                  height: height,
-                                  itemCount: totalItem,
-                                  totalOfItem:
-                                      '${snapshot.data.response[0].cartInfo[0].finalPrice}',
-                                  tax:
-                                      '${snapshot.data.response[0].cartInfo[0].finalTaxPrice}',
-                                  deliverCharge:
-                                      '${snapshot.data.response[0].cartInfo[0].finalDeliveryPrice}',
-                                  mainTotal:
-                                      '${snapshot.data.response[0].cartInfo[0].finalTotalPrice}',
+                                  ],
                                 ),
-                                BlueLongButton(
-                                  title: "PROCESS TO CHECKOUT",
-                                  height: height,
-                                  onTap: snapshot.data.response[0].cartInfo[0]
-                                              .hideCheckoutButton ==
-                                          "NO"
-                                      ? () {}
-                                      : null,
-                                )
-                              ],
-                            );
-                    },
-                    itemCount: snapshot.data.response[0].cart.length + 1,
-                  );
+                              )
+                            : Column(
+                                children: [
+                                  PriceDetail(
+                                    width: width,
+                                    height: height,
+                                    itemCount: totalItem,
+                                    totalOfItem:
+                                        '${snapshot.data.response[0].cartInfo[0].finalPrice}',
+                                    tax:
+                                        '${snapshot.data.response[0].cartInfo[0].finalTaxPrice}',
+                                    deliverCharge:
+                                        '${snapshot.data.response[0].cartInfo[0].finalDeliveryPrice}',
+                                    mainTotal:
+                                        '${snapshot.data.response[0].cartInfo[0].finalTotalPrice}',
+                                  ),
+                                  BlueLongButton(
+                                    title: "PROCESS TO CHECKOUT",
+                                    height: height,
+                                    onTap: snapshot.data.response[0].cartInfo[0]
+                                                .hideCheckoutButton ==
+                                            "NO"
+                                        ? () {}
+                                        : null,
+                                  )
+                                ],
+                              );
+                      },
+                      itemCount: snapshot.data.response[0].cart.length + 1,
+                    );
+                  }
                 } else {
                   return Container(
                     child: Center(

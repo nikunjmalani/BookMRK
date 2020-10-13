@@ -134,45 +134,46 @@ class _RegisterState extends State<Register> {
                               height: 10,
                             ),
                             SuffixTextfield(
-                                obscureText: false,
-                                hintText: "Date of Birth",
-                                validator: (value) {
-                                  if (value.toString().split('-')[0] ==
-                                      DateTime.now().toString().split("-")[0]) {
-                                    return "Date of Birth can not be current year";
-                                  } else if (value == "" || value == null) {
-                                    return "Please fill Date of Birth";
-                                  }
-                                  try {
-                                    DateTime.parse(value);
-                                  } catch (e) {
-                                    return "Please select valid Date";
-                                  }
-                                  return null;
-                                },
-                                controller: _registerDateOfBirth,
-                                suffixIcon: GestureDetector(
-                                  onTap: () {
-                                    DatePicker.showDatePicker(context,
-                                        showTitleActions: true,
-                                        minTime: DateTime.parse("1900-01-01"),
-                                        maxTime: DateTime.now()
-                                            .subtract(Duration(days: 365)),
-                                        onChanged: (date) {
-                                      _registerDateOfBirth.text =
-                                          date.toString().split(" ")[0];
-                                    }, onConfirm: (date) {
-                                      _registerDateOfBirth.text =
-                                          date.toString().split(" ")[0];
-                                    },
-                                        currentTime: DateTime.now(),
-                                        locale: LocaleType.en);
+                              obscureText: false,
+                              hintText: "Date of Birth",
+                              validator: (value) {
+                                if (value.toString().split('-')[0] ==
+                                    DateTime.now().toString().split("-")[0]) {
+                                  return "Date of Birth can not be current year";
+                                } else if (value == "" || value == null) {
+                                  return "Please fill Date of Birth";
+                                }
+                                try {
+                                  DateTime.parse(value);
+                                } catch (e) {
+                                  return "Please select valid Date";
+                                }
+                                return null;
+                              },
+                              controller: _registerDateOfBirth,
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  DatePicker.showDatePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime.parse("1900-01-01"),
+                                      maxTime: DateTime.now()
+                                          .subtract(Duration(days: 365)),
+                                      onChanged: (date) {
+                                    _registerDateOfBirth.text =
+                                        date.toString().split(" ")[0];
+                                  }, onConfirm: (date) {
+                                    _registerDateOfBirth.text =
+                                        date.toString().split(" ")[0];
                                   },
-                                  child: Icon(
-                                    Icons.calendar_today,
-                                    color: colorPalette.navyBlue,
-                                  ),
-                                )),
+                                      currentTime: DateTime.now(),
+                                      locale: LocaleType.en);
+                                },
+                                child: Icon(
+                                  Icons.calendar_today,
+                                  color: colorPalette.navyBlue,
+                                ),
+                              ),
+                            ),
                             SizedBox(
                               height: 10,
                             ),

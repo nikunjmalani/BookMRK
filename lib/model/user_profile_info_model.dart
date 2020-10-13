@@ -59,7 +59,7 @@ class Response {
   String mobile;
   String profilePic;
   String emailHash;
-  DateTime dob;
+  String dob;
   String gender;
   String isMobileVerified;
 
@@ -72,7 +72,7 @@ class Response {
         mobile: json["mobile"],
         profilePic: json["profile_pic"],
         emailHash: json["email_hash"],
-        dob: DateTime.parse(json["dob"]),
+        dob: json["dob"],
         gender: json["gender"],
         isMobileVerified: json["is_mobile_verified"],
       );
@@ -86,8 +86,7 @@ class Response {
         "mobile": mobile,
         "profile_pic": profilePic,
         "email_hash": emailHash,
-        "dob":
-            "${dob.year.toString().padLeft(4, '0')}-${dob.month.toString().padLeft(2, '0')}-${dob.day.toString().padLeft(2, '0')}",
+        "dob": dob,
         "gender": gender,
         "is_mobile_verified": isMobileVerified,
       };

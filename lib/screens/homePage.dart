@@ -420,7 +420,11 @@ class _HomePageState extends State<HomePage> {
                           ? EditProfile()
                           : _homeScreenProvider.selectedString ==
                           "ChangeMobile"
-                          ? ChangeMobile()
+                          ? Consumer<UserProvider>(
+                          builder: (_, _userProvider, child) =>
+                              ChangeMobile(
+                                selectedMobileNumber: _userProvider
+                                    .mobileNumberToChange,))
                           : _homeScreenProvider.selectedString ==
                           "UserOTP"
                           ? UserOTP()
@@ -500,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                       ? SizedBox()
                       : Container(
                     padding: EdgeInsets.only(bottom: 10),
-                    height: 90,
+                    height: 70,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.vertical(
@@ -532,12 +536,13 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 0
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
                               _homeScreenProvider.selectedBottomIndex ==
                                   0
                                   ? "assets/icons/activeHome.svg"
-                                  : "assets/icons/Home.svg",
+                                  : "assets/icons/Home.svg", height: 25.0,
+
                             ),
                           ),
                         ),
@@ -556,12 +561,13 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 1
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
                               _homeScreenProvider.selectedBottomIndex ==
                                   1
                                   ? "assets/icons/activeCategory.svg"
-                                  : "assets/icons/Category.svg",
+                                  : "assets/icons/Category.svg", height: 25.0,
+
                             ),
                           ),
                         ),
@@ -580,12 +586,13 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 2
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
                               _homeScreenProvider.selectedBottomIndex ==
                                   2
                                   ? "assets/icons/activeSchool.svg"
-                                  : "assets/icons/School.svg",
+                                  : "assets/icons/School.svg", height: 25.0,
+
                             ),
                           ),
                         ),
@@ -604,8 +611,9 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 3
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
+
                               _homeScreenProvider.selectedBottomIndex ==
                                   3
                                   ? "assets/icons/activeUser.svg"
@@ -614,6 +622,7 @@ class _HomePageState extends State<HomePage> {
                                   .selectedBottomIndex == 3
                                   ? Colors.black
                                   : null,
+                              height: 25.0,
                             ),
                           ),
                         ),

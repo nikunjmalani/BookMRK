@@ -189,6 +189,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                             width: width * 0.4,
                                             child: Text(
                                               '${snapshot.data.response[index].address}, ${snapshot.data.response[index].city}, ${snapshot.data.response[index].pincode}',
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontFamily: 'Roboto',
                                                 fontSize: 14,

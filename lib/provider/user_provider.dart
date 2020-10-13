@@ -60,4 +60,44 @@ class UserProvider extends ChangeNotifier {
     _feedbackInProgress = value;
     notifyListeners();
   }
+
+  /// profile update in progress ...
+  bool _isProfileUpdateInProgress = false;
+  bool get isProfileUpdateInProgress => _isProfileUpdateInProgress;
+  set isProfileUpdateInProgress(bool value) {
+    _isProfileUpdateInProgress = value;
+    notifyListeners();
+  }
+
+  /// mobile number change otp from profile page ...
+  dynamic _otpForMobileChange;
+  dynamic get otpForMobileChange => _otpForMobileChange;
+  set otpForMobileChange(dynamic value) {
+    _otpForMobileChange = value;
+    notifyListeners();
+  }
+
+  /// otp sending progress ...
+  bool _isOtpSendingInProgress = false;
+  bool get isOtpSendingInProgress => _isOtpSendingInProgress;
+  set isOtpSendingInProgress(bool value) {
+    _isOtpSendingInProgress = value;
+    notifyListeners();
+  }
+
+  /// otp verifying in progress ....
+  bool _isOtpVerifyingInProgress = false;
+  bool get isOtpVerifyingInProgress => _isOtpVerifyingInProgress;
+  set isOtpVerifyingInProgress(bool value) {
+    _isOtpVerifyingInProgress = value;
+    notifyListeners();
+  }
+
+  /// mobile number to change ...
+  String _mobileNumberToChange;
+  String get mobileNumberToChange => _mobileNumberToChange;
+  set mobileNumberToChange(String value) {
+    _mobileNumberToChange = value;
+    notifyListeners();
+  }
 }
