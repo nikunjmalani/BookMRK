@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
                   child: PageView(
                     controller: pageController,
                     children: [
-                      data.selectedString == "Home"
+                      data.selectedString == "Home" && data.selectedBottomIndex ==0
                           ? Home()
                           : data.selectedString == "SearchProducts"
                               ? Search()
@@ -337,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                                               : data.selectedString == "School"
                                                   ? School()
                                                   : data.selectedString=="Category"&& data.selectedBottomIndex==1?Category():data.selectedString=="CategoryInfo"?CategoryInfo():AllVendors(),
-                      data.selectedString == "Category"
+                      data.selectedString == "Category" && data.selectedBottomIndex == 1
                           ? Category()
                           : data.selectedString == "ProductInfo"
                               ? ProductInfo()
