@@ -92,7 +92,7 @@ class _MyAddressState extends State<MyAddress> {
                                             padding: EdgeInsets.only(top: 20),
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 16, vertical: 10),
-                                            height: width / 2.5,
+                                            height: width / 2.2,
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: colorPalette.grey,

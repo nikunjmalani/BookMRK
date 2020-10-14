@@ -27,9 +27,9 @@ class CategoryAPI {
   }
 
   /// api to get all products from category..
-  static Future getCategoryProducts(int categoryId) async {
+  static Future getCategoryProducts(String categorySlug, String userId) async {
     String url =
-        "$kBaseURL/categories/categories_by_subcategories_product/1595922619X5f1fd8bb5f332/MOB/1/$categoryId";
+        "$kBaseURL/categories/categories_by_subcategories_product/1595922619X5f1fd8bb5f332/MOB/$userId/$categorySlug";
 
     Map<String, String> header = {
 //      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",

@@ -1,5 +1,6 @@
 import 'package:bookmrk/api/home_page_api.dart';
 import 'package:bookmrk/model/home_page_model.dart';
+import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
@@ -108,14 +109,31 @@ class _HomeState extends State<Home> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: List.generate(
-                                  snapshot.data.response[0].category.length,
-                                  (index) => CategoryButtons(
-                                    width,
-                                    "${snapshot.data.response[0].category[index].categoryName}",
-                                    colorPalette.navyBlue,
-                                    Color(0xff6A4B9C),
-                                  ),
-                                ),
+                                    snapshot.data.response[0].category.length,
+                                    (index) => Consumer<CategoryProvider>(
+                                          builder:
+                                              (_, _categoryProvider, child) =>
+                                                  GestureDetector(
+                                            onTap: () {
+                                              /// category_slug is required, but api response do not contain category_slug...
+//                                              Provider.of<HomeScreenProvider>(
+//                                                          context,
+//                                                          listen: false)
+//                                                      .selectedString =
+//                                                  "CategoryInfo";
+//                                              _categoryProvider
+//                                                      .selectedCategoryName =
+//                                                  snapshot.data.response[0].category[index]
+//                                                      .catSlug;
+                                            },
+                                            child: CategoryButtons(
+                                              width,
+                                              "${snapshot.data.response[0].category[index].categoryName}",
+                                              colorPalette.navyBlue,
+                                              Color(0xff6A4B9C),
+                                            ),
+                                          ),
+                                        )),
                               ),
                             ),
                             Container(
@@ -129,6 +147,8 @@ class _HomeState extends State<Home> {
                                     builder: (_, _vendorProvider, child) =>
                                         GestureDetector(
                                       onTap: () {
+                                        print(
+                                            "selected : ${snapshot.data.response[0].product[index].productSlug}");
                                         _vendorProvider.selectedVendorName =
                                             "${snapshot.data.response[0].product[index].vendorSlug}";
 
@@ -284,9 +304,11 @@ class _HomeState extends State<Home> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                Provider.of<HomeScreenProvider>(context,
-                                        listen: false)
-                                    .selectedString = "SchoolInfo";
+                                /// school info require school slug, and here, we are not getting school slug
+                                /// so do not redirect to schoolInfo page from home page...
+//                                Provider.of<HomeScreenProvider>(context,
+//                                        listen: false)
+//                                    .selectedString = "SchoolInfo";
                               },
                               child: ImageBox(
                                   height: height,

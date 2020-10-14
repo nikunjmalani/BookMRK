@@ -70,4 +70,56 @@ class HomeScreenProvider extends ChangeNotifier {
     _selectedProductSlug = value;
     notifyListeners();
   }
+
+  bool _confirmedFlag = true;
+  bool get confirmedFlag => _confirmedFlag;
+  set confirmedFlag(bool value) {
+    _confirmedFlag = value;
+    notifyListeners();
+  }
+
+  bool _packedFlag = true;
+  bool get packedFlag => _packedFlag;
+  set packedFlag(bool value) {
+    _packedFlag = value;
+    notifyListeners();
+  }
+
+  bool _pickupFlag = true;
+  bool get pickupFlag => _pickupFlag;
+  set pickupFlag(bool value) {
+    _pickupFlag = value;
+    notifyListeners();
+  }
+
+  bool _inTransistFlag = true;
+  bool get inTransistFlag => _inTransistFlag;
+  set inTransistFlag(bool value) {
+    _inTransistFlag = value;
+    notifyListeners();
+  }
+
+  bool _outForDeliveryFlag = false;
+  bool get outForDeliveryFlag => _outForDeliveryFlag;
+  set outForDeliveryFlag(bool value) {
+    _outForDeliveryFlag = value;
+    notifyListeners();
+  }
+
+  bool _deliveredFlag = false;
+  bool get deliveredFlag => _deliveredFlag;
+  set deliveredFlag(bool value) {
+    _deliveredFlag = value;
+    notifyListeners();
+  }
+
+  /// find product name ...
+  String _findHomeScreenProduct = "asa";
+
+  String get findHomeScreenProduct => _findHomeScreenProduct;
+
+  set findHomeScreenProduct(String value) {
+    _findHomeScreenProduct = value;
+    notifyListeners();
+  }
 }

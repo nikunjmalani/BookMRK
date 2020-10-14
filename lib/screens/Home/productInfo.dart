@@ -3,6 +3,7 @@ import 'package:bookmrk/api/wishlist_api.dart';
 import 'package:bookmrk/model/product_details_model.dart';
 import 'package:bookmrk/model/product_details_no_variation_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/product_order_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/indicators.dart';
@@ -51,153 +52,310 @@ class _ProductInfoState extends State<ProductInfo> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return FutureBuilder(
-        future: getProductDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        _productCarasoul(context,
-                            isInwishlist: snapshot.data.response[0]
-                                        .productInUserWishlist ==
-                                    "1"
-                                ? true
-                                : false,
-                            productId: snapshot.data.response[0].productId,
-                            height: height,
-                            pageController: pageController,
-                            currentPage: currentPage,
-                            images: snapshot.data.response[0].productImgs,
-                            stock:
-                                "${snapshot.data.response[0].productStockStatus}",
-                            onChange: (value) {
-                          setState(() {
-                            currentPage = value;
-                          });
-                        }),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        BlueHeader("${snapshot.data.response[0].productName}"),
-                        descrip(
-                            "${snapshot.data.response[0].vendorCompanyName}"),
-                        Text(
-                          'Published By : Alpha bate Publication ',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 14,
-                            color: const Color(0xffa4a4a4),
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+    return Consumer<ProductOrderProvider>(
+        builder: (_, _productOrderProvider, child) => FutureBuilder(
+            future: getProductDetails(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
                           children: [
+                            _productCarasoul(context,
+                                isInwishlist: snapshot.data.response[0]
+                                            .productInUserWishlist ==
+                                        "1"
+                                    ? true
+                                    : false,
+                                productId: snapshot.data.response[0].productId,
+                                height: height,
+                                pageController: pageController,
+                                currentPage: currentPage,
+                                images: snapshot.data.response[0].productImgs,
+                                stock:
+                                    "${snapshot.data.response[0].productStockStatus}",
+                                onChange: (value) {
+                              setState(() {
+                                currentPage = value;
+                              });
+                            }),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            BlueHeader(
+                                "${snapshot.data.response[0].productName}"),
+                            descrip(
+                                "${snapshot.data.response[0].vendorCompanyName}"),
                             Text(
-                              '₹ ${snapshot.data.response[0].productPrice}',
+                              'Published By : Alpha bate Publication ',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
-                                fontSize: 17,
-                                color: Colors.black,
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor: Colors.black,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                color: const Color(0xffa4a4a4),
                               ),
                               textAlign: TextAlign.left,
                             ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '₹ ${snapshot.data.response[0].productPrice}',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 17,
+                                    color: Colors.black,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  ' Save ${snapshot.data.response[0].productDiscount}',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 17,
+                                    color: const Color(0xff000000),
+                                    fontWeight: FontWeight.w200,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
+                            ),
                             Text(
-                              ' Save ${snapshot.data.response[0].productDiscount}',
+                              '₹ ${snapshot.data.response[0].productSalePrice}',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 17,
                                 color: const Color(0xff000000),
-                                fontWeight: FontWeight.w200,
+                                fontWeight: FontWeight.w700,
                               ),
                               textAlign: TextAlign.left,
                             ),
-                          ],
-                        ),
-                        Text(
-                          '₹ ${snapshot.data.response[0].productSalePrice}',
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 17,
-                            color: const Color(0xff000000),
-                            fontWeight: FontWeight.w700,
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                        title("Specifications"),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 15),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            '${snapshot.data.response[0].productSpecification == "" ? "No Specifications" : snapshot.data.response[0].productSpecification}',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 17,
-                              color: Colors.black,
+                            title("Specifications"),
+                            SizedBox(
+                              height: 15,
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        title("Description"),
-                        Container(
-                          padding: EdgeInsets.only(
-                              left: 15.0, top: 10.0, bottom: 10.0, right: 10.0),
-                          alignment: Alignment.centerLeft,
-                          child: descrip(
-                              "${snapshot.data.response[0].productDescription}"),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            NavyBlueButton(
-                                onClick: () {},
-                                context: context,
-                                title: "ADD TO CART"),
-                            NavyBlueButton(
-                                onClick: () {},
-                                context: context,
-                                title: "BUY NOW")
+                            Container(
+                              padding: EdgeInsets.only(left: 15),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${snapshot.data.response[0].productSpecification == "" ? "No Specifications" : snapshot.data.response[0].productSpecification}',
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 17,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            title("Description"),
+                            Container(
+                              padding: EdgeInsets.only(
+                                  left: 15.0,
+                                  top: 10.0,
+                                  bottom: 10.0,
+                                  right: 10.0),
+                              alignment: Alignment.centerLeft,
+                              child: descrip(
+                                  "${snapshot.data.response[0].productDescription}"),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            snapshot.data.response[0].variation == "YES"
+                                ? Container(
+                                    height: 200.0,
+                                    width: MediaQuery.of(context).size.width,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 17.0),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              spreadRadius: 1,
+                                              color:
+                                                  Colors.grey.withOpacity(0.2),
+                                              blurRadius: 10)
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(20.0)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10.0, vertical: 10.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${snapshot.data.response[0].variationsDetails[0].variationsDisplay}',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10.0),
+                                        Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 55.0,
+                                          child: ListView.builder(
+                                            physics: BouncingScrollPhysics(),
+                                            itemBuilder: (context, index) =>
+                                                Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  _productOrderProvider
+                                                          .selectedVariation1Name =
+                                                      '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}';
+                                                },
+                                                child: Container(
+                                                  width: 100.0,
+                                                  height: 50.0,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                    color: _productOrderProvider
+                                                                .selectedVariation1Name ==
+                                                            '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}'
+                                                        ? colorPalette.navyBlue
+                                                        : colorPalette.orange,
+                                                  ),
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsOptionsName}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.0),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            itemCount: snapshot
+                                                .data
+                                                .response[0]
+                                                .variationsDetails[0]
+                                                .varValue
+                                                .length,
+                                            scrollDirection: Axis.horizontal,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10.0),
+                                        Text(
+                                          '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10.0),
+                                        Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                color: Colors.grey,
+                                                width: 1.5,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0)),
+                                          height: 55.0,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20.0),
+                                          alignment: Alignment.center,
+                                          child: DropdownButton(
+                                            hint: Text(
+                                                '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}'),
+                                            isExpanded: true,
+                                            onChanged: (value) {
+                                              _productOrderProvider
+                                                      .selectedVariation2Option =
+                                                  value;
+                                            },
+                                            value: _productOrderProvider
+                                                    .selectedVariation2Option ??
+                                                snapshot
+                                                    .data
+                                                    .response[0]
+                                                    .variationsDetails[1]
+                                                    .varValue[0]
+                                                    .variationsDataId,
+                                            underline: Container(),
+                                            items: List.generate(
+                                              snapshot
+                                                  .data
+                                                  .response[0]
+                                                  .variationsDetails[1]
+                                                  .varValue
+                                                  .length,
+                                              (index) => DropdownMenuItem(
+                                                child: Text(
+                                                    '${snapshot.data.response[0].variationsDetails[1].varValue[index].variationsOptionsName}'),
+                                                value: snapshot
+                                                    .data
+                                                    .response[0]
+                                                    .variationsDetails[1]
+                                                    .varValue[index]
+                                                    .variationsDataId,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                NavyBlueButton(
+                                    onClick: () {},
+                                    context: context,
+                                    title: "ADD TO CART"),
+                                NavyBlueButton(
+                                    onClick: () {},
+                                    context: context,
+                                    title: "BUY NOW")
+                              ],
+                            ),
+                            SizedBox(
+                              height: 110,
+                            ),
                           ],
                         ),
-                        SizedBox(
-                          height: 110,
-                        ),
-                      ],
+                      ),
+                    )
+                  ],
+                );
+              } else {
+                return Container(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
                     ),
                   ),
-                )
-              ],
-            );
-          } else {
-            return Container(
-              child: Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
-                ),
-              ),
-            );
-          }
-        });
+                );
+              }
+            }));
   }
 }
 

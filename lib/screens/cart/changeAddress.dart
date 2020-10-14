@@ -42,7 +42,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                   return Container(
                     padding: EdgeInsets.only(top: 20),
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    height: width / 2.5,
+                    height: width / 2.2,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: colorPalette.grey,
@@ -103,30 +103,34 @@ class _ChangeAddressState extends State<ChangeAddress> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () async {
-                            _userProvider.changeAddressInProgress = true;
-                            print('sdf');
-                            SharedPreferences _prefs =
-                                await SharedPreferences.getInstance();
-                            int userId = _prefs.getInt('userId');
-                            dynamic response =
-                                await UserAPI.changeSelectedUserAddress(
-                                    userId.toString(),
-                                    snapshot
-                                        .data.response[index].userAddressId);
-                            print(response);
-                            if (response['status'] == 200) {
-                              setState(() {});
+                          onTap: snapshot.data.response[index].isSelected == "1"
+                              ? () {}
+                              : () async {
+                                  _userProvider.changeAddressInProgress = true;
+                                  print('sdf');
+                                  SharedPreferences _prefs =
+                                      await SharedPreferences.getInstance();
+                                  int userId = _prefs.getInt('userId');
+                                  dynamic response =
+                                      await UserAPI.changeSelectedUserAddress(
+                                          userId.toString(),
+                                          snapshot.data.response[index]
+                                              .userAddressId);
+                                  print(response);
+                                  if (response['status'] == 200) {
+                                    setState(() {});
 
-                              _userProvider.changeAddressInProgress = false;
-                              Scaffold.of(context).showSnackBar(getSnackBar(
-                                  'address is set as default address !'));
-                            } else {
-                              _userProvider.changeAddressInProgress = false;
-                              Scaffold.of(context).showSnackBar(getSnackBar(
-                                  'unable to set address as default!'));
-                            }
-                          },
+                                    _userProvider.changeAddressInProgress =
+                                        false;
+                                    Scaffold.of(context).showSnackBar(getSnackBar(
+                                        'address is set as default address !'));
+                                  } else {
+                                    _userProvider.changeAddressInProgress =
+                                        false;
+                                    Scaffold.of(context).showSnackBar(getSnackBar(
+                                        'unable to set address as default!'));
+                                  }
+                                },
                           child: Container(
                             alignment: Alignment.center,
                             height: width / 10,

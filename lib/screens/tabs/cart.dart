@@ -61,64 +61,71 @@ class _CartState extends State<Cart> {
               future: getSelectedAddressInCart(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  int selectedAddressIndex = 0;
-                  for (int i = 0; i < snapshot.data.response.length; i++) {
-                    if (snapshot.data.response[i].isSelected == "1") {
-                      selectedAddressIndex = i;
+                  if (snapshot.data.response.length != 0) {
+                    int selectedAddressIndex = 0;
+                    for (int i = 0; i < snapshot.data.response.length; i++) {
+                      if (snapshot.data.response[i].isSelected == "1") {
+                        selectedAddressIndex = i;
+                      }
                     }
-                  }
 
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Deliver to ${snapshot.data.response[selectedAddressIndex].fname} ${snapshot.data.response[selectedAddressIndex].lname}',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 13,
-                              color: const Color(0xff000000),
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Deliver to ${snapshot.data.response[selectedAddressIndex].fname} ${snapshot.data.response[selectedAddressIndex].lname}',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 13,
+                                color: const Color(0xff000000),
+                              ),
+                              textAlign: TextAlign.left,
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(
-                            '${snapshot.data.response[selectedAddressIndex].address1},\n${snapshot.data.response[selectedAddressIndex].city}, ${snapshot.data.response[selectedAddressIndex].state}\n${snapshot.data.response[selectedAddressIndex].pincode} ',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 12,
-                              color: const Color(0xffa9a9aa),
-                              fontWeight: FontWeight.w300,
+                            Text(
+                              '${snapshot.data.response[selectedAddressIndex].address1},\n${snapshot.data.response[selectedAddressIndex].city}, ${snapshot.data.response[selectedAddressIndex].state}\n${snapshot.data.response[selectedAddressIndex].pincode} ',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 12,
+                                color: const Color(0xffa9a9aa),
+                                fontWeight: FontWeight.w300,
+                              ),
+                              textAlign: TextAlign.left,
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: width / 4.5,
-                        child: FlatButton(
-                          onPressed: () {
-                            Provider.of<HomeScreenProvider>(context,
-                                    listen: false)
-                                .selectedString = "ChangeAddress";
-                          },
-                          color: colorPalette.navyBlue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Text(
-                            'CHANGE',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 12,
-                              color: const Color(0xffffffff),
+                          ],
+                        ),
+                        Container(
+                          width: width / 4.5,
+                          child: FlatButton(
+                            onPressed: () {
+                              Provider.of<HomeScreenProvider>(context,
+                                      listen: false)
+                                  .selectedString = "ChangeAddress";
+                            },
+                            color: colorPalette.navyBlue,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text(
+                              'CHANGE',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 12,
+                                color: const Color(0xffffffff),
+                              ),
+                              textAlign: TextAlign.left,
                             ),
-                            textAlign: TextAlign.left,
                           ),
                         ),
-                      ),
-                    ],
-                  );
+                      ],
+                    );
+                  } else {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 30.0),
+                      child: Text('Any Address not selected !'),
+                    );
+                  }
                 } else {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -197,27 +204,37 @@ class _CartState extends State<Cart> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              '${snapshot.data.response[0].cart[index].productName}',
-                                              style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 18,
-                                                color: const Color(0xff000000),
+                                            Container(
+                                              width: width / 1.7,
+                                              child: Text(
+                                                '${snapshot.data.response[0].cart[index].productName}',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: 18,
+                                                  color:
+                                                      const Color(0xff000000),
+                                                ),
+                                                textAlign: TextAlign.left,
                                               ),
-                                              textAlign: TextAlign.left,
                                             ),
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Text(
-                                              '${snapshot.data.response[0].cart[index].productName}',
-                                              style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 16,
-                                                color: const Color(0xffa9a9aa),
-                                                fontWeight: FontWeight.w300,
+                                            Container(
+                                              width: width / 1.7,
+                                              child: Text(
+                                                '${snapshot.data.response[0].cart[index].productName}',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: 16,
+                                                  color:
+                                                      const Color(0xffa9a9aa),
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                                textAlign: TextAlign.left,
                                               ),
-                                              textAlign: TextAlign.left,
                                             ),
                                           ],
                                         )
@@ -233,10 +250,26 @@ class _CartState extends State<Cart> {
                                           horizontal: 15),
                                       child: Row(
                                         children: [
-                                          SvgPicture.asset(
-                                            "assets/icons/delete.svg",
-                                            height: 30,
-                                            width: 30,
+                                          GestureDetector(
+                                            onTap: () async {
+                                              SharedPreferences _prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              int userId =
+                                                  _prefs.getInt('userId');
+                                              dynamic response =
+                                                  await CartAPI.removeCart(
+                                                      userId.toString(),
+                                                      snapshot.data.response[0]
+                                                          .cart[index].cartId);
+                                              setState(() {});
+                                              print(response);
+                                            },
+                                            child: SvgPicture.asset(
+                                              "assets/icons/delete.svg",
+                                              height: 30,
+                                              width: 30,
+                                            ),
                                           ),
                                           SizedBox(width: 10.0),
                                           Text(
@@ -260,7 +293,7 @@ class _CartState extends State<Cart> {
                                             textAlign: TextAlign.left,
                                           ),
                                           Text(
-                                            'Total : ${(double.parse('${snapshot.data.response[0].cart[index].productSalePrice}')) * (int.parse('${snapshot.data.response[0].cart[index].qty}'))} ₹',
+                                            'Total : ${snapshot.data.response[0].cart[index].productFinalTotal} ₹',
                                             style: TextStyle(
                                               fontFamily: 'Roboto',
                                               fontSize: 16,

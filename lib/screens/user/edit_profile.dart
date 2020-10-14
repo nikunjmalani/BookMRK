@@ -307,13 +307,20 @@ class _EditProfileState extends State<EditProfile> {
                                       isExpanded: true,
                                       underline: SizedBox(),
                                       onChanged: (value) {
+//
                                         _registerProvider
                                                 .selectedGenderRegister =
                                             value.toString();
                                       },
                                       value: _registerProvider
-                                              .selectedGenderRegister ??
-                                          "Male",
+                                                      .selectedGenderRegister ==
+                                                  "" ||
+                                              _registerProvider
+                                                      .selectedGenderRegister ==
+                                                  null
+                                          ? "Male"
+                                          : _registerProvider
+                                              .selectedGenderRegister,
                                     ),
                                   ),
                                 ],

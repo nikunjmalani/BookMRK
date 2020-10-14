@@ -1,12 +1,14 @@
 import 'package:bookmrk/api/school_api.dart';
 import 'package:bookmrk/model/school_product_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/indicators.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SchoolInfo extends StatefulWidget {
   final String schoolSlug;
@@ -23,7 +25,11 @@ class _SchoolInfoState extends State<SchoolInfo> {
   int currentPage = 1;
 
   Future getSchoolProductDetails() async {
-    dynamic data = await SchoolAPI.getSchoolProductDetails(widget.schoolSlug);
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    int userId = _prefs.getInt('userId');
+    dynamic data = await SchoolAPI.getSchoolProductDetails(
+        widget.schoolSlug, userId.toString());
+    print(data);
     SchoolProductsModel _schoolProductModel =
         SchoolProductsModel.fromJson(data);
     return _schoolProductModel;
@@ -58,7 +64,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                        "${snapshot.data.response[0].school[0].schoolBanners.length == 0 ? snapshot.data.response[0].school[0].schoolLogo : snapshot.data.response[0].school[0].schoolBanners[index].schoolLogo}"),
+                                        "${snapshot.data.response[0].school[0].schoolBanners.length == 0 ? snapshot.data.response[0].school[0].schoolLogo : snapshot.data.response[0].school[0].schoolBanners[index]['school_img']}"),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -168,6 +174,16 @@ class _SchoolInfoState extends State<SchoolInfo> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+                                Provider.of<VendorProvider>(context,
+                                            listen: false)
+                                        .selectedVendorName =
+                                    "${snapshot.data.response[0].schoolAllProduct[index].vendorSlug}";
+
+                                Provider.of<HomeScreenProvider>(context,
+                                            listen: false)
+                                        .selectedProductSlug =
+                                    "${snapshot.data.response[0].schoolAllProduct[index].productSlug}";
+
                                 Provider.of<HomeScreenProvider>(context,
                                         listen: false)
                                     .selectedString = "ProductInfo";

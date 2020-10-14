@@ -31,7 +31,7 @@ Widget CustomAppBar(
       child: Row(
         children: [
           Container(
-            width: width / 1.6,
+            width: width / 1.9,
             child: child,
           ),
           Spacer(),
@@ -69,7 +69,7 @@ Widget CustomAppBar(
             ),
           ),
           SizedBox(
-            width: 10,
+            width: 5,
           ),
           GestureDetector(
             onTap: onBellTap,

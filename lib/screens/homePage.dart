@@ -271,6 +271,7 @@ class _HomePageState extends State<HomePage> {
                   _homeScreenProvider.selectedString == "NewPassword" ||
                   _homeScreenProvider.selectedString ==
                       "FeedBack"
+              || _homeScreenProvider.selectedString == "ProductInfo"
                   ? leadingAppBar(
                 title: _homeScreenProvider.selectedString == "User"
                     ? "Account"
@@ -305,6 +306,10 @@ class _HomePageState extends State<HomePage> {
                     ? false
                     : true,
                 onBackTap: () {
+
+                  print("selected String : ${_homeScreenProvider.selectedString}");
+
+
                   _setHomeScreenProvider.selectedString =
                   _homeScreenProvider
                       .selectedString ==
@@ -333,7 +338,7 @@ class _HomePageState extends State<HomePage> {
                       : _homeScreenProvider.selectedString ==
                       "NewPassword"
                       ? "ChangePassword"
-                      : "";
+                      : _homeScreenProvider.selectedString == "ProductInfo" ? "Wishlist": "";
                 },
               )
                   : _homeScreenProvider.selectedString == "Cart"
@@ -394,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                           ? Consumer<CategoryProvider>(
                         builder: (_, _categoryProvider, child) =>
                             CategoryInfo(
-                                _categoryProvider.selectedCategoryId),)
+                                _categoryProvider.selectedCategoryName),)
                           : AllVendors(),
                       _homeScreenProvider.selectedString == "Category"
                           ? CategoryTab()
@@ -408,7 +413,7 @@ class _HomePageState extends State<HomePage> {
                           : Consumer<CategoryProvider>(
                         builder: (_, _categoryProvider, child) =>
                             CategoryInfo(
-                                _categoryProvider.selectedCategoryId),),
+                                _categoryProvider.selectedCategoryName),),
                       _homeScreenProvider.selectedString == "School"
                           ? SchoolTab()
                           : Consumer<SchoolProvider>(
@@ -466,7 +471,11 @@ class _HomePageState extends State<HomePage> {
                           : _homeScreenProvider.selectedString ==
                           "FeedBack"
                           ? FeedBack()
-                          : User(),
+                          : _homeScreenProvider.selectedString == "ProductInfo" ? Consumer<HomeScreenProvider>(
+                          builder: (_, _homeScreenProvider, child) =>
+                              ProductInfo(
+                                selectedProductSlug: _homeScreenProvider
+                                    .selectedProductSlug,)): User(),
                       _homeScreenProvider.selectedString == "Cart"
                           ? Cart()
                           : _homeScreenProvider.selectedString ==
