@@ -1,5 +1,6 @@
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/order_provider.dart';
 import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
@@ -454,7 +455,7 @@ class _HomePageState extends State<HomePage> {
                           ? MyOrders()
                           : _homeScreenProvider.selectedString ==
                           "OrderDetails"
-                          ? OrderDetails()
+                          ? Consumer<OrderProvider>(builder: (_, _orderProvider, child)=>OrderDetails(_orderProvider.orderId.toString()))
                           : _homeScreenProvider.selectedString ==
                           "OrderTracking"
                           ? OrderTracking()

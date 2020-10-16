@@ -35,7 +35,13 @@ class _CategoryTabState extends State<CategoryTab> {
                 return Column(
                   children: [
                     SearchBar(
-                        width: width, onTap: () {}, title: "Search Category"),
+                      width: width,
+                      onTap: () {
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .selectedString = "SearchProducts";
+                      },
+                      title: "Search Products",
+                    ),
                     Expanded(
                       child: GridView.builder(
                         itemCount: snapshot.data.response.length,

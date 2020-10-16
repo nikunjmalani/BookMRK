@@ -190,9 +190,11 @@ class _HomeState extends State<Home> {
                                             SizedBox(
                                               height: 3,
                                             ),
-                                            Center(
+                                            Container(
+                                              width: width * 0.5,
                                               child: Text(
                                                 '${snapshot.data.response[0].product[index].productName}',
+                                                overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                   fontFamily: 'Roboto',
                                                   fontSize: 12,
