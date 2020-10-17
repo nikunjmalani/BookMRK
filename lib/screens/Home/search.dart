@@ -32,7 +32,6 @@ class _SearchState extends State<Search> {
     int userId = _prefs.getInt('userId');
     dynamic response =
         await SearchAPI.searchProductHomePage(productName, userId.toString());
-    print(response);
     if (response['response'].length == 0) {
       NoDataOrderModel _noData = NoDataOrderModel.fromJson(response);
       return _noData;
@@ -56,7 +55,6 @@ class _SearchState extends State<Search> {
               width: width,
               controller: _searchProductController,
               onChanged: (value) {
-                print(value);
                 _homeScreenProvider.findHomeScreenProduct = value;
               }),
           Expanded(

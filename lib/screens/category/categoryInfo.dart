@@ -22,7 +22,6 @@ class CategoryInfo extends StatefulWidget {
 class _CategoryInfoState extends State<CategoryInfo> {
   Future getCategoryProductsDetails() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    print(widget.categoryName);
     int userId = _prefs.getInt('userId');
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
         widget.categoryName, userId.toString());

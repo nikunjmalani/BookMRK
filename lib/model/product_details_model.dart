@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final productDetailsModel = productDetailsModelFromJson(jsonString);
+
 import 'dart:convert';
 
 ProductDetailsModel productDetailsModelFromJson(String str) =>
@@ -44,14 +48,19 @@ class Response {
     this.schoolSlug,
     this.type,
     this.productType,
+    this.additionalSet,
     this.variation,
     this.howManyVariation,
     this.variationsDetails,
     this.productName,
+    this.author,
+    this.language,
+    this.bookType,
     this.quantity,
     this.productPrice,
     this.productDiscount,
     this.productSalePrice,
+    this.productAdditionalSetTotalPrice,
     this.productSpecification,
     this.productDescription,
     this.vendorCompanyName,
@@ -66,14 +75,19 @@ class Response {
   String schoolSlug;
   String type;
   String productType;
+  String additionalSet;
   String variation;
   String howManyVariation;
   List<VariationsDetail> variationsDetails;
   String productName;
+  String author;
+  String language;
+  String bookType;
   String quantity;
   String productPrice;
   String productDiscount;
   String productSalePrice;
+  String productAdditionalSetTotalPrice;
   String productSpecification;
   String productDescription;
   String vendorCompanyName;
@@ -88,16 +102,22 @@ class Response {
         schoolSlug: json["school_slug"],
         type: json["type"],
         productType: json["product_type"],
+        additionalSet: json["additional_set"],
         variation: json["variation"],
         howManyVariation: json["how_many_variation"],
         variationsDetails: List<VariationsDetail>.from(
             json["variations_details"]
                 .map((x) => VariationsDetail.fromJson(x))),
         productName: json["product_name"],
+        author: json["author"],
+        language: json["language"],
+        bookType: json["book_type"],
         quantity: json["quantity"],
         productPrice: json["product_price"],
         productDiscount: json["product_discount"],
         productSalePrice: json["product_sale_price"],
+        productAdditionalSetTotalPrice:
+            json["product_additional_set_total_price"],
         productSpecification: json["product_specification"],
         productDescription: json["product_description"],
         vendorCompanyName: json["vendor_company_name"],
@@ -114,15 +134,20 @@ class Response {
         "school_slug": schoolSlug,
         "type": type,
         "product_type": productType,
+        "additional_set": additionalSet,
         "variation": variation,
         "how_many_variation": howManyVariation,
         "variations_details":
             List<dynamic>.from(variationsDetails.map((x) => x.toJson())),
         "product_name": productName,
+        "author": author,
+        "language": language,
+        "book_type": bookType,
         "quantity": quantity,
         "product_price": productPrice,
         "product_discount": productDiscount,
         "product_sale_price": productSalePrice,
+        "product_additional_set_total_price": productAdditionalSetTotalPrice,
         "product_specification": productSpecification,
         "product_description": productDescription,
         "vendor_company_name": vendorCompanyName,

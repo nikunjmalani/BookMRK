@@ -174,7 +174,6 @@ class _MyAddressState extends State<MyAddress> {
                                                     _userProvider
                                                             .changeAddressInProgress =
                                                         true;
-                                                    print('sdf');
                                                     SharedPreferences _prefs =
                                                         await SharedPreferences
                                                             .getInstance();
@@ -187,7 +186,6 @@ class _MyAddressState extends State<MyAddress> {
                                                                 .data
                                                                 .response[index]
                                                                 .userAddressId);
-                                                    print(response);
                                                     if (response['status'] ==
                                                         200) {
                                                       setState(() {});

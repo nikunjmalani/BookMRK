@@ -10,6 +10,7 @@ import 'package:bookmrk/widgets/indicators.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,8 +34,6 @@ class _ProductInfoState extends State<ProductInfo> {
     int userId = _prefs.getInt('userId');
     dynamic response = await ProductAPI.getProductDetails(
         widget.selectedProductSlug, userId.toString());
-    print(widget.selectedProductSlug);
-    print(response);
 
     if (response['response'][0]['variation'] == "NO") {
       ProductDetailsNoVariationModel _productDetailsNoVariationModel =
@@ -166,15 +165,26 @@ class _ProductInfoState extends State<ProductInfo> {
                                   bottom: 10.0,
                                   right: 10.0),
                               alignment: Alignment.centerLeft,
-                              child: descrip(
-                                  "${snapshot.data.response[0].productDescription}"),
+                              child: Html(
+                                data:
+                                    "${snapshot.data.response[0].productDescription}",
+                                backgroundColor: Colors.grey[200],
+                              ),
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             snapshot.data.response[0].variation == "YES"
                                 ? Container(
-                                    height: 200.0,
+                                    height: snapshot.data.response[0]
+                                                .variationsDetails.length ==
+                                            1
+                                        ? 120.0
+                                        : snapshot.data.response[0]
+                                                    .variationsDetails.length ==
+                                                2
+                                            ? 200
+                                            : 200.0,
                                     width: MediaQuery.of(context).size.width,
                                     margin:
                                         EdgeInsets.symmetric(horizontal: 17.0),
@@ -197,133 +207,239 @@ class _ProductInfoState extends State<ProductInfo> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          '${snapshot.data.response[0].variationsDetails[0].variationsDisplay}',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.0),
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 55.0,
-                                          child: ListView.builder(
-                                            physics: BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) =>
-                                                Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10.0),
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  _productOrderProvider
-                                                          .selectedVariation1Name =
-                                                      '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}';
-                                                },
-                                                child: Container(
-                                                  width: 100.0,
-                                                  height: 50.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.0),
-                                                    color: _productOrderProvider
-                                                                .selectedVariation1Name ==
-                                                            '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}'
-                                                        ? colorPalette.navyBlue
-                                                        : colorPalette.orange,
-                                                  ),
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsOptionsName}',
+                                        snapshot.data.response[0]
+                                                    .variationsDetails.length >
+                                                0
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${snapshot.data.response[0].variationsDetails[0].variationsDisplay}',
                                                     style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 18.0),
+                                                      color: Colors.grey,
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                            itemCount: snapshot
-                                                .data
-                                                .response[0]
-                                                .variationsDetails[0]
-                                                .varValue
-                                                .length,
-                                            scrollDirection: Axis.horizontal,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.0),
-                                        Text(
-                                          '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.0),
-                                        Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: Colors.grey,
-                                                width: 1.5,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          height: 55.0,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20.0),
-                                          alignment: Alignment.center,
-                                          child: DropdownButton(
-                                            hint: Text(
-                                                '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}'),
-                                            isExpanded: true,
-                                            onChanged: (value) {
-                                              _productOrderProvider
-                                                      .selectedVariation2Option =
-                                                  value;
-                                            },
-                                            value: _productOrderProvider
-                                                    .selectedVariation2Option ??
-                                                snapshot
-                                                    .data
-                                                    .response[0]
-                                                    .variationsDetails[1]
-                                                    .varValue[0]
-                                                    .variationsDataId,
-                                            underline: Container(),
-                                            items: List.generate(
-                                              snapshot
-                                                  .data
-                                                  .response[0]
-                                                  .variationsDetails[1]
-                                                  .varValue
-                                                  .length,
-                                              (index) => DropdownMenuItem(
-                                                child: Text(
-                                                    '${snapshot.data.response[0].variationsDetails[1].varValue[index].variationsOptionsName}'),
-                                                value: snapshot
-                                                    .data
-                                                    .response[0]
-                                                    .variationsDetails[1]
-                                                    .varValue[index]
-                                                    .variationsDataId,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                                  SizedBox(height: 10.0),
+                                                  Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: 55.0,
+                                                    child: ListView.builder(
+                                                      physics:
+                                                          BouncingScrollPhysics(),
+                                                      itemBuilder:
+                                                          (context, index) =>
+                                                              Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    10.0),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            _productOrderProvider
+                                                                    .selectedVariation1Name =
+                                                                '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}';
+                                                          },
+                                                          child: Container(
+                                                            width: 100.0,
+                                                            height: 50.0,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10.0),
+                                                              color: _productOrderProvider
+                                                                          .selectedVariation1Name ==
+                                                                      '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}'
+                                                                  ? colorPalette
+                                                                      .navyBlue
+                                                                  : colorPalette
+                                                                      .orange,
+                                                            ),
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Text(
+                                                              '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsOptionsName}',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      18.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      itemCount: snapshot
+                                                          .data
+                                                          .response[0]
+                                                          .variationsDetails[0]
+                                                          .varValue
+                                                          .length,
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 10.0),
+                                                ],
+                                              )
+                                            : SizedBox(),
+                                        snapshot.data.response[0]
+                                                    .variationsDetails.length >
+                                                1
+                                            ? Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 10.0),
+                                                  Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 1.5,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    height: 55.0,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 20.0),
+                                                    alignment: Alignment.center,
+                                                    child: DropdownButton(
+                                                      hint: Text(
+                                                          '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}'),
+                                                      isExpanded: true,
+                                                      onChanged: (value) {
+                                                        _productOrderProvider
+                                                                .selectedVariation2Option =
+                                                            value;
+                                                      },
+                                                      value: _productOrderProvider
+                                                              .selectedVariation2Option ??
+                                                          snapshot
+                                                              .data
+                                                              .response[0]
+                                                              .variationsDetails[
+                                                                  1]
+                                                              .varValue[0]
+                                                              .variationsDataId,
+                                                      underline: Container(),
+                                                      items: List.generate(
+                                                        snapshot
+                                                            .data
+                                                            .response[0]
+                                                            .variationsDetails[
+                                                                1]
+                                                            .varValue
+                                                            .length,
+                                                        (index) =>
+                                                            DropdownMenuItem(
+                                                          child: Text(
+                                                              '${snapshot.data.response[0].variationsDetails[1].varValue[index].variationsOptionsName}'),
+                                                          value: snapshot
+                                                              .data
+                                                              .response[0]
+                                                              .variationsDetails[
+                                                                  1]
+                                                              .varValue[index]
+                                                              .variationsDataId,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : SizedBox()
                                       ],
                                     ),
                                   )
                                 : SizedBox(),
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
+                            snapshot.data.response[0].additionalSet == "YES"
+                                ? Container(
+                                    height: 200,
+                                    width: MediaQuery.of(context).size.width,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              'additional set',
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Column(
+                                            children: List.generate(
+                                                snapshot
+                                                    .data
+                                                    .response[0]
+                                                    .additionalSetDetails
+                                                    .length, (index) {
+                                              return CheckboxListTile(
+                                                value: snapshot
+                                                            .data
+                                                            .response[0]
+                                                            .additionalSetDetails[
+                                                                index]
+                                                            .isMandatory ==
+                                                        "1"
+                                                    ? true
+                                                    : false,
+                                                onChanged: (value) {},
+                                                checkColor:
+                                                    colorPalette.navyBlue,
+                                                activeColor: Colors.transparent,
+                                                title: Container(
+                                                  child: Text(
+                                                    '${snapshot.data.response[0].additionalSetDetails[index].optionName}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 17.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(height: 20.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [

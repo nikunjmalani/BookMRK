@@ -37,6 +37,11 @@ dependencies:
   cached_network_image: ^2.3.2+1
   file_picker: ^2.0.7
   permission_handler:
+  flutter_html:
+
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

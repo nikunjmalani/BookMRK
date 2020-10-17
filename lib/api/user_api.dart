@@ -235,7 +235,6 @@ class UserAPI {
       "Content-Type": "application/x-www-form-urlencoded",
     };
 
-    print(dob);
     Map<String, String> body = {
       "client_key": "1595922619X5f1fd8bb5f332",
       "device_type": "MOB",

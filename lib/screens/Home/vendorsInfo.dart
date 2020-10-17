@@ -2,6 +2,7 @@ import 'package:bookmrk/api/vendor_api.dart';
 import 'package:bookmrk/model/vedor_product_info_model.dart';
 import 'package:bookmrk/model/vendor_school_info_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/product_order_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/schoolImageBox.dart';
@@ -10,6 +11,7 @@ import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class VendorsInfo extends StatefulWidget {
   final String vendorSlug;
@@ -181,7 +183,19 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                         Consumer<VendorProvider>(
                                       builder: (_, _vendorProvider, child) =>
                                           GestureDetector(
-                                        onTap: () {
+                                        onTap: () async {
+                                          SharedPreferences _prefs =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          int userId = _prefs.getInt('userId');
+                                          print('userId : $userId');
+                                          print(
+                                              "${snapshot.data[0].response[0].vendorProduct[index].productSlug}");
+
+                                          Provider.of<ProductOrderProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .selectedVariation2Option = null;
                                           _homeScreenProvider
                                                   .selectedProductSlug =
                                               "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";

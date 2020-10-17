@@ -55,7 +55,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     .orderDetail.length ==
                                 0
                             ? width / 1.8
-                            : width / 1.9,
+                            : width / 2.0,
                         margin:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
@@ -75,16 +75,50 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 ),
                               ),
                               height: width / 6,
-                              child: Text(
-                                'Order Id : ${snapshot.data.response[0].orderData[index].subOrderNo}\n${snapshot.data.response[0].orderData[index].orderConfirmedDate}',
-                                style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontSize: 15,
-                                  color: const Color(0xffffffff),
-                                ),
-                                textAlign: TextAlign.left,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(top: width / 24),
+                                    child: Text(
+                                      'Order Id : ${snapshot.data.response[0].orderData[index].subOrderNo}\n${snapshot.data.response[0].orderData[index].orderConfirmedDate}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 15,
+                                        color: const Color(0xffffffff),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  snapshot.data.response[0].orderData[index]
+                                              .isManual !=
+                                          "0"
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                              color: colorPalette.pinkOrange,
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                              )),
+                                          height: width / 16,
+                                          width: width / 3,
+                                          child: Text(
+                                            'Manual Shipping ',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 12,
+                                              color: const Color(0xffffffff),
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          alignment: Alignment.center,
+                                        )
+                                      : SizedBox()
+                                ],
                               ),
-                              alignment: Alignment.centerLeft,
+                              alignment: Alignment.topLeft,
                               padding: EdgeInsets.only(left: 15),
                             ),
                             Expanded(
@@ -277,7 +311,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                           ),
                           TextSpan(
-                            text: "Wallet",
+                            text:
+                                "${snapshot.data.response[0].order[0].paymentMethod}",
                             style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 15,
@@ -292,11 +327,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                   PriceDetail(
                     width: width,
                     height: height,
-                    itemCount: 2,
-                    totalOfItem: '869.00',
-                    tax: '0.00',
-                    deliverCharge: '50.0',
-                    mainTotal: '919.00',
+                    itemCount: snapshot.data.response[0].orderData.length,
+                    totalOfItem:
+                        '${snapshot.data.response[0].orderSummary[0].finalPrice}',
+                    tax:
+                        '${snapshot.data.response[0].orderSummary[0].finalTaxPrice}',
+                    deliverCharge:
+                        '${snapshot.data.response[0].orderSummary[0].finalDeliveryPrice}',
+                    mainTotal:
+                        '${snapshot.data.response[0].orderSummary[0].finalTotalPrice}',
                   ),
                   SizedBox(
                     height: 80,

@@ -29,7 +29,6 @@ class _CartState extends State<Cart> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     int userId = _prefs.getInt('userId');
     dynamic response = await CartAPI.getCartData(userId.toString());
-    print(response);
     if (response['response'][0].length == 0) {
       NoDataCartModel _noDataCart = NoDataCartModel.fromJson(response);
       return _noDataCart;
@@ -263,7 +262,6 @@ class _CartState extends State<Cart> {
                                                       snapshot.data.response[0]
                                                           .cart[index].cartId);
                                               setState(() {});
-                                              print(response);
                                             },
                                             child: SvgPicture.asset(
                                               "assets/icons/delete.svg",

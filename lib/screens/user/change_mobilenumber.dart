@@ -110,18 +110,15 @@ class _ChangeMobileState extends State<ChangeMobile> {
                             dynamic response =
                                 await ForgotPasswordAPI.forgotPassword(
                                     _mobileNumberController.text, userId);
-                            print(response);
                             if (response['status'] == 200) {
                               _userProvider.isOtpSendingInProgress = false;
-                              print(
-                                  _userProvider.otpForMobileChange.runtimeType);
-                              print(response['response'][0]['otp']);
                               _userProvider.otpForMobileChange =
                                   response['response'][0]['otp'];
                               homeProvider.selectedString = "UserOTP";
                             } else {
                               _userProvider.isOtpSendingInProgress = false;
-                              Scaffold.of(context).showSnackBar(getSnackBar('${response['message']}'));
+                              Scaffold.of(context).showSnackBar(
+                                  getSnackBar('${response['message']}'));
                             }
                           },
                           title: "NEXT"),

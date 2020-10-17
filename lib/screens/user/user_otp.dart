@@ -118,12 +118,10 @@ class _UserOTPState extends State<UserOTP> {
                               SharedPreferences _prefs =
                                   await SharedPreferences.getInstance();
                               int userId = _prefs.getInt('userId');
-                              print(_userProvider.mobileNumberToChange);
                               dynamic response =
                                   await UserAPI.changeUserProfileMobilNumber(
                                       userId.toString(),
                                       _userProvider.mobileNumberToChange);
-                              print(response);
                               if (response['status'] == 200) {
                                 _userProvider.isOtpVerifyingInProgress = false;
                                 Provider.of<HomeScreenProvider>(context,

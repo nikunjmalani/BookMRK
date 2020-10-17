@@ -19,4 +19,17 @@ class SchoolProvider extends ChangeNotifier {
     _schoolsToFilter = value;
     notifyListeners();
   }
+
+  void schoolsToFilterAddSingleSchool(dynamic school) {
+    _schoolsToFilter.add(school);
+    notifyListeners();
+  }
+
+  /// when search school
+  bool _isSearchSchoolTabSelected = false;
+  bool get isSearchSchoolTabSelected => _isSearchSchoolTabSelected;
+  set isSearchSchoolTabSelected(bool value) {
+    _isSearchSchoolTabSelected = value;
+    notifyListeners();
+  }
 }

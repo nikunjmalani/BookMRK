@@ -83,7 +83,9 @@ class _MyOrdersState extends State<MyOrders> {
                                             "OrderDetails";
                                       },
                                       child: Container(
-                                        height: width / 1.8,
+                                        height: data.length > 1
+                                            ? width / 1.8
+                                            : width / 2.5,
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 16, vertical: 10),
                                         decoration: BoxDecoration(
@@ -228,37 +230,37 @@ class _MyOrdersState extends State<MyOrders> {
                                         ),
                                       ),
                                     ),
-                                    index == 1
-                                        ? Positioned(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      colorPalette.pinkOrange,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(20),
-                                                    topRight:
-                                                        Radius.circular(20),
-                                                  )),
-                                              height: width / 16,
-                                              width: width / 3,
-                                              child: Text(
-                                                'Manual Shipping ',
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 12,
-                                                  color:
-                                                      const Color(0xffffffff),
-                                                ),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                              alignment: Alignment.center,
-                                            ),
-                                            top: 10,
-                                            right: 16,
-                                          )
-                                        : SizedBox(),
+//                                    index == 1
+//                                        ? Positioned(
+//                                            child: Container(
+//                                              decoration: BoxDecoration(
+//                                                  color:
+//                                                      colorPalette.pinkOrange,
+//                                                  borderRadius:
+//                                                      BorderRadius.only(
+//                                                    bottomLeft:
+//                                                        Radius.circular(20),
+//                                                    topRight:
+//                                                        Radius.circular(20),
+//                                                  )),
+//                                              height: width / 16,
+//                                              width: width / 3,
+//                                              child: Text(
+//                                                'Manual Shipping ',
+//                                                style: TextStyle(
+//                                                  fontFamily: 'Roboto',
+//                                                  fontSize: 12,
+//                                                  color:
+//                                                      const Color(0xffffffff),
+//                                                ),
+//                                                textAlign: TextAlign.left,
+//                                              ),
+//                                              alignment: Alignment.center,
+//                                            ),
+//                                            top: 10,
+//                                            right: 16,
+//                                          )
+//                                        : SizedBox(),
                                   ],
                                 );
                               },
@@ -458,37 +460,37 @@ class _MyOrdersState extends State<MyOrders> {
                                         ),
                                       ),
                                     ),
-                                    index == 1
-                                        ? Positioned(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                  color:
-                                                      colorPalette.pinkOrange,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    bottomLeft:
-                                                        Radius.circular(20),
-                                                    topRight:
-                                                        Radius.circular(20),
-                                                  )),
-                                              height: width / 16,
-                                              width: width / 3,
-                                              child: Text(
-                                                'Manual Shipping ',
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 12,
-                                                  color:
-                                                      const Color(0xffffffff),
-                                                ),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                              alignment: Alignment.center,
-                                            ),
-                                            top: 10,
-                                            right: 16,
-                                          )
-                                        : SizedBox(),
+//                                    index == 1
+//                                        ? Positioned(
+//                                            child: Container(
+//                                              decoration: BoxDecoration(
+//                                                  color:
+//                                                      colorPalette.pinkOrange,
+//                                                  borderRadius:
+//                                                      BorderRadius.only(
+//                                                    bottomLeft:
+//                                                        Radius.circular(20),
+//                                                    topRight:
+//                                                        Radius.circular(20),
+//                                                  )),
+//                                              height: width / 16,
+//                                              width: width / 3,
+//                                              child: Text(
+//                                                'Manual Shipping ',
+//                                                style: TextStyle(
+//                                                  fontFamily: 'Roboto',
+//                                                  fontSize: 12,
+//                                                  color:
+//                                                      const Color(0xffffffff),
+//                                                ),
+//                                                textAlign: TextAlign.left,
+//                                              ),
+//                                              alignment: Alignment.center,
+//                                            ),
+//                                            top: 10,
+//                                            right: 16,
+//                                          )
+//                                        : SizedBox(),
                                   ],
                                 );
                               },

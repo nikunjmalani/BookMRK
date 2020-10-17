@@ -16,7 +16,6 @@ class SearchAPI {
     };
 
     http.Response response = await http.get(url, headers: header);
-    print(response.body);
     return jsonDecode(response.body);
   }
 }

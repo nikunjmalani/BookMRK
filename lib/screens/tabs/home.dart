@@ -116,15 +116,15 @@ class _HomeState extends State<Home> {
                                                   GestureDetector(
                                             onTap: () {
                                               /// category_slug is required, but api response do not contain category_slug...
-//                                              Provider.of<HomeScreenProvider>(
-//                                                          context,
-//                                                          listen: false)
-//                                                      .selectedString =
-//                                                  "CategoryInfo";
-//                                              _categoryProvider
-//                                                      .selectedCategoryName =
-//                                                  snapshot.data.response[0].category[index]
-//                                                      .catSlug;
+                                              Provider.of<HomeScreenProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .selectedString =
+                                                  "CategoryInfo";
+                                              _categoryProvider
+                                                      .selectedCategoryName =
+                                                  snapshot.data.response[0]
+                                                      .category[index].catSlug;
                                             },
                                             child: CategoryButtons(
                                               width,
@@ -147,8 +147,6 @@ class _HomeState extends State<Home> {
                                     builder: (_, _vendorProvider, child) =>
                                         GestureDetector(
                                       onTap: () {
-                                        print(
-                                            "selected : ${snapshot.data.response[0].product[index].productSlug}");
                                         _vendorProvider.selectedVendorName =
                                             "${snapshot.data.response[0].product[index].vendorSlug}";
 

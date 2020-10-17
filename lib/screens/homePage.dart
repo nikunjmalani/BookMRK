@@ -307,10 +307,6 @@ class _HomePageState extends State<HomePage> {
                     ? false
                     : true,
                 onBackTap: () {
-
-                  print("selected String : ${_homeScreenProvider.selectedString}");
-
-
                   _setHomeScreenProvider.selectedString =
                   _homeScreenProvider
                       .selectedString ==

@@ -107,7 +107,6 @@ class _ChangeAddressState extends State<ChangeAddress> {
                               ? () {}
                               : () async {
                                   _userProvider.changeAddressInProgress = true;
-                                  print('sdf');
                                   SharedPreferences _prefs =
                                       await SharedPreferences.getInstance();
                                   int userId = _prefs.getInt('userId');
@@ -116,7 +115,6 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                           userId.toString(),
                                           snapshot.data.response[index]
                                               .userAddressId);
-                                  print(response);
                                   if (response['status'] == 200) {
                                     setState(() {});
 

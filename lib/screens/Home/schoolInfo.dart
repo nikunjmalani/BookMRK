@@ -29,7 +29,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
     int userId = _prefs.getInt('userId');
     dynamic data = await SchoolAPI.getSchoolProductDetails(
         widget.schoolSlug, userId.toString());
-    print(data);
+
     SchoolProductsModel _schoolProductModel =
         SchoolProductsModel.fromJson(data);
     return _schoolProductModel;
@@ -112,9 +112,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                           return Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: index == 0
-                                  ? colorPalette.navyBlue
-                                  : Colors.transparent,
+                              color: Colors.transparent,
                               borderRadius: BorderRadius.circular(25),
                             ),
                             margin: EdgeInsets.only(
@@ -127,9 +125,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 17,
-                                color: index == 0
-                                    ? Color(0xffffffff)
-                                    : Color(0xff727C8E),
+                                color:Color(0xff727C8E),
                               ),
                               textAlign: TextAlign.left,
                             ),
