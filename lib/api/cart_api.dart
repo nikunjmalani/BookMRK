@@ -41,4 +41,44 @@ class CartAPI {
         headers: header, body: body, encoding: Encoding.getByName('utf-8'));
     return jsonDecode(response.body);
   }
+
+  /// api to add product in the cart....
+  static Future addProductToCart(
+    String userId,
+    String productId,
+    int qty,
+    String studentName,
+    String studentRoll,
+    String pvsmId,
+    dynamic variationInfo,
+  ) async {
+    String url = "$kBaseURL/purchase/add_to_cart";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, dynamic> body = {
+      "client-key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "product_id": "$productId",
+      "qty": "$qty",
+      "student-name": "$studentName",
+      "student-roll": "$studentRoll",
+      "pvsm_id": "$pvsmId",
+      "variations_info": jsonEncode("$variationInfo"),
+    };
+
+    http.Response response = await http.post(
+      url,
+      headers: header,
+      body: body,
+      encoding: Encoding.getByName('utf-8'),
+    );
+
+    return jsonDecode(response.body);
+  }
 }

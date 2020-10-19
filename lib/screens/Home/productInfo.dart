@@ -7,6 +7,7 @@ import 'package:bookmrk/provider/product_order_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/indicators.dart';
+import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,17 @@ class _ProductInfoState extends State<ProductInfo> {
   PageController pageController = PageController(initialPage: 1);
   ColorPalette colorPalette = ColorPalette();
   int currentPage = 1;
+
+  /// variable to check that page loads for first time or not....
+  bool _isPageLoadsFirstTime = true;
+
+  /// TextFields for student name and student roll number...
+  TextEditingController _studentNameController = TextEditingController();
+  TextEditingController _studentRollNumberController = TextEditingController();
+  TextEditingController _productQuantityController = TextEditingController();
+
+  /// form key...
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   /// get the product details...
   Future getProductDetails() async {
@@ -56,6 +68,42 @@ class _ProductInfoState extends State<ProductInfo> {
             future: getProductDetails(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if (_isPageLoadsFirstTime) {
+                  /// selected variation image..
+                  _productOrderProvider.setVariation1Img(
+                      "${snapshot.data.response[0].variationsDetails[0].varValue[0].varImg}");
+
+                  /// selected variation name....
+                  _productOrderProvider.setVariation1Name(
+                      "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationName}");
+
+                  /// selected variation option name....
+                  _productOrderProvider.setVariation1Name(
+                      "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationsOptionsName}");
+
+                  /// selected variation id....
+                  _productOrderProvider.setVariation1Id(
+                      "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationsDataId}");
+
+                  /// selected variation2 option name...
+                  _productOrderProvider.setVariation2Name(
+                      "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationsOptionsName}");
+
+                  /// selected variation2 id...
+                  _productOrderProvider.setVariation2Id(
+                      "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationsDataId}");
+
+                  /// selected variation 2 name...
+                  _productOrderProvider.setVariation2Name(
+                      "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationName}");
+
+                  /// selected variation 2 image...
+                  _productOrderProvider.setVariation2Img(
+                      "${snapshot.data.response[0].variationsDetails[1].varValue[0].varImg}");
+
+                  /// change the state of the page load...
+                  _isPageLoadsFirstTime = false;
+                }
                 return Column(
                   children: [
                     Expanded(
@@ -243,8 +291,24 @@ class _ProductInfoState extends State<ProductInfo> {
                                                                     10.0),
                                                         child: GestureDetector(
                                                           onTap: () {
+                                                            /// selected variation image..
+                                                            _productOrderProvider
+                                                                    .selectedVariation1Img =
+                                                                "${snapshot.data.response[0].variationsDetails[0].varValue[index].varImg}";
+
+                                                            /// selected variation name....
                                                             _productOrderProvider
                                                                     .selectedVariation1Name =
+                                                                "${snapshot.data.response[0].variationsDetails[0].varValue[index].variationName}";
+
+                                                            /// selected variation option name....
+                                                            _productOrderProvider
+                                                                    .selectedVariation1OptionName =
+                                                                "${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsOptionsName}";
+
+                                                            /// selected variation id....
+                                                            _productOrderProvider
+                                                                    .selectedVariations1Id =
                                                                 '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}';
                                                           },
                                                           child: Container(
@@ -257,7 +321,7 @@ class _ProductInfoState extends State<ProductInfo> {
                                                                       .circular(
                                                                           10.0),
                                                               color: _productOrderProvider
-                                                                          .selectedVariation1Name ==
+                                                                          .selectedVariations1Id ==
                                                                       '${snapshot.data.response[0].variationsDetails[0].varValue[index].variationsDataId}'
                                                                   ? colorPalette
                                                                       .navyBlue
@@ -332,12 +396,28 @@ class _ProductInfoState extends State<ProductInfo> {
                                                           '${snapshot.data.response[0].variationsDetails[1].variationsDisplay}'),
                                                       isExpanded: true,
                                                       onChanged: (value) {
+                                                        /// selected variation2 option name...
                                                         _productOrderProvider
                                                                 .selectedVariation2Option =
+                                                            "${snapshot.data.response[0].variationsDetails[1].varValue[int.parse("${value ?? "0"}")].variationsOptionsName}";
+
+                                                        /// selected variation2 id...
+                                                        _productOrderProvider
+                                                                .selectedVariation2Id =
                                                             value;
+
+                                                        /// selected variation 2 name...
+                                                        _productOrderProvider
+                                                                .selectedVariation2Name =
+                                                            "${snapshot.data.response[0].variationsDetails[1].varValue[int.parse("${value ?? "0"}")].variationName}";
+
+                                                        /// selected variation 2 image...
+                                                        _productOrderProvider
+                                                                .selectedVariation2Img =
+                                                            "${snapshot.data.response[0].variationsDetails[1].varValue[int.parse("${value ?? "0"}")].varImg}";
                                                       },
                                                       value: _productOrderProvider
-                                                              .selectedVariation2Option ??
+                                                              .selectedVariation2Id ??
                                                           snapshot
                                                               .data
                                                               .response[0]
@@ -444,7 +524,60 @@ class _ProductInfoState extends State<ProductInfo> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 NavyBlueButton(
-                                    onClick: () {},
+                                    onClick: () async {
+                                      if (snapshot
+                                              .data.response[0].productType ==
+                                          "Single") {
+                                        SharedPreferences _prefs =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        int userId = _prefs.getInt('userId');
+                                        String productId =
+                                            snapshot.data.response[0].productId;
+
+                                        List variations = [
+                                          {
+                                            "variations_data_id":
+                                                "${_productOrderProvider.selectedVariations1Id}",
+                                            "variations_options_name":
+                                                "${_productOrderProvider.selectedVariation1OptionName}",
+                                            "variation_name":
+                                                "${_productOrderProvider.selectedVariation1Name}",
+                                            "var_img":
+                                                "${_productOrderProvider.selectedVariation1Img}",
+                                          },
+                                          {
+                                            "variations_data_id":
+                                                "${_productOrderProvider.selectedVariation2Id}",
+                                            "variations_options_name":
+                                                "${_productOrderProvider.selectedVariation2Option}",
+                                            "variation_name":
+                                                "${_productOrderProvider.selectedVariation2Name}",
+                                            "var_img":
+                                                "${_productOrderProvider.selectedVariation2Img}",
+                                          }
+                                        ];
+                                        dynamic response = await ProductAPI
+                                            .getVariationDetails(
+                                                userId.toString(),
+                                                productId,
+                                                variations);
+                                        print(response);
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return _addToCartDialog(
+                                                  context,
+                                                  _studentNameController,
+                                                  _studentRollNumberController,
+                                                  _productQuantityController);
+                                            });
+                                      } else {
+                                        Scaffold.of(context).showSnackBar(
+                                            getSnackBar(
+                                                'Product added to cart !'));
+                                      }
+                                    },
                                     context: context,
                                     title: "ADD TO CART"),
                                 NavyBlueButton(
@@ -473,6 +606,160 @@ class _ProductInfoState extends State<ProductInfo> {
               }
             }));
   }
+}
+
+Widget _addToCartDialog(
+  BuildContext context,
+  TextEditingController studentNameController,
+  TextEditingController studentRollNumberController,
+  TextEditingController productQuantityController,
+) {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  return Dialog(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    child: Container(
+      height: 390.0,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.white,
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 20.0,
+        vertical: 20.0,
+      ),
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: studentNameController,
+              validator: (value) {
+                if (value.length <= 0) {
+                  return "Please enter student name";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide:
+                      BorderSide(color: colorPalette.navyBlue, width: 1.0),
+                ),
+                labelText: "Student's Name",
+                labelStyle: TextStyle(color: colorPalette.navyBlue),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              controller: studentRollNumberController,
+              validator: (value) {
+                if (value.length <= 0) {
+                  return "Enter student roll number";
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide:
+                      BorderSide(color: colorPalette.navyBlue, width: 1.0),
+                ),
+                labelText: "Student's Name",
+                labelStyle: TextStyle(color: colorPalette.navyBlue),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            TextFormField(
+              controller: productQuantityController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide:
+                      BorderSide(color: colorPalette.navyBlue, width: 1.0),
+                ),
+                labelText: "Product Quantity",
+                labelStyle: TextStyle(color: colorPalette.navyBlue),
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null) {
+                  return "Amount must contains only digits !";
+                }
+                if (!(double.tryParse(value) != null)) {
+                  return "Amount must contains only digits !";
+                }
+                return null;
+              },
+              autovalidate: true,
+            ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Cancel',
+                    style:
+                        TextStyle(color: colorPalette.navyBlue, fontSize: 18.0),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 10.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  color: Colors.transparent,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    if (formKey.currentState.validate()) {
+//                                                                  SharedPreferences
+//                                                                      _prefs =
+//                                                                      await SharedPreferences
+//                                                                          .getInstance();
+//                                                                  int userId =
+//                                                                      _prefs.getInt(
+//                                                                          'userId');
+//                                                                  String productId = snapshot
+//                                                                      .data
+//                                                                      .response[
+//                                                                          0]
+//                                                                      .productId
+//                                                                      .toString();
+                      int qty = int.parse('${productQuantityController.text}');
+
+//                                                                  dynamic response = await CartAPI.addProductToCart(userId.toString(), productId, qty, studentName, studentRoll, pvsmId, variationInfo)
+                    }
+                  },
+                  child: Text(
+                    'Continue',
+                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 10.0,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  color: colorPalette.navyBlue,
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 Widget _productCarasoul(BuildContext context,
