@@ -15,6 +15,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,6 +27,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   ColorPalette colorPalette = ColorPalette();
   RegisterProvider _registerProvider;
+  Permission _userStoragePermission = Permission.storage;
 
   /// TextFields...
   TextEditingController _firstNameController = TextEditingController();
@@ -52,6 +54,21 @@ class _EditProfileState extends State<EditProfile> {
 
     _registerProvider.selectedGenderRegister =
         _userProfileModel.response[0].gender;
+  }
+
+  checkPermission() async {
+    if (await _userStoragePermission.isGranted) {
+      return uploadImage();
+    } else {
+      _userStoragePermission.request().then((value) {
+        if (value.isGranted) {
+          return uploadImage();
+        } else {
+          Scaffold.of(context)
+              .showSnackBar(getSnackBar('Please Give Permission !'));
+        }
+      });
+    }
   }
 
   getProfilePic() async {
@@ -102,6 +119,7 @@ class _EditProfileState extends State<EditProfile> {
               fit: StackFit.expand,
               children: [
                 SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -158,7 +176,7 @@ class _EditProfileState extends State<EditProfile> {
                         SizedBox(height: 5.0),
                         GestureDetector(
                           onTap: () {
-                            uploadImage();
+                            checkPermission();
                           },
                           child: Text(
                             'Change Profile',

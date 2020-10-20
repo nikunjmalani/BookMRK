@@ -271,4 +271,26 @@ class UserAPI {
         headers: header, body: body, encoding: Encoding.getByName('utf-8'));
     return jsonDecode(respones.body);
   }
+
+  /// api to remove userAddress
+  static Future removeUserAddress(String userId, String userAddressId) async {
+    String url = "$kBaseURL/user/delete_address_user";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "user_id": "$userId",
+      "user_address_id": "$userAddressId",
+      "device_type": "MOB",
+    };
+
+    http.Response response = await http.post(url,
+        headers: header, body: body, encoding: Encoding.getByName('utf-8'));
+    return jsonDecode(response.body);
+  }
 }

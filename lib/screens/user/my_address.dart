@@ -5,6 +5,7 @@ import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -154,18 +155,60 @@ class _MyAddressState extends State<MyAddress> {
                                                           ),
                                                         ],
                                                       ),
-                                                      BlueOutlineButton(
-                                                        width: width,
-                                                        title: "Edit",
-                                                        onTap: () {
-                                                          _userProvider
-                                                                  .selectedUserAddressId =
-                                                              "${snapshot.data.response[index].userAddressId}";
-                                                          homeProvider
-                                                                  .selectedString =
-                                                              "UserEditAddress";
-                                                        },
-                                                      )
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          IconButton(
+                                                            onPressed:
+                                                                () async {
+                                                              SharedPreferences
+                                                                  _prefs =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+                                                              int userId =
+                                                                  _prefs.getInt(
+                                                                      'userId');
+                                                              String
+                                                                  userAddressId =
+                                                                  "${snapshot.data.response[index].userAddressId}";
+                                                              dynamic response =
+                                                                  await UserAPI
+                                                                      .removeUserAddress(
+                                                                          userId
+                                                                              .toString(),
+                                                                          userAddressId);
+
+                                                              setState(() {});
+                                                            },
+                                                            icon: Icon(
+                                                              Icons.delete,
+                                                              size: 30.0,
+                                                              color:
+                                                                  colorPalette
+                                                                      .navyBlue,
+                                                            ),
+                                                          ),
+                                                          SizedBox(
+                                                              height: 10.0),
+                                                          BlueOutlineButton(
+                                                            width: width,
+                                                            title: "Edit",
+                                                            onTap: () {
+                                                              _userProvider
+                                                                      .selectedUserAddressId =
+                                                                  "${snapshot.data.response[index].userAddressId}";
+                                                              homeProvider
+                                                                      .selectedString =
+                                                                  "UserEditAddress";
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -268,6 +311,7 @@ class _MyAddressState extends State<MyAddress> {
                 Visibility(
                   visible: _userProvider.changeAddressInProgress,
                   child: Container(
+                    color: Colors.transparent,
                     child: Center(
                       child: CircularProgressIndicator(
                         valueColor:

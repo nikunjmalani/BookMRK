@@ -1,4 +1,7 @@
+import 'package:bookmrk/api/notification_api.dart';
+import 'package:bookmrk/model/notification_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
   /// bell icon...
@@ -120,6 +123,43 @@ class HomeScreenProvider extends ChangeNotifier {
 
   set findHomeScreenProduct(String value) {
     _findHomeScreenProduct = value;
+    notifyListeners();
+  }
+
+  /// total Number of notifications ....
+  int _totalNewNotifications = 0;
+
+  int get totalNewNotifications => _totalNewNotifications;
+
+  set totalNewNotifications(int value) {
+    _totalNewNotifications = value;
+    notifyListeners();
+  }
+
+  /// total number of orders in cart....
+  int _totalNumberOfOrdersInCart = 0;
+
+  int get totalNumberOfOrdersInCart => _totalNumberOfOrdersInCart;
+
+  set totalNumberOfOrdersInCart(int value) {
+    _totalNumberOfOrdersInCart = value;
+    notifyListeners();
+  }
+
+  getNotification() async {
+    SharedPreferences _presf = await SharedPreferences.getInstance();
+    int userId = _presf.getInt('userId');
+    dynamic response =
+        await NotificationAPI.getAllNotification(userId.toString());
+    NotificationModel _notificationModel = NotificationModel.fromJson(response);
+    int totalNotification = 0;
+    _notificationModel.response.forEach((notification) {
+      if (notification.isSeen == "0") {
+        totalNotification++;
+      }
+    });
+    print('from provider timer....');
+    _totalNewNotifications = totalNotification;
     notifyListeners();
   }
 }

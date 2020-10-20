@@ -34,7 +34,7 @@ class ProductAPI {
       "device_type": "MOB",
       "user_id": "$userId",
       "product_id": "$productId",
-      "variations_stock": jsonEncode("$variation"),
+      "variations_stock": jsonEncode(variation),
     };
 
     http.Response response = await http.post(url,

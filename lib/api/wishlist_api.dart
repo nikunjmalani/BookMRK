@@ -44,4 +44,33 @@ class WishListAPI {
 
     return jsonDecode(response.body);
   }
+
+  /// api to remove product from the wish list...
+  static Future removeProductFromWishList(
+      String userId, String productId) async {
+    String url = "$kBaseURL/product/product_in_user_wishlist";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "product_id": "$productId",
+      "status": "REMOVE"
+    };
+
+    http.Response response = await http.post(
+      url,
+      headers: header,
+      body: body,
+      encoding: Encoding.getByName('utf-8'),
+    );
+
+    return jsonDecode(response.body);
+  }
 }

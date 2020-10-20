@@ -61,15 +61,16 @@ class CartAPI {
     };
 
     Map<String, dynamic> body = {
-      "client-key": "1595922619X5f1fd8bb5f332",
+      "client_key": "1595922619X5f1fd8bb5f332",
       "device_type": "MOB",
       "user_id": "$userId",
       "product_id": "$productId",
       "qty": "$qty",
-      "student-name": "$studentName",
-      "student-roll": "$studentRoll",
+      "student_name": "$studentName",
+      "student_roll": "$studentRoll",
       "pvsm_id": "$pvsmId",
-      "variations_info": jsonEncode("$variationInfo"),
+      "variations_info": jsonEncode(variationInfo),
+      "additional_set_info": "null"
     };
 
     http.Response response = await http.post(

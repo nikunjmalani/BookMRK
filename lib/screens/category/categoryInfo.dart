@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/category_api.dart';
 import 'package:bookmrk/model/category_product_model.dart';
 import 'package:bookmrk/model/no_data_model.dart';
+import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
@@ -122,7 +123,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                               textAlign: TextAlign.left,
                             ),
                             Text(
-                              '${snapshot.data.response[0].category[0].allProductsCount} Products',
+                              '${snapshot.data.response[0].category[0].allProductsCount ?? "0"} Products',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 20,
@@ -135,44 +136,61 @@ class _CategoryInfoState extends State<CategoryInfo> {
                       )
                     ],
                   ),
-                  Container(
-                    height: height / 15,
-                    child: snapshot.data.response[0].subCategory.length > 0
-                        ? ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                child: Text(
-                                  '${snapshot.data.response[0].subCategory[index].categoryName}',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 14,
-                                    color: index == 0
-                                        ? colorPalette.navyBlue
-                                        : Color(0xff919191),
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                              );
-                            },
-                            itemCount:
-                                snapshot.data.response[0].subCategory.length,
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            child: Text(
-                              'No Subcategory',
-                              style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontSize: 14,
-                                  color: colorPalette.navyBlue),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                  ),
+                  Consumer<CategoryProvider>(
+                      builder: (_, _categoryProvider, child) => Consumer<
+                              HomeScreenProvider>(
+                          builder: (_, _homeScreenProvider, child) => Container(
+                                height: height / 15,
+                                child: snapshot.data.response[0].subCategory
+                                            .length >
+                                        0
+                                    ? ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              print(
+                                                  "subcategory name : ${snapshot.data.response[0].subCategory[index].catSlug}");
+                                              _homeScreenProvider
+                                                      .selectedString =
+                                                  "CategoryInfo";
+                                              _categoryProvider
+                                                      .selectedCategoryName =
+                                                  "${snapshot.data.response[0].subCategory[index].catSlug}";
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 20),
+                                              child: Text(
+                                                '${snapshot.data.response[0].subCategory[index].categoryName}',
+                                                style: TextStyle(
+                                                    fontFamily: 'Roboto',
+                                                    fontSize: 14,
+                                                    color:
+                                                        colorPalette.navyBlue),
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        itemCount: snapshot.data.response[0]
+                                            .subCategory.length,
+                                      )
+                                    : Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 20),
+                                        child: Text(
+                                          'No Subcategory',
+                                          style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14,
+                                              color: colorPalette.navyBlue),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                              ))),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

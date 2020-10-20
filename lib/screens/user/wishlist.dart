@@ -71,7 +71,23 @@ class _WishListState extends State<WishList> {
                                 .selectedString = "ProductInfo";
                           },
                           child: ProductBox(
-                              icon: SvgPicture.asset("assets/icons/trash.svg"),
+                              icon: GestureDetector(
+                                  onTap: () async {
+                                    SharedPreferences _prefs =
+                                        await SharedPreferences.getInstance();
+                                    int userId = _prefs.getInt('userId');
+
+                                    print(snapshot
+                                        .data.response[index].productId);
+                                    dynamic response = await WishListAPI
+                                        .removeProductFromWishList(
+                                            userId.toString(),
+                                            snapshot.data.response[index]
+                                                .productId);
+                                    setState(() {});
+                                  },
+                                  child: SvgPicture.asset(
+                                      "assets/icons/trash.svg")),
                               expanded: true,
                               height: height,
                               width: width,
