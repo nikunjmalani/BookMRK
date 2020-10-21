@@ -63,6 +63,7 @@ Widget CategoryButtons(width, title, color, borderColor) {
     alignment: Alignment.center,
     child: Text(
       title,
+      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontFamily: 'Roboto',
         fontSize: 18,

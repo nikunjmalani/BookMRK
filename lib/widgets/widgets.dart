@@ -163,7 +163,7 @@ Widget ProductBox(
                   Container(
                     alignment: Alignment.center,
                     height: 20,
-                    width: 60,
+                    width: 70,
                     decoration: BoxDecoration(
                       color: colorPalette.pinkOrange,
                       borderRadius: BorderRadius.circular(30),

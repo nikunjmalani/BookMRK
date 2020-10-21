@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-CategoryProductsModel categoryProductsModelFromJson(String str) =>
-    CategoryProductsModel.fromJson(json.decode(str));
+SearchProductModel searchProductModelFromJson(String str) =>
+    SearchProductModel.fromJson(json.decode(str));
 
-String categoryProductsModelToJson(CategoryProductsModel data) =>
+String searchProductModelToJson(SearchProductModel data) =>
     json.encode(data.toJson());
 
-class CategoryProductsModel {
-  CategoryProductsModel({
+class SearchProductModel {
+  SearchProductModel({
     this.status,
     this.message,
     this.count,
@@ -19,8 +19,8 @@ class CategoryProductsModel {
   int count;
   List<Response> response;
 
-  factory CategoryProductsModel.fromJson(Map<String, dynamic> json) =>
-      CategoryProductsModel(
+  factory SearchProductModel.fromJson(Map<String, dynamic> json) =>
+      SearchProductModel(
         status: json["status"],
         message: json["message"],
         count: json["count"],
@@ -38,68 +38,6 @@ class CategoryProductsModel {
 
 class Response {
   Response({
-    this.category,
-    this.subCategory,
-    this.product,
-  });
-
-  List<Category> category;
-  List<Category> subCategory;
-  List<Product> product;
-
-  factory Response.fromJson(Map<String, dynamic> json) => Response(
-        category: List<Category>.from(
-            json["category"].map((x) => Category.fromJson(x))),
-        subCategory: List<Category>.from(
-            json["sub_category"].map((x) => Category.fromJson(x))),
-        product:
-            List<Product>.from(json["product"].map((x) => Product.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "category": List<dynamic>.from(category.map((x) => x.toJson())),
-        "sub_category": List<dynamic>.from(subCategory.map((x) => x.toJson())),
-        "product": List<dynamic>.from(product.map((x) => x.toJson())),
-      };
-}
-
-class Category {
-  Category({
-    this.categoryId,
-    this.catSlug,
-    this.categoryName,
-    this.categoryImg,
-    this.allProductsCount,
-  });
-
-  String categoryId;
-  String catSlug;
-  String categoryName;
-  String categoryImg;
-  String allProductsCount;
-
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-        categoryId: json["category_id"],
-        catSlug: json["cat_slug"],
-        categoryName: json["category_name"],
-        categoryImg: json["category_img"],
-        allProductsCount: json["all_products_count"] == null
-            ? null
-            : json["all_products_count"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "category_id": categoryId,
-        "cat_slug": catSlug,
-        "category_name": categoryName,
-        "category_img": categoryImg,
-        "all_products_count":
-            allProductsCount == null ? null : allProductsCount,
-      };
-}
-
-class Product {
-  Product({
     this.productId,
     this.productSlug,
     this.vendorSlug,
@@ -145,7 +83,7 @@ class Product {
   String productStockStatus;
   String productInUserWishlist;
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory Response.fromJson(Map<String, dynamic> json) => Response(
         productId: json["product_id"],
         productSlug: json["product_slug"],
         vendorSlug: json["vendor_slug"],

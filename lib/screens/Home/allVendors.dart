@@ -39,32 +39,84 @@ class _AllVendorsState extends State<AllVendors> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SearchBar(width: width, title: "Search Vendors"),
-                    Expanded(
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              _vendorProvider.selectedVendorName =
-                                  snapshot.data.response[index].vendorSlug;
-                              Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
-                                  .selectedString = "VendorInfo";
-                            },
-                            child: ImageBox(
-                                height: height,
-                                width: width,
-                                image:
-                                    "${snapshot.data.response[index].companyLogo}",
-                                title:
-                                    "${snapshot.data.response[index].companyName}"),
-                          );
-                        },
-                        itemCount: snapshot.data.response.length,
-                      ),
+                    SearchBar(
+                      width: width,
+                      title: "Search Vendors",
+                      onChanged: (value) {
+                        if (value.length < 1) {
+                          _vendorProvider.isVendorBarSelected = false;
+                        } else {
+                          _vendorProvider.isVendorBarSelected = true;
+                          _vendorProvider.vendorFilterList.clear();
+
+                          snapshot.data.response.forEach((e) {
+                            if (e.vendorName
+                                .toString()
+                                .toLowerCase()
+                                .contains(value.toLowerCase())) {
+                              _vendorProvider.vendorFilterListAddSingle(e);
+                            }
+                          });
+                        }
+                      },
                     ),
+                    _vendorProvider.isVendorBarSelected
+                        ? Expanded(
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _vendorProvider.selectedVendorName =
+                                        _vendorProvider
+                                            .vendorFilterList[index].vendorSlug;
+                                    Provider.of<HomeScreenProvider>(context,
+                                            listen: false)
+                                        .selectedString = "VendorInfo";
+                                  },
+                                  child: ImageBox(
+                                      height: height,
+                                      width: width,
+                                      image:
+                                          "${_vendorProvider.vendorFilterList[index].companyLogo}",
+                                      title:
+                                          "${_vendorProvider.vendorFilterList[index].companyName}"),
+                                );
+                              },
+                              itemCount:
+                                  _vendorProvider.vendorFilterList.length,
+                            ),
+                          )
+                        : Expanded(
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _vendorProvider.selectedVendorName =
+                                        snapshot
+                                            .data.response[index].vendorSlug;
+                                    print(_vendorProvider.selectedVendorName);
+                                    Provider.of<HomeScreenProvider>(context,
+                                            listen: false)
+                                        .selectedString = "VendorInfo";
+                                  },
+                                  child: ImageBox(
+                                      height: height,
+                                      width: width,
+                                      image:
+                                          "${snapshot.data.response[index].companyLogo}",
+                                      title:
+                                          "${snapshot.data.response[index].companyName}"),
+                                );
+                              },
+                              itemCount: snapshot.data.response.length,
+                            ),
+                          ),
                   ],
                 ),
               ),

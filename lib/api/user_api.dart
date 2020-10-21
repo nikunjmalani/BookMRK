@@ -217,4 +217,80 @@ class UserAPI {
         headers: header, body: body, encoding: Encoding.getByName('utf-8'));
     return jsonDecode(response.body);
   }
+
+  /// api to change the user information of profile....
+  static Future changeUserInformation(
+    String userId,
+    String fname,
+    String lname,
+    String dob,
+    String gender,
+    String email,
+  ) async {
+    String url = "$kBaseURL/user/update_user_detail";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simpelrestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "fname": "$fname",
+      "lname": "$lname",
+      "dob": "$dob",
+      "gender": "$gender",
+      "email": "$email",
+    };
+
+    http.Response response = await http.post(url,
+        headers: header, body: body, encoding: Encoding.getByName('utf-8'));
+    return jsonDecode(response.body);
+  }
+
+  /// api for change mobile number of user profile...
+  static Future changeUserProfileMobilNumber(
+      String userId, String mobileNumber) async {
+    String url = "$kBaseURL/user/update_user_mobile_number";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "mobile": "$mobileNumber",
+    };
+    http.Response respones = await http.post(url,
+        headers: header, body: body, encoding: Encoding.getByName('utf-8'));
+    return jsonDecode(respones.body);
+  }
+
+  /// api to remove userAddress
+  static Future removeUserAddress(String userId, String userAddressId) async {
+    String url = "$kBaseURL/user/delete_address_user";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "user_id": "$userId",
+      "user_address_id": "$userAddressId",
+      "device_type": "MOB",
+    };
+
+    http.Response response = await http.post(url,
+        headers: header, body: body, encoding: Encoding.getByName('utf-8'));
+    return jsonDecode(response.body);
+  }
 }

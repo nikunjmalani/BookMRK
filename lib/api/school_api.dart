@@ -25,9 +25,10 @@ class SchoolAPI {
     return data;
   }
 
-  static Future getSchoolProductDetails(String schoolSlug) async {
+  static Future getSchoolProductDetails(
+      String schoolSlug, String userId) async {
     String url =
-        "$kBaseURL/app/single_school/1595922619X5f1fd8bb5f332/MOB/1/$schoolSlug";
+        "$kBaseURL/app/single_school/1595922619X5f1fd8bb5f332/MOB/$userId/$schoolSlug";
 
     Map<String, String> header = {
 //      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",

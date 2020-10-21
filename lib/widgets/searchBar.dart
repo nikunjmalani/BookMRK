@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget SearchBar({width, title, onTap}) {
+Widget SearchBar({width, title, onTap, onChanged, controller}) {
   return Material(
     child: Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -13,6 +13,8 @@ Widget SearchBar({width, title, onTap}) {
       ),
       child: TextField(
         onTap: onTap,
+        onChanged: onChanged,
+        controller: controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: title,

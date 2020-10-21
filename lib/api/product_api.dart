@@ -17,4 +17,28 @@ class ProductAPI {
     http.Response response = await http.get(url, headers: header);
     return jsonDecode(response.body);
   }
+
+  /// product variation stock details...
+  static Future getVariationDetails(
+      String userId, String productId, dynamic variation) async {
+    String url = "$kBaseURL/product/variations_stock_info";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "product_id": "$productId",
+      "variations_stock": jsonEncode(variation),
+    };
+
+    http.Response response = await http.post(url,
+        headers: header, body: body, encoding: Encoding.getByName('utf-8'));
+    return jsonDecode(response.body);
+  }
 }

@@ -105,9 +105,7 @@ class _AddAddressState extends State<AddAddress> {
                         FutureBuilder(
                           future: getAllCountry(),
                           builder: (context, countryData) {
-                            if (countryData.hasData) {
-                              print('has data ');
-                            }
+                            if (countryData.hasData) {}
                             if (countryData.hasData) {
                               return getLocationBottomSheet(
                                   context,
@@ -193,9 +191,7 @@ class _AddAddressState extends State<AddAddress> {
                               _locationProvider.selectedCountryId),
                           builder: (context, stateData) {
                             if (stateData.hasData &&
-                                _locationProvider.selectedCountryId != null) {
-                              print('has data ');
-                            }
+                                _locationProvider.selectedCountryId != null) {}
                             if (stateData.hasData) {
                               return getLocationBottomSheet(
                                   context,
@@ -376,17 +372,6 @@ class _AddAddressState extends State<AddAddress> {
                   SharedPreferences _prefs =
                       await SharedPreferences.getInstance();
                   int userId = _prefs.getInt('userId');
-                  print(' user id : $userId');
-                  print('first name : ${_firstNameAddressController.text}');
-                  print('last name : ${_lastNameAddressController.text}');
-                  print('email : ${_emailAddressController.text}');
-                  print(' contact : ${_contactNumberAddressController.text}');
-                  print(' zip : ${_zipCodeAddressController.text}');
-                  print(' country : ${_locationProvider.selectedCountryId}');
-                  print(' state : ${_locationProvider.selectedStateId}');
-                  print(' city : ${_locationProvider.selectedCityId}');
-                  print(' ad1 : ${_firstAddressController.text}');
-                  print(' ad2 : ${_secondAddressController.text}');
 
                   dynamic response = await UserAPI.addNewUserAddress(
                     userId.toString(),
@@ -402,7 +387,6 @@ class _AddAddressState extends State<AddAddress> {
                     '${_locationProvider.selectedCountryId ?? 0}',
                   );
 
-                  print("data $response");
                   if (response['status'] == 200) {
                     _userProvider.isAddAddressInProcess = false;
                     Scaffold.of(context)

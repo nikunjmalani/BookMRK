@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     _homeScreenProvider =
         Provider.of<HomeScreenProvider>(context, listen: false);
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      _homeScreenProvider.getNotification();
+      print('from splash timer : ${timer.tick}');
+    });
     return Scaffold(
       body: GestureDetector(
         onTap: () async {

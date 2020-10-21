@@ -11,12 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Search extends StatefulWidget {
+class Search2 extends StatefulWidget {
   @override
-  _SearchState createState() => _SearchState();
+  _Search2State createState() => _Search2State();
 }
 
-class _SearchState extends State<Search> {
+class _Search2State extends State<Search2> {
   ColorPalette colorPalette = ColorPalette();
 
   /// TextField Controller

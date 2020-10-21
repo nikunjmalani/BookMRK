@@ -159,7 +159,6 @@ class _OtpVerificationState extends State<OtpVerification> {
                                             .verificationMobileNumberForRegister,
                                         otp,
                                         userId.toString());
-                                print(response);
 
                                 if (response['status'] == 200) {
                                   _forgotPasswordProvider

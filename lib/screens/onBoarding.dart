@@ -51,6 +51,7 @@ class _OnBoardingState extends State<OnBoarding> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
+                        height: MediaQuery.of(context).size.height * 0.20,
                         alignment: Alignment.center,
                         child: index < images.length
                             ? Image.asset(images[index])

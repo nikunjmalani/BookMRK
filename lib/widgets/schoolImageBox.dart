@@ -49,7 +49,7 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
           ),
           Container(
             margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-            height: height / 6,
+            height: height / 5,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
                 color: Colors.black.withOpacity(0.39)),
@@ -67,16 +67,20 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 15,
-                    color: const Color(0xfff5f5f5),
+                Container(
+                  height: 35.0,
+                  child: Text(
+                    description,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontFamily: 'Roboto',
+                      fontSize: 15,
+                      color: const Color(0xfff5f5f5),
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: height / 30,
+                  height: height * 0.02,
                 ),
                 Container(
                   padding: EdgeInsets.only(right: 10),

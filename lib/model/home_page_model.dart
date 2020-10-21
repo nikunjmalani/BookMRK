@@ -74,22 +74,26 @@ class Response {
 class Category {
   Category({
     this.categoryId,
+    this.catSlug,
     this.categoryImg,
     this.categoryName,
   });
 
   String categoryId;
+  String catSlug;
   String categoryImg;
   String categoryName;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
         categoryId: json["category_id"],
+        catSlug: json["cat_slug"],
         categoryImg: json["category_img"],
         categoryName: json["category_name"],
       );
 
   Map<String, dynamic> toJson() => {
         "category_id": categoryId,
+        "cat_slug": catSlug,
         "category_img": categoryImg,
         "category_name": categoryName,
       };
@@ -132,9 +136,13 @@ class Product {
     this.type,
     this.productType,
     this.variation,
+    this.additionalSet,
     this.categoryName,
     this.productImg,
     this.productName,
+    this.author,
+    this.language,
+    this.bookType,
     this.productPrice,
     this.productDiscount,
     this.productSalePrice,
@@ -151,9 +159,13 @@ class Product {
   String type;
   String productType;
   String variation;
+  String additionalSet;
   String categoryName;
   String productImg;
   String productName;
+  String author;
+  String language;
+  String bookType;
   String productPrice;
   String productDiscount;
   String productSalePrice;
@@ -170,9 +182,13 @@ class Product {
         type: json["type"],
         productType: json["product_type"],
         variation: json["variation"],
+        additionalSet: json["additional_set"],
         categoryName: json["category_name"],
         productImg: json["Product_img"],
         productName: json["product_name"],
+        author: json["author"],
+        language: json["language"],
+        bookType: json["book_type"],
         productPrice: json["product_price"],
         productDiscount: json["product_discount"],
         productSalePrice: json["product_sale_price"],
@@ -190,9 +206,13 @@ class Product {
         "type": type,
         "product_type": productType,
         "variation": variation,
+        "additional_set": additionalSet,
         "category_name": categoryName,
         "Product_img": productImg,
         "product_name": productName,
+        "author": author,
+        "language": language,
+        "book_type": bookType,
         "product_price": productPrice,
         "product_discount": productDiscount,
         "product_sale_price": productSalePrice,
@@ -216,14 +236,15 @@ class School {
   String schoolLogo;
   String schoolName;
   String board;
-  List<dynamic> schoolBanners;
+  List<SchoolBanner> schoolBanners;
 
   factory School.fromJson(Map<String, dynamic> json) => School(
         schoolId: json["school_id"],
         schoolLogo: json["school_logo"],
         schoolName: json["school_name"],
         board: json["board"],
-        schoolBanners: List<dynamic>.from(json["school_banners"].map((x) => x)),
+        schoolBanners: List<SchoolBanner>.from(
+            json["school_banners"].map((x) => SchoolBanner.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -231,7 +252,24 @@ class School {
         "school_logo": schoolLogo,
         "school_name": schoolName,
         "board": board,
-        "school_banners": List<dynamic>.from(schoolBanners.map((x) => x)),
+        "school_banners":
+            List<dynamic>.from(schoolBanners.map((x) => x.toJson())),
+      };
+}
+
+class SchoolBanner {
+  SchoolBanner({
+    this.schoolImg,
+  });
+
+  String schoolImg;
+
+  factory SchoolBanner.fromJson(Map<String, dynamic> json) => SchoolBanner(
+        schoolImg: json["school_img"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "school_img": schoolImg,
       };
 }
 

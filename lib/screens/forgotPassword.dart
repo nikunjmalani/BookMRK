@@ -152,7 +152,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       _registerProvider
                                               .isOTPVerificationPageFromRegisterUser =
                                           false;
-                                      print(response);
                                       SharedPreferences _prefs =
                                           await SharedPreferences.getInstance();
                                       _prefs.setInt(

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-Widget CustomAppBar(
+Widget CustomAppBar(BuildContext context,
     {width,
     bool blueCartIcon,
     bool blueBellIcon,
@@ -31,7 +31,7 @@ Widget CustomAppBar(
       child: Row(
         children: [
           Container(
-            width: width / 1.6,
+            width: width / 1.9,
             child: child,
           ),
           Spacer(),
@@ -52,24 +52,27 @@ Widget CustomAppBar(
                   radius: 25,
                   backgroundColor: Colors.transparent,
                 ),
-                CircleAvatar(
-                  radius: 10,
-                  child: Text(
-                    '3',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 13,
-                      color: const Color(0xffffffff),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  backgroundColor: colorPalette.pinkOrange,
-                )
+//                Consumer<HomeScreenProvider>(
+//                    builder: (_, _homeScreenProvider, child) {
+//                  return CircleAvatar(
+//                    radius: 10,
+//                    child: Text(
+//                      '${_homeScreenProvider.totalNumberOfOrdersInCart}',
+//                      style: TextStyle(
+//                        fontFamily: 'Roboto',
+//                        fontSize: 13,
+//                        color: const Color(0xffffffff),
+//                      ),
+//                      textAlign: TextAlign.left,
+//                    ),
+//                    backgroundColor: colorPalette.pinkOrange,
+//                  );
+//                })
               ],
             ),
           ),
           SizedBox(
-            width: 10,
+            width: 5,
           ),
           GestureDetector(
             onTap: onBellTap,
@@ -88,19 +91,22 @@ Widget CustomAppBar(
                   radius: 25,
                   backgroundColor: Colors.transparent,
                 ),
-                CircleAvatar(
-                  radius: 10,
-                  child: Text(
-                    '8',
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 13,
-                      color: const Color(0xffffffff),
+                Consumer<HomeScreenProvider>(
+                    builder: (_, _homeScreenProvider, child) {
+                  return CircleAvatar(
+                    radius: 10,
+                    child: Text(
+                      '${_homeScreenProvider.totalNewNotifications}',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 13,
+                        color: const Color(0xffffffff),
+                      ),
+                      textAlign: TextAlign.left,
                     ),
-                    textAlign: TextAlign.left,
-                  ),
-                  backgroundColor: colorPalette.pinkOrange,
-                )
+                    backgroundColor: colorPalette.pinkOrange,
+                  );
+                })
               ],
             ),
           ),

@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final categoryListModel = categoryListModelFromJson(jsonString);
+
 import 'dart:convert';
 
 CategoryListModel categoryListModelFromJson(String str) =>
@@ -39,23 +43,27 @@ class CategoryListModel {
 class Response {
   Response({
     this.categoryId,
-    this.categoryImg,
+    this.catSlug,
     this.categoryName,
+    this.categoryImg,
   });
 
   String categoryId;
-  String categoryImg;
+  String catSlug;
   String categoryName;
+  String categoryImg;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
         categoryId: json["category_id"],
-        categoryImg: json["category_img"],
+        catSlug: json["cat_slug"],
         categoryName: json["category_name"],
+        categoryImg: json["category_img"],
       );
 
   Map<String, dynamic> toJson() => {
         "category_id": categoryId,
-        "category_img": categoryImg,
+        "cat_slug": catSlug,
         "category_name": categoryName,
+        "category_img": categoryImg,
       };
 }

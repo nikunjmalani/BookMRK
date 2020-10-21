@@ -1,4 +1,7 @@
+import 'package:bookmrk/api/notification_api.dart';
+import 'package:bookmrk/model/notification_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
   /// bell icon...
@@ -68,6 +71,95 @@ class HomeScreenProvider extends ChangeNotifier {
 
   set selectedProductSlug(String value) {
     _selectedProductSlug = value;
+    notifyListeners();
+  }
+
+  bool _confirmedFlag = true;
+  bool get confirmedFlag => _confirmedFlag;
+  set confirmedFlag(bool value) {
+    _confirmedFlag = value;
+    notifyListeners();
+  }
+
+  bool _packedFlag = true;
+  bool get packedFlag => _packedFlag;
+  set packedFlag(bool value) {
+    _packedFlag = value;
+    notifyListeners();
+  }
+
+  bool _pickupFlag = true;
+  bool get pickupFlag => _pickupFlag;
+  set pickupFlag(bool value) {
+    _pickupFlag = value;
+    notifyListeners();
+  }
+
+  bool _inTransistFlag = true;
+  bool get inTransistFlag => _inTransistFlag;
+  set inTransistFlag(bool value) {
+    _inTransistFlag = value;
+    notifyListeners();
+  }
+
+  bool _outForDeliveryFlag = false;
+  bool get outForDeliveryFlag => _outForDeliveryFlag;
+  set outForDeliveryFlag(bool value) {
+    _outForDeliveryFlag = value;
+    notifyListeners();
+  }
+
+  bool _deliveredFlag = false;
+  bool get deliveredFlag => _deliveredFlag;
+  set deliveredFlag(bool value) {
+    _deliveredFlag = value;
+    notifyListeners();
+  }
+
+  /// find product name ...
+  String _findHomeScreenProduct = "asa";
+
+  String get findHomeScreenProduct => _findHomeScreenProduct;
+
+  set findHomeScreenProduct(String value) {
+    _findHomeScreenProduct = value;
+    notifyListeners();
+  }
+
+  /// total Number of notifications ....
+  int _totalNewNotifications = 0;
+
+  int get totalNewNotifications => _totalNewNotifications;
+
+  set totalNewNotifications(int value) {
+    _totalNewNotifications = value;
+    notifyListeners();
+  }
+
+  /// total number of orders in cart....
+  int _totalNumberOfOrdersInCart = 0;
+
+  int get totalNumberOfOrdersInCart => _totalNumberOfOrdersInCart;
+
+  set totalNumberOfOrdersInCart(int value) {
+    _totalNumberOfOrdersInCart = value;
+    notifyListeners();
+  }
+
+  getNotification() async {
+    SharedPreferences _presf = await SharedPreferences.getInstance();
+    int userId = _presf.getInt('userId');
+    dynamic response =
+        await NotificationAPI.getAllNotification(userId.toString());
+    NotificationModel _notificationModel = NotificationModel.fromJson(response);
+    int totalNotification = 0;
+    _notificationModel.response.forEach((notification) {
+      if (notification.isSeen == "0") {
+        totalNotification++;
+      }
+    });
+    print('from provider timer....');
+    _totalNewNotifications = totalNotification;
     notifyListeners();
   }
 }

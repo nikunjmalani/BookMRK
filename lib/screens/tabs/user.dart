@@ -27,8 +27,10 @@ class _UserState extends State<User> {
     print(userId);
     dynamic userInformation =
         await UserAPI.getAllUserInformation(userId.toString());
+
     UserProfileInfoModel _userInformationModel =
         UserProfileInfoModel.fromJson(userInformation);
+
     return _userInformationModel;
   }
 
@@ -53,34 +55,17 @@ class _UserState extends State<User> {
         future: getUserInformation(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15, top: 25),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      snapshot.data.response[0].profilePic == ""
-                          ? CircleAvatar(
-                              radius: height / 10,
-                              backgroundColor: Colors.transparent,
-                              child: Icon(
-                                Icons.person_outline,
-                                size: 100.0,
-                                color: colorPalette.navyBlue,
-                              ),
-                            )
-                          : CachedNetworkImage(
-                              imageUrl:
-                                  '${snapshot.data.response[0].profilePic}',
-                              imageBuilder: (context, imageProvider) =>
-                                  CircleAvatar(
-                                radius: height / 10,
-                                backgroundColor: Colors.transparent,
-                                backgroundImage: imageProvider,
-                              ),
-                              errorWidget: (context, string, stackTrace) =>
-                                  CircleAvatar(
+            return SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15, top: 25),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        snapshot.data.response[0].profilePic == ""
+                            ? CircleAvatar(
                                 radius: height / 10,
                                 backgroundColor: Colors.transparent,
                                 child: Icon(
@@ -88,199 +73,226 @@ class _UserState extends State<User> {
                                   size: 100.0,
                                   color: colorPalette.navyBlue,
                                 ),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl:
+                                    '${snapshot.data.response[0].profilePic}',
+                                imageBuilder: (context, imageProvider) =>
+                                    CircleAvatar(
+                                  radius: height / 12,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: imageProvider,
+                                ),
+                                errorWidget: (context, string, stackTrace) =>
+                                    CircleAvatar(
+                                  radius: height / 10,
+                                  backgroundColor: Colors.transparent,
+                                  child: Icon(
+                                    Icons.person_outline,
+                                    size: 100.0,
+                                    color: colorPalette.navyBlue,
+                                  ),
+                                ),
+                                placeholder: (context, str) => CircleAvatar(
+                                  radius: height / 10,
+                                  backgroundColor: Colors.transparent,
+                                  child: Icon(
+                                    Icons.person_outline,
+                                    size: 100.0,
+                                    color: colorPalette.navyBlue,
+                                  ),
+                                ),
                               ),
-                              placeholder: (context, str) => CircleAvatar(
-                                radius: height / 10,
-                                backgroundColor: Colors.transparent,
-                                child: Icon(
-                                  Icons.person_outline,
-                                  size: 100.0,
-                                  color: colorPalette.navyBlue,
+                        SizedBox(
+                          width: 30.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${snapshot.data.response[0].fname}',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 30,
+                                color: const Color(0xff515c6f),
+                                fontWeight: FontWeight.w700,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              '${snapshot.data.response[0].email}',
+                              style: TextStyle(
+                                fontFamily: 'Roboto',
+                                fontSize: 15,
+                                color: const Color(0xff515c6f),
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Provider.of<HomeScreenProvider>(context,
+                                        listen: false)
+                                    .selectedString = "EditProfile";
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: height / 26,
+                                width: width / 3.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                    width: 2.8,
+                                    color: colorPalette.navyBlue,
+                                  ),
+                                ),
+                                child: Text(
+                                  'EDIT PROFILE',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 13,
+                                    color: const Color(0xff301869),
+                                    letterSpacing: 0.72,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${snapshot.data.response[0].fname}',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 30,
-                              color: const Color(0xff515c6f),
-                              fontWeight: FontWeight.w700,
+                            SizedBox(
+                              height: 25,
                             ),
-                            textAlign: TextAlign.left,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            '${snapshot.data.response[0].email}',
-                            style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 15,
-                              color: const Color(0xff515c6f),
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
-                                  .selectedString = "EditProfile";
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: height / 26,
-                              width: width / 3.5,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                  width: 2.8,
-                                  color: colorPalette.navyBlue,
-                                ),
-                              ),
-                              child: Text(
-                                'EDIT PROFILE',
-                                style: TextStyle(
-                                  fontFamily: 'Roboto',
-                                  fontSize: 13,
-                                  color: const Color(0xff301869),
-                                  letterSpacing: 0.72,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: width * 1.15,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      color: colorPalette.grey,
-                      width: 1,
+                          ],
+                        )
+                      ],
                     ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _profileMenus(
-                          title: "My Addresses",
-                          width: width,
-                          asset: "address",
-                          onClick: () {
-                            homeProvider.selectedString = "MyAddress";
-                          }),
-                      _customDivider(),
-                      _profileMenus(
-                          title: "My Orders",
-                          width: width,
-                          asset: "allOrder",
-                          onClick: () {
-                            homeProvider.selectedString = "MyOrders";
-                          }),
-                      _customDivider(),
-                      _profileMenus(
-                          title: "Wishlist",
-                          width: width,
-                          asset: "heart",
-                          onClick: () {
-                            homeProvider.selectedString = "Wishlist";
-                          }),
-                      _customDivider(),
-                      Consumer<ForgotPasswordProvider>(
-                        builder: (_, _forgotPasswordProvider, child) =>
-                            Consumer<UserProvider>(
-                          builder: (_, _userProvider, child) => _profileMenus(
-                              title: "Change Password",
-                              width: width,
-                              asset: "key",
-                              onClick: () async {
-                                dynamic response = await sendOTP(
-                                    snapshot.data.response[0].mobile);
-                                if (response['status'] == 200) {
-                                  _forgotPasswordProvider
-                                      .forgotPasswordFromPage = "Account";
-                                  _userProvider.mobileNumberToSendOtp =
-                                      snapshot.data.response[0].mobile;
-                                  homeProvider.selectedString =
-                                      "ChangePassword";
-                                } else {
-                                  Scaffold.of(context).showSnackBar(
-                                      getSnackBar('${response['message']}'));
-                                }
-                              }),
-                        ),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    height: width * 1.15,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: colorPalette.grey,
+                        width: 1,
                       ),
-                      _customDivider(),
-                      _profileMenus(
-                          title: "Terms and Conditions",
-                          width: width,
-                          asset: "tc",
-                          onClick: () {}),
-                      _customDivider(),
-                      _profileMenus(
-                          title: "Privacy Policy",
-                          width: width,
-                          asset: "policy",
-                          onClick: () {}),
-                      _customDivider(),
-                      _profileMenus(
-                          title: "Submit Feedback",
-                          width: width,
-                          asset: "good",
-                          onClick: () =>
-                              homeProvider.selectedString = "FeedBack"),
-                      _customDivider(),
-                      Consumer<HomeScreenProvider>(
-                        builder: (_, _homeScreenProvider, child) =>
-                            _profileMenus(
-                          title: "Logout",
-                          width: width,
-                          asset: "logout",
-                          onClick: () => showDialog(
-                            context: context,
-                            builder: (context) => LogOutDialog(
-                              width: width,
-                              onCancelTap: () {
-                                Navigator.pop(context);
-                              },
-                              onYesTap: () async {
-                                SharedPreferences _sharedPref =
-                                    await SharedPreferences.getInstance();
-                                _sharedPref.setBool('isLogin', false);
-                                _homeScreenProvider.selectedString = "Home";
-                                _homeScreenProvider.selectedBottomIndex = 0;
-                                Navigator.pop(context);
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => OnBoarding()),
-                                );
-                              },
-                            ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _profileMenus(
+                            title: "My Addresses",
+                            width: width,
+                            asset: "address",
+                            onClick: () {
+                              homeProvider.selectedString = "MyAddress";
+                            }),
+                        _customDivider(),
+                        _profileMenus(
+                            title: "My Orders",
+                            width: width,
+                            asset: "allOrder",
+                            onClick: () {
+                              homeProvider.selectedString = "MyOrders";
+                            }),
+                        _customDivider(),
+                        _profileMenus(
+                            title: "Wishlist",
+                            width: width,
+                            asset: "heart",
+                            onClick: () {
+                              homeProvider.selectedString = "Wishlist";
+                            }),
+                        _customDivider(),
+                        Consumer<ForgotPasswordProvider>(
+                          builder: (_, _forgotPasswordProvider, child) =>
+                              Consumer<UserProvider>(
+                            builder: (_, _userProvider, child) => _profileMenus(
+                                title: "Change Password",
+                                width: width,
+                                asset: "key",
+                                onClick: () async {
+                                  dynamic response = await sendOTP(
+                                      snapshot.data.response[0].mobile);
+                                  if (response['status'] == 200) {
+                                    _forgotPasswordProvider
+                                        .forgotPasswordFromPage = "Account";
+                                    _userProvider.mobileNumberToSendOtp =
+                                        snapshot.data.response[0].mobile;
+                                    homeProvider.selectedString =
+                                        "ChangePassword";
+                                  } else {
+                                    Scaffold.of(context).showSnackBar(
+                                        getSnackBar('${response['message']}'));
+                                  }
+                                }),
                           ),
                         ),
-                      )
-                    ],
+                        _customDivider(),
+                        _profileMenus(
+                            title: "Terms and Conditions",
+                            width: width,
+                            asset: "tc",
+                            onClick: () {}),
+                        _customDivider(),
+                        _profileMenus(
+                            title: "Privacy Policy",
+                            width: width,
+                            asset: "policy",
+                            onClick: () {}),
+                        _customDivider(),
+                        _profileMenus(
+                            title: "Submit Feedback",
+                            width: width,
+                            asset: "good",
+                            onClick: () =>
+                                homeProvider.selectedString = "FeedBack"),
+                        _customDivider(),
+                        Consumer<HomeScreenProvider>(
+                          builder: (_, _homeScreenProvider, child) =>
+                              _profileMenus(
+                            title: "Logout",
+                            width: width,
+                            asset: "logout",
+                            onClick: () => showDialog(
+                              context: context,
+                              builder: (context) => LogOutDialog(
+                                width: width,
+                                onCancelTap: () {
+                                  Navigator.pop(context);
+                                },
+                                onYesTap: () async {
+                                  SharedPreferences _sharedPref =
+                                      await SharedPreferences.getInstance();
+                                  _sharedPref.setBool('isLogin', false);
+                                  _homeScreenProvider.selectedString = "Home";
+                                  _homeScreenProvider.selectedBottomIndex = 0;
+                                  Navigator.pop(context);
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => OnBoarding()),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                )
-              ],
+                  SizedBox(height: 90.0),
+                ],
+              ),
             );
           } else {
             return Container(

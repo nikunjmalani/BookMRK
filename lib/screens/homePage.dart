@@ -1,5 +1,6 @@
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/order_provider.dart';
 import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
@@ -10,6 +11,7 @@ import 'package:bookmrk/screens/Home/filter.dart';
 import 'package:bookmrk/screens/Home/productInfo.dart';
 import 'package:bookmrk/screens/Home/schoolInfo.dart';
 import 'package:bookmrk/screens/Home/search.dart';
+import 'package:bookmrk/screens/Home/search_from_category.dart';
 import 'package:bookmrk/screens/Home/vendorsInfo.dart';
 import 'package:bookmrk/screens/cart/addAddress.dart';
 import 'package:bookmrk/screens/cart/changeAddress.dart';
@@ -74,6 +76,7 @@ class _HomePageState extends State<HomePage> {
               _homeScreenProvider.selectedString == "AddAddress" ||
               _homeScreenProvider.selectedString == "EditAddress" ||
               _homeScreenProvider.selectedString == "SearchProducts" ||
+              _homeScreenProvider.selectedString == "SearchProducts2" ||
               _homeScreenProvider.selectedString == "Filter" ||
               _homeScreenProvider.selectedString == "UserEditAddress" ||
               _homeScreenProvider.selectedString == "UserAddAddress" ||
@@ -84,6 +87,8 @@ class _HomePageState extends State<HomePage> {
                   _homeScreenProvider.selectedString == "EditAddress" ||
                   _homeScreenProvider.selectedString ==
                       "SearchProducts" ||
+                  _homeScreenProvider.selectedString ==
+                      "SearchProducts2" ||
                   _homeScreenProvider.selectedString == "Filter" ||
                   _homeScreenProvider.selectedString ==
                       "UserEditAddress" ||
@@ -120,12 +125,16 @@ class _HomePageState extends State<HomePage> {
                     : _homeScreenProvider.selectedString ==
                     "OrderTracking"
                     ? "OrderDetails"
+                    : _homeScreenProvider.selectedString == "SearchProducts2"
+                    ? "Category"
                     : "Cart";
               },
               title: _homeScreenProvider.selectedString ==
                   "SearchProducts"
                   ? "Search Products"
-                  : _homeScreenProvider.selectedString == "Filter"
+                  : _homeScreenProvider.selectedString == "SearchProducts2" ?
+                    "Search Products"
+                  :_homeScreenProvider.selectedString == "Filter"
                   ? "Filter By Categories"
                   : _homeScreenProvider.selectedString ==
                   "UserEditAddress"
@@ -139,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                   : "",
               icon: Icons.close)
               : CustomAppBar(
+            context,
             blueCartIcon: _homeScreenProvider.blueCartIcon,
             blueBellIcon: _homeScreenProvider.blueBellIcon,
             onBellTap: () {
@@ -271,6 +281,7 @@ class _HomePageState extends State<HomePage> {
                   _homeScreenProvider.selectedString == "NewPassword" ||
                   _homeScreenProvider.selectedString ==
                       "FeedBack"
+                  || _homeScreenProvider.selectedString == "ProductInfo"
                   ? leadingAppBar(
                 title: _homeScreenProvider.selectedString == "User"
                     ? "Account"
@@ -333,6 +344,8 @@ class _HomePageState extends State<HomePage> {
                       : _homeScreenProvider.selectedString ==
                       "NewPassword"
                       ? "ChangePassword"
+                      : _homeScreenProvider.selectedString == "ProductInfo"
+                      ? "Wishlist"
                       : "";
                 },
               )
@@ -394,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                           ? Consumer<CategoryProvider>(
                         builder: (_, _categoryProvider, child) =>
                             CategoryInfo(
-                                _categoryProvider.selectedCategoryId),)
+                                _categoryProvider.selectedCategoryName),)
                           : AllVendors(),
                       _homeScreenProvider.selectedString == "Category"
                           ? CategoryTab()
@@ -405,10 +418,12 @@ class _HomePageState extends State<HomePage> {
                               ProductInfo(
                                   selectedProductSlug: _homeScreenProvider
                                       .selectedProductSlug))
-                          : Consumer<CategoryProvider>(
+                          : _homeScreenProvider.selectedString ==
+                          "SearchProducts2" ? Search2() : Consumer<
+                          CategoryProvider>(
                         builder: (_, _categoryProvider, child) =>
                             CategoryInfo(
-                                _categoryProvider.selectedCategoryId),),
+                                _categoryProvider.selectedCategoryName),),
                       _homeScreenProvider.selectedString == "School"
                           ? SchoolTab()
                           : Consumer<SchoolProvider>(
@@ -420,7 +435,11 @@ class _HomePageState extends State<HomePage> {
                           ? EditProfile()
                           : _homeScreenProvider.selectedString ==
                           "ChangeMobile"
-                          ? ChangeMobile()
+                          ? Consumer<UserProvider>(
+                          builder: (_, _userProvider, child) =>
+                              ChangeMobile(
+                                selectedMobileNumber: _userProvider
+                                    .mobileNumberToChange,))
                           : _homeScreenProvider.selectedString ==
                           "UserOTP"
                           ? UserOTP()
@@ -445,7 +464,9 @@ class _HomePageState extends State<HomePage> {
                           ? MyOrders()
                           : _homeScreenProvider.selectedString ==
                           "OrderDetails"
-                          ? OrderDetails()
+                          ? Consumer<OrderProvider>(
+                          builder: (_, _orderProvider, child) =>
+                              OrderDetails(_orderProvider.orderId.toString()))
                           : _homeScreenProvider.selectedString ==
                           "OrderTracking"
                           ? OrderTracking()
@@ -462,6 +483,12 @@ class _HomePageState extends State<HomePage> {
                           : _homeScreenProvider.selectedString ==
                           "FeedBack"
                           ? FeedBack()
+                          : _homeScreenProvider.selectedString == "ProductInfo"
+                          ? Consumer<HomeScreenProvider>(
+                          builder: (_, _homeScreenProvider, child) =>
+                              ProductInfo(
+                                selectedProductSlug: _homeScreenProvider
+                                    .selectedProductSlug,))
                           : User(),
                       _homeScreenProvider.selectedString == "Cart"
                           ? Cart()
@@ -500,7 +527,7 @@ class _HomePageState extends State<HomePage> {
                       ? SizedBox()
                       : Container(
                     padding: EdgeInsets.only(bottom: 10),
-                    height: 90,
+                    height: 70,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.vertical(
@@ -532,12 +559,13 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 0
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
                               _homeScreenProvider.selectedBottomIndex ==
                                   0
                                   ? "assets/icons/activeHome.svg"
-                                  : "assets/icons/Home.svg",
+                                  : "assets/icons/Home.svg", height: 25.0,
+
                             ),
                           ),
                         ),
@@ -556,12 +584,13 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 1
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
                               _homeScreenProvider.selectedBottomIndex ==
                                   1
                                   ? "assets/icons/activeCategory.svg"
-                                  : "assets/icons/Category.svg",
+                                  : "assets/icons/Category.svg", height: 25.0,
+
                             ),
                           ),
                         ),
@@ -580,12 +609,13 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 2
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
                               _homeScreenProvider.selectedBottomIndex ==
                                   2
                                   ? "assets/icons/activeSchool.svg"
-                                  : "assets/icons/School.svg",
+                                  : "assets/icons/School.svg", height: 25.0,
+
                             ),
                           ),
                         ),
@@ -604,8 +634,9 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedBottomIndex == 3
                                 ? colorPalette.orange
                                 : Colors.transparent,
-                            radius: width / 13,
+                            radius: width / 17,
                             child: SvgPicture.asset(
+
                               _homeScreenProvider.selectedBottomIndex ==
                                   3
                                   ? "assets/icons/activeUser.svg"
@@ -614,6 +645,7 @@ class _HomePageState extends State<HomePage> {
                                   .selectedBottomIndex == 3
                                   ? Colors.black
                                   : null,
+                              height: 25.0,
                             ),
                           ),
                         ),

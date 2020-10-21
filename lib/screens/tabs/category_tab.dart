@@ -35,7 +35,13 @@ class _CategoryTabState extends State<CategoryTab> {
                 return Column(
                   children: [
                     SearchBar(
-                        width: width, onTap: () {}, title: "Search Products"),
+                      width: width,
+                      onTap: () {
+                        Provider.of<HomeScreenProvider>(context, listen: false)
+                            .selectedString = "SearchProducts2";
+                      },
+                      title: "Search Products",
+                    ),
                     Expanded(
                       child: GridView.builder(
                         itemCount: snapshot.data.response.length,
@@ -47,10 +53,8 @@ class _CategoryTabState extends State<CategoryTab> {
                             return GestureDetector(
                               onTap: () {
                                 data.selectedString = "CategoryInfo";
-                                _categoryProvider.selectedCategoryId =
-                                    int.parse(snapshot
-                                        .data.response[index].categoryId
-                                        .toString());
+                                _categoryProvider.selectedCategoryName =
+                                    snapshot.data.response[index].catSlug;
                               },
                               child: Stack(
                                 fit: StackFit.expand,
