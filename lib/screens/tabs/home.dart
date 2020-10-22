@@ -147,8 +147,6 @@ class _HomeState extends State<Home> {
                                     builder: (_, _vendorProvider, child) =>
                                         GestureDetector(
                                       onTap: () {
-                                        print(
-                                            '${snapshot.data.response[0].product[index].productSlug}');
                                         _vendorProvider.selectedVendorName =
                                             "${snapshot.data.response[0].product[index].vendorSlug}";
                                         Provider.of<HomeScreenProvider>(context,

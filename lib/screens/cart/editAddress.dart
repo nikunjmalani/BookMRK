@@ -237,9 +237,7 @@ class _EditAddressState extends State<EditAddress> {
                               _locationProvider.selectedCountryId),
                           builder: (context, stateData) {
                             if (stateData.hasData &&
-                                _locationProvider.selectedCountryId != null) {
-                              print('has data ');
-                            }
+                                _locationProvider.selectedCountryId != null) {}
                             if (stateData.hasData) {
                               return getLocationBottomSheet(
                                   context,
@@ -421,20 +419,6 @@ class _EditAddressState extends State<EditAddress> {
                         await SharedPreferences.getInstance();
                     int userId = _prefs.getInt('userId');
 
-//                  print(' user id : $userId');
-//                  print(
-//                      ' user address id : ${_userProvider.selectedUserAddressId}');
-//                  print('first name : ${_firstNameEditAddress.text}');
-//                  print('last name : ${_lastNameEditAddress.text}');
-//                  print('email : ${_emailEditAddress.text}');
-//                  print(' contact : ${_contactEditAddress.text}');
-//                  print(' zip : ${_zipEditAddress.text}');
-//                  print(' country : ${_countryEditAddress.text}');
-//                  print(' state : ${_stateEditAddress.text}');
-//                  print(' city : ${_cityEditAddress.text}');
-//                  print(' ad1 : ${_firstAddressEdit.text}');
-//                  print(' ad2 : ${_secondAddressEdit.text}');
-
                     dynamic response = await UserAPI.editUserAddress(
                       userId.toString(),
                       _userProvider.selectedUserAddressId,
@@ -448,8 +432,6 @@ class _EditAddressState extends State<EditAddress> {
                       _secondAddressEdit.text,
                       _zipEditAddress.text,
                     );
-
-                    print(response);
 
                     if (response['status'] == 200) {
                       _userProvider.userAddressEditInProgress = false;

@@ -100,7 +100,6 @@ class _AllVendorsState extends State<AllVendors> {
                                     _vendorProvider.selectedVendorName =
                                         snapshot
                                             .data.response[index].vendorSlug;
-                                    print(_vendorProvider.selectedVendorName);
                                     Provider.of<HomeScreenProvider>(context,
                                             listen: false)
                                         .selectedString = "VendorInfo";

@@ -158,7 +158,6 @@ class HomeScreenProvider extends ChangeNotifier {
         totalNotification++;
       }
     });
-    print('from provider timer....');
     _totalNewNotifications = totalNotification;
     notifyListeners();
   }

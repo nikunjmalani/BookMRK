@@ -203,7 +203,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                                                 _homeScreenProvider
                                                     .selectedString = "Account";
                                                 Navigator.pop(context);
-                                                print(response['response']);
                                               } else if (_forgotPasswordProvider
                                                       .forgotPasswordFromPage ==
                                                   "ForgotPassword") {

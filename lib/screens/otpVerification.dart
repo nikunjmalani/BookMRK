@@ -126,13 +126,13 @@ class _OtpVerificationState extends State<OtpVerification> {
                               color: colorPalette.navyBlue,
                             ),
                           ),
-                          TextSpan(
-                            text: " 00:00",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: colorPalette.midGrey,
-                            ),
-                          ),
+//                          TextSpan(
+//                            text: " 00:00",
+//                            style: TextStyle(
+//                              fontSize: 18,
+//                              color: colorPalette.midGrey,
+//                            ),
+//                          ),
                         ],
                       ),
                     ),

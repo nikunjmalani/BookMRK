@@ -46,4 +46,21 @@ class SchoolAPI {
     dynamic data = jsonDecode(response.body);
     return data;
   }
+
+  /// api to fetch products of selected sub category in school info page...
+  static Future getSubcategoryProductsOfSchool(
+      String userId, String schoolSlug, String subcategoryId) async {
+    String url =
+        "$kBaseURL/app/single_school_categories_product/1595922619X5f1fd8bb5f332/MOB/$userId/$schoolSlug/$subcategoryId";
+    Map<String, String> header = {
+//      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+//      "User-ID": "1",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    http.Response response = await http.get(url, headers: header);
+    return jsonDecode(response.body);
+  }
 }

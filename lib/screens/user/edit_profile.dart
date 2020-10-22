@@ -100,12 +100,12 @@ class _EditProfileState extends State<EditProfile> {
     dynamic response =
         await UserAPI.updateUserProfileImage(userId.toString(), data);
 
-    print(response);
     if (response['status'] == 200) {
       Scaffold.of(context)
           .showSnackBar(getSnackBar('Image uploaded Successfully !'));
     } else {
-      print('upload failed !');
+      Scaffold.of(context).showSnackBar(
+          getSnackBar('failed to upload image please try again !'));
     }
   }
 
@@ -412,17 +412,6 @@ class _EditProfileState extends State<EditProfile> {
                             height: height,
                             onTap: () async {
                               _userProvider.isProfileUpdateInProgress = true;
-                              print('Save changes .................');
-                              print(
-                                  'first name : ${_firstNameController.text}');
-                              print('last name : ${_lastNameController.text}');
-                              print(
-                                  'date of birth : ${_dateOfBirthController.text}');
-                              print(
-                                  'gender : ${_registerProvider.selectedGenderRegister}');
-                              print('email : ${_emailAddressController.text}');
-                              print(
-                                  'mobile number : ${_mobileNumberController.text}');
 
                               SharedPreferences _prefs =
                                   await SharedPreferences.getInstance();
@@ -435,7 +424,7 @@ class _EditProfileState extends State<EditProfile> {
                                       _dateOfBirthController.text,
                                       _registerProvider.selectedGenderRegister,
                                       _emailAddressController.text);
-                              print(response);
+
                               if (response['status'] == 200) {
                                 _userProvider.isProfileUpdateInProgress = false;
 

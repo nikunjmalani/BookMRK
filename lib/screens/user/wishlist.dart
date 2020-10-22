@@ -77,8 +77,7 @@ class _WishListState extends State<WishList> {
                                         await SharedPreferences.getInstance();
                                     int userId = _prefs.getInt('userId');
 
-                                    print(snapshot
-                                        .data.response[index].productId);
+
                                     dynamic response = await WishListAPI
                                         .removeProductFromWishList(
                                             userId.toString(),

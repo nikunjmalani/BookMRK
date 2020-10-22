@@ -43,9 +43,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     _homeScreenProvider =
         Provider.of<HomeScreenProvider>(context, listen: false);
-    Timer.periodic(Duration(seconds: 10), (timer) {
+    Timer.periodic(Duration(seconds: 30), (timer) {
       _homeScreenProvider.getNotification();
-      print('from splash timer : ${timer.tick}');
     });
     return Scaffold(
       body: GestureDetector(

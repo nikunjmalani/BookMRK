@@ -71,11 +71,9 @@ class _FeedBackState extends State<FeedBack> {
                   context: context,
                   onClick: () async {
                     _userProvider.feedbackInProgress = true;
-                    print(_feedBackController.text);
                     SharedPreferences _prefs =
                         await SharedPreferences.getInstance();
                     int userId = _prefs.get('userId');
-                    print(userId);
                     dynamic response = await FeedBackAPI.giveFeedBack(
                         userId.toString(), _feedBackController.text);
                     if (response['status'] == 200) {
