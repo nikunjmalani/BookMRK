@@ -12,9 +12,8 @@ Widget PriceDetail(
   return Container(
     margin: EdgeInsets.only(top: 20),
     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-    height: height / 4,
+    height: height / 3,
     width: width,
-    color: Colors.white,
     child: Column(
       children: [
         priceDetail(),

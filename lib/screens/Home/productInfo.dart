@@ -73,42 +73,48 @@ class _ProductInfoState extends State<ProductInfo> {
               if (snapshot.hasData) {
                 if (_isPageLoadsFirstTime) {
                   if (snapshot.data.response[0].variation == "YES") {
-                    print("called");
+                    if (int.parse(snapshot.data.response[0].howManyVariation
+                            .toString()) >
+                        0) {
+                      /// selected variation image..
+                      _productOrderProvider.setVariation1Img(
+                          "${snapshot.data.response[0].variationsDetails[0].varValue[0].varImg}");
 
-                    /// selected variation image..
-                    _productOrderProvider.setVariation1Img(
-                        "${snapshot.data.response[0].variationsDetails[0].varValue[0].varImg}");
+                      /// selected variation name....
+                      _productOrderProvider.setVariation1Name(
+                          "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationName}");
 
-                    /// selected variation name....
-                    _productOrderProvider.setVariation1Name(
-                        "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationName}");
+                      /// selected variation option name....
+                      _productOrderProvider.setVariation1OptionName(
+                          "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationsOptionsName}");
 
-                    /// selected variation option name....
-                    _productOrderProvider.setVariation1OptionName(
-                        "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationsOptionsName}");
+                      /// selected variation id....
+                      _productOrderProvider.setVariation1Id(
+                          "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationsDataId}");
 
-                    /// selected variation id....
-                    _productOrderProvider.setVariation1Id(
-                        "${snapshot.data.response[0].variationsDetails[0].varValue[0].variationsDataId}");
+                      if (int.parse(snapshot.data.response[0].howManyVariation
+                              .toString()) >
+                          1) {
+                        /// selected variation2 option name...
+                        _productOrderProvider.setVariation2Option(
+                            "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationsOptionsName}");
 
-                    /// selected variation2 option name...
-                    _productOrderProvider.setVariation2Option(
-                        "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationsOptionsName}");
+                        /// selected variation2 id...
+                        _productOrderProvider.setVariation2Id(
+                            "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationsDataId}");
 
-                    /// selected variation2 id...
-                    _productOrderProvider.setVariation2Id(
-                        "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationsDataId}");
+                        /// selected variation 2 name...
+                        _productOrderProvider.setVariation2Name(
+                            "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationName}");
 
-                    /// selected variation 2 name...
-                    _productOrderProvider.setVariation2Name(
-                        "${snapshot.data.response[0].variationsDetails[1].varValue[0].variationName}");
+                        /// selected variation 2 image...
+                        _productOrderProvider.setVariation2Img(
+                            "${snapshot.data.response[0].variationsDetails[1].varValue[0].varImg}");
+                      }
 
-                    /// selected variation 2 image...
-                    _productOrderProvider.setVariation2Img(
-                        "${snapshot.data.response[0].variationsDetails[1].varValue[0].varImg}");
-
-                    /// change the state of the page load...
-                    _isPageLoadsFirstTime = false;
+                      /// change the state of the page load...
+                      _isPageLoadsFirstTime = false;
+                    }
                   }
                 }
                 return Stack(
@@ -650,8 +656,6 @@ class _ProductInfoState extends State<ProductInfo> {
                                                   }
                                                 ];
 
-                                                print(twoVariationsStructure);
-
                                                 // code block for get pvsm_id in response .............................
                                                 /// check when the variations are multiple or single ....
 
@@ -671,7 +675,7 @@ class _ProductInfoState extends State<ProductInfo> {
                                                   );
                                                   variationInfo =
                                                       twoVariationsStructure;
-                                                  print(response);
+
                                                   pvsmId = response['response']
                                                           [0]['pvsm_id']
                                                       .toString();
@@ -731,7 +735,6 @@ class _ProductInfoState extends State<ProductInfo> {
                                                         );
                                                       });
                                                 } else {
-                                                  print(variationInfo);
                                                   dynamic response2 =
                                                       await CartAPI
                                                           .addProductToCart(
@@ -936,8 +939,6 @@ Widget _addToCartDialog(
                                 pvsmId,
                                 variationInfo,
                               );
-
-                              print(response);
 
                               /// check if the product added to cart or not....
                               if (response['status'] == 200) {

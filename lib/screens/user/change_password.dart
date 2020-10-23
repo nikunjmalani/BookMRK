@@ -157,9 +157,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                                                 builder: (context) =>
                                                     ResetPassword()));
                                       } else {
-                                        print(response);
-                                        print(widget.userMobileNumber);
-                                        print(otp);
                                         _forgotPasswordProvider
                                                 .isOTPVerificationInProgress =
                                             false;

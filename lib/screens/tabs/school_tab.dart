@@ -275,6 +275,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                   onTap: () {
                                     _schoolProvider.selectedSchoolSlug =
                                         "${snapshot.data.response[index].schoolSlug}";
+
                                     Provider.of<HomeScreenProvider>(context,
                                             listen: false)
                                         .selectedString = "SchoolInfo";

@@ -24,7 +24,7 @@ class _UserState extends State<User> {
   Future getUserInformation() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     int userId = _prefs.getInt('userId');
-    print(userId);
+
     dynamic userInformation =
         await UserAPI.getAllUserInformation(userId.toString());
 
@@ -40,7 +40,7 @@ class _UserState extends State<User> {
     int userId = _prefs.getInt('userId');
     dynamic response =
         await ForgotPasswordAPI.forgotPassword(userMobileNumber, userId);
-    print(response);
+
     return response;
   }
 

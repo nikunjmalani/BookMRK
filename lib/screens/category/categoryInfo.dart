@@ -149,8 +149,6 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                         itemBuilder: (context, index) {
                                           return GestureDetector(
                                             onTap: () {
-                                              print(
-                                                  "subcategory name : ${snapshot.data.response[0].subCategory[index].catSlug}");
                                               _homeScreenProvider
                                                       .selectedString =
                                                   "CategoryInfo";

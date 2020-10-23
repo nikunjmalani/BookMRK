@@ -46,4 +46,19 @@ class CategoryAPI {
     dynamic data = jsonDecode(response.body);
     return data;
   }
+
+  /// get list of category with subcategory ....
+  static Future getListOfCategoryWithSubCategory(String userId) async {
+    String url =
+        "$kBaseURL//categories/main_categories_view_with_subcategory/1595922619X5f1fd8bb5f332/MOB/$userId";
+    Map<String, String> header = {
+//      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    http.Response response = await http.get(url, headers: header);
+    return jsonDecode(response.body);
+  }
 }

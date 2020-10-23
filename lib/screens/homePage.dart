@@ -133,8 +133,8 @@ class _HomePageState extends State<HomePage> {
                   "SearchProducts"
                   ? "Search Products"
                   : _homeScreenProvider.selectedString == "SearchProducts2" ?
-                    "Search Products"
-                  :_homeScreenProvider.selectedString == "Filter"
+              "Search Products"
+                  : _homeScreenProvider.selectedString == "Filter"
                   ? "Filter By Categories"
                   : _homeScreenProvider.selectedString ==
                   "UserEditAddress"
@@ -178,6 +178,8 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               height: width / 6,
               width: width / 2,
+
+              /// home page appbar...
               child: _homeScreenProvider.selectedBottomIndex == 0 &&
                   _homeScreenProvider.selectedString == "Home"
                   ? imagePath.logo
@@ -223,16 +225,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               )
+
+              /// category page appbar...
                   : _homeScreenProvider.selectedBottomIndex == 1 &&
-                  _homeScreenProvider.selectedString == "Category" ||
-                  _homeScreenProvider.selectedString ==
-                      "CategoryInfo" ||
-                  _homeScreenProvider.selectedString == "ProductInfo"
+                  (_homeScreenProvider.selectedString == "Category" ||
+                      _homeScreenProvider.selectedString ==
+                          "CategoryInfo" ||
+                      _homeScreenProvider.selectedString == "ProductInfo")
                   ? leadingAppBar(
                   title: _homeScreenProvider.selectedString ==
                       "Category"
                       ? "Category"
-                      : "",
+                      : "cat",
                   backButton:
                   _homeScreenProvider.selectedString == "Category"
                       ? false
@@ -243,9 +247,12 @@ class _HomePageState extends State<HomePage> {
                         ? "Category"
                         : "CategoryInfo";
                   })
+
+              /// school page appbar ....
                   : _homeScreenProvider.selectedBottomIndex == 2 &&
-                  _homeScreenProvider.selectedString == "School" ||
-                  _homeScreenProvider.selectedString == "SchoolInfo"
+                  (_homeScreenProvider.selectedString == "ProductInfo" ||
+                      _homeScreenProvider.selectedString == "School" ||
+                      _homeScreenProvider.selectedString == "SchoolInfo")
                   ? leadingAppBar(
                 title: _homeScreenProvider.selectedString == "School"
                     ? "Schools"
@@ -259,29 +266,32 @@ class _HomePageState extends State<HomePage> {
                   _homeScreenProvider.selectedString ==
                       "SchoolInfo"
                       ? "School"
-                      : "School";
+                      : _homeScreenProvider.selectedString ==
+                      "ProductInfo" ? "SchoolInfo" : "School";
                 },
               )
+
+              /// user page appbar...
                   : _homeScreenProvider.selectedString == "User" ||
-                  _homeScreenProvider.selectedString ==
+                  (_homeScreenProvider.selectedString ==
                       "EditProfile" ||
-                  _homeScreenProvider.selectedString ==
-                      "ChangeMobile" ||
-                  _homeScreenProvider.selectedString == "UserOTP" ||
-                  _homeScreenProvider.selectedString == "Wishlist" ||
-                  _homeScreenProvider.selectedString ==
-                      "MyAddress" ||
-                  _homeScreenProvider.selectedString == "MyOrders" ||
-                  _homeScreenProvider.selectedString ==
-                      "OrderDetails" ||
-                  _homeScreenProvider.selectedString ==
-                      "OrderTracking" ||
-                  _homeScreenProvider.selectedString ==
-                      "ChangePassword" ||
-                  _homeScreenProvider.selectedString == "NewPassword" ||
-                  _homeScreenProvider.selectedString ==
-                      "FeedBack"
-                  || _homeScreenProvider.selectedString == "ProductInfo"
+                      _homeScreenProvider.selectedString ==
+                          "ChangeMobile" ||
+                      _homeScreenProvider.selectedString == "UserOTP" ||
+                      _homeScreenProvider.selectedString == "Wishlist" ||
+                      _homeScreenProvider.selectedString ==
+                          "MyAddress" ||
+                      _homeScreenProvider.selectedString == "MyOrders" ||
+                      _homeScreenProvider.selectedString ==
+                          "OrderDetails" ||
+                      _homeScreenProvider.selectedString ==
+                          "OrderTracking" ||
+                      _homeScreenProvider.selectedString ==
+                          "ChangePassword" ||
+                      _homeScreenProvider.selectedString == "NewPassword" ||
+                      _homeScreenProvider.selectedString ==
+                          "FeedBack"
+                      || _homeScreenProvider.selectedString == "ProductInfo")
                   ? leadingAppBar(
                 title: _homeScreenProvider.selectedString == "User"
                     ? "Account"
@@ -349,6 +359,8 @@ class _HomePageState extends State<HomePage> {
                       : "";
                 },
               )
+
+              /// cart page appbar....
                   : _homeScreenProvider.selectedString == "Cart"
                   ? leadingAppBar(
                   backButton: false,
@@ -368,6 +380,8 @@ class _HomePageState extends State<HomePage> {
                   child: PageView(
                     controller: pageController,
                     children: [
+
+                      /// home page..
                       _homeScreenProvider.selectedString == "Home"
                           ? Home()
                           : _homeScreenProvider.selectedString ==
@@ -382,10 +396,12 @@ class _HomePageState extends State<HomePage> {
                           : _homeScreenProvider.selectedString ==
                           "ProductInfo"
                           ? Consumer<HomeScreenProvider>(
-                          builder: (_, _homeScreenProvider, child) =>
-                              ProductInfo(
-                                selectedProductSlug: _homeScreenProvider
-                                    .selectedProductSlug,))
+                          builder: (_, _homeScreenProvider, child) {
+                            return ProductInfo(
+                              selectedProductSlug: _homeScreenProvider
+                                  .selectedProductSlug,);
+                          }
+                      )
                           : _homeScreenProvider.selectedString ==
                           "SchoolInfo"
                           ? Consumer<SchoolProvider>(
@@ -409,6 +425,8 @@ class _HomePageState extends State<HomePage> {
                             CategoryInfo(
                                 _categoryProvider.selectedCategoryName),)
                           : AllVendors(),
+
+                      /// category page...
                       _homeScreenProvider.selectedString == "Category"
                           ? CategoryTab()
                           : _homeScreenProvider.selectedString ==
@@ -424,12 +442,23 @@ class _HomePageState extends State<HomePage> {
                         builder: (_, _categoryProvider, child) =>
                             CategoryInfo(
                                 _categoryProvider.selectedCategoryName),),
+
+
+                      /// school page...
                       _homeScreenProvider.selectedString == "School"
                           ? SchoolTab()
-                          : Consumer<SchoolProvider>(
+                          : _homeScreenProvider.selectedString == "SchoolInfo"
+                          ? Consumer<SchoolProvider>(
                           builder: (_, _schoolProvider, child) =>
                               SchoolInfo(schoolSlug: _schoolProvider
-                                  .selectedSchoolSlug)),
+                                  .selectedSchoolSlug))
+                          : Consumer<HomeScreenProvider>(
+                          builder: (_, _homeScreenProvider, child) =>
+                              ProductInfo(
+                                  selectedProductSlug: _homeScreenProvider
+                                      .selectedProductSlug)),
+
+                      /// user page...
                       _homeScreenProvider.selectedString ==
                           "EditProfile"
                           ? EditProfile()
@@ -469,7 +498,9 @@ class _HomePageState extends State<HomePage> {
                               OrderDetails(_orderProvider.orderId.toString()))
                           : _homeScreenProvider.selectedString ==
                           "OrderTracking"
-                          ? OrderTracking()
+                          ? Consumer<OrderProvider>(
+                          builder: (_, _orderProvider, child) => OrderTracking(orderIdToTrack: _orderProvider.orderIdToTrack,)
+                      )
                           : _homeScreenProvider.selectedString ==
                           "ChangePassword"
                           ? Consumer<UserProvider>(
@@ -490,6 +521,8 @@ class _HomePageState extends State<HomePage> {
                                 selectedProductSlug: _homeScreenProvider
                                     .selectedProductSlug,))
                           : User(),
+
+                      /// cart page...
                       _homeScreenProvider.selectedString == "Cart"
                           ? Cart()
                           : _homeScreenProvider.selectedString ==
@@ -502,6 +535,8 @@ class _HomePageState extends State<HomePage> {
                               EditAddress(userAddressId: _userProvider
                                   .selectedUserAddressId,))
                           : ChangeAddress(),
+
+                      /// notification page...
                       NotificationPage(),
                     ],
                     onPageChanged: (value) {

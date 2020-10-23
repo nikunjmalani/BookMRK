@@ -155,9 +155,6 @@ class _UserEditAddressState extends State<UserEditAddress> {
                           future: getAllCountry(),
                           builder: (context, countryData) {
                             if (countryData.hasData) {
-                              print('has data ');
-                            }
-                            if (countryData.hasData) {
                               return getLocationBottomSheet(
                                   context,
                                   List.generate(
@@ -241,10 +238,6 @@ class _UserEditAddressState extends State<UserEditAddress> {
                           future: getAllStateOfSelectedCountry(
                               _locationProvider.selectedCountryId),
                           builder: (context, stateData) {
-                            if (stateData.hasData &&
-                                _locationProvider.selectedCountryId != null) {
-                              print('has data ');
-                            }
                             if (stateData.hasData) {
                               return getLocationBottomSheet(
                                   context,
@@ -426,20 +419,6 @@ class _UserEditAddressState extends State<UserEditAddress> {
                         await SharedPreferences.getInstance();
                     int userId = _prefs.getInt('userId');
 
-//                  print(' user id : $userId');
-//                  print(
-//                      ' user address id : ${_userProvider.selectedUserAddressId}');
-//                  print('first name : ${_firstNameEditAddress.text}');
-//                  print('last name : ${_lastNameEditAddress.text}');
-//                  print('email : ${_emailEditAddress.text}');
-//                  print(' contact : ${_contactEditAddress.text}');
-//                  print(' zip : ${_zipEditAddress.text}');
-//                  print(' country : ${_countryEditAddress.text}');
-//                  print(' state : ${_stateEditAddress.text}');
-//                  print(' city : ${_cityEditAddress.text}');
-//                  print(' ad1 : ${_firstAddressEdit.text}');
-//                  print(' ad2 : ${_secondAddressEdit.text}');
-
                     dynamic response = await UserAPI.editUserAddress(
                       userId.toString(),
                       _userProvider.selectedUserAddressId,
@@ -453,8 +432,6 @@ class _UserEditAddressState extends State<UserEditAddress> {
                       _secondAddressEdit.text,
                       _zipEditAddress.text,
                     );
-
-                    print(response);
 
                     if (response['status'] == 200) {
                       _userProvider.userAddressEditInProgress = false;
