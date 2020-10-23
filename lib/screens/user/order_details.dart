@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/order_history_api.dart';
 import 'package:bookmrk/model/order_details_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/order_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderDetails extends StatefulWidget {
   final String orderId;
+
   OrderDetails(this.orderId);
 
   @override
@@ -25,6 +27,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     int userId = _prefs.getInt('userId');
     dynamic response = await OrderHistoryAPI.getOrderDetailsFromOrderId(
         widget.orderId.toString(), userId.toString());
+    print(widget.orderId.toString());
     OrderDetailsModel _orderDetailsModel = OrderDetailsModel.fromJson(response);
     return _orderDetailsModel;
   }
@@ -45,17 +48,22 @@ class _OrderDetailsState extends State<OrderDetails> {
                   Column(
                     children: List.generate(
                         snapshot.data.response[0].orderData.length, (index) {
-                      var total = 0;
+                      var total = 0.0;
                       snapshot.data.response[0].orderData[index].orderDetail
                           .forEach((e) {
-                        total = total + (int.parse(e.productSalePrice));
+                        try {
+                          total = total + (double.parse(e.productSalePrice));
+                          total = total.floorToDouble();
+                        } catch (e) {
+                          total = total + (int.parse(e.productSalePrice));
+                        }
                       });
                       return Container(
                         height: snapshot.data.response[0].orderData[index]
                                     .orderDetail.length ==
-                                0
-                            ? width / 1.8
-                            : width / 2.0,
+                                1
+                            ? width / 2.0
+                            : width / 1.5,
                         margin:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                         decoration: BoxDecoration(
@@ -192,11 +200,18 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  BlueOutlineButton(
-                                    width: width,
-                                    onTap: () => homeProvider.selectedString =
-                                        "OrderTracking",
-                                    title: "TRACK",
+                                  Consumer<OrderProvider>(
+                                    builder: (_, _orderProvider, child) =>
+                                        BlueOutlineButton(
+                                      width: width,
+                                      onTap: () {
+                                        homeProvider.selectedString =
+                                            "OrderTracking";
+                                        _orderProvider.orderIdToTrack =
+                                            "${snapshot.data.response[0].orderData[index].subOrderNo}";
+                                      },
+                                      title: "TRACK",
+                                    ),
                                   ),
                                   RichText(
                                     text: TextSpan(
