@@ -97,6 +97,8 @@ class _AllVendorsState extends State<AllVendors> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
+                                    print(snapshot
+                                        .data.response[index].vendorSlug);
                                     _vendorProvider.selectedVendorName =
                                         snapshot
                                             .data.response[index].vendorSlug;

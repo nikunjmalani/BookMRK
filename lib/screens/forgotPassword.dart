@@ -122,6 +122,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             NavyBlueButton(
                                 context: context,
                                 onClick: () async {
+                                  //
+                                  // Navigator.of(context).push(
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             OtpVerification()));
+
                                   _forgotPasswordProvider
                                           .isMobileNumberCheckingForgotPassword =
                                       true;

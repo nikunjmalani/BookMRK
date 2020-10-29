@@ -199,9 +199,7 @@ class _HomePageState extends State<HomePage> {
                       _homeScreenProvider.selectedString == "VendorInfo"
                           ? "All Vendors"
                           : _homeScreenProvider.selectedString ==
-                          "ProductInfo" ||
-                          _homeScreenProvider.selectedString ==
-                              "SchoolInfo"
+                          "ProductInfo"
                           ? "VendorInfo"
                           : "Home";
                     },

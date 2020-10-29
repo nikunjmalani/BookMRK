@@ -16,10 +16,9 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+                  image: imageProvider,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             placeholder: (context, url) => Container(
@@ -28,10 +27,9 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
-                    image: AssetImage('assets/images/school.png'),
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+                  image: AssetImage('assets/images/school.png'),
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
             errorWidget: (context, url, error) => Container(
@@ -40,10 +38,9 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
-                    image: AssetImage('assets/images/school.png'),
-                    fit: BoxFit.fill,
-                    colorFilter: ColorFilter.mode(
-                        Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+                  image: AssetImage('assets/images/school.png'),
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
           ),

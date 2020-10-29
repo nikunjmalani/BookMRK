@@ -134,6 +134,22 @@ class _RegisterState extends State<Register> {
                               height: 10,
                             ),
                             SuffixTextfield(
+                              onTap: () {
+                                DatePicker.showDatePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime.parse("1900-01-01"),
+                                    maxTime: DateTime.now()
+                                        .subtract(Duration(days: 365)),
+                                    onChanged: (date) {
+                                  _registerDateOfBirth.text =
+                                      date.toString().split(" ")[0];
+                                }, onConfirm: (date) {
+                                  _registerDateOfBirth.text =
+                                      date.toString().split(" ")[0];
+                                },
+                                    currentTime: DateTime.now(),
+                                    locale: LocaleType.en);
+                              },
                               obscureText: false,
                               hintText: "Date of Birth",
                               validator: (value) {
@@ -151,27 +167,9 @@ class _RegisterState extends State<Register> {
                                 return null;
                               },
                               controller: _registerDateOfBirth,
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  DatePicker.showDatePicker(context,
-                                      showTitleActions: true,
-                                      minTime: DateTime.parse("1900-01-01"),
-                                      maxTime: DateTime.now()
-                                          .subtract(Duration(days: 365)),
-                                      onChanged: (date) {
-                                    _registerDateOfBirth.text =
-                                        date.toString().split(" ")[0];
-                                  }, onConfirm: (date) {
-                                    _registerDateOfBirth.text =
-                                        date.toString().split(" ")[0];
-                                  },
-                                      currentTime: DateTime.now(),
-                                      locale: LocaleType.en);
-                                },
-                                child: Icon(
-                                  Icons.calendar_today,
-                                  color: colorPalette.navyBlue,
-                                ),
+                              suffixIcon: Icon(
+                                Icons.calendar_today,
+                                color: colorPalette.navyBlue,
                               ),
                             ),
                             SizedBox(
@@ -201,7 +199,7 @@ class _RegisterState extends State<Register> {
                             ),
                             SuffixTextfield(
                                 obscureText:
-                                    _registerProvider.isRegisterPasswordVisible,
+                                    _registerProvider.isRegisterConfirmPasswordVisible,
                                 hintText: "Confirm Password",
                                 controller: _registerConfirmPassword,
                                 validator: (value) {
@@ -217,12 +215,12 @@ class _RegisterState extends State<Register> {
                                 suffixIcon: GestureDetector(
                                   onTap: () {
                                     _registerProvider
-                                            .isRegisterPasswordVisible =
+                                            .isRegisterConfirmPasswordVisible =
                                         !_registerProvider
-                                            .isRegisterPasswordVisible;
+                                            .isRegisterConfirmPasswordVisible;
                                   },
                                   child: Icon(
-                                    _registerProvider.isRegisterPasswordVisible
+                                    _registerProvider.isRegisterConfirmPasswordVisible
                                         ? Icons.visibility
                                         : Icons.visibility_off,
                                     color: colorPalette.navyBlue,
@@ -252,62 +250,64 @@ class _RegisterState extends State<Register> {
                               builder: (context) => NavyBlueButton(
                                   context: context,
                                   onClick: () async {
-//                                    Navigator.of(context).push(
-//                                                MaterialPageRoute(
-//                                                    builder: (context) =>
-//                                                        MobileVerification()));
-                                    _registerProvider.isRegisterInProcess =
-                                        true;
-                                    // check for terms and conditions accepted or not...
-                                    if (_registerProvider
-                                        .isTermAndConditionAccepted) {
-                                      // check for fields validation...
-                                      if (_formKey.currentState.validate()) {
-                                        // call register use API...
-
-                                        dynamic response =
-                                            await RegisterAPI.registerNewUser(
-                                          firstName: _registerFirstName.text,
-                                          lastName: _registerLastName.text,
-                                          gender: _registerProvider
-                                              .selectedGenderRegister,
-                                          email: _registerEmailAddress.text,
-                                          mobile: _registerMobileNumber.text,
-                                          dob: _registerDateOfBirth.text,
-                                          password: _registerPassword.text,
-                                          confirmPassword:
-                                              _registerConfirmPassword.text,
-                                        );
-                                        if (response['status'] == 200) {
-                                          if (response['response'][0]
-                                                  ['already_exists'] !=
-                                              "0") {
-                                            _registerProvider
-                                                .isRegisterInProcess = false;
-
-                                            Scaffold.of(context).showSnackBar(
-                                                getSnackBar(
-                                                    '${response['message']}'));
-                                          } else {
-                                            _registerProvider
-                                                .isRegisterInProcess = false;
-                                            Navigator.of(context).pushReplacement(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MobileVerification()));
-                                          }
-                                        }
-                                      } else {
-                                        _registerProvider.isRegisterInProcess =
-                                            false;
-                                      }
-                                    } else {
-                                      _registerProvider.isRegisterInProcess =
-                                          false;
-
-                                      Scaffold.of(context).showSnackBar(getSnackBar(
-                                          'Please check terms and conditions'));
-                                    }
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MobileVerification(),
+                                      ),
+                                    );
+//                                     _registerProvider.isRegisterInProcess =
+//                                         true;
+//                                     // check for terms and conditions accepted or not...
+//                                     if (_registerProvider
+//                                         .isTermAndConditionAccepted) {
+//                                       // check for fields validation...
+//                                       if (_formKey.currentState.validate()) {
+//                                         // call register use API...
+//
+//                                         dynamic response =
+//                                             await RegisterAPI.registerNewUser(
+//                                           firstName: _registerFirstName.text,
+//                                           lastName: _registerLastName.text,
+//                                           gender: _registerProvider
+//                                               .selectedGenderRegister,
+//                                           email: _registerEmailAddress.text,
+//                                           mobile: _registerMobileNumber.text,
+//                                           dob: _registerDateOfBirth.text,
+//                                           password: _registerPassword.text,
+//                                           confirmPassword:
+//                                               _registerConfirmPassword.text,
+//                                         );
+//                                         if (response['status'] == 200) {
+//                                           if (response['response'][0]
+//                                                   ['already_exists'] !=
+//                                               "0") {
+//                                             _registerProvider
+//                                                 .isRegisterInProcess = false;
+//
+//                                             Scaffold.of(context).showSnackBar(
+//                                                 getSnackBar(
+//                                                     '${response['message']}'));
+//                                           } else {
+//                                             _registerProvider
+//                                                 .isRegisterInProcess = false;
+//                                             Navigator.of(context).pushReplacement(
+//                                                 MaterialPageRoute(
+//                                                     builder: (context) =>
+//                                                         MobileVerification()));
+//                                           }
+//                                         }
+//                                       } else {
+//                                         _registerProvider.isRegisterInProcess =
+//                                             false;
+//                                       }
+//                                     } else {
+//                                       _registerProvider.isRegisterInProcess =
+//                                           false;
+//
+//                                       Scaffold.of(context).showSnackBar(getSnackBar(
+//                                           'Please check terms and conditions'));
+//                                     }
                                   },
                                   title: "CONTINUE"),
                             )
@@ -342,6 +342,7 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 30.0),
                   ],
                 ),
               ),

@@ -224,25 +224,27 @@ class Product {
 }
 
 class School {
-  School({
-    this.schoolId,
-    this.schoolLogo,
-    this.schoolName,
-    this.board,
-    this.schoolBanners,
-  });
+  School(
+      {this.schoolId,
+      this.schoolLogo,
+      this.schoolName,
+      this.board,
+      this.schoolBanners,
+      this.schoolSlug});
 
   String schoolId;
   String schoolLogo;
   String schoolName;
   String board;
   List<SchoolBanner> schoolBanners;
+  String schoolSlug;
 
   factory School.fromJson(Map<String, dynamic> json) => School(
         schoolId: json["school_id"],
         schoolLogo: json["school_logo"],
         schoolName: json["school_name"],
         board: json["board"],
+        schoolSlug: json["school_slug"],
         schoolBanners: List<SchoolBanner>.from(
             json["school_banners"].map((x) => SchoolBanner.fromJson(x))),
       );
@@ -252,6 +254,7 @@ class School {
         "school_logo": schoolLogo,
         "school_name": schoolName,
         "board": board,
+        "school_slug": schoolSlug,
         "school_banners":
             List<dynamic>.from(schoolBanners.map((x) => x.toJson())),
       };
@@ -274,27 +277,28 @@ class SchoolBanner {
 }
 
 class Vendor {
-  Vendor({
-    this.vendorId,
-    this.fname,
-    this.lname,
-    this.companyName,
-    this.companyLogo,
-  });
+  Vendor(
+      {this.vendorId,
+      this.fname,
+      this.lname,
+      this.companyName,
+      this.companyLogo,
+      this.vendorSlug});
 
   String vendorId;
   String fname;
   String lname;
   String companyName;
   String companyLogo;
+  String vendorSlug;
 
   factory Vendor.fromJson(Map<String, dynamic> json) => Vendor(
-        vendorId: json["vendor_id"],
-        fname: json["fname"],
-        lname: json["lname"],
-        companyName: json["company_name"],
-        companyLogo: json["company_logo"],
-      );
+      vendorId: json["vendor_id"],
+      fname: json["fname"],
+      lname: json["lname"],
+      companyName: json["company_name"],
+      companyLogo: json["company_logo"],
+      vendorSlug: json["vendor_slug"]);
 
   Map<String, dynamic> toJson() => {
         "vendor_id": vendorId,
@@ -302,5 +306,6 @@ class Vendor {
         "lname": lname,
         "company_name": companyName,
         "company_logo": companyLogo,
+        "vendor_slug": vendorSlug
       };
 }

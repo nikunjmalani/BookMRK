@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:bookmrk/api/home_page_api.dart';
 import 'package:bookmrk/model/home_page_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
@@ -75,6 +78,7 @@ class _HomeState extends State<Home> {
                         banners: snapshot.data.response[0].homeBanner,
                         pageController: pageController,
                       ),
+                      SizedBox(height: 20.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
@@ -189,6 +193,9 @@ class _HomeState extends State<Home> {
                                             ),
                                             Container(
                                               width: width * 0.5,
+                                              padding: EdgeInsets.only(
+                                                left: 5.0,
+                                              ),
                                               child: Text(
                                                 '${snapshot.data.response[0].product[index].productName}',
                                                 overflow: TextOverflow.ellipsis,
@@ -280,6 +287,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
+                      SizedBox(height: 30.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
@@ -303,11 +311,13 @@ class _HomeState extends State<Home> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                /// school info require school slug, and here, we are not getting school slug
-                                /// so do not redirect to schoolInfo page from home page...
-//                                Provider.of<HomeScreenProvider>(context,
-//                                        listen: false)
-//                                    .selectedString = "SchoolInfo";
+                                Provider.of<HomeScreenProvider>(context,
+                                        listen: false)
+                                    .selectedString = "SchoolInfo";
+                                Provider.of<SchoolProvider>(context,
+                                            listen: false)
+                                        .selectedSchoolSlug =
+                                    "${snapshot.data.response[0].school[index].schoolSlug}";
                               },
                               child: ImageBox(
                                   height: height,
@@ -322,9 +332,7 @@ class _HomeState extends State<Home> {
                           scrollDirection: Axis.horizontal,
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
+                      SizedBox(height: 40.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: Row(
@@ -346,13 +354,24 @@ class _HomeState extends State<Home> {
                         height: height / 5,
                         child: ListView.builder(
                           itemBuilder: (context, index) {
-                            return ImageBox(
-                                height: height,
-                                width: width,
-                                image:
-                                    "${snapshot.data.response[0].vendor[index].companyLogo}",
-                                title:
-                                    "${snapshot.data.response[0].vendor[index].companyName}");
+                            return GestureDetector(
+                              onTap: () {
+                                Provider.of<VendorProvider>(context,
+                                            listen: false)
+                                        .selectedVendorName =
+                                    "${snapshot.data.response[0].vendor[index].vendorSlug}";
+                                Provider.of<HomeScreenProvider>(context,
+                                        listen: false)
+                                    .selectedString = "VendorInfo";
+                              },
+                              child: ImageBox(
+                                  height: height,
+                                  width: width,
+                                  image:
+                                      "${snapshot.data.response[0].vendor[index].companyLogo}",
+                                  title:
+                                      "${snapshot.data.response[0].vendor[index].companyName}"),
+                            );
                           },
                           itemCount: snapshot.data.response[0].vendor.length,
                           scrollDirection: Axis.horizontal,

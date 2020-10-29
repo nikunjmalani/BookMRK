@@ -137,58 +137,44 @@ class _CategoryInfoState extends State<CategoryInfo> {
                     ],
                   ),
                   Consumer<CategoryProvider>(
-                      builder: (_, _categoryProvider, child) => Consumer<
-                              HomeScreenProvider>(
-                          builder: (_, _homeScreenProvider, child) => Container(
-                                height: height / 15,
-                                child: snapshot.data.response[0].subCategory
-                                            .length >
-                                        0
-                                    ? ListView.builder(
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              _homeScreenProvider
-                                                      .selectedString =
-                                                  "CategoryInfo";
-                                              _categoryProvider
-                                                      .selectedCategoryName =
-                                                  "${snapshot.data.response[0].subCategory[index].catSlug}";
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 20),
-                                              child: Text(
-                                                '${snapshot.data.response[0].subCategory[index].categoryName}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 14,
-                                                    color:
-                                                        colorPalette.navyBlue),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        itemCount: snapshot.data.response[0]
-                                            .subCategory.length,
-                                      )
-                                    : Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 20),
-                                        child: Text(
-                                          'No Subcategory',
-                                          style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 14,
-                                              color: colorPalette.navyBlue),
-                                          textAlign: TextAlign.left,
-                                        ),
+                    builder: (_, _categoryProvider, child) =>
+                        Consumer<HomeScreenProvider>(
+                      builder: (_, _homeScreenProvider, child) => Container(
+                        height: snapshot.data.response[0].subCategory.length > 0
+                            ? height / 15
+                            : height / 45,
+                        child: snapshot.data.response[0].subCategory.length > 0
+                            ? ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      _homeScreenProvider.selectedString =
+                                          "CategoryInfo";
+                                      _categoryProvider.selectedCategoryName =
+                                          "${snapshot.data.response[0].subCategory[index].catSlug}";
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                      child: Text(
+                                        '${snapshot.data.response[0].subCategory[index].categoryName}',
+                                        style: TextStyle(
+                                            fontFamily: 'Roboto',
+                                            fontSize: 14,
+                                            color: colorPalette.navyBlue),
+                                        textAlign: TextAlign.left,
                                       ),
-                              ))),
+                                    ),
+                                  );
+                                },
+                                itemCount: snapshot
+                                    .data.response[0].subCategory.length,
+                              )
+                            : SizedBox(),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),

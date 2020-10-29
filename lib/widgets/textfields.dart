@@ -44,6 +44,7 @@ Widget SuffixTextfield({
   TextEditingController controller,
   bool obscureText,
   Function validator,
+  Function onTap,
 }) {
   ColorPalette colorPalette = ColorPalette();
 
@@ -60,6 +61,7 @@ Widget SuffixTextfield({
 
   return TextFormField(
     validator: validator,
+    onTap: onTap,
     controller: controller,
     obscureText: obscureText,
     decoration: InputDecoration(

@@ -39,7 +39,7 @@ dependencies:
   permission_handler:
   flutter_html:
   google_maps_flutter:
-
+  webview_flutter:
 
 dev_dependencies:
   flutter_test:
