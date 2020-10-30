@@ -11,4 +11,17 @@ class MapProvider extends ChangeNotifier {
     _selectedLatLng = value;
     notifyListeners();
   }
+
+  /// selected latlong for address add....
+  LatLng _addressSelectedLatLng = LatLng(21.214603285574814, 72.88839161396027);
+
+  LatLng get addressSelectedLatLng => _addressSelectedLatLng;
+
+  set addressSelectedLatLng(LatLng value) {
+    _addressSelectedLatLng = value;
+    notifyListeners();
+  }
+
+  /// converted address from latlong for address line 1..
+
 }

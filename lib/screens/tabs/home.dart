@@ -133,8 +133,8 @@ class _HomeState extends State<Home> {
                                             child: CategoryButtons(
                                               width,
                                               "${snapshot.data.response[0].category[index].categoryName}",
-                                              colorPalette.navyBlue,
-                                              Color(0xff6A4B9C),
+                                              index == 0 ? colorPalette.orange : colorPalette.navyBlue,
+                                              index == 0 ? colorPalette.pinkOrange : Color(0xff6A4B9C),
                                             ),
                                           ),
                                         )),

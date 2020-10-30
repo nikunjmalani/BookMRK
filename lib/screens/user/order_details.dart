@@ -250,7 +250,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    height: width / 2.5,
+                    height: width / 2.3,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: colorPalette.grey,

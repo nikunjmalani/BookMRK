@@ -3,11 +3,14 @@ import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/provider/city_model.dart';
 import 'package:bookmrk/provider/country_model.dart';
 import 'package:bookmrk/provider/location_name_provider.dart';
+import 'package:bookmrk/provider/map_provider.dart';
 import 'package:bookmrk/provider/state_model.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/widgets/addressTextfields.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,6 +54,19 @@ class _UserAddAddressState extends State<UserAddAddress> {
     return _cityModel;
   }
 
+  /// get the current location of the user....
+  getLocation() async {
+    Location _location = Location();
+    dynamic value = await _location.getLocation();
+    print(value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -60,6 +76,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.vertical,
+              physics: BouncingScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
@@ -343,10 +360,108 @@ class _UserAddAddressState extends State<UserAddAddress> {
                     SizedBox(
                       height: width / 20,
                     ),
-                    AddressTextFields(
-                        width: width,
-                        title: "Address Line 1",
-                        controller: _firstAddressController),
+                    Row(
+                      children: [
+                        AddressTextFields(
+                            width: width / 1.43,
+                            title: "Address Line 1",
+                            controller: _firstAddressController),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 40.0, vertical: 150.0),
+                                    color: colorPalette.navyBlue,
+                                    child: Material(
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 50,
+                                            color: colorPalette.navyBlue,
+                                            child: Row(
+                                              children: [
+                                                Spacer(),
+                                                Text(
+                                                  'Done',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18.0),
+                                                ),
+                                                SizedBox(
+                                                  width: 20.0,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              child: Consumer<MapProvider>(
+                                                builder:
+                                                    (_, _mapProvider, child) =>
+                                                        GoogleMap(
+                                                  initialCameraPosition:
+                                                      CameraPosition(
+                                                    target: LatLng(
+                                                        _mapProvider
+                                                            .addressSelectedLatLng
+                                                            .latitude,
+                                                        _mapProvider
+                                                            .addressSelectedLatLng
+                                                            .longitude),
+                                                    zoom: 14,
+                                                  ),
+                                                  onTap: (position) {
+                                                    _mapProvider
+                                                            .addressSelectedLatLng =
+                                                        position;
+                                                  },
+                                                  minMaxZoomPreference:
+                                                      MinMaxZoomPreference(9, 20),
+                                                  markers: {
+                                                    Marker(
+                                                        markerId: MarkerId("1"),
+                                                        visible: true,
+                                                        position: LatLng(
+                                                          _mapProvider
+                                                              .addressSelectedLatLng
+                                                              .latitude,
+                                                          _mapProvider
+                                                              .addressSelectedLatLng
+                                                              .longitude,
+                                                        ))
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Container(
+                            height: 60,
+                            width: width / 5.5,
+                            margin: EdgeInsets.only(top: 23.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                    width: 1.2, color: Color(0x80515c6f))),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.map,
+                              size: 30.0,
+                              color: colorPalette.navyBlue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: width / 20,
                     ),
@@ -355,7 +470,10 @@ class _UserAddAddressState extends State<UserAddAddress> {
                         title: "Address Line 2",
                         controller: _secondAddressController),
                     SizedBox(
-                      height: width / 3,
+                      width: 10.0,
+                    ),
+                    SizedBox(
+                      height: width / 2,
                     ),
                   ],
                 ),
