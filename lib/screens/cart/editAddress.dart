@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/location_name_api.dart';
 import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/edit_address_info_model.dart';
 import 'package:bookmrk/provider/city_model.dart';
 import 'package:bookmrk/provider/country_model.dart';
@@ -14,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EditAddress extends StatefulWidget {
   final String userAddressId;
@@ -61,8 +61,8 @@ class _EditAddressState extends State<EditAddress> {
 
   /// get default address information to edit
   Future getDefaultAddressInformationToEdit() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic response = await UserAPI.getCurrentAddressForEdit(
         userId.toString(), widget.userAddressId);
     EditAddressInfoModel _editAddressInfoModel =
@@ -591,9 +591,8 @@ class _EditAddressState extends State<EditAddress> {
                     _userProvider.userAddressEditInProgress = true;
 
                     /// change address from user profile..
-                    SharedPreferences _prefs =
-                        await SharedPreferences.getInstance();
-                    int userId = _prefs.getInt('userId');
+
+                    int userId =  prefs.read<int>('userId');
 
                     dynamic response = await UserAPI.editUserAddress(
                       userId.toString(),

@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/forgot_password_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
@@ -6,7 +7,6 @@ import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'otpVerification.dart';
 
@@ -134,9 +134,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   if (_mobileNumberForgotPassword.text != "" &&
                                       _mobileNumberForgotPassword.text !=
                                           null) {
-                                    SharedPreferences _prefs =
-                                        await SharedPreferences.getInstance();
-                                    int userId = _prefs.getInt('userId');
+                                    int userId = prefs.read<int>('userId');
 
                                     dynamic response =
                                         await ForgotPasswordAPI.forgotPassword(
@@ -158,9 +156,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                       _registerProvider
                                               .isOTPVerificationPageFromRegisterUser =
                                           false;
-                                      SharedPreferences _prefs =
-                                          await SharedPreferences.getInstance();
-                                      _prefs.setInt(
+
+                                      prefs.write(
                                           'userId',
                                           int.parse(
                                               '${response['response'][0]['user_id'].toString()}'));

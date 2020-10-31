@@ -1,5 +1,6 @@
 import 'package:bookmrk/api/search_api.dart';
 import 'package:bookmrk/api/wishlist_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/no_data_model.dart';
 import 'package:bookmrk/model/search_product_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -9,7 +10,6 @@ import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Search2 extends StatefulWidget {
   @override
@@ -28,8 +28,8 @@ class _Search2State extends State<Search2> {
       productName = "a";
     }
 
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic response =
         await SearchAPI.searchProductHomePage(productName, userId.toString());
     if (response['response'].length == 0) {
@@ -222,9 +222,8 @@ class _Search2State extends State<Search2> {
                                   right: 0,
                                   child: IconButton(
                                     onPressed: () async {
-                                      SharedPreferences _prefs =
-                                          await SharedPreferences.getInstance();
-                                      int userId = _prefs.getInt('userId');
+
+                                      int userId =  prefs.read<int>('userId');
                                       dynamic response = await WishListAPI
                                           .addProductInWishList(
                                               userId.toString(),

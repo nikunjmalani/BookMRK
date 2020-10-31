@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/forgot_password_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
@@ -6,7 +7,6 @@ import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeMobile extends StatefulWidget {
   final String selectedMobileNumber;
@@ -104,9 +104,8 @@ class _ChangeMobileState extends State<ChangeMobile> {
                           context: context,
                           onClick: () async {
                             _userProvider.isOtpSendingInProgress = true;
-                            SharedPreferences _prefs =
-                                await SharedPreferences.getInstance();
-                            int userId = _prefs.getInt('userId');
+
+                            int userId = prefs.read<int>('userId');
                             dynamic response =
                                 await ForgotPasswordAPI.forgotPassword(
                                     _mobileNumberController.text, userId);

@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/register_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
@@ -9,7 +10,6 @@ import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../resetPassword.dart';
 
@@ -129,12 +129,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     if (_registerProvider
                                         .isOTPVerificationPageFromRegisterUser) {
                                       /// when mobile number verification..
-                                      SharedPreferences _prefs =
-                                          await SharedPreferences.getInstance();
-                                      bool login = _prefs.getBool('isLogin');
+                                      bool login = prefs.read<bool>('isLogin');
                                       int userId;
                                       if (login) {
-                                        userId = _prefs.getInt('userId');
+                                        userId =  prefs.read<int>('userId');
                                       }
 
                                       dynamic response =

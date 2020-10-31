@@ -1,9 +1,10 @@
 import 'package:bookmrk/api/notification_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/notification_model.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class NotificationPage extends StatefulWidget {
   @override
@@ -13,8 +14,7 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   /// get all the notification ....
   Future getNotifications() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId =  prefs.read<int>('userId');
     dynamic response =
         await NotificationAPI.getAllNotification(userId.toString());
     NotificationModel _notificationModel = NotificationModel.fromJson(response);

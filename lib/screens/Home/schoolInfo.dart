@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/school_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/school_product_model.dart';
 import 'package:bookmrk/model/school_subcategory_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -10,7 +11,6 @@ import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SchoolInfo extends StatefulWidget {
   final String schoolSlug;
@@ -28,8 +28,8 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
   /// api to get school product details....
   Future getSchoolProductDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic data = await SchoolAPI.getSchoolProductDetails(
         widget.schoolSlug, userId.toString());
 
@@ -40,8 +40,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
   /// call api for get products of selected subcategory in school...
   Future getSubCategoryProducts(String subCategoryId) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId =  prefs.read<int>('userId');
     dynamic response = await SchoolAPI.getSubcategoryProductsOfSchool(
         userId.toString(), widget.schoolSlug, subCategoryId.toString());
     SchoolSubcategoryModel _schoolSubcategoryModel =

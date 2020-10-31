@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/location_name_api.dart';
 import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/city_model.dart';
 import 'package:bookmrk/provider/country_model.dart';
 import 'package:bookmrk/provider/location_name_provider.dart';
@@ -13,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class AddAddress extends StatefulWidget {
   @override
@@ -549,9 +550,7 @@ class _AddAddressState extends State<AddAddress> {
               child: GestureDetector(
                 onTap: () async {
                   _userProvider.isAddAddressInProcess = true;
-                  SharedPreferences _prefs =
-                      await SharedPreferences.getInstance();
-                  int userId = _prefs.getInt('userId');
+                  int userId =  prefs.read<int>('userId');
 
                   dynamic response = await UserAPI.addNewUserAddress(
                     userId.toString(),

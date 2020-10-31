@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bookmrk/api/cart_api.dart';
 import 'package:bookmrk/api/product_api.dart';
 import 'package:bookmrk/api/wishlist_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/product_details_model.dart';
 import 'package:bookmrk/model/product_details_no_variation_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -16,7 +17,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductInfo extends StatefulWidget {
   final String selectedProductSlug;
@@ -45,8 +45,8 @@ class _ProductInfoState extends State<ProductInfo> {
 
   /// get the product details...
   Future getProductDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic response = await ProductAPI.getProductDetails(
         widget.selectedProductSlug, userId.toString());
 
@@ -604,11 +604,8 @@ class _ProductInfoState extends State<ProductInfo> {
                                               String pvsmId;
 
                                               /// set userId ....
-                                              SharedPreferences _prefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
                                               int userId =
-                                                  _prefs.getInt('userId');
+                                                  prefs.read<int>('userId');
 
                                               /// set productId ....
                                               String productId = snapshot
@@ -1048,9 +1045,8 @@ Widget _productCarasoul(BuildContext context,
             Consumer<HomeScreenProvider>(
               builder: (_, _homeScreenProvider, child) => IconButton(
                 onPressed: () async {
-                  SharedPreferences _prefs =
-                      await SharedPreferences.getInstance();
-                  int userId = _prefs.getInt('userId');
+
+                  int userId =  prefs.read<int>('userId');
                   dynamic response = await WishListAPI.addProductInWishList(
                       userId.toString(), productId);
                 },

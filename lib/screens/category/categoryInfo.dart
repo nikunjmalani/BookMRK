@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/category_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/category_product_model.dart';
 import 'package:bookmrk/model/no_data_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
@@ -9,7 +10,6 @@ import 'package:bookmrk/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryInfo extends StatefulWidget {
   final String categoryName;
@@ -22,8 +22,8 @@ class CategoryInfo extends StatefulWidget {
 
 class _CategoryInfoState extends State<CategoryInfo> {
   Future getCategoryProductsDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
         widget.categoryName, userId.toString());
     if (categoryProductsDetails['response'].length == "0") {

@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/order_history_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/order_details_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/order_provider.dart';
@@ -7,7 +8,7 @@ import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class OrderDetails extends StatefulWidget {
   final String orderId;
@@ -23,8 +24,7 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   /// get orderDetails...
   Future getOrderDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getOrderDetailsFromOrderId(
         widget.orderId.toString(), userId.toString());
     print(widget.orderId.toString());

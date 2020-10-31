@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/order_history_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/no_data_model.dart';
 import 'package:bookmrk/model/order_history_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -7,7 +8,6 @@ import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyOrders extends StatefulWidget {
   @override
@@ -17,8 +17,7 @@ class MyOrders extends StatefulWidget {
 class _MyOrdersState extends State<MyOrders> {
   /// get order history...
   Future getOrderList(String status) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
 
     dynamic response =
         await OrderHistoryAPI.getOrderHistoryDetails(userId.toString(), status);

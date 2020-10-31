@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/login_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/login_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
@@ -9,7 +10,6 @@ import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'homePage.dart';
 
@@ -114,10 +114,8 @@ class _LoginState extends State<Login> {
 
                               if (response['status'] == 200) {
                                 _loginProvider.isPasswordChecking = false;
-                                SharedPreferences _prefs =
-                                    await SharedPreferences.getInstance();
-                                _prefs.setBool('isLogin', true);
-                                _prefs.setInt(
+                                prefs.write('isLogin', true);
+                                prefs.write(
                                     'userId',
                                     int.parse(response['data'][0]['user_id']
                                         .toString()));

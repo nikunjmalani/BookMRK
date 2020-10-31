@@ -1,5 +1,6 @@
 import 'package:bookmrk/api/cart_api.dart';
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/cart_details_model.dart';
 import 'package:bookmrk/model/no_data_cart_model.dart';
 import 'package:bookmrk/model/user_address_model.dart';
@@ -12,7 +13,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Cart extends StatefulWidget {
   @override
@@ -27,8 +27,7 @@ class _CartState extends State<Cart> {
 
   /// get cart details of user...
   Future getCartDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await CartAPI.getCartData(userId.toString());
     if (response['response'][0].length == 0) {
       NoDataCartModel _noDataCart = NoDataCartModel.fromJson(response);
@@ -41,8 +40,8 @@ class _CartState extends State<Cart> {
 
   /// get selected address details...
   Future getSelectedAddressInCart() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic response = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userAddress = UserAddressModel.fromJson(response);
     return _userAddress;
@@ -293,12 +292,9 @@ class _CartState extends State<Cart> {
                                                           _productOrderProvider
                                                                   .isProductRemovingFromCartInProgress =
                                                               true;
-                                                          SharedPreferences
-                                                              _prefs =
-                                                              await SharedPreferences
-                                                                  .getInstance();
-                                                          int userId = _prefs
-                                                              .getInt('userId');
+
+                                                          int userId =  prefs
+                                                              .read<int>('userId');
                                                           dynamic response =
                                                               await CartAPI.removeCart(
                                                                   userId

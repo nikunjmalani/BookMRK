@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'homePage.dart';
 import 'onBoarding.dart';
@@ -21,8 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
   navigateToAnotherScreen() async {
     await Future.delayed(Duration(seconds: 2), () async {
       _homeScreenProvider.selectedString = "Home";
-      SharedPreferences _prefs = await SharedPreferences.getInstance();
-      bool isLogin = _prefs.getBool("isLogin");
+      bool isLogin = prefs.read<bool>("isLogin");
       if (isLogin ?? false) {
         Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (context) => HomePage()));

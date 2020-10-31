@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bookmrk/api/order_history_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/track_order_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/map_provider.dart';
@@ -9,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 class OrderTracking extends StatefulWidget {
   final String orderIdToTrack;
 
@@ -25,8 +24,7 @@ class _OrderTrackingState extends State<OrderTracking> {
 
   /// get Information to track order details...
   Future getTrackingInformation() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
         userId.toString(), widget.orderIdToTrack);
     TrackOrderModel _trackOrderModel = TrackOrderModel.fromJson(response);

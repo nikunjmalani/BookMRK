@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
@@ -7,7 +8,6 @@ import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeAddress extends StatefulWidget {
   @override
@@ -17,8 +17,8 @@ class ChangeAddress extends StatefulWidget {
 class _ChangeAddressState extends State<ChangeAddress> {
   /// get user address in cart page..
   Future getUserAddress() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic response = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userModel = UserAddressModel.fromJson(response);
     return _userModel;
@@ -126,9 +126,8 @@ class _ChangeAddressState extends State<ChangeAddress> {
                               ? () {}
                               : () async {
                                   _userProvider.changeAddressInProgress = true;
-                                  SharedPreferences _prefs =
-                                      await SharedPreferences.getInstance();
-                                  int userId = _prefs.getInt('userId');
+
+                                  int userId =  prefs.read<int>('userId');
                                   dynamic response =
                                       await UserAPI.changeSelectedUserAddress(
                                           userId.toString(),

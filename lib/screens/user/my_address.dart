@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/map_provider.dart';
@@ -9,7 +10,6 @@ import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAddress extends StatefulWidget {
   @override
@@ -20,8 +20,8 @@ class _MyAddressState extends State<MyAddress> {
   ColorPalette colorPalette = ColorPalette();
 
   Future getUserAddress() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId = prefs.read<int>('userId');
     dynamic data = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userAddressModel = UserAddressModel.fromJson(data);
     return _userAddressModel;
@@ -190,12 +190,9 @@ class _MyAddressState extends State<MyAddress> {
                                                           IconButton(
                                                             onPressed:
                                                                 () async {
-                                                              SharedPreferences
-                                                                  _prefs =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
+
                                                               int userId =
-                                                                  _prefs.getInt(
+                                                                  prefs.read<int>(
                                                                       'userId');
                                                               String
                                                                   userAddressId =
@@ -241,11 +238,9 @@ class _MyAddressState extends State<MyAddress> {
                                                     _userProvider
                                                             .changeAddressInProgress =
                                                         true;
-                                                    SharedPreferences _prefs =
-                                                        await SharedPreferences
-                                                            .getInstance();
+
                                                     int userId =
-                                                        _prefs.getInt('userId');
+                                                     prefs.read<int>('userId');
                                                     dynamic response = await UserAPI
                                                         .changeSelectedUserAddress(
                                                             userId.toString(),
