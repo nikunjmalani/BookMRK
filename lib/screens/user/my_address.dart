@@ -1,6 +1,7 @@
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/map_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
@@ -48,6 +49,7 @@ class _MyAddressState extends State<MyAddress> {
                                   Provider.of<HomeScreenProvider>(context,
                                           listen: false)
                                       .selectedString = "UserAddAddress";
+                                  Provider.of<MapProvider>(context, listen: false).isLatLngSelected = false;
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +95,7 @@ class _MyAddressState extends State<MyAddress> {
                                             padding: EdgeInsets.only(top: 20),
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 16, vertical: 10),
-                                            height: width / 2.2,
+                                            height: width / 2,
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: colorPalette.grey,
@@ -138,20 +140,42 @@ class _MyAddressState extends State<MyAddress> {
                                                           SizedBox(
                                                             height: 5,
                                                           ),
-                                                          Text(
-                                                            '${snapshot.data.response[index].address1}, \n${snapshot.data.response[index].address2}, ${snapshot.data.response[index].city}, \n${snapshot.data.response[index].state}, ${snapshot.data.response[index].country}\n${snapshot.data.response[index].pincode}',
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Roboto',
-                                                              fontSize: 13,
-                                                              color: const Color(
-                                                                  0xffa9a9aa),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
+                                                          Container(
+                                                            width: 200.0,
+                                                            child: Text(
+                                                              'address 1 : ${snapshot.data.response[index].address1},',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 13,
+                                                                color: const Color(
+                                                                    0xffa9a9aa),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign.left,
                                                             ),
-                                                            textAlign:
-                                                                TextAlign.left,
+                                                          ),
+                                                          SizedBox(height: 5,),
+                                                          Container(
+                                                            width: 200.0,
+                                                            child: Text(
+                                                              'address 2 : ${snapshot.data.response[index].address2}',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                'Roboto',
+                                                                fontSize: 13,
+                                                                color: const Color(
+                                                                    0xffa9a9aa),
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w300,
+                                                              ),
+                                                              textAlign:
+                                                              TextAlign.left,
+                                                            ),
                                                           ),
                                                         ],
                                                       ),

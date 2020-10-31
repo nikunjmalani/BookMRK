@@ -42,7 +42,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                   return Container(
                     padding: EdgeInsets.only(top: 20),
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    height: width / 2.2,
+                    height: width / 2,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: colorPalette.grey,
@@ -73,15 +73,34 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    '${snapshot.data.response[index].address1}, \n${snapshot.data.response[index].address2}, ${snapshot.data.response[index].city}, \n${snapshot.data.response[index].state}, ${snapshot.data.response[index].country}\n${snapshot.data.response[index].pincode}',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 13,
-                                      color: const Color(0xffa9a9aa),
-                                      fontWeight: FontWeight.w300,
+                                  Container(
+                                    width: width / 1.8,
+                                    child: Text(
+                                      'address 1 : ${snapshot.data.response[index].address1}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 13,
+                                        color: const Color(0xffa9a9aa),
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                    width: width / 1.8,
+                                    child: Text(
+                                      'address 2 : ${snapshot.data.response[index].address2}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 13,
+                                        color: const Color(0xffa9a9aa),
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
                                   ),
                                 ],
                               ),

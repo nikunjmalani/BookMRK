@@ -1,13 +1,17 @@
 import 'package:bookmrk/api/location_name_api.dart';
+import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/provider/city_model.dart';
 import 'package:bookmrk/provider/country_model.dart';
 import 'package:bookmrk/provider/location_name_provider.dart';
+import 'package:bookmrk/provider/map_provider.dart';
 import 'package:bookmrk/provider/state_model.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/widgets/addressTextfields.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +21,8 @@ class AddAddress extends StatefulWidget {
 }
 
 class _AddAddressState extends State<AddAddress> {
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   /// TextFields
   TextEditingController _firstNameAddressController = TextEditingController();
   TextEditingController _lastNameAddressController = TextEditingController();
@@ -49,6 +55,35 @@ class _AddAddressState extends State<AddAddress> {
     dynamic response = await LocationNameAPI.getAllCityOfState(stateId);
     CityModel _cityModel = CityModel.fromJson(response);
     return _cityModel;
+  }
+
+  /// get the current location of the user....
+  getLocation() async {
+    Location _location = Location();
+
+    if (await _location.hasPermission() == PermissionStatus.granted) {
+      LocationData value = await _location.getLocation();
+      Provider.of<MapProvider>(context, listen: false).addressSelectedLatLng =
+          LatLng(value.latitude, value.longitude);
+    } else {
+      _location.requestPermission().then((value) async {
+        if (value == PermissionStatus.granted) {
+          LocationData value = await _location.getLocation();
+          Provider.of<MapProvider>(context, listen: false)
+              .addressSelectedLatLng = LatLng(value.latitude, value.longitude);
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) => _scaffoldKey
+              .currentState
+              .showSnackBar(getSnackBar('Please Give Permission !')));
+        }
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
   }
 
   @override
@@ -346,10 +381,155 @@ class _AddAddressState extends State<AddAddress> {
                     SizedBox(
                       height: width / 20,
                     ),
-                    AddressTextFields(
-                        width: width,
-                        title: "Address Line 1",
-                        controller: _firstAddressController),
+                    Row(
+                      children: [
+                        AddressTextFields(
+                            width: width / 1.43,
+                            title: "Address Line 1",
+                            controller: _firstAddressController),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: 40.0, vertical: 150.0),
+                                    color: colorPalette.navyBlue,
+                                    child: Material(
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: 50,
+                                            color: colorPalette.navyBlue,
+                                            child: Row(
+                                              children: [
+                                                Spacer(),
+                                                Consumer<MapProvider>(
+                                                  builder:
+                                                      (_, _mapProvider, child) {
+                                                    return GestureDetector(
+                                                      onTap: () async {
+                                                        print(_mapProvider
+                                                            .addressSelectedLatLng);
+                                                        dynamic response = await MapAPI
+                                                            .getAddressFromLatLng(
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .latitude,
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .longitude);
+                                                        if (response[
+                                                                'status'] ==
+                                                            "OK") {
+                                                          _mapProvider
+                                                                  .addressLine1FromLatLng =
+                                                              response['results']
+                                                                      [0][
+                                                                  'formatted_address'];
+                                                          _mapProvider
+                                                                  .isLatLngSelected =
+                                                              true;
+                                                          _firstAddressController
+                                                                  .text =
+                                                              _mapProvider
+                                                                  .addressLine1FromLatLng;
+                                                          Navigator.pop(
+                                                              context);
+                                                        } else {
+                                                          _mapProvider
+                                                              .addressLine1FromLatLng = "";
+                                                          _firstAddressController
+                                                                  .text =
+                                                              _mapProvider
+                                                                  .addressLine1FromLatLng;
+                                                          Navigator.pop(
+                                                              context);
+                                                        }
+                                                      },
+                                                      child: Text(
+                                                        'Done',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18.0),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                  width: 20.0,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              child: Consumer<MapProvider>(
+                                                builder:
+                                                    (_, _mapProvider, child) =>
+                                                        GoogleMap(
+                                                  initialCameraPosition:
+                                                      CameraPosition(
+                                                    target: LatLng(
+                                                        _mapProvider
+                                                            .addressSelectedLatLng
+                                                            .latitude,
+                                                        _mapProvider
+                                                            .addressSelectedLatLng
+                                                            .longitude),
+                                                    zoom: 14,
+                                                  ),
+                                                  onTap: (position) {
+                                                    _mapProvider
+                                                            .addressSelectedLatLng =
+                                                        position;
+                                                  },
+                                                  minMaxZoomPreference:
+                                                      MinMaxZoomPreference(
+                                                          9, 20),
+                                                  markers: {
+                                                    Marker(
+                                                        markerId: MarkerId("1"),
+                                                        visible: true,
+                                                        position: LatLng(
+                                                          _mapProvider
+                                                              .addressSelectedLatLng
+                                                              .latitude,
+                                                          _mapProvider
+                                                              .addressSelectedLatLng
+                                                              .longitude,
+                                                        ))
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Container(
+                            height: 60,
+                            width: width / 5.5,
+                            margin: EdgeInsets.only(top: 23.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border: Border.all(
+                                    width: 1.2, color: Color(0x80515c6f))),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.map,
+                              size: 30.0,
+                              color: colorPalette.navyBlue,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: width / 20,
                     ),

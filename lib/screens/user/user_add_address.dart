@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:bookmrk/api/location_name_api.dart';
+import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/provider/city_model.dart';
 import 'package:bookmrk/provider/country_model.dart';
@@ -20,6 +24,10 @@ class UserAddAddress extends StatefulWidget {
 }
 
 class _UserAddAddressState extends State<UserAddAddress> {
+
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   /// TextFields
   TextEditingController _firstNameAddressController = TextEditingController();
   TextEditingController _lastNameAddressController = TextEditingController();
@@ -57,8 +65,23 @@ class _UserAddAddressState extends State<UserAddAddress> {
   /// get the current location of the user....
   getLocation() async {
     Location _location = Location();
-    dynamic value = await _location.getLocation();
-    print(value);
+
+    if (await _location.hasPermission() == PermissionStatus.granted) {
+      LocationData value = await _location.getLocation();
+      Provider.of<MapProvider>(context, listen: false).addressSelectedLatLng =
+          LatLng(value.latitude, value.longitude);
+    } else {
+      _location.requestPermission().then((value) async {
+        if (value == PermissionStatus.granted) {
+          LocationData value = await _location.getLocation();
+          Provider.of<MapProvider>(context, listen: false)
+              .addressSelectedLatLng = LatLng(value.latitude, value.longitude);
+        } else {
+          WidgetsBinding.instance
+              .addPostFrameCallback((_) => _scaffoldKey.currentState.showSnackBar(getSnackBar('Please Give Permission !')));
+        }
+      });
+    }
   }
 
   @override
@@ -70,479 +93,529 @@ class _UserAddAddressState extends State<UserAddAddress> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return Consumer<LocationProvider>(
-      builder: (_, _locationProvider, child) => Consumer<UserProvider>(
-        builder: (_, _userProvider, child) => Stack(
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              physics: BouncingScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    AddressTextFields(
-                        width: width,
-                        title: "First Name",
-                        controller: _firstNameAddressController),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    AddressTextFields(
-                        width: width,
-                        title: "Last Name",
-                        controller: _lastNameAddressController),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    AddressTextFields(
-                        width: width,
-                        title: "Email",
-                        controller: _emailAddressController),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    AddressTextFields(
-                        width: width,
-                        title: "Contact Number",
-                        controller: _contactNumberAddressController),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AddressTextFields(
-                            width: width / 2.25,
-                            title: "Zip Code",
-                            controller: _zipCodeAddressController),
-                        FutureBuilder(
-                          future: getAllCountry(),
-                          builder: (context, countryData) {
-                            if (countryData.hasData) {
-                              return getLocationBottomSheet(
-                                  context,
-                                  List.generate(
-                                      countryData.data.response.length,
-                                      (index) => {
-                                            "name":
-                                                "${countryData.data.response[index].name}",
-                                            "id":
-                                                "${countryData.data.response[index].countryId}"
-                                          }),
-                                  width / 2.25,
-                                  type: locationType.Country);
-                            } else {
-                              return Container(
-                                width: width / 2.25,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'country',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 13,
-                                        color: const Color(0x80515c6f),
-                                        letterSpacing: 0.9100000000000001,
+    return Scaffold(
+      key: _scaffoldKey,
+      body: Consumer<LocationProvider>(
+        builder: (_, _locationProvider, child) => Consumer<UserProvider>(
+          builder: (_, _userProvider, child) => Stack(
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                physics: BouncingScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      AddressTextFields(
+                          width: width,
+                          title: "First Name",
+                          controller: _firstNameAddressController),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      AddressTextFields(
+                          width: width,
+                          title: "Last Name",
+                          controller: _lastNameAddressController),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      AddressTextFields(
+                          width: width,
+                          title: "Email",
+                          controller: _emailAddressController),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      AddressTextFields(
+                          width: width,
+                          title: "Contact Number",
+                          controller: _contactNumberAddressController),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AddressTextFields(
+                              width: width / 2.25,
+                              title: "Zip Code",
+                              controller: _zipCodeAddressController),
+                          FutureBuilder(
+                            future: getAllCountry(),
+                            builder: (context, countryData) {
+                              if (countryData.hasData) {
+                                return getLocationBottomSheet(
+                                    context,
+                                    List.generate(
+                                        countryData.data.response.length,
+                                        (index) => {
+                                              "name":
+                                                  "${countryData.data.response[index].name}",
+                                              "id":
+                                                  "${countryData.data.response[index].countryId}"
+                                            }),
+                                    width / 2.25,
+                                    type: locationType.Country);
+                              } else {
+                                return Container(
+                                  width: width / 2.25,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'country',
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13,
+                                          color: const Color(0x80515c6f),
+                                          letterSpacing: 0.9100000000000001,
+                                        ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: width,
-                                      padding: EdgeInsets.only(
-                                          top: 16.0,
-                                          bottom: 17.0,
-                                          left: 5.0,
-                                          right: 5.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            width: 1.5,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Loading ..',
-                                            style: TextStyle(
-                                              fontSize: 16.0,
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: width,
+                                        padding: EdgeInsets.only(
+                                            top: 16.0,
+                                            bottom: 17.0,
+                                            left: 5.0,
+                                            right: 5.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
                                               color:
-                                                  Colors.black.withOpacity(0.2),
+                                                  Colors.black.withOpacity(0.3),
+                                              width: 1.5,
                                             ),
-                                          ),
-                                          Spacer(),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color:
-                                                Colors.black.withOpacity(0.4),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        FutureBuilder(
-                          future: getAllStateOfSelectedCountry(
-                              _locationProvider.selectedCountryId),
-                          builder: (context, stateData) {
-                            if (stateData.hasData) {
-                              return getLocationBottomSheet(
-                                  context,
-                                  List.generate(
-                                      stateData.data.response.length,
-                                      (index) => {
-                                            "name":
-                                                "${stateData.data.response[index].name}",
-                                            "id":
-                                                "${stateData.data.response[index].stateId}"
-                                          }),
-                                  width / 2.25,
-                                  type: locationType.State);
-                            } else {
-                              return Container(
-                                width: width / 2.25,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'state',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 13,
-                                        color: const Color(0x80515c6f),
-                                        letterSpacing: 0.9100000000000001,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: width,
-                                      padding: EdgeInsets.only(
-                                          top: 16.0,
-                                          bottom: 17.0,
-                                          left: 5.0,
-                                          right: 5.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            width: 1.5,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Loading ..',
-                                            style: TextStyle(
-                                              fontSize: 16.0,
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Loading ..',
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color:
+                                                    Colors.black.withOpacity(0.2),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Icon(
+                                              Icons.arrow_drop_down,
                                               color:
-                                                  Colors.black.withOpacity(0.2),
+                                                  Colors.black.withOpacity(0.4),
                                             ),
-                                          ),
-                                          Spacer(),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color:
-                                                Colors.black.withOpacity(0.4),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                        FutureBuilder(
-                          future: getAllCityOfSelectedState(
-                              _locationProvider.selectedStateId),
-                          builder: (context, cityData) {
-                            if (cityData.hasData &&
-                                _locationProvider.selectedStateId != null) {
-                              return getLocationBottomSheet(
-                                  context,
-                                  List.generate(
-                                      cityData.data.response.length,
-                                      (index) => {
-                                            "name":
-                                                "${cityData.data.response[index].name}",
-                                            "id":
-                                                "${cityData.data.response[index].cityId}"
-                                          }),
-                                  width / 2.25,
-                                  type: locationType.City);
-                            } else {
-                              return Container(
-                                width: width / 2.25,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'city',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 13,
-                                        color: const Color(0x80515c6f),
-                                        letterSpacing: 0.9100000000000001,
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FutureBuilder(
+                            future: getAllStateOfSelectedCountry(
+                                _locationProvider.selectedCountryId),
+                            builder: (context, stateData) {
+                              if (stateData.hasData) {
+                                return getLocationBottomSheet(
+                                    context,
+                                    List.generate(
+                                        stateData.data.response.length,
+                                        (index) => {
+                                              "name":
+                                                  "${stateData.data.response[index].name}",
+                                              "id":
+                                                  "${stateData.data.response[index].stateId}"
+                                            }),
+                                    width / 2.25,
+                                    type: locationType.State);
+                              } else {
+                                return Container(
+                                  width: width / 2.25,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'state',
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13,
+                                          color: const Color(0x80515c6f),
+                                          letterSpacing: 0.9100000000000001,
+                                        ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: width,
-                                      padding: EdgeInsets.only(
-                                          top: 16.0,
-                                          bottom: 17.0,
-                                          left: 5.0,
-                                          right: 5.0),
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            width: 1.5,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(15.0)),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            'Loading ..',
-                                            style: TextStyle(
-                                              fontSize: 16.0,
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: width,
+                                        padding: EdgeInsets.only(
+                                            top: 16.0,
+                                            bottom: 17.0,
+                                            left: 5.0,
+                                            right: 5.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
                                               color:
-                                                  Colors.black.withOpacity(0.2),
+                                                  Colors.black.withOpacity(0.3),
+                                              width: 1.5,
                                             ),
-                                          ),
-                                          Spacer(),
-                                          Icon(
-                                            Icons.arrow_drop_down,
-                                            color:
-                                                Colors.black.withOpacity(0.4),
-                                          ),
-                                        ],
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Loading ..',
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color:
+                                                    Colors.black.withOpacity(0.2),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Icon(
+                                              Icons.arrow_drop_down,
+                                              color:
+                                                  Colors.black.withOpacity(0.4),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    Row(
-                      children: [
-                        AddressTextFields(
-                            width: width / 1.43,
-                            title: "Address Line 1",
-                            controller: _firstAddressController),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: 40.0, vertical: 150.0),
-                                    color: colorPalette.navyBlue,
-                                    child: Material(
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 50,
-                                            color: colorPalette.navyBlue,
-                                            child: Row(
-                                              children: [
-                                                Spacer(),
-                                                Text(
-                                                  'Done',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 18.0),
-                                                ),
-                                                SizedBox(
-                                                  width: 20.0,
-                                                ),
-                                              ],
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          FutureBuilder(
+                            future: getAllCityOfSelectedState(
+                                _locationProvider.selectedStateId),
+                            builder: (context, cityData) {
+                              if (cityData.hasData &&
+                                  _locationProvider.selectedStateId != null) {
+                                return getLocationBottomSheet(
+                                    context,
+                                    List.generate(
+                                        cityData.data.response.length,
+                                        (index) => {
+                                              "name":
+                                                  "${cityData.data.response[index].name}",
+                                              "id":
+                                                  "${cityData.data.response[index].cityId}"
+                                            }),
+                                    width / 2.25,
+                                    type: locationType.City);
+                              } else {
+                                return Container(
+                                  width: width / 2.25,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'city',
+                                        style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13,
+                                          color: const Color(0x80515c6f),
+                                          letterSpacing: 0.9100000000000001,
+                                        ),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: width,
+                                        padding: EdgeInsets.only(
+                                            top: 16.0,
+                                            bottom: 17.0,
+                                            left: 5.0,
+                                            right: 5.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                              width: 1.5,
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              child: Consumer<MapProvider>(
-                                                builder:
-                                                    (_, _mapProvider, child) =>
-                                                        GoogleMap(
-                                                  initialCameraPosition:
-                                                      CameraPosition(
-                                                    target: LatLng(
-                                                        _mapProvider
-                                                            .addressSelectedLatLng
-                                                            .latitude,
-                                                        _mapProvider
-                                                            .addressSelectedLatLng
-                                                            .longitude),
-                                                    zoom: 14,
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Loading ..',
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color:
+                                                    Colors.black.withOpacity(0.2),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Icon(
+                                              Icons.arrow_drop_down,
+                                              color:
+                                                  Colors.black.withOpacity(0.4),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      Row(
+                        children: [
+                          AddressTextFields(
+                              width: width / 1.43,
+                              title: "Address Line 1",
+                              controller: _firstAddressController),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 40.0, vertical: 150.0),
+                                      color: colorPalette.navyBlue,
+                                      child: Material(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              color: colorPalette.navyBlue,
+                                              child: Row(
+                                                children: [
+                                                  Spacer(),
+                                                  Consumer<MapProvider>(
+                                                    builder:
+                                                        (_, _mapProvider, child) {
+                                                      return GestureDetector(
+                                                        onTap: () async {
+                                                          print(_mapProvider
+                                                              .addressSelectedLatLng);
+                                                          dynamic response = await MapAPI
+                                                              .getAddressFromLatLng(
+                                                                  _mapProvider
+                                                                      .addressSelectedLatLng
+                                                                      .latitude,
+                                                                  _mapProvider
+                                                                      .addressSelectedLatLng
+                                                                      .longitude);
+                                                          if (response[
+                                                                  'status'] ==
+                                                              "OK") {
+                                                            _mapProvider
+                                                                    .addressLine1FromLatLng =
+                                                                response['results']
+                                                                        [0][
+                                                                    'formatted_address'];
+                                                            _mapProvider
+                                                                    .isLatLngSelected =
+                                                                true;
+                                                            _firstAddressController
+                                                                    .text =
+                                                                _mapProvider
+                                                                    .addressLine1FromLatLng;
+                                                            Navigator.pop(
+                                                                context);
+                                                          } else {
+                                                            _mapProvider
+                                                                .addressLine1FromLatLng = "";
+                                                            _firstAddressController
+                                                                    .text =
+                                                                _mapProvider
+                                                                    .addressLine1FromLatLng;
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          'Done',
+                                                          style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 18.0),
+                                                        ),
+                                                      );
+                                                    },
                                                   ),
-                                                  onTap: (position) {
-                                                    _mapProvider
-                                                            .addressSelectedLatLng =
-                                                        position;
-                                                  },
-                                                  minMaxZoomPreference:
-                                                      MinMaxZoomPreference(9, 20),
-                                                  markers: {
-                                                    Marker(
-                                                        markerId: MarkerId("1"),
-                                                        visible: true,
-                                                        position: LatLng(
+                                                  SizedBox(
+                                                    width: 20.0,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                child: Consumer<MapProvider>(
+                                                  builder:
+                                                      (_, _mapProvider, child) =>
+                                                          GoogleMap(
+                                                    initialCameraPosition:
+                                                        CameraPosition(
+                                                      target: LatLng(
                                                           _mapProvider
                                                               .addressSelectedLatLng
                                                               .latitude,
                                                           _mapProvider
                                                               .addressSelectedLatLng
-                                                              .longitude,
-                                                        ))
-                                                  },
+                                                              .longitude),
+                                                      zoom: 14,
+                                                    ),
+                                                    onTap: (position) {
+                                                      _mapProvider
+                                                              .addressSelectedLatLng =
+                                                          position;
+                                                    },
+                                                    minMaxZoomPreference:
+                                                        MinMaxZoomPreference(
+                                                            9, 20),
+                                                    markers: {
+                                                      Marker(
+                                                          markerId: MarkerId("1"),
+                                                          visible: true,
+                                                          position: LatLng(
+                                                            _mapProvider
+                                                                .addressSelectedLatLng
+                                                                .latitude,
+                                                            _mapProvider
+                                                                .addressSelectedLatLng
+                                                                .longitude,
+                                                          ))
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                });
-                          },
-                          child: Container(
-                            height: 60,
-                            width: width / 5.5,
-                            margin: EdgeInsets.only(top: 23.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(
-                                    width: 1.2, color: Color(0x80515c6f))),
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.map,
-                              size: 30.0,
-                              color: colorPalette.navyBlue,
+                                    );
+                                  });
+                            },
+                            child: Container(
+                              height: 60,
+                              width: width / 5.5,
+                              margin: EdgeInsets.only(top: 23.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                      width: 1.2, color: Color(0x80515c6f))),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.map,
+                                size: 30.0,
+                                color: colorPalette.navyBlue,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: width / 20,
-                    ),
-                    AddressTextFields(
-                        width: width,
-                        title: "Address Line 2",
-                        controller: _secondAddressController),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    SizedBox(
-                      height: width / 2,
-                    ),
-                  ],
+                        ],
+                      ),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      AddressTextFields(
+                          width: width,
+                          title: "Address Line 2",
+                          controller: _secondAddressController),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      SizedBox(
+                        height: width / 2,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              child: GestureDetector(
-                onTap: () async {
-                  _userProvider.isAddAddressInProcess = true;
-                  SharedPreferences _prefs =
-                      await SharedPreferences.getInstance();
-                  int userId = _prefs.getInt('userId');
+              Positioned(
+                bottom: 0.0,
+                child: GestureDetector(
+                  onTap: () async {
+                    _userProvider.isAddAddressInProcess = true;
+                    SharedPreferences _prefs =
+                        await SharedPreferences.getInstance();
+                    int userId = _prefs.getInt('userId');
 
-                  dynamic response = await UserAPI.addNewUserAddress(
-                    userId.toString(),
-                    _firstNameAddressController.text,
-                    _lastNameAddressController.text,
-                    _emailAddressController.text,
-                    _contactNumberAddressController.text,
-                    '${_locationProvider.selectedStateId ?? 0}',
-                    '${_locationProvider.selectedCityId ?? 0}',
-                    _firstAddressController.text,
-                    _secondAddressController.text,
-                    _zipCodeAddressController.text,
-                    '${_locationProvider.selectedCountryId ?? 0}',
-                  );
+                    dynamic response = await UserAPI.addNewUserAddress(
+                      userId.toString(),
+                      _firstNameAddressController.text,
+                      _lastNameAddressController.text,
+                      _emailAddressController.text,
+                      _contactNumberAddressController.text,
+                      '${_locationProvider.selectedStateId ?? 0}',
+                      '${_locationProvider.selectedCityId ?? 0}',
+                      _firstAddressController.text,
+                      _secondAddressController.text,
+                      _zipCodeAddressController.text,
+                      '${_locationProvider.selectedCountryId ?? 0}',
+                    );
 
-                  if (response['status'] == 200) {
-                    _userProvider.isAddAddressInProcess = false;
-                    Scaffold.of(context)
-                        .showSnackBar(getSnackBar('Address is added.'));
-                  } else {
-                    _userProvider.isAddAddressInProcess = false;
-                    Scaffold.of(context)
-                        .showSnackBar(getSnackBar('Address not added !'));
-                  }
-                },
+                    if (response['status'] == 200) {
+                      _userProvider.isAddAddressInProcess = false;
+                      Scaffold.of(context)
+                          .showSnackBar(getSnackBar('Address is added.'));
+                    } else {
+                      _userProvider.isAddAddressInProcess = false;
+                      Scaffold.of(context)
+                          .showSnackBar(getSnackBar('Address not added !'));
+                    }
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.only(bottom: 10),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "ADD",
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 18,
+                        color: const Color(0xffffffff),
+                        fontWeight: FontWeight.w700,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                    height: width / 5,
+                    color: colorPalette.navyBlue,
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _userProvider.isAddAddressInProcess,
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(bottom: 10),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "ADD",
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 18,
-                      color: const Color(0xffffffff),
-                      fontWeight: FontWeight.w700,
+                  color: Colors.transparent,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
                     ),
-                    textAlign: TextAlign.left,
-                  ),
-                  height: width / 5,
-                  color: colorPalette.navyBlue,
-                ),
-              ),
-            ),
-            Visibility(
-              visible: _userProvider.isAddAddressInProcess,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -560,7 +633,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
                 ? "Country"
                 : type == locationType.State
                     ? "State"
-                    : type == locationType.City ? "city" : "Location",
+                    : type == locationType.City ? "City" : "Location",
             style: TextStyle(
               fontFamily: 'Roboto',
               fontSize: 13,
@@ -690,17 +763,21 @@ class _UserAddAddressState extends State<UserAddAddress> {
                         borderRadius: BorderRadius.circular(15.0)),
                     child: Row(
                       children: [
-                        Text(
-                          type == locationType.Country
-                              ? '${_locationProvider.selectedCountryName}'
-                              : type == locationType.State
-                                  ? '${_locationProvider.selectedStateName}'
-                                  : type == locationType.City
-                                      ? '${_locationProvider.selectedCityName}'
-                                      : 'Select Location',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black.withOpacity(0.4)),
+                        Container(
+                          width: width/1.3,
+                          child: Text(
+                            type == locationType.Country
+                                ? '${_locationProvider.selectedCountryName}'
+                                : type == locationType.State
+                                    ? '${_locationProvider.selectedStateName}'
+                                    : type == locationType.City
+                                        ? '${_locationProvider.selectedCityName}'
+                                        : 'Select Location',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.black.withOpacity(0.4)),
+                          ),
                         ),
                         Spacer(),
                         Icon(

@@ -94,15 +94,18 @@ class _CartState extends State<Cart> {
                                           ),
                                           textAlign: TextAlign.left,
                                         ),
-                                        Text(
-                                          '${snapshot.data.response[selectedAddressIndex].address1},\n${snapshot.data.response[selectedAddressIndex].city}, ${snapshot.data.response[selectedAddressIndex].state}\n${snapshot.data.response[selectedAddressIndex].pincode} ',
-                                          style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 12,
-                                            color: const Color(0xffa9a9aa),
-                                            fontWeight: FontWeight.w300,
+                                        Container(
+                                          width: MediaQuery.of(context).size.width / 1.5 ,
+                                          child: Text(
+                                            '${snapshot.data.response[selectedAddressIndex].address1},\n${snapshot.data.response[selectedAddressIndex].city}, ${snapshot.data.response[selectedAddressIndex].state}\n${snapshot.data.response[selectedAddressIndex].pincode} ',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 12,
+                                              color: const Color(0xffa9a9aa),
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                            textAlign: TextAlign.left,
                                           ),
-                                          textAlign: TextAlign.left,
                                         ),
                                       ],
                                     ),

@@ -8,38 +8,38 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
         children: [
           CachedNetworkImage(
             imageUrl: '$image',
-            height: height / 5.8,
+            height: height / 4.8,
             fit: BoxFit.fill,
             imageBuilder: (context, imageProvider) => Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-              height: height / 6,
+              height: height / 4.8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
                   image: imageProvider,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
             placeholder: (context, url) => Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-              height: height / 6,
+              height: height / 4.8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
                   image: AssetImage('assets/images/school.png'),
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
             errorWidget: (context, url, error) => Container(
               margin: EdgeInsets.only(left: 10, right: 10, top: 7),
-              height: height / 6,
+              height: height / 4.8,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
                   image: AssetImage('assets/images/school.png'),
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
