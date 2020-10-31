@@ -4,6 +4,7 @@ import 'package:bookmrk/provider/login_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:bookmrk/screens/forgotPassword.dart';
+import 'package:bookmrk/screens/mobileverification.dart';
 import 'package:bookmrk/screens/register.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
@@ -111,19 +112,30 @@ class _LoginState extends State<Login> {
                               dynamic response = await LoginAPI.checkLogin(
                                   email: _loginEmailAddress.text,
                                   password: _loginPassword.text);
+                              print(response);
 
                               if (response['status'] == 200) {
-                                _loginProvider.isPasswordChecking = false;
-                                prefs.write('isLogin', true);
-                                prefs.write(
-                                    'userId',
-                                    int.parse(response['data'][0]['user_id']
-                                        .toString()));
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomePage(),
-                                    ));
+                                if (response['data'][0]['is_mobile_verified'] ==
+                                    "0") {
+                                  _loginProvider.isPasswordChecking = false;
+                                  prefs.write('isLogin', true);
+                                  prefs.write(
+                                      'userId',
+                                      int.parse(response['data'][0]['user_id']
+                                          .toString()));
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ));
+                                } else {
+                                  _loginProvider.isPasswordChecking = false;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MobileVerification()));
+                                }
                               } else {
                                 _loginProvider.isPasswordChecking = false;
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:bookmrk/constant/constant.dart';
 import 'package:http/http.dart' as http;
@@ -21,8 +20,9 @@ class HomePageApi {
       url,
       headers: header,
     );
-
+    print(response.body);
     dynamic data = jsonDecode(response.body);
+
     return data;
   }
 }

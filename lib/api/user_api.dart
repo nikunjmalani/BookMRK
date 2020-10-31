@@ -91,6 +91,8 @@ class UserAPI {
     String address2,
     String pincode,
     String country,
+    String lat,
+    String lng,
   ) async {
     String url = "$kBaseURL/user/add_address";
 
@@ -116,6 +118,8 @@ class UserAPI {
       "address1": "$address1",
       "address2": "$address2",
       "pincode": "$pincode",
+      "latitudes": "$lat",
+      "longitude": "$lng",
     };
 
     http.Response response = await http.post(
@@ -141,6 +145,8 @@ class UserAPI {
     String address1,
     String address2,
     String pincode,
+    String lat,
+    String lng,
   ) async {
     String url = "$kBaseURL/user/update_address_user";
 
@@ -165,6 +171,8 @@ class UserAPI {
       "address1": "$address1",
       "address2": "$address2",
       "pincode": "$pincode",
+      "latitudes": "$lat",
+      "longitude": "$lng",
     };
 
     http.Response response = await http.post(

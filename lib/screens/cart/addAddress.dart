@@ -15,7 +15,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
-
 class AddAddress extends StatefulWidget {
   @override
   _AddAddressState createState() => _AddAddressState();
@@ -545,56 +544,61 @@ class _AddAddressState extends State<AddAddress> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0.0,
-              child: GestureDetector(
-                onTap: () async {
-                  _userProvider.isAddAddressInProcess = true;
-                  int userId =  prefs.read<int>('userId');
+            Consumer<MapProvider>(
+                builder: (_, _mapProvider, child) => Positioned(
+                      bottom: 0.0,
+                      child: GestureDetector(
+                        onTap: () async {
+                          _userProvider.isAddAddressInProcess = true;
+                          int userId = prefs.read<int>('userId');
 
-                  dynamic response = await UserAPI.addNewUserAddress(
-                    userId.toString(),
-                    _firstNameAddressController.text,
-                    _lastNameAddressController.text,
-                    _emailAddressController.text,
-                    _contactNumberAddressController.text,
-                    '${_locationProvider.selectedStateId ?? 0}',
-                    '${_locationProvider.selectedCityId ?? 0}',
-                    _firstAddressController.text,
-                    _secondAddressController.text,
-                    _zipCodeAddressController.text,
-                    '${_locationProvider.selectedCountryId ?? 0}',
-                  );
+                          dynamic response = await UserAPI.addNewUserAddress(
+                            userId.toString(),
+                            _firstNameAddressController.text,
+                            _lastNameAddressController.text,
+                            _emailAddressController.text,
+                            _contactNumberAddressController.text,
+                            '${_locationProvider.selectedStateId ?? 0}',
+                            '${_locationProvider.selectedCityId ?? 0}',
+                            _firstAddressController.text,
+                            _secondAddressController.text,
+                            _zipCodeAddressController.text,
+                            '${_locationProvider.selectedCountryId ?? 0}',
+                            _mapProvider.addressSelectedLatLng.latitude
+                                .toString(),
+                            _mapProvider.addressSelectedLatLng.longitude
+                                .toString(),
+                          );
 
-                  if (response['status'] == 200) {
-                    _userProvider.isAddAddressInProcess = false;
-                    Scaffold.of(context)
-                        .showSnackBar(getSnackBar('Address is added.'));
-                  } else {
-                    _userProvider.isAddAddressInProcess = false;
-                    Scaffold.of(context)
-                        .showSnackBar(getSnackBar('Address not added !'));
-                  }
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(bottom: 10),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "ADD",
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 18,
-                      color: const Color(0xffffffff),
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  height: width / 5,
-                  color: colorPalette.navyBlue,
-                ),
-              ),
-            ),
+                          if (response['status'] == 200) {
+                            _userProvider.isAddAddressInProcess = false;
+                            Scaffold.of(context)
+                                .showSnackBar(getSnackBar('Address is added.'));
+                          } else {
+                            _userProvider.isAddAddressInProcess = false;
+                            Scaffold.of(context).showSnackBar(
+                                getSnackBar('Address not added !'));
+                          }
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(bottom: 10),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "ADD",
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 18,
+                              color: const Color(0xffffffff),
+                              fontWeight: FontWeight.w700,
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          height: width / 5,
+                          color: colorPalette.navyBlue,
+                        ),
+                      ),
+                    )),
             Visibility(
               visible: _userProvider.isAddAddressInProcess,
               child: Container(
@@ -624,7 +628,9 @@ class _AddAddressState extends State<AddAddress> {
                 ? "Country"
                 : type == locationType.State
                     ? "State"
-                    : type == locationType.City ? "city" : "Location",
+                    : type == locationType.City
+                        ? "city"
+                        : "Location",
             style: TextStyle(
               fontFamily: 'Roboto',
               fontSize: 13,

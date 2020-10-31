@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
 class OrderTracking extends StatefulWidget {
   final String orderIdToTrack;
 
@@ -21,6 +22,7 @@ class OrderTracking extends StatefulWidget {
 
 class _OrderTrackingState extends State<OrderTracking> {
   ColorPalette colorPalette = ColorPalette();
+  dynamic customIcon;
 
   /// get Information to track order details...
   Future getTrackingInformation() async {
@@ -34,6 +36,12 @@ class _OrderTrackingState extends State<OrderTracking> {
 
   @override
   Widget build(BuildContext context) {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(0.01, 0.01)), 'assets/images/otp.png')
+        .then((d) {
+      customIcon = d;
+    });
+
     var homeProvider = Provider.of<HomeScreenProvider>(context, listen: false);
 
     return Consumer<HomeScreenProvider>(
@@ -75,6 +83,23 @@ class _OrderTrackingState extends State<OrderTracking> {
                                     print(value);
                                     _mapProvider.selectedLatLng = value;
                                   },
+                                  polylines: {
+                                    Polyline(
+                                        polylineId: PolylineId("1"),
+                                        color: colorPalette.navyBlue,
+                                        points: [
+                                          LatLng(21.210599401715537,
+                                              72.89728783071041),
+                                          LatLng(21.21198686447561,
+                                              72.89922069758177),
+                                          LatLng(21.212741383692656,
+                                              72.90207289159298),
+                                          LatLng(21.211182956576078,
+                                              72.90254160761833),
+                                          LatLng(21.213699373744955,
+                                              72.90952004492283)
+                                        ])
+                                  },
                                   minMaxZoomPreference:
                                       MinMaxZoomPreference(14, 17),
                                   mapToolbarEnabled: true,
@@ -83,7 +108,8 @@ class _OrderTrackingState extends State<OrderTracking> {
                                       markerId: MarkerId("1"),
                                       visible: true,
                                       position: _mapProvider.selectedLatLng,
-                                      draggable: true,
+                                      draggable: false,
+                                      icon: customIcon,
                                     )
                                   },
                                 ),

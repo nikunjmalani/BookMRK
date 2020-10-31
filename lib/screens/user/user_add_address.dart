@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:bookmrk/api/location_name_api.dart';
 import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
@@ -24,8 +21,6 @@ class UserAddAddress extends StatefulWidget {
 }
 
 class _UserAddAddressState extends State<UserAddAddress> {
-
-
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   /// TextFields
@@ -77,8 +72,9 @@ class _UserAddAddressState extends State<UserAddAddress> {
           Provider.of<MapProvider>(context, listen: false)
               .addressSelectedLatLng = LatLng(value.latitude, value.longitude);
         } else {
-          WidgetsBinding.instance
-              .addPostFrameCallback((_) => _scaffoldKey.currentState.showSnackBar(getSnackBar('Please Give Permission !')));
+          WidgetsBinding.instance.addPostFrameCallback((_) => _scaffoldKey
+              .currentState
+              .showSnackBar(getSnackBar('Please Give Permission !')));
         }
       });
     }
@@ -164,7 +160,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                 return Container(
                                   width: width / 2.25,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'country',
@@ -200,8 +197,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                               'Loading ..',
                                               style: TextStyle(
                                                 fontSize: 16.0,
-                                                color:
-                                                    Colors.black.withOpacity(0.2),
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
                                               ),
                                             ),
                                             Spacer(),
@@ -248,7 +245,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                 return Container(
                                   width: width / 2.25,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'state',
@@ -284,8 +282,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                               'Loading ..',
                                               style: TextStyle(
                                                 fontSize: 16.0,
-                                                color:
-                                                    Colors.black.withOpacity(0.2),
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
                                               ),
                                             ),
                                             Spacer(),
@@ -325,7 +323,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                 return Container(
                                   width: width / 2.25,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'city',
@@ -361,8 +360,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                               'Loading ..',
                                               style: TextStyle(
                                                 fontSize: 16.0,
-                                                color:
-                                                    Colors.black.withOpacity(0.2),
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
                                               ),
                                             ),
                                             Spacer(),
@@ -411,8 +410,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                 children: [
                                                   Spacer(),
                                                   Consumer<MapProvider>(
-                                                    builder:
-                                                        (_, _mapProvider, child) {
+                                                    builder: (_, _mapProvider,
+                                                        child) {
                                                       return GestureDetector(
                                                         onTap: () async {
                                                           print(_mapProvider
@@ -425,6 +424,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                                   _mapProvider
                                                                       .addressSelectedLatLng
                                                                       .longitude);
+                                                          print(response);
                                                           if (response[
                                                                   'status'] ==
                                                               "OK") {
@@ -456,7 +456,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                         child: Text(
                                                           'Done',
                                                           style: TextStyle(
-                                                              color: Colors.white,
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize: 18.0),
                                                         ),
                                                       );
@@ -471,9 +472,9 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                             Expanded(
                                               child: Container(
                                                 child: Consumer<MapProvider>(
-                                                  builder:
-                                                      (_, _mapProvider, child) =>
-                                                          GoogleMap(
+                                                  builder: (_, _mapProvider,
+                                                          child) =>
+                                                      GoogleMap(
                                                     initialCameraPosition:
                                                         CameraPosition(
                                                       target: LatLng(
@@ -495,7 +496,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                             9, 20),
                                                     markers: {
                                                       Marker(
-                                                          markerId: MarkerId("1"),
+                                                          markerId:
+                                                              MarkerId("1"),
                                                           visible: true,
                                                           position: LatLng(
                                                             _mapProvider
@@ -551,53 +553,57 @@ class _UserAddAddressState extends State<UserAddAddress> {
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 0.0,
-                child: GestureDetector(
-                  onTap: () async {
-                    _userProvider.isAddAddressInProcess = true;
-                    int userId = prefs.read<int>('userId');
+              Consumer<MapProvider>(
+                builder: (_, _mapProvider, child) => Positioned(
+                  bottom: 0.0,
+                  child: GestureDetector(
+                    onTap: () async {
+                      _userProvider.isAddAddressInProcess = true;
+                      int userId = prefs.read<int>('userId');
 
-                    dynamic response = await UserAPI.addNewUserAddress(
-                      userId.toString(),
-                      _firstNameAddressController.text,
-                      _lastNameAddressController.text,
-                      _emailAddressController.text,
-                      _contactNumberAddressController.text,
-                      '${_locationProvider.selectedStateId ?? 0}',
-                      '${_locationProvider.selectedCityId ?? 0}',
-                      _firstAddressController.text,
-                      _secondAddressController.text,
-                      _zipCodeAddressController.text,
-                      '${_locationProvider.selectedCountryId ?? 0}',
-                    );
+                      dynamic response = await UserAPI.addNewUserAddress(
+                        userId.toString(),
+                        _firstNameAddressController.text,
+                        _lastNameAddressController.text,
+                        _emailAddressController.text,
+                        _contactNumberAddressController.text,
+                        '${_locationProvider.selectedStateId ?? 0}',
+                        '${_locationProvider.selectedCityId ?? 0}',
+                        _firstAddressController.text,
+                        _secondAddressController.text,
+                        _zipCodeAddressController.text,
+                        '${_locationProvider.selectedCountryId ?? 0}',
+                        _mapProvider.addressSelectedLatLng.latitude.toString(),
+                        _mapProvider.addressSelectedLatLng.longitude.toString(),
+                      );
 
-                    if (response['status'] == 200) {
-                      _userProvider.isAddAddressInProcess = false;
-                      Scaffold.of(context)
-                          .showSnackBar(getSnackBar('Address is added.'));
-                    } else {
-                      _userProvider.isAddAddressInProcess = false;
-                      Scaffold.of(context)
-                          .showSnackBar(getSnackBar('Address not added !'));
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(bottom: 10),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "ADD",
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 18,
-                        color: const Color(0xffffffff),
-                        fontWeight: FontWeight.w700,
+                      if (response['status'] == 200) {
+                        _userProvider.isAddAddressInProcess = false;
+                        Scaffold.of(context)
+                            .showSnackBar(getSnackBar('Address is added.'));
+                      } else {
+                        _userProvider.isAddAddressInProcess = false;
+                        Scaffold.of(context)
+                            .showSnackBar(getSnackBar('Address not added !'));
+                      }
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "ADD",
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 18,
+                          color: const Color(0xffffffff),
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left,
+                      height: width / 5,
+                      color: colorPalette.navyBlue,
                     ),
-                    height: width / 5,
-                    color: colorPalette.navyBlue,
                   ),
                 ),
               ),
@@ -631,7 +637,9 @@ class _UserAddAddressState extends State<UserAddAddress> {
                 ? "Country"
                 : type == locationType.State
                     ? "State"
-                    : type == locationType.City ? "City" : "Location",
+                    : type == locationType.City
+                        ? "City"
+                        : "Location",
             style: TextStyle(
               fontFamily: 'Roboto',
               fontSize: 13,
@@ -762,7 +770,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
                     child: Row(
                       children: [
                         Container(
-                          width: width/1.3,
+                          width: width / 1.3,
                           child: Text(
                             type == locationType.Country
                                 ? '${_locationProvider.selectedCountryName}'

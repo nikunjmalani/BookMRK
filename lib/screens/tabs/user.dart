@@ -35,8 +35,7 @@ class _UserState extends State<User> {
 
   /// send otp on mobile number ...
   Future sendOTP(String userMobileNumber) async {
-
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response =
         await ForgotPasswordAPI.forgotPassword(userMobileNumber, userId);
 
@@ -270,7 +269,6 @@ class _UserState extends State<User> {
                                   Navigator.pop(context);
                                 },
                                 onYesTap: () async {
-
                                   prefs.write('isLogin', false);
                                   _homeScreenProvider.selectedString = "Home";
                                   _homeScreenProvider.selectedBottomIndex = 0;
@@ -312,9 +310,14 @@ Widget _profileMenus({width, title, asset, onClick}) {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
       child: Row(
         children: [
-          SvgPicture.asset(
-            "assets/icons/${asset}.svg",
-            height: width / 22,
+          Container(
+            width: width / 16,
+            height: 20,
+            child: SvgPicture.asset(
+              "assets/icons/${asset}.svg",
+              height: width / 22,
+              width: width / 22,
+            ),
           ),
           SizedBox(
             width: 15,

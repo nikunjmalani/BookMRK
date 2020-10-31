@@ -28,7 +28,6 @@ class _EditAddressState extends State<EditAddress> {
   LocationProvider _locationProviderInit;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   /// TextFields...
   TextEditingController _firstNameEditAddress = TextEditingController();
   TextEditingController _lastNameEditAddress = TextEditingController();
@@ -61,8 +60,7 @@ class _EditAddressState extends State<EditAddress> {
 
   /// get default address information to edit
   Future getDefaultAddressInformationToEdit() async {
-
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await UserAPI.getCurrentAddressForEdit(
         userId.toString(), widget.userAddressId);
     EditAddressInfoModel _editAddressInfoModel =
@@ -112,20 +110,19 @@ class _EditAddressState extends State<EditAddress> {
           Provider.of<MapProvider>(context, listen: false)
               .addressSelectedLatLng = LatLng(value.latitude, value.longitude);
         } else {
-          WidgetsBinding.instance
-              .addPostFrameCallback((_) => _scaffoldKey.currentState.showSnackBar(getSnackBar('Please Give Permission !')));
+          WidgetsBinding.instance.addPostFrameCallback((_) => _scaffoldKey
+              .currentState
+              .showSnackBar(getSnackBar('Please Give Permission !')));
         }
       });
     }
   }
-
 
   @override
   void initState() {
     super.initState();
     getDefaultAddressInformationToEdit();
     getLocation();
-
   }
 
   @override
@@ -454,25 +451,25 @@ class _EditAddressState extends State<EditAddress> {
                                                             .addressSelectedLatLng);
                                                         dynamic response = await MapAPI
                                                             .getAddressFromLatLng(
-                                                            _mapProvider
-                                                                .addressSelectedLatLng
-                                                                .latitude,
-                                                            _mapProvider
-                                                                .addressSelectedLatLng
-                                                                .longitude);
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .latitude,
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .longitude);
                                                         if (response[
-                                                        'status'] ==
+                                                                'status'] ==
                                                             "OK") {
                                                           _mapProvider
-                                                              .addressLine1FromLatLng =
-                                                          response['results']
-                                                          [0][
-                                                          'formatted_address'];
+                                                                  .addressLine1FromLatLng =
+                                                              response['results']
+                                                                      [0][
+                                                                  'formatted_address'];
                                                           _mapProvider
-                                                              .isLatLngSelected =
-                                                          true;
+                                                                  .isLatLngSelected =
+                                                              true;
                                                           _firstAddressEdit
-                                                              .text =
+                                                                  .text =
                                                               _mapProvider
                                                                   .addressLine1FromLatLng;
                                                           Navigator.pop(
@@ -481,7 +478,7 @@ class _EditAddressState extends State<EditAddress> {
                                                           _mapProvider
                                                               .addressLine1FromLatLng = "";
                                                           _firstAddressEdit
-                                                              .text =
+                                                                  .text =
                                                               _mapProvider
                                                                   .addressLine1FromLatLng;
                                                           Navigator.pop(
@@ -508,40 +505,40 @@ class _EditAddressState extends State<EditAddress> {
                                               child: Consumer<MapProvider>(
                                                 builder:
                                                     (_, _mapProvider, child) =>
-                                                    GoogleMap(
-                                                      initialCameraPosition:
+                                                        GoogleMap(
+                                                  initialCameraPosition:
                                                       CameraPosition(
-                                                        target: LatLng(
-                                                            _mapProvider
-                                                                .addressSelectedLatLng
-                                                                .latitude,
-                                                            _mapProvider
-                                                                .addressSelectedLatLng
-                                                                .longitude),
-                                                        zoom: 14,
-                                                      ),
-                                                      onTap: (position) {
+                                                    target: LatLng(
                                                         _mapProvider
+                                                            .addressSelectedLatLng
+                                                            .latitude,
+                                                        _mapProvider
+                                                            .addressSelectedLatLng
+                                                            .longitude),
+                                                    zoom: 14,
+                                                  ),
+                                                  onTap: (position) {
+                                                    _mapProvider
                                                             .addressSelectedLatLng =
-                                                            position;
-                                                      },
-                                                      minMaxZoomPreference:
+                                                        position;
+                                                  },
+                                                  minMaxZoomPreference:
                                                       MinMaxZoomPreference(
                                                           9, 20),
-                                                      markers: {
-                                                        Marker(
-                                                            markerId: MarkerId("1"),
-                                                            visible: true,
-                                                            position: LatLng(
-                                                              _mapProvider
-                                                                  .addressSelectedLatLng
-                                                                  .latitude,
-                                                              _mapProvider
-                                                                  .addressSelectedLatLng
-                                                                  .longitude,
-                                                            ))
-                                                      },
-                                                    ),
+                                                  markers: {
+                                                    Marker(
+                                                        markerId: MarkerId("1"),
+                                                        visible: true,
+                                                        position: LatLng(
+                                                          _mapProvider
+                                                              .addressSelectedLatLng
+                                                              .latitude,
+                                                          _mapProvider
+                                                              .addressSelectedLatLng
+                                                              .longitude,
+                                                        ))
+                                                  },
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -583,57 +580,61 @@ class _EditAddressState extends State<EditAddress> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0.0,
-              child: Consumer<UserProvider>(
-                builder: (_, _userProvider, child) => GestureDetector(
-                  onTap: () async {
-                    _userProvider.userAddressEditInProgress = true;
+            Consumer<MapProvider>(
+              builder: (_, _mapProvider, child) => Positioned(
+                bottom: 0.0,
+                child: Consumer<UserProvider>(
+                  builder: (_, _userProvider, child) => GestureDetector(
+                    onTap: () async {
+                      _userProvider.userAddressEditInProgress = true;
 
-                    /// change address from user profile..
+                      /// change address from user profile..
 
-                    int userId =  prefs.read<int>('userId');
+                      int userId = prefs.read<int>('userId');
 
-                    dynamic response = await UserAPI.editUserAddress(
-                      userId.toString(),
-                      _userProvider.selectedUserAddressId,
-                      _firstNameEditAddress.text,
-                      _lastNameEditAddress.text,
-                      _emailEditAddress.text,
-                      _contactEditAddress.text,
-                      '${_locationProvider.selectedStateId ?? 0}',
-                      '${_locationProvider.selectedCityId ?? 0}',
-                      _firstAddressEdit.text,
-                      _secondAddressEdit.text,
-                      _zipEditAddress.text,
-                    );
+                      dynamic response = await UserAPI.editUserAddress(
+                        userId.toString(),
+                        _userProvider.selectedUserAddressId,
+                        _firstNameEditAddress.text,
+                        _lastNameEditAddress.text,
+                        _emailEditAddress.text,
+                        _contactEditAddress.text,
+                        '${_locationProvider.selectedStateId ?? 0}',
+                        '${_locationProvider.selectedCityId ?? 0}',
+                        _firstAddressEdit.text,
+                        _secondAddressEdit.text,
+                        _zipEditAddress.text,
+                        _mapProvider.addressSelectedLatLng.latitude.toString(),
+                        _mapProvider.addressSelectedLatLng.longitude.toString(),
+                      );
 
-                    if (response['status'] == 200) {
-                      _userProvider.userAddressEditInProgress = false;
-                      Scaffold.of(context)
-                          .showSnackBar(getSnackBar('record Changed !'));
-                    } else {
-                      _userProvider.userAddressEditInProgress = false;
-                      Scaffold.of(context)
-                          .showSnackBar(getSnackBar('${response['message']}'));
-                    }
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(bottom: 10),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Save Changes",
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 18,
-                        color: const Color(0xffffffff),
-                        fontWeight: FontWeight.w700,
+                      if (response['status'] == 200) {
+                        _userProvider.userAddressEditInProgress = false;
+                        Scaffold.of(context)
+                            .showSnackBar(getSnackBar('record Changed !'));
+                      } else {
+                        _userProvider.userAddressEditInProgress = false;
+                        Scaffold.of(context).showSnackBar(
+                            getSnackBar('${response['message']}'));
+                      }
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(bottom: 10),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Save Changes",
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          fontSize: 18,
+                          color: const Color(0xffffffff),
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                      textAlign: TextAlign.left,
+                      height: width / 5,
+                      color: colorPalette.navyBlue,
                     ),
-                    height: width / 5,
-                    color: colorPalette.navyBlue,
                   ),
                 ),
               ),
@@ -667,7 +668,9 @@ class _EditAddressState extends State<EditAddress> {
                 ? "Country"
                 : type == locationType.State
                     ? "State"
-                    : type == locationType.City ? "city" : "Location",
+                    : type == locationType.City
+                        ? "city"
+                        : "Location",
             style: TextStyle(
               fontFamily: 'Roboto',
               fontSize: 13,

@@ -17,8 +17,7 @@ class ChangeAddress extends StatefulWidget {
 class _ChangeAddressState extends State<ChangeAddress> {
   /// get user address in cart page..
   Future getUserAddress() async {
-
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userModel = UserAddressModel.fromJson(response);
     return _userModel;
@@ -75,6 +74,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                   ),
                                   Container(
                                     width: width / 1.8,
+                                    height: 46.0,
                                     child: Text(
                                       'address 1 : ${snapshot.data.response[index].address1}',
                                       style: TextStyle(
@@ -91,6 +91,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                   ),
                                   Container(
                                     width: width / 1.8,
+                                    height: 30.0,
                                     child: Text(
                                       'address 2 : ${snapshot.data.response[index].address2}',
                                       style: TextStyle(
@@ -127,7 +128,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                               : () async {
                                   _userProvider.changeAddressInProgress = true;
 
-                                  int userId =  prefs.read<int>('userId');
+                                  int userId = prefs.read<int>('userId');
                                   dynamic response =
                                       await UserAPI.changeSelectedUserAddress(
                                           userId.toString(),
