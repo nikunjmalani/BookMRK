@@ -133,7 +133,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: _schoolProvider.selectedSubCategoryId ==
-                                        '${snapshot.data.response[0].schoolCat[index].categoryId}'
+                                        '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
                                     ? colorPalette.navyBlue
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25),
@@ -145,6 +145,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                               width: 100,
                               child: GestureDetector(
                                 onTap: () {
+                                  _schoolProvider.selectedSchoolCategoryIndex = index;
                                   _schoolProvider.selectedSubCategoryId =
                                       '${snapshot.data.response[0].schoolCat[index].categoryId}';
                                 },
@@ -155,12 +156,12 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                     fontSize: 17,
                                     fontWeight: _schoolProvider
                                                 .selectedSubCategoryId ==
-                                            '${snapshot.data.response[0].schoolCat[index].categoryId}'
+                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
                                         ? FontWeight.w900
                                         : FontWeight.w500,
                                     color: _schoolProvider
                                                 .selectedSubCategoryId ==
-                                            '${snapshot.data.response[0].schoolCat[index].categoryId}'
+                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
                                         ? Colors.white
                                         : colorPalette.navyBlue,
                                   ),

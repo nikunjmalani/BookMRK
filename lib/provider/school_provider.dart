@@ -65,4 +65,14 @@ class SchoolProvider extends ChangeNotifier {
     _fetchingDataFromSubcategoryInProgress = value;
     notifyListeners();
   }
+
+  /// school grade category selected index ...
+  int _selectedSchoolCategoryIndex = 0;
+
+  int get selectedSchoolCategoryIndex => _selectedSchoolCategoryIndex;
+
+  set selectedSchoolCategoryIndex(int value) {
+    _selectedSchoolCategoryIndex = value;
+    notifyListeners();
+  }
 }

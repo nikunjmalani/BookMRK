@@ -68,7 +68,7 @@ class _OrderTrackingState extends State<OrderTracking> {
     });
   }
 
-  getPoints() async{
+  getPoints() async {
     int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
         userId.toString(), widget.orderIdToTrack);
@@ -76,11 +76,11 @@ class _OrderTrackingState extends State<OrderTracking> {
     Provider.of<MapProvider>(context, listen: false)
         .deliveryBoyCurrentLocation = LatLng(
       double.parse(_trackOrderModel.response[0].deliveryUserLatitudes == "" ||
-          _trackOrderModel.response[0].deliveryUserLatitudes == null
+              _trackOrderModel.response[0].deliveryUserLatitudes == null
           ? "66.66762233898528"
           : _trackOrderModel.response[0].deliveryUserLatitudes),
       double.parse(_trackOrderModel.response[0].deliveryUserLongitude == "" ||
-          _trackOrderModel.response[0].deliveryUserLongitude == null
+              _trackOrderModel.response[0].deliveryUserLongitude == null
           ? "70.07588859647512"
           : _trackOrderModel.response[0].deliveryUserLongitude),
     );
@@ -94,6 +94,7 @@ class _OrderTrackingState extends State<OrderTracking> {
     );
     Provider.of<MapProvider>(context, listen: false).pathPointsList =
         result.points;
+    print(result.points);
   }
 
   @override
@@ -139,48 +140,55 @@ class _OrderTrackingState extends State<OrderTracking> {
                       ),
                     ),
                     snapshot.data.response[0].inTransit == "1"
-                        ? Container(
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Consumer<MapProvider>(
-                                builder: (_, _mapProvider, child) => GoogleMap(
-                                  initialCameraPosition: CameraPosition(
-                                      target: _mapProvider.selectedLatLng,
-                                      zoom: 1),
-                                  mapType: MapType.terrain,
-
-                                  polylines: {
-                                    Polyline(
-                                      polylineId: PolylineId("1"),
-                                      color: colorPalette.navyBlue,
-                                      points: List.generate(
-                                        _mapProvider.pathPointsList.length,
-                                        (index) => LatLng(
-                                          _mapProvider
-                                              .pathPointsList[index].latitude,
-                                          _mapProvider
-                                              .pathPointsList[index].longitude,
+                        ? GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: Consumer<MapProvider>(
+                                  builder: (_, _mapProvider, child) =>
+                                      GoogleMap(
+                                    initialCameraPosition: CameraPosition(
+                                        target: widget.userAddressToDeliver,
+                                        zoom: 1),
+                                    mapType: MapType.terrain,
+                                    polylines: {
+                                      Polyline(
+                                        polylineId: PolylineId("1"),
+                                        color: colorPalette.navyBlue,
+                                        points: List.generate(
+                                          _mapProvider.pathPointsList.length,
+                                          (index) => LatLng(
+                                            _mapProvider
+                                                .pathPointsList[index].latitude,
+                                            _mapProvider.pathPointsList[index]
+                                                .longitude,
+                                          ),
                                         ),
-                                      ),
-                                    )
-                                  },
-                                  minMaxZoomPreference:
-                                      MinMaxZoomPreference(1, 18),
-                                  mapToolbarEnabled: true,
-                                  markers: {
-                                    Marker(
-                                      markerId: MarkerId("1"),
-                                      visible: true,
-                                      position: _mapProvider.deliveryBoyCurrentLocation,
-                                      draggable: false,
-                                    ),
-                                    Marker(
-                                        markerId: MarkerId("2"),
+                                      )
+                                    },
+                                    minMaxZoomPreference:
+                                        MinMaxZoomPreference(1, 18),
+                                    mapToolbarEnabled: true,
+                                    onTap: (value) {
+                                      print(value);
+                                    },
+                                    markers: {
+                                      Marker(
+                                        markerId: MarkerId("1"),
                                         visible: true,
-                                        position: widget.userAddressToDeliver,
+                                        position: _mapProvider
+                                            .deliveryBoyCurrentLocation,
                                         draggable: false,
-                                        alpha: 0.2)
-                                  },
+                                      ),
+                                      Marker(
+                                          markerId: MarkerId("2"),
+                                          visible: true,
+                                          position: widget.userAddressToDeliver,
+                                          draggable: false,
+                                          alpha: 0.2)
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
