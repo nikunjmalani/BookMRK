@@ -414,8 +414,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                         child) {
                                                       return GestureDetector(
                                                         onTap: () async {
-                                                          print(_mapProvider
-                                                              .addressSelectedLatLng);
+
                                                           dynamic response = await MapAPI
                                                               .getAddressFromLatLng(
                                                                   _mapProvider
@@ -424,7 +423,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                                   _mapProvider
                                                                       .addressSelectedLatLng
                                                                       .longitude);
-                                                          print(response);
+
                                                           if (response[
                                                                   'status'] ==
                                                               "OK") {

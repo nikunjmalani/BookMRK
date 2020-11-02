@@ -310,11 +310,6 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
                                           onTap: () async {
-                                            print(snapshot
-                                                .data[0]
-                                                .response[0]
-                                                .vendorProduct[index]
-                                                .categoryName);
 
                                             Provider.of<ProductOrderProvider>(
                                                 context,

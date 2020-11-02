@@ -497,7 +497,11 @@ class _HomePageState extends State<HomePage> {
                           : _homeScreenProvider.selectedString ==
                           "OrderTracking"
                           ? Consumer<OrderProvider>(
-                          builder: (_, _orderProvider, child) => OrderTracking(orderIdToTrack: _orderProvider.orderIdToTrack,)
+                          builder: (_, _orderProvider, child) =>
+                              OrderTracking(
+                                orderIdToTrack: _orderProvider.orderIdToTrack,
+                                userAddressToDeliver: _orderProvider
+                                    .userDeliveryAddress,)
                       )
                           : _homeScreenProvider.selectedString ==
                           "ChangePassword"

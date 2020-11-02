@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Container(
-                        height: height / 2.3,
+                        height: snapshot.data.response[0].product.length > 0 ? height / 2.3 : height / 10,
                         margin:
                             EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                         decoration: BoxDecoration(
@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Container(
-                              height: height / 3.2,
+                              height: snapshot.data.response[0].product.length > 0 ? height / 3.2 : 0.0,
                               child: ListView.builder(
                                 itemCount:
                                     snapshot.data.response[0].product.length,

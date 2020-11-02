@@ -3,6 +3,7 @@ import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:bookmrk/screens/login.dart';
+import 'package:bookmrk/screens/user/terms_and_conditions.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/textfields.dart';
@@ -239,10 +240,20 @@ class _RegisterState extends State<Register> {
                                   checkColor: colorPalette.navyBlue,
                                   activeColor: Colors.white,
                                 ),
-                                Text(
-                                  "Accept Terms and Conditions",
-                                  style:
-                                      TextStyle(color: colorPalette.navyBlue),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TermsAndCondition(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Accept Terms and Conditions",
+                                    style:
+                                        TextStyle(color: colorPalette.navyBlue),
+                                  ),
                                 ),
                               ],
                             ),

@@ -39,7 +39,7 @@ class _OtpVerificationState extends State<OtpVerification> {
 
   setTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (t) {
-      print(t.tick);
+
       Provider.of<RegisterProvider>(context, listen: false)
           .timeRemainingInTimer = t.tick;
       if (t.tick == 30) {
@@ -158,7 +158,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                               _forgotPassword
                                                   .forgotPasswordMobile,
                                               userId);
-                                      print(response);
+
                                       if (response['status'] == 200) {
                                         _forgotPasswordProvider
                                                 .isOTPVerificationInProgress =

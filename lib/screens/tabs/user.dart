@@ -7,6 +7,8 @@ import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/screens/onBoarding.dart';
+import 'package:bookmrk/screens/user/privacy_policy.dart';
+import 'package:bookmrk/screens/user/terms_and_conditions.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -240,13 +242,27 @@ class _UserState extends State<User> {
                             title: "Terms and Conditions",
                             width: width,
                             asset: "tc",
-                            onClick: () {}),
+                            onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TermsAndCondition(),
+                                ),
+                              );
+                            }),
                         _customDivider(),
                         _profileMenus(
                             title: "Privacy Policy",
                             width: width,
                             asset: "policy",
-                            onClick: () {}),
+                            onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PrivacyPolicy(),
+                                ),
+                              );
+                            }),
                         _customDivider(),
                         _profileMenus(
                             title: "Submit Feedback",

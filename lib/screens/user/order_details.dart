@@ -7,8 +7,8 @@ import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
 
 class OrderDetails extends StatefulWidget {
   final String orderId;
@@ -24,10 +24,11 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   /// get orderDetails...
   Future getOrderDetails() async {
+
     int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getOrderDetailsFromOrderId(
         widget.orderId.toString(), userId.toString());
-    print(widget.orderId.toString());
+
     OrderDetailsModel _orderDetailsModel = OrderDetailsModel.fromJson(response);
     return _orderDetailsModel;
   }
@@ -205,10 +206,55 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         BlueOutlineButton(
                                       width: width,
                                       onTap: () {
-                                        homeProvider.selectedString =
-                                            "OrderTracking";
                                         _orderProvider.orderIdToTrack =
                                             "${snapshot.data.response[0].orderData[index].subOrderNo}";
+
+                                        _orderProvider.userDeliveryAddress = LatLng(23.28997666506622,78.43588247895241, );
+                                        // _orderProvider.userDeliveryAddress =
+                                        //     LatLng(
+                                        //   double.parse(snapshot
+                                        //                   .data
+                                        //                   .response[0]
+                                        //                   .userDeliveryAddress[
+                                        //                       0]
+                                        //                   .latitudes ==
+                                        //               "23.28997666506622" ||
+                                        //           snapshot
+                                        //                   .data
+                                        //                   .response[0]
+                                        //                   .userDeliveryAddress[
+                                        //                       0]
+                                        //                   .latitudes ==
+                                        //               null
+                                        //       ? "78.43588247895241"
+                                        //       : snapshot
+                                        //           .data
+                                        //           .response[0]
+                                        //           .userDeliveryAddress[0]
+                                        //           .longitude),
+                                        //   double.parse(snapshot
+                                        //                   .data
+                                        //                   .response[0]
+                                        //                   .userDeliveryAddress[
+                                        //                       0]
+                                        //                   .longitude ==
+                                        //               "" ||
+                                        //           snapshot
+                                        //                   .data
+                                        //                   .response[0]
+                                        //                   .userDeliveryAddress[
+                                        //                       0]
+                                        //                   .longitude ==
+                                        //               null
+                                        //       ? ""
+                                        //       : snapshot
+                                        //           .data
+                                        //           .response[0]
+                                        //           .userDeliveryAddress[0]
+                                        //           .longitude),
+                                        // );
+                                        homeProvider.selectedString =
+                                            "OrderTracking";
                                       },
                                       title: "TRACK",
                                     ),

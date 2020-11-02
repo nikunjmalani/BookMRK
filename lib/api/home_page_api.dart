@@ -20,7 +20,7 @@ class HomePageApi {
       url,
       headers: header,
     );
-    print(response.body);
+
     dynamic data = jsonDecode(response.body);
 
     return data;

@@ -30,7 +30,7 @@ class LoginAPI {
     );
 
     dynamic data = jsonDecode(response.body);
-    // print(data);
+
     if (data['status'] == 200) {
       return {
         "status": 200,

@@ -456,8 +456,7 @@ class _UserEditAddressState extends State<UserEditAddress> {
                                                         child) {
                                                       return GestureDetector(
                                                         onTap: () async {
-                                                          print(_mapProvider
-                                                              .addressSelectedLatLng);
+
                                                           dynamic response = await MapAPI
                                                               .getAddressFromLatLng(
                                                                   _mapProvider
