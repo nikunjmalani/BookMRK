@@ -1,5 +1,6 @@
 import 'package:bookmrk/api/search_api.dart';
 import 'package:bookmrk/api/wishlist_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/no_data_model.dart';
 import 'package:bookmrk/model/search_product_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -8,8 +9,8 @@ import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -28,8 +29,8 @@ class _SearchState extends State<Search> {
       productName = "a";
     }
 
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic response =
         await SearchAPI.searchProductHomePage(productName, userId.toString());
     if (response['response'].length == 0) {
@@ -222,9 +223,8 @@ class _SearchState extends State<Search> {
                                   right: 0,
                                   child: IconButton(
                                     onPressed: () async {
-                                      SharedPreferences _prefs =
-                                          await SharedPreferences.getInstance();
-                                      int userId = _prefs.getInt('userId');
+
+                                      int userId =  prefs.read<int>('userId');
                                       dynamic response = await WishListAPI
                                           .addProductInWishList(
                                               userId.toString(),
@@ -254,7 +254,18 @@ class _SearchState extends State<Search> {
                       } else {
                         return Padding(
                           padding: EdgeInsets.only(top: 40.0),
-                          child: Text('Please write Correct name'),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/search1.svg',
+                                height: 100.0,
+                              ),
+                              SizedBox(height:30),
+                              Text('Please write Correct names'),
+                            ],
+                          ),
                         );
                       }
                     } else {

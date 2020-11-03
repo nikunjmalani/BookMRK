@@ -1,20 +1,23 @@
 import 'dart:async';
 
 import 'package:bookmrk/api/order_history_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/track_order_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/map_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderTracking extends StatefulWidget {
   final String orderIdToTrack;
+  final LatLng userAddressToDeliver;
 
-  const OrderTracking({this.orderIdToTrack});
+  const OrderTracking({this.orderIdToTrack, this.userAddressToDeliver});
 
   @override
   _OrderTrackingState createState() => _OrderTrackingState();
@@ -22,22 +25,95 @@ class OrderTracking extends StatefulWidget {
 
 class _OrderTrackingState extends State<OrderTracking> {
   ColorPalette colorPalette = ColorPalette();
+  Timer timer;
+  MapProvider _mapProviderMap;
 
   /// get Information to track order details...
   Future getTrackingInformation() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
         userId.toString(), widget.orderIdToTrack);
     TrackOrderModel _trackOrderModel = TrackOrderModel.fromJson(response);
-    print(response);
+
     return _trackOrderModel;
+  }
+
+  getDeliveryBoyLocation() async {
+    timer = Timer.periodic(Duration(seconds: 10), (timer) async {
+      int userId = prefs.read<int>('userId');
+      dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
+          userId.toString(), widget.orderIdToTrack);
+      TrackOrderModel _trackOrderModel = TrackOrderModel.fromJson(response);
+      Provider.of<MapProvider>(context, listen: false)
+          .deliveryBoyCurrentLocation = LatLng(
+        double.parse(_trackOrderModel.response[0].deliveryUserLatitudes == "" ||
+                _trackOrderModel.response[0].deliveryUserLatitudes == null
+            ? "66.66762233898528"
+            : _trackOrderModel.response[0].deliveryUserLatitudes),
+        double.parse(_trackOrderModel.response[0].deliveryUserLongitude == "" ||
+                _trackOrderModel.response[0].deliveryUserLongitude == null
+            ? "70.07588859647512"
+            : _trackOrderModel.response[0].deliveryUserLongitude),
+      );
+      PolylinePoints polylinePoints = PolylinePoints();
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        kMapKey,
+        PointLatLng(_mapProviderMap.deliveryBoyCurrentLocation.latitude,
+            _mapProviderMap.deliveryBoyCurrentLocation.longitude),
+        PointLatLng(widget.userAddressToDeliver.latitude,
+            widget.userAddressToDeliver.longitude),
+      );
+      Provider.of<MapProvider>(context, listen: false).pathPointsList =
+          result.points;
+    });
+  }
+
+  getPoints() async {
+    int userId = prefs.read<int>('userId');
+    dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
+        userId.toString(), widget.orderIdToTrack);
+    TrackOrderModel _trackOrderModel = TrackOrderModel.fromJson(response);
+    Provider.of<MapProvider>(context, listen: false)
+        .deliveryBoyCurrentLocation = LatLng(
+      double.parse(_trackOrderModel.response[0].deliveryUserLatitudes == "" ||
+              _trackOrderModel.response[0].deliveryUserLatitudes == null
+          ? "66.66762233898528"
+          : _trackOrderModel.response[0].deliveryUserLatitudes),
+      double.parse(_trackOrderModel.response[0].deliveryUserLongitude == "" ||
+              _trackOrderModel.response[0].deliveryUserLongitude == null
+          ? "70.07588859647512"
+          : _trackOrderModel.response[0].deliveryUserLongitude),
+    );
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      kMapKey,
+      PointLatLng(_mapProviderMap.deliveryBoyCurrentLocation.latitude,
+          _mapProviderMap.deliveryBoyCurrentLocation.longitude),
+      PointLatLng(widget.userAddressToDeliver.latitude,
+          widget.userAddressToDeliver.longitude),
+    );
+    Provider.of<MapProvider>(context, listen: false).pathPointsList =
+        result.points;
+    print(result.points);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPoints();
+    getDeliveryBoyLocation();
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var homeProvider = Provider.of<HomeScreenProvider>(context, listen: false);
-
+    _mapProviderMap = Provider.of<MapProvider>(context);
     return Consumer<HomeScreenProvider>(
       builder: (context, data, child) {
         return FutureBuilder(
@@ -64,30 +140,55 @@ class _OrderTrackingState extends State<OrderTracking> {
                       ),
                     ),
                     snapshot.data.response[0].inTransit == "1"
-                        ? Container(
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Consumer<MapProvider>(
-                                builder: (_, _mapProvider, child) => GoogleMap(
-                                  initialCameraPosition: CameraPosition(
-                                      target: _mapProvider.selectedLatLng,
-                                      zoom: 14.0),
-                                  mapType: MapType.terrain,
-                                  onTap: (value) {
-                                    print(value);
-                                    _mapProvider.selectedLatLng = value;
-                                  },
-                                  minMaxZoomPreference:
-                                      MinMaxZoomPreference(14, 17),
-                                  mapToolbarEnabled: true,
-                                  markers: {
-                                    Marker(
-                                      markerId: MarkerId("1"),
-                                      visible: true,
-                                      position: _mapProvider.selectedLatLng,
-                                      draggable: true,
-                                    )
-                                  },
+                        ? GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: Consumer<MapProvider>(
+                                  builder: (_, _mapProvider, child) =>
+                                      GoogleMap(
+                                    initialCameraPosition: CameraPosition(
+                                        target: widget.userAddressToDeliver,
+                                        zoom: 1),
+                                    mapType: MapType.terrain,
+                                    polylines: {
+                                      Polyline(
+                                        polylineId: PolylineId("1"),
+                                        color: colorPalette.navyBlue,
+                                        points: List.generate(
+                                          _mapProvider.pathPointsList.length,
+                                          (index) => LatLng(
+                                            _mapProvider
+                                                .pathPointsList[index].latitude,
+                                            _mapProvider.pathPointsList[index]
+                                                .longitude,
+                                          ),
+                                        ),
+                                      )
+                                    },
+                                    minMaxZoomPreference:
+                                        MinMaxZoomPreference(1, 18),
+                                    mapToolbarEnabled: true,
+                                    onTap: (value) {
+                                      print(value);
+                                    },
+                                    markers: {
+                                      Marker(
+                                        markerId: MarkerId("1"),
+                                        visible: true,
+                                        position: _mapProvider
+                                            .deliveryBoyCurrentLocation,
+                                        draggable: false,
+                                      ),
+                                      Marker(
+                                          markerId: MarkerId("2"),
+                                          visible: true,
+                                          position: widget.userAddressToDeliver,
+                                          draggable: false,
+                                          alpha: 0.2)
+                                    },
+                                  ),
                                 ),
                               ),
                             ),

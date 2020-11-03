@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/school_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/school_product_model.dart';
 import 'package:bookmrk/model/school_subcategory_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -9,8 +10,8 @@ import 'package:bookmrk/widgets/indicators.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SchoolInfo extends StatefulWidget {
   final String schoolSlug;
@@ -28,8 +29,8 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
   /// api to get school product details....
   Future getSchoolProductDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic data = await SchoolAPI.getSchoolProductDetails(
         widget.schoolSlug, userId.toString());
 
@@ -40,8 +41,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
   /// call api for get products of selected subcategory in school...
   Future getSubCategoryProducts(String subCategoryId) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId =  prefs.read<int>('userId');
     dynamic response = await SchoolAPI.getSubcategoryProductsOfSchool(
         userId.toString(), widget.schoolSlug, subCategoryId.toString());
     SchoolSubcategoryModel _schoolSubcategoryModel =
@@ -129,12 +129,13 @@ class _SchoolInfoState extends State<SchoolInfo> {
                         height: height / 24,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: _schoolProvider.selectedSubCategoryId ==
-                                        '${snapshot.data.response[0].schoolCat[index].categoryId}'
+                                        '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
                                     ? colorPalette.navyBlue
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25),
@@ -146,6 +147,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                               width: 100,
                               child: GestureDetector(
                                 onTap: () {
+                                  _schoolProvider.selectedSchoolCategoryIndex = index;
                                   _schoolProvider.selectedSubCategoryId =
                                       '${snapshot.data.response[0].schoolCat[index].categoryId}';
                                 },
@@ -156,12 +158,12 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                     fontSize: 17,
                                     fontWeight: _schoolProvider
                                                 .selectedSubCategoryId ==
-                                            '${snapshot.data.response[0].schoolCat[index].categoryId}'
+                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
                                         ? FontWeight.w900
                                         : FontWeight.w500,
                                     color: _schoolProvider
                                                 .selectedSubCategoryId ==
-                                            '${snapshot.data.response[0].schoolCat[index].categoryId}'
+                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
                                         ? Colors.white
                                         : colorPalette.navyBlue,
                                   ),
@@ -204,6 +206,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                       height: height / 2.7,
                                       width: width,
                                       child: ListView.builder(
+                                        physics: BouncingScrollPhysics(),
                                         itemCount:
                                             subCatSnapshot.data.response.length,
                                         scrollDirection: Axis.horizontal,
@@ -258,9 +261,15 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                   top: 30.0,
                                   bottom: 20,
                                 ),
-                                child: Text(
-                                  'No Data',
-                                  style: TextStyle(fontSize: 18.0),
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset('assets/icons/no_data.svg', height: 100,),
+                                    SizedBox(height: 20.0,),
+                                    Text(
+                                      'Products not found !',
+                                      style: TextStyle(fontSize: 18.0),
+                                    ),
+                                  ],
                                 ),
                               );
                             }
@@ -341,6 +350,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                             itemCount: snapshot
                                 .data.response[0].schoolAllProduct.length,
                             scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               if (_schoolProvider.selectedSchoolProductType ==
                                   "Single") {

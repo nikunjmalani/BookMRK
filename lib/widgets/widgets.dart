@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Widget OtpBox(context, TextEditingController controller, FocusNode fn) {
+Widget OtpBox(context, TextEditingController controller, FocusNode fn, {Function doneCallBack}) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
     height: MediaQuery.of(context).size.width / 7,
@@ -21,7 +21,11 @@ Widget OtpBox(context, TextEditingController controller, FocusNode fn) {
       style: TextStyle(fontSize: 35.0),
       onChanged: (value) {
         if (value.length >= 1) {
-          fn.nextFocus();
+          if(doneCallBack != null){
+            doneCallBack();
+          }
+            fn.nextFocus();
+
         } else if (value.length <= 0) {
           fn.previousFocus();
         }
@@ -45,10 +49,10 @@ Widget ImageBox({height, width, image, title}) {
       border: Border.all(color: Color(0xffcfcfcf)),
       borderRadius: BorderRadius.circular(25),
       image: DecorationImage(
-          image: image != null
+          image: image != null && image != ""
               ? NetworkImage(image)
               : AssetImage('assets/images/logo.png'),
-          fit: BoxFit.fill),
+          fit: BoxFit.contain),
     ),
     child: Container(
       alignment: Alignment.center,
@@ -56,10 +60,12 @@ Widget ImageBox({height, width, image, title}) {
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
         color: colorPalette.orange,
       ),
+      padding: EdgeInsets.symmetric(horizontal: 5.0,),
       height: 40,
       width: double.infinity,
       child: Text(
         title,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           backgroundColor: colorPalette.orange,
           fontFamily: 'Roboto',
@@ -107,8 +113,7 @@ Widget ProductBox(
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: imageProvider,
-                        colorFilter: ColorFilter.mode(
-                            Colors.red.withOpacity(0.5), BlendMode.colorBurn)),
+                        ),
                   ),
                 ),
                 placeholder: (context, url) =>
@@ -162,14 +167,13 @@ Widget ProductBox(
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    height: 20,
-                    width: 70,
+                    padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
                     decoration: BoxDecoration(
                       color: colorPalette.pinkOrange,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
-                      '$stock Stock',
+                      stock == "IN" ? "In Stock" : "Out of Stock",
                       style: TextStyle(
                         fontFamily: 'Roboto',
                         fontSize: 13,

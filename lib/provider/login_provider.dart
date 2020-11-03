@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoginProvider extends ChangeNotifier {
   /// login password eye ~ visibility
-  bool _isPasswordVisible = false;
+  bool _isPasswordVisible = true;
 
   bool get isPasswordVisible => _isPasswordVisible;
 

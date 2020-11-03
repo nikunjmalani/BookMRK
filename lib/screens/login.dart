@@ -1,15 +1,16 @@
 import 'package:bookmrk/api/login_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/login_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:bookmrk/screens/forgotPassword.dart';
+import 'package:bookmrk/screens/mobileverification.dart';
 import 'package:bookmrk/screens/register.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/textfields.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'homePage.dart';
 
@@ -112,20 +113,29 @@ class _LoginState extends State<Login> {
                                   email: _loginEmailAddress.text,
                                   password: _loginPassword.text);
 
+                                print(response);
                               if (response['status'] == 200) {
-                                _loginProvider.isPasswordChecking = false;
-                                SharedPreferences _prefs =
-                                    await SharedPreferences.getInstance();
-                                _prefs.setBool('isLogin', true);
-                                _prefs.setInt(
-                                    'userId',
-                                    int.parse(response['data'][0]['user_id']
-                                        .toString()));
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HomePage(),
-                                    ));
+                                if (response['data'][0]['is_mobile_verified'] ==
+                                    "0") {
+                                  _loginProvider.isPasswordChecking = false;
+                                  prefs.write('isLogin', true);
+                                  prefs.write(
+                                      'userId',
+                                      int.parse(response['data'][0]['user_id']
+                                          .toString()));
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomePage(),
+                                      ));
+                                } else {
+                                  _loginProvider.isPasswordChecking = false;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MobileVerification()));
+                                }
                               } else {
                                 _loginProvider.isPasswordChecking = false;
 

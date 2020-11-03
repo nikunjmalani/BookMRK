@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
@@ -7,7 +8,6 @@ import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeAddress extends StatefulWidget {
   @override
@@ -17,8 +17,7 @@ class ChangeAddress extends StatefulWidget {
 class _ChangeAddressState extends State<ChangeAddress> {
   /// get user address in cart page..
   Future getUserAddress() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userModel = UserAddressModel.fromJson(response);
     return _userModel;
@@ -42,7 +41,7 @@ class _ChangeAddressState extends State<ChangeAddress> {
                   return Container(
                     padding: EdgeInsets.only(top: 20),
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    height: width / 2.2,
+                    height: width / 2,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: colorPalette.grey,
@@ -73,15 +72,36 @@ class _ChangeAddressState extends State<ChangeAddress> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  Text(
-                                    '${snapshot.data.response[index].address1}, \n${snapshot.data.response[index].address2}, ${snapshot.data.response[index].city}, \n${snapshot.data.response[index].state}, ${snapshot.data.response[index].country}\n${snapshot.data.response[index].pincode}',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 13,
-                                      color: const Color(0xffa9a9aa),
-                                      fontWeight: FontWeight.w300,
+                                  Container(
+                                    width: width / 1.8,
+                                    height: 46.0,
+                                    child: Text(
+                                      'address 1 : ${snapshot.data.response[index].address1}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 13,
+                                        color: const Color(0xffa9a9aa),
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    textAlign: TextAlign.left,
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                    width: width / 1.8,
+                                    height: 30.0,
+                                    child: Text(
+                                      'address 2 : ${snapshot.data.response[index].address2}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 13,
+                                        color: const Color(0xffa9a9aa),
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -107,9 +127,8 @@ class _ChangeAddressState extends State<ChangeAddress> {
                               ? () {}
                               : () async {
                                   _userProvider.changeAddressInProgress = true;
-                                  SharedPreferences _prefs =
-                                      await SharedPreferences.getInstance();
-                                  int userId = _prefs.getInt('userId');
+
+                                  int userId = prefs.read<int>('userId');
                                   dynamic response =
                                       await UserAPI.changeSelectedUserAddress(
                                           userId.toString(),

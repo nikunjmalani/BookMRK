@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/wishlist_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/wishlist_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
@@ -7,7 +8,6 @@ import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WishList extends StatefulWidget {
   @override
@@ -17,8 +17,7 @@ class WishList extends StatefulWidget {
 class _WishListState extends State<WishList> {
   /// api to get all the products in the wish list....
   Future<WishListModel> getWishList() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await WishListAPI.getWishListProducts(userId.toString());
     WishListModel _wishListModel = WishListModel.fromJson(response);
     return _wishListModel;
@@ -73,11 +72,8 @@ class _WishListState extends State<WishList> {
                           child: ProductBox(
                               icon: GestureDetector(
                                   onTap: () async {
-                                    SharedPreferences _prefs =
-                                        await SharedPreferences.getInstance();
-                                    int userId = _prefs.getInt('userId');
-
-
+                                    int userId = prefs.read<int>('userId');
+                                    
                                     dynamic response = await WishListAPI
                                         .removeProductFromWishList(
                                             userId.toString(),

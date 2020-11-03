@@ -2,14 +2,16 @@ import 'package:bookmrk/widgets/indicators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-Widget Carasoul(
-    {height,
-    pageController,
-    currentPage,
-    colorPalette,
-    width,
-    onChanged,
-    banners}) {
+Widget Carasoul({
+  height,
+  pageController,
+  currentPage,
+  colorPalette,
+  width,
+  onChanged,
+  banners,
+  seeMoreLink,
+}) {
   return Container(
     height: height / 4.3,
     child: Column(
@@ -60,38 +62,40 @@ Widget Carasoul(
                                 ),
                                 textAlign: TextAlign.left,
                               ),
-                              Container(
-                                height: height / 20,
-                                width: width / 3,
-                                padding: EdgeInsets.only(
-                                  right: 7,
-                                  left: 15,
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(40),
-                                  color: Colors.white,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'SEE MORE',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 14,
-                                        color: const Color(0xff727c8e),
-                                        letterSpacing: 0.72,
+                              seeMoreLink != "" && seeMoreLink != null
+                                  ? Container(
+                                      height: height / 20,
+                                      width: width / 3,
+                                      padding: EdgeInsets.only(
+                                        right: 7,
+                                        left: 15,
                                       ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SvgPicture.asset(
-                                      "assets/icons/backBlue.svg",
-                                      height: height / 25,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(40),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'SEE MORE',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 14,
+                                              color: const Color(0xff727c8e),
+                                              letterSpacing: 0.72,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SvgPicture.asset(
+                                            "assets/icons/backBlue.svg",
+                                            height: height / 25,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox(),
                             ],
                           ),
                         ),

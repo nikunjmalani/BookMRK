@@ -1,11 +1,11 @@
 import 'package:bookmrk/api/feedback_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedBack extends StatefulWidget {
   @override
@@ -71,9 +71,8 @@ class _FeedBackState extends State<FeedBack> {
                   context: context,
                   onClick: () async {
                     _userProvider.feedbackInProgress = true;
-                    SharedPreferences _prefs =
-                        await SharedPreferences.getInstance();
-                    int userId = _prefs.get('userId');
+
+                    int userId = prefs.read<int>('userId');
                     dynamic response = await FeedBackAPI.giveFeedBack(
                         userId.toString(), _feedBackController.text);
                     if (response['status'] == 200) {

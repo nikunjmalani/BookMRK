@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/user_profile_info_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
@@ -17,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -39,8 +39,7 @@ class _EditProfileState extends State<EditProfile> {
 
   ///get user details ...
   Future getCurrentDetailsOfUser() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await UserAPI.getAllUserInformation(userId.toString());
     UserProfileInfoModel _userProfileModel =
         UserProfileInfoModel.fromJson(response);
@@ -72,8 +71,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   getProfilePic() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await UserAPI.getAllUserInformation(userId.toString());
     UserProfileInfoModel _userProfileModel =
         UserProfileInfoModel.fromJson(response);
@@ -95,8 +93,8 @@ class _EditProfileState extends State<EditProfile> {
 
     dynamic bytes = File(pickedFile.files[0].path).readAsBytesSync();
     dynamic data = base64Encode(bytes);
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId = prefs.read<int>('userId');
     dynamic response =
         await UserAPI.updateUserProfileImage(userId.toString(), data);
 
@@ -412,10 +410,7 @@ class _EditProfileState extends State<EditProfile> {
                             height: height,
                             onTap: () async {
                               _userProvider.isProfileUpdateInProgress = true;
-
-                              SharedPreferences _prefs =
-                                  await SharedPreferences.getInstance();
-                              int userId = _prefs.getInt('userId');
+                              int userId = prefs.read<int>('userId');
                               dynamic response =
                                   await UserAPI.changeUserInformation(
                                       userId.toString(),

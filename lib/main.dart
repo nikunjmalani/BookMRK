@@ -1,3 +1,4 @@
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
@@ -14,12 +15,16 @@ import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 /// new push from the backend branch...
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await GetStorage.init();
+  prefs = GetStorage();
   runApp(MyApp());
 }
 
@@ -71,7 +76,7 @@ class MyApp extends StatelessWidget {
           create: (context) => MapProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'BookMRK',
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),

@@ -50,7 +50,7 @@ class CategoryAPI {
   /// get list of category with subcategory ....
   static Future getListOfCategoryWithSubCategory(String userId) async {
     String url =
-        "$kBaseURL//categories/main_categories_view_with_subcategory/1595922619X5f1fd8bb5f332/MOB/$userId";
+        "$kBaseURL/categories/main_categories_view_with_subcategory/1595922619X5f1fd8bb5f332/MOB/$userId";
     Map<String, String> header = {
 //      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
       "Client-Service": "frontend-client",
@@ -59,6 +59,22 @@ class CategoryAPI {
     };
 
     http.Response response = await http.get(url, headers: header);
+    return jsonDecode(response.body);
+  }
+
+  /// category filter publisher, class, subjects...
+  static Future getFilterCategory(
+      String userId, String filterType, String filterSlug) async {
+    String url =
+        "$kBaseURL/categories/filter_categories_product/1595922619X5f1fd8bb5f332/MOB/$userId/$filterType/$filterSlug";
+
+    Map<String, String> header = {
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded"
+    };
+    http.Response response = await http.get(url, headers: header);
+    print(response.body);
     return jsonDecode(response.body);
   }
 }

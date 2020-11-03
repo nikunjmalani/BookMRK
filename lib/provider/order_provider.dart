@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OrderProvider extends ChangeNotifier {
   /// store the orderId of the selected order from the history...
@@ -18,6 +19,16 @@ class OrderProvider extends ChangeNotifier {
 
   set orderIdToTrack(String value) {
     _orderIdToTrack = value;
+    notifyListeners();
+  }
+
+  /// user address latlng to deliver ....
+  LatLng _userDeliveryAddress;
+
+  LatLng get userDeliveryAddress => _userDeliveryAddress;
+
+  set userDeliveryAddress(LatLng value) {
+    _userDeliveryAddress = value;
     notifyListeners();
   }
 }

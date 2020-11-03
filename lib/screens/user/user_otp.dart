@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
@@ -8,7 +9,6 @@ import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserOTP extends StatefulWidget {
   @override
@@ -115,9 +115,7 @@ class _UserOTPState extends State<UserOTP> {
                           if (otp.length >= 4) {
                             /// when forgot password !
                             if (otp == _userProvider.otpForMobileChange) {
-                              SharedPreferences _prefs =
-                                  await SharedPreferences.getInstance();
-                              int userId = _prefs.getInt('userId');
+                              int userId = prefs.read<int>('userId');
                               dynamic response =
                                   await UserAPI.changeUserProfileMobilNumber(
                                       userId.toString(),

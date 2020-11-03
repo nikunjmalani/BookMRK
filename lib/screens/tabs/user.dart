@@ -1,17 +1,19 @@
 import 'package:bookmrk/api/forgot_password_api.dart';
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/user_profile_info_model.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/screens/onBoarding.dart';
+import 'package:bookmrk/screens/user/privacy_policy.dart';
+import 'package:bookmrk/screens/user/terms_and_conditions.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class User extends StatefulWidget {
   @override
@@ -22,8 +24,7 @@ class _UserState extends State<User> {
   ColorPalette colorPalette = ColorPalette();
 
   Future getUserInformation() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
 
     dynamic userInformation =
         await UserAPI.getAllUserInformation(userId.toString());
@@ -36,8 +37,7 @@ class _UserState extends State<User> {
 
   /// send otp on mobile number ...
   Future sendOTP(String userMobileNumber) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response =
         await ForgotPasswordAPI.forgotPassword(userMobileNumber, userId);
 
@@ -242,13 +242,27 @@ class _UserState extends State<User> {
                             title: "Terms and Conditions",
                             width: width,
                             asset: "tc",
-                            onClick: () {}),
+                            onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TermsAndCondition(),
+                                ),
+                              );
+                            }),
                         _customDivider(),
                         _profileMenus(
                             title: "Privacy Policy",
                             width: width,
                             asset: "policy",
-                            onClick: () {}),
+                            onClick: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PrivacyPolicy(),
+                                ),
+                              );
+                            }),
                         _customDivider(),
                         _profileMenus(
                             title: "Submit Feedback",
@@ -271,9 +285,7 @@ class _UserState extends State<User> {
                                   Navigator.pop(context);
                                 },
                                 onYesTap: () async {
-                                  SharedPreferences _sharedPref =
-                                      await SharedPreferences.getInstance();
-                                  _sharedPref.setBool('isLogin', false);
+                                  prefs.write('isLogin', false);
                                   _homeScreenProvider.selectedString = "Home";
                                   _homeScreenProvider.selectedBottomIndex = 0;
                                   Navigator.pop(context);
@@ -314,9 +326,14 @@ Widget _profileMenus({width, title, asset, onClick}) {
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 3),
       child: Row(
         children: [
-          SvgPicture.asset(
-            "assets/icons/${asset}.svg",
-            height: width / 22,
+          Container(
+            width: width / 16,
+            height: 20,
+            child: SvgPicture.asset(
+              "assets/icons/${asset}.svg",
+              height: width / 22,
+              width: width / 22,
+            ),
           ),
           SizedBox(
             width: 15,

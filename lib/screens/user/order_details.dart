@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/order_history_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/order_details_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/order_provider.dart';
@@ -6,8 +7,8 @@ import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderDetails extends StatefulWidget {
   final String orderId;
@@ -23,11 +24,11 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   /// get orderDetails...
   Future getOrderDetails() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getOrderDetailsFromOrderId(
         widget.orderId.toString(), userId.toString());
-    print(widget.orderId.toString());
+
     OrderDetailsModel _orderDetailsModel = OrderDetailsModel.fromJson(response);
     return _orderDetailsModel;
   }
@@ -205,10 +206,53 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         BlueOutlineButton(
                                       width: width,
                                       onTap: () {
-                                        homeProvider.selectedString =
-                                            "OrderTracking";
                                         _orderProvider.orderIdToTrack =
                                             "${snapshot.data.response[0].orderData[index].subOrderNo}";
+                                        _orderProvider.userDeliveryAddress =
+                                            LatLng(
+                                          double.parse(snapshot
+                                                          .data
+                                                          .response[0]
+                                                          .userDeliveryAddress[
+                                                              0]
+                                                          .latitudes ==
+                                                      "" ||
+                                                  snapshot
+                                                          .data
+                                                          .response[0]
+                                                          .userDeliveryAddress[
+                                                              0]
+                                                          .latitudes ==
+                                                      null
+                                              ? "21.969138705424697"
+                                              : snapshot
+                                                  .data
+                                                  .response[0]
+                                                  .userDeliveryAddress[0]
+                                                  .longitude),
+                                          double.parse(snapshot
+                                                          .data
+                                                          .response[0]
+                                                          .userDeliveryAddress[
+                                                              0]
+                                                          .longitude ==
+                                                      "" ||
+                                                  snapshot
+                                                          .data
+                                                          .response[0]
+                                                          .userDeliveryAddress[
+                                                              0]
+                                                          .longitude ==
+                                                      null
+                                              ? "77.69074838608503"
+                                              : snapshot
+                                                  .data
+                                                  .response[0]
+                                                  .userDeliveryAddress[0]
+                                                  .longitude),
+                                        );
+                                        homeProvider.selectedString =
+                                            "OrderTracking";
                                       },
                                       title: "TRACK",
                                     ),
@@ -250,7 +294,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    height: width / 2.5,
+                    height: width / 2.3,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: colorPalette.grey,

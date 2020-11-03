@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 
 class RegisterProvider extends ChangeNotifier {
   /// register password & confirm password visibility
-  bool _isRegisterPasswordVisible = false;
+  bool _isRegisterPasswordVisible = true;
 
   bool get isRegisterPasswordVisible => _isRegisterPasswordVisible;
 
   set isRegisterPasswordVisible(bool value) {
     _isRegisterPasswordVisible = value;
+    notifyListeners();
+  }
+
+  /// register Confirm password visibility..
+  bool _isRegisterConfirmPasswordVisible = true;
+
+  bool get isRegisterConfirmPasswordVisible =>
+      _isRegisterConfirmPasswordVisible;
+
+  set isRegisterConfirmPasswordVisible(bool value) {
+    _isRegisterConfirmPasswordVisible = value;
     notifyListeners();
   }
 
@@ -80,6 +91,16 @@ class RegisterProvider extends ChangeNotifier {
 
   set isOTPVerificationPageFromRegisterUser(bool value) {
     _isOTPVerificationPageFromRegisterUser = value;
+    notifyListeners();
+  }
+
+  /// timer tick provider....
+  int _timeRemainingInTimer = 0;
+
+  int get timeRemainingInTimer => _timeRemainingInTimer;
+
+  set timeRemainingInTimer(int value) {
+    _timeRemainingInTimer = value;
     notifyListeners();
   }
 }

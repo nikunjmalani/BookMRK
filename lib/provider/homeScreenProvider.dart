@@ -1,7 +1,7 @@
 import 'package:bookmrk/api/notification_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/notification_model.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
   /// bell icon...
@@ -147,8 +147,7 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   getNotification() async {
-    SharedPreferences _presf = await SharedPreferences.getInstance();
-    int userId = _presf.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response =
         await NotificationAPI.getAllNotification(userId.toString());
     NotificationModel _notificationModel = NotificationModel.fromJson(response);
@@ -159,6 +158,16 @@ class HomeScreenProvider extends ChangeNotifier {
       }
     });
     _totalNewNotifications = totalNotification;
+    notifyListeners();
+  }
+
+  /// provider for check when show dialog open or not,,,
+  bool _homeScreenMainPopupShow = true;
+
+  bool get homeScreenMainPopupShow => _homeScreenMainPopupShow;
+
+  set homeScreenMainPopupShow(bool value) {
+    _homeScreenMainPopupShow = value;
     notifyListeners();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Widget NavyBlueButton({BuildContext context, Function onClick, String title}) {
   ColorPalette colorPalette = ColorPalette();
@@ -49,12 +50,12 @@ Widget ViewAll({onClick}) {
   );
 }
 
-Widget CategoryButtons(width, title, color, borderColor) {
+Widget CategoryButtons(title, color, borderColor) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
-    margin: EdgeInsets.only(left: 14, top: 15),
-    height: width / 8,
-    width: width / 3.4,
+    margin: EdgeInsets.only(left: 14, top: 15, right: 14, bottom :15),
+    height: Get.width / 8,
+    width: Get.width / 4.4,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(15),
       color: color,
@@ -66,7 +67,33 @@ Widget CategoryButtons(width, title, color, borderColor) {
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
         fontFamily: 'Roboto',
-        fontSize: 18,
+        fontSize: 16,
+        color: const Color(0xffffffff),
+        fontWeight: FontWeight.w600,
+      ),
+      textAlign: TextAlign.left,
+    ),
+  );
+}
+
+Widget ClassButtons(title, color, borderColor) {
+  ColorPalette colorPalette = ColorPalette();
+  return Container(
+    margin: EdgeInsets.only(left: 14, top: 15, right: 14, bottom :15),
+    height: Get.width / 8,
+    width: Get.width / 4.3,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(15),
+      color: color,
+      border: Border.all(color: borderColor, width: 5),
+    ),
+    alignment: Alignment.center,
+    child: Text(
+      title,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontFamily: 'Roboto',
+        fontSize: 15,
         color: const Color(0xffffffff),
         fontWeight: FontWeight.w600,
       ),

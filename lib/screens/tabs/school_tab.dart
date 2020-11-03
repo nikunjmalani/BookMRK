@@ -143,9 +143,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                             image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.cover,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.red.withOpacity(0.5),
-                                                  BlendMode.colorBurn),
+
                                             ),
                                           ),
                                         ),
@@ -159,9 +157,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                               image: AssetImage(
                                                   "assets/images/schoolImage.png"),
                                               fit: BoxFit.cover,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.red.withOpacity(0.5),
-                                                  BlendMode.colorBurn),
+
                                             ),
                                           ),
                                         ),
@@ -175,9 +171,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                               image: AssetImage(
                                                   "assets/images/schoolImage.png"),
                                               fit: BoxFit.cover,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.red.withOpacity(0.5),
-                                                  BlendMode.colorBurn),
+
                                             ),
                                           ),
                                         ),
@@ -297,9 +291,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                             image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.cover,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.red.withOpacity(0.5),
-                                                  BlendMode.colorBurn),
+
                                             ),
                                           ),
                                         ),
@@ -313,9 +305,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                               image: AssetImage(
                                                   "assets/images/schoolImage.png"),
                                               fit: BoxFit.cover,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.red.withOpacity(0.5),
-                                                  BlendMode.colorBurn),
+
                                             ),
                                           ),
                                         ),
@@ -329,9 +319,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                               image: AssetImage(
                                                   "assets/images/schoolImage.png"),
                                               fit: BoxFit.cover,
-                                              colorFilter: ColorFilter.mode(
-                                                  Colors.red.withOpacity(0.5),
-                                                  BlendMode.colorBurn),
+
                                             ),
                                           ),
                                         ),

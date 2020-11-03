@@ -1,6 +1,8 @@
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/map_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
@@ -8,7 +10,6 @@ import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAddress extends StatefulWidget {
   @override
@@ -19,8 +20,7 @@ class _MyAddressState extends State<MyAddress> {
   ColorPalette colorPalette = ColorPalette();
 
   Future getUserAddress() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+    int userId = prefs.read<int>('userId');
     dynamic data = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userAddressModel = UserAddressModel.fromJson(data);
     return _userAddressModel;
@@ -48,6 +48,9 @@ class _MyAddressState extends State<MyAddress> {
                                   Provider.of<HomeScreenProvider>(context,
                                           listen: false)
                                       .selectedString = "UserAddAddress";
+                                  Provider.of<MapProvider>(context,
+                                          listen: false)
+                                      .isLatLngSelected = false;
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +96,7 @@ class _MyAddressState extends State<MyAddress> {
                                             padding: EdgeInsets.only(top: 20),
                                             margin: EdgeInsets.symmetric(
                                                 horizontal: 16, vertical: 10),
-                                            height: width / 2.2,
+                                            height: width / 2,
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: colorPalette.grey,
@@ -138,20 +141,48 @@ class _MyAddressState extends State<MyAddress> {
                                                           SizedBox(
                                                             height: 5,
                                                           ),
-                                                          Text(
-                                                            '${snapshot.data.response[index].address1}, \n${snapshot.data.response[index].address2}, ${snapshot.data.response[index].city}, \n${snapshot.data.response[index].state}, ${snapshot.data.response[index].country}\n${snapshot.data.response[index].pincode}',
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Roboto',
-                                                              fontSize: 13,
-                                                              color: const Color(
-                                                                  0xffa9a9aa),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w300,
+                                                          Container(
+                                                            width: 200.0,
+                                                            height: 46.0,
+                                                            child: Text(
+                                                              'address 1 : ${snapshot.data.response[index].address1},',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 13,
+                                                                color: const Color(
+                                                                    0xffa9a9aa),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
                                                             ),
-                                                            textAlign:
-                                                                TextAlign.left,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 5,
+                                                          ),
+                                                          Container(
+                                                            width: 200.0,
+                                                            height: 30,
+                                                            child: Text(
+                                                              'address 2 : ${snapshot.data.response[index].address2}',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 13,
+                                                                color: const Color(
+                                                                    0xffa9a9aa),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -166,12 +197,8 @@ class _MyAddressState extends State<MyAddress> {
                                                           IconButton(
                                                             onPressed:
                                                                 () async {
-                                                              SharedPreferences
-                                                                  _prefs =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-                                                              int userId =
-                                                                  _prefs.getInt(
+                                                              int userId = prefs
+                                                                  .read<int>(
                                                                       'userId');
                                                               String
                                                                   userAddressId =
@@ -213,41 +240,51 @@ class _MyAddressState extends State<MyAddress> {
                                                   ),
                                                 ),
                                                 GestureDetector(
-                                                  onTap: () async {
-                                                    _userProvider
-                                                            .changeAddressInProgress =
-                                                        true;
-                                                    SharedPreferences _prefs =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    int userId =
-                                                        _prefs.getInt('userId');
-                                                    dynamic response = await UserAPI
-                                                        .changeSelectedUserAddress(
-                                                            userId.toString(),
-                                                            snapshot
-                                                                .data
-                                                                .response[index]
-                                                                .userAddressId);
-                                                    if (response['status'] ==
-                                                        200) {
-                                                      setState(() {});
+                                                  onTap: snapshot
+                                                              .data
+                                                              .response[index]
+                                                              .isSelected ==
+                                                          "1"
+                                                      ? () {}
+                                                      : () async {
+                                                          _userProvider
+                                                                  .changeAddressInProgress =
+                                                              true;
 
-                                                      _userProvider
-                                                              .changeAddressInProgress =
-                                                          false;
-                                                      Scaffold.of(context)
-                                                          .showSnackBar(getSnackBar(
-                                                              'address is set as default address !'));
-                                                    } else {
-                                                      _userProvider
-                                                              .changeAddressInProgress =
-                                                          false;
-                                                      Scaffold.of(context)
-                                                          .showSnackBar(getSnackBar(
-                                                              'unable to set address as default!'));
-                                                    }
-                                                  },
+                                                          int userId =
+                                                              prefs.read<int>(
+                                                                  'userId');
+                                                          dynamic response = await UserAPI
+                                                              .changeSelectedUserAddress(
+                                                                  userId
+                                                                      .toString(),
+                                                                  snapshot
+                                                                      .data
+                                                                      .response[
+                                                                          index]
+                                                                      .userAddressId);
+                                                          if (response[
+                                                                  'status'] ==
+                                                              200) {
+                                                            setState(() {});
+
+                                                            _userProvider
+                                                                    .changeAddressInProgress =
+                                                                false;
+                                                            Scaffold.of(context)
+                                                                .showSnackBar(
+                                                                    getSnackBar(
+                                                                        'address is set as default address !'));
+                                                          } else {
+                                                            _userProvider
+                                                                    .changeAddressInProgress =
+                                                                false;
+                                                            Scaffold.of(context)
+                                                                .showSnackBar(
+                                                                    getSnackBar(
+                                                                        'unable to set address as default!'));
+                                                          }
+                                                        },
                                                   child: Container(
                                                     alignment: Alignment.center,
                                                     height: width / 10,

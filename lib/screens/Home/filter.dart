@@ -1,10 +1,10 @@
 import 'package:bookmrk/api/category_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/category_with_subcategory_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Filter extends StatefulWidget {
   @override
@@ -16,8 +16,8 @@ class _FilterState extends State<Filter> {
 
   /// get list of category with subcategory to filter....
   Future getListOfCategoryWithSubCategory() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    int userId = _prefs.getInt('userId');
+
+    int userId = prefs.read<int>('userId');
     dynamic response =
         await CategoryAPI.getListOfCategoryWithSubCategory(userId.toString());
     CategoryWithSubcategoryListModel _categoryWithSubcategoryModel =

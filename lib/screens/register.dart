@@ -3,6 +3,7 @@ import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:bookmrk/screens/login.dart';
+import 'package:bookmrk/screens/user/terms_and_conditions.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/textfields.dart';
@@ -134,6 +135,22 @@ class _RegisterState extends State<Register> {
                               height: 10,
                             ),
                             SuffixTextfield(
+                              onTap: () {
+                                DatePicker.showDatePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime.parse("1900-01-01"),
+                                    maxTime: DateTime.now()
+                                        .subtract(Duration(days: 365)),
+                                    onChanged: (date) {
+                                  _registerDateOfBirth.text =
+                                      date.toString().split(" ")[0];
+                                }, onConfirm: (date) {
+                                  _registerDateOfBirth.text =
+                                      date.toString().split(" ")[0];
+                                },
+                                    currentTime: DateTime.now(),
+                                    locale: LocaleType.en);
+                              },
                               obscureText: false,
                               hintText: "Date of Birth",
                               validator: (value) {
@@ -151,27 +168,9 @@ class _RegisterState extends State<Register> {
                                 return null;
                               },
                               controller: _registerDateOfBirth,
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  DatePicker.showDatePicker(context,
-                                      showTitleActions: true,
-                                      minTime: DateTime.parse("1900-01-01"),
-                                      maxTime: DateTime.now()
-                                          .subtract(Duration(days: 365)),
-                                      onChanged: (date) {
-                                    _registerDateOfBirth.text =
-                                        date.toString().split(" ")[0];
-                                  }, onConfirm: (date) {
-                                    _registerDateOfBirth.text =
-                                        date.toString().split(" ")[0];
-                                  },
-                                      currentTime: DateTime.now(),
-                                      locale: LocaleType.en);
-                                },
-                                child: Icon(
-                                  Icons.calendar_today,
-                                  color: colorPalette.navyBlue,
-                                ),
+                              suffixIcon: Icon(
+                                Icons.calendar_today,
+                                color: colorPalette.navyBlue,
                               ),
                             ),
                             SizedBox(
@@ -201,7 +200,7 @@ class _RegisterState extends State<Register> {
                             ),
                             SuffixTextfield(
                                 obscureText:
-                                    _registerProvider.isRegisterPasswordVisible,
+                                    _registerProvider.isRegisterConfirmPasswordVisible,
                                 hintText: "Confirm Password",
                                 controller: _registerConfirmPassword,
                                 validator: (value) {
@@ -217,12 +216,12 @@ class _RegisterState extends State<Register> {
                                 suffixIcon: GestureDetector(
                                   onTap: () {
                                     _registerProvider
-                                            .isRegisterPasswordVisible =
+                                            .isRegisterConfirmPasswordVisible =
                                         !_registerProvider
-                                            .isRegisterPasswordVisible;
+                                            .isRegisterConfirmPasswordVisible;
                                   },
                                   child: Icon(
-                                    _registerProvider.isRegisterPasswordVisible
+                                    _registerProvider.isRegisterConfirmPasswordVisible
                                         ? Icons.visibility
                                         : Icons.visibility_off,
                                     color: colorPalette.navyBlue,
@@ -241,10 +240,20 @@ class _RegisterState extends State<Register> {
                                   checkColor: colorPalette.navyBlue,
                                   activeColor: Colors.white,
                                 ),
-                                Text(
-                                  "Accept Terms and Conditions",
-                                  style:
-                                      TextStyle(color: colorPalette.navyBlue),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TermsAndCondition(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Accept Terms and Conditions",
+                                    style:
+                                        TextStyle(color: colorPalette.navyBlue),
+                                  ),
                                 ),
                               ],
                             ),
@@ -252,10 +261,12 @@ class _RegisterState extends State<Register> {
                               builder: (context) => NavyBlueButton(
                                   context: context,
                                   onClick: () async {
-//                                    Navigator.of(context).push(
-//                                                MaterialPageRoute(
-//                                                    builder: (context) =>
-//                                                        MobileVerification()));
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         MobileVerification(),
+                                    //   ),
+                                    // );
                                     _registerProvider.isRegisterInProcess =
                                         true;
                                     // check for terms and conditions accepted or not...
@@ -278,6 +289,7 @@ class _RegisterState extends State<Register> {
                                           confirmPassword:
                                               _registerConfirmPassword.text,
                                         );
+                                        print(response);
                                         if (response['status'] == 200) {
                                           if (response['response'][0]
                                                   ['already_exists'] !=
@@ -342,6 +354,7 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ),
+                    SizedBox(height: 30.0),
                   ],
                 ),
               ),

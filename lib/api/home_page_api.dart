@@ -22,6 +22,7 @@ class HomePageApi {
     );
 
     dynamic data = jsonDecode(response.body);
+
     return data;
   }
 }
