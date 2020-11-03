@@ -1057,14 +1057,19 @@ Widget leadingAppBar({bool backButton, title, onBackTap}) {
         iconSize: 30,
       )
           : SizedBox(),
-      Text(
-        title,
-        style: TextStyle(
-          fontFamily: 'Roboto',
-          fontSize: 20,
-          color: const Color(0xff301869),
+      Container(
+        width: Get.width / 2.6,
+        child: Text(
+          title,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xff301869),
+          ),
+          textAlign: TextAlign.left,
         ),
-        textAlign: TextAlign.left,
       ),
     ],
   );

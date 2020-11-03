@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Widget OtpBox(context, TextEditingController controller, FocusNode fn) {
+Widget OtpBox(context, TextEditingController controller, FocusNode fn, {Function doneCallBack}) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
     height: MediaQuery.of(context).size.width / 7,
@@ -21,7 +21,11 @@ Widget OtpBox(context, TextEditingController controller, FocusNode fn) {
       style: TextStyle(fontSize: 35.0),
       onChanged: (value) {
         if (value.length >= 1) {
-          fn.nextFocus();
+          if(doneCallBack != null){
+            doneCallBack();
+          }
+            fn.nextFocus();
+
         } else if (value.length <= 0) {
           fn.previousFocus();
         }

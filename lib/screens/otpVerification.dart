@@ -55,6 +55,12 @@ class _OtpVerificationState extends State<OtpVerification> {
   }
 
   @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
