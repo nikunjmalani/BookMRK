@@ -1,16 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class CategoryProvider extends ChangeNotifier {
-  int _selectedCategoryId = 1;
 
-  int get selectedCategoryId => _selectedCategoryId;
-
-  set selectedCategoryId(int value) {
-    _selectedCategoryId = value;
-    notifyListeners();
-  }
-
-  /// selected category id...
+  /// selected category name...
   String _selectedCategoryName;
 
   String get selectedCategoryName => _selectedCategoryName;
@@ -47,6 +39,26 @@ class CategoryProvider extends ChangeNotifier {
 
   void filterCategoryListAddSingle(dynamic value) {
     _filterCategoryList.add(value);
+    notifyListeners();
+  }
+
+  /// selected subCategory Name.....
+  String _selectedSubCategory;
+
+  String get selectedSubCategory => _selectedSubCategory;
+
+  set selectedSubCategory(String value) {
+    _selectedSubCategory = value;
+    notifyListeners();
+  }
+
+  /// selected subcategory id....
+  int _selectedSubCategoryId;
+
+  int get selectedSubCategoryId => _selectedSubCategoryId;
+
+  set selectedSubCategoryId(int value) {
+    _selectedSubCategoryId = value;
     notifyListeners();
   }
 }

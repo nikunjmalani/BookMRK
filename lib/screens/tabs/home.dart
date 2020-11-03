@@ -70,7 +70,7 @@ class _HomeState extends State<Home> {
                                 title: "Search Products",
                                 onTap: () {
                                   Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
+                                          listen: false)
                                       .selectedString = "SearchProducts";
                                 },
                               ),
@@ -84,37 +84,33 @@ class _HomeState extends State<Home> {
                                     currentPage = value;
                                   });
                                 },
-                                banners:
-                                snapshot.data.response[0].homeBanner,
+                                banners: snapshot.data.response[0].homeBanner,
                                 pageController: pageController,
                               ),
-                              SizedBox(height: 20.0),
+                              SizedBox(height: 10.0),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
                                     Header2("Categories"),
                                     Spacer(),
                                     ViewAll(onClick: () {
-                                      Provider.of<HomeScreenProvider>(
-                                          context,
-                                          listen: false)
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
                                           .selectedString = "Category";
-                                      Provider.of<HomeScreenProvider>(
-                                          context,
-                                          listen: false)
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
                                           .selectedBottomIndex = 1;
                                     })
                                   ],
                                 ),
                               ),
                               Container(
-                                height: snapshot.data.response[0].product
-                                    .length >
-                                    0
-                                    ? height / 2.3
-                                    : height / 9,
+                                height:
+                                    snapshot.data.response[0].product.length > 0
+                                        ? height / 2.3
+                                        : height / 9,
                                 margin: EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 15),
                                 decoration: BoxDecoration(
@@ -129,236 +125,215 @@ class _HomeState extends State<Home> {
                                       scrollDirection: Axis.horizontal,
                                       child: Row(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: List.generate(
-                                            snapshot.data.response[0]
-                                                .category.length,
-                                                (index) =>
+                                            snapshot.data.response[0].category
+                                                .length,
+                                            (index) =>
                                                 Consumer<CategoryProvider>(
                                                   builder: (_,
-                                                      _categoryProvider,
-                                                      child) =>
+                                                          _categoryProvider,
+                                                          child) =>
                                                       GestureDetector(
-                                                        onTap: () {
-                                                          /// category_slug is required, but api response do not contain category_slug...
-                                                          Provider.of<HomeScreenProvider>(
-                                                              context,
-                                                              listen: false)
+                                                    onTap: () {
+                                                      /// category_slug is required, but api response do not contain category_slug...
+                                                      Provider.of<HomeScreenProvider>(
+                                                                  context,
+                                                                  listen: false)
                                                               .selectedString =
                                                           "CategoryInfo";
-                                                          _categoryProvider
+                                                      _categoryProvider
                                                               .selectedCategoryName =
-                                                              snapshot
-                                                                  .data
-                                                                  .response[0]
-                                                                  .category[
-                                                              index]
-                                                                  .catSlug;
-                                                        },
-                                                        child: CategoryButtons(
-                                                          "${snapshot.data.response[0].category[index].categoryName}",
-                                                          index == 0
-                                                              ? colorPalette
-                                                              .orange
-                                                              : colorPalette
+                                                          snapshot
+                                                              .data
+                                                              .response[0]
+                                                              .category[index]
+                                                              .catSlug;
+                                                    },
+                                                    child: CategoryButtons(
+                                                      "${snapshot.data.response[0].category[index].categoryName}",
+                                                      index == 0
+                                                          ? colorPalette.orange
+                                                          : colorPalette
                                                               .navyBlue,
-                                                          index == 0
-                                                              ? colorPalette
+                                                      index == 0
+                                                          ? colorPalette
                                                               .pinkOrange
-                                                              : Color(
-                                                              0xff6A4B9C),
-                                                        ),
-                                                      ),
+                                                          : Color(0xff6A4B9C),
+                                                    ),
+                                                  ),
                                                 )),
                                       ),
                                     ),
                                     Container(
-                                      height: snapshot.data.response[0]
-                                          .product.length >
-                                          0
+                                      height: snapshot.data.response[0].product
+                                                  .length >
+                                              0
                                           ? height / 3.2
                                           : 0.0,
                                       child: ListView.builder(
-                                        itemCount: snapshot.data.response[0]
-                                            .product.length,
+                                        itemCount: snapshot
+                                            .data.response[0].product.length,
                                         scrollDirection: Axis.horizontal,
                                         itemBuilder: (context, index) {
                                           return Consumer<VendorProvider>(
-                                            builder: (_, _vendorProvider,
-                                                child) =>
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    _vendorProvider
+                                            builder:
+                                                (_, _vendorProvider, child) =>
+                                                    GestureDetector(
+                                              onTap: () {
+                                                _vendorProvider
                                                         .selectedVendorName =
                                                     "${snapshot.data.response[0].product[index].vendorSlug}";
-                                                    Provider.of<HomeScreenProvider>(
-                                                        context,
-                                                        listen: false)
+                                                Provider.of<HomeScreenProvider>(
+                                                            context,
+                                                            listen: false)
                                                         .selectedProductSlug =
                                                     "${snapshot.data.response[0].product[index].productSlug}";
-                                                    Provider.of<HomeScreenProvider>(
-                                                        context,
-                                                        listen: false)
+                                                Provider.of<HomeScreenProvider>(
+                                                            context,
+                                                            listen: false)
                                                         .selectedString =
                                                     "ProductInfo";
-                                                  },
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(
-                                                        top: 20,
-                                                        left: 10,
-                                                        right: 10),
-                                                    height: height / 3.8,
-                                                    width: width / 2.8,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          10),
-                                                      border: Border.all(
-                                                        color:
-                                                        Color(0xffcfcfcf),
-                                                      ),
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                      children: [
-                                                        Container(
-                                                          child:
-                                                          showCachedImage(
-                                                            image:
-                                                            '${snapshot.data.response[0].product[index].productImg}',
-                                                            height: height,
-                                                            placeHolderImage:
-                                                            'assets/images/book.png',
-                                                          ),
-                                                          height: height / 5.6,
-                                                          padding:
-                                                          EdgeInsets.only(
-                                                              top: 15),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 3,
-                                                        ),
-                                                        Container(
-                                                          width: width * 0.5,
-                                                          padding:
-                                                          EdgeInsets.only(
-                                                            left: 5.0,
-                                                          ),
-                                                          child: Text(
-                                                            '${snapshot.data.response[0].product[index].productName}',
-                                                            overflow:
-                                                            TextOverflow
-                                                                .ellipsis,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                              'Roboto',
-                                                              fontSize: 12,
-                                                              color: const Color(
-                                                                  0xff000000),
-                                                            ),
-                                                            textAlign:
-                                                            TextAlign.left,
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 3,
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            '${snapshot.data.response[0].product[index].vendorCompanyName}',
-                                                            overflow:
-                                                            TextOverflow
-                                                                .ellipsis,
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                              'Roboto',
-                                                              fontSize: 12,
-                                                              color: const Color(
-                                                                  0xff777777),
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w300,
-                                                            ),
-                                                            textAlign:
-                                                            TextAlign.left,
-                                                          ),
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          padding:
-                                                          EdgeInsets.only(
-                                                              left: 5,
-                                                              right: 5),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                            top: 3,
-                                                            left: 5,
-                                                            right: 5,
-                                                          ),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                            children: [
-                                                              Container(
-                                                                alignment:
-                                                                Alignment
-                                                                    .center,
-                                                                height: 15,
-                                                                width: 50,
-                                                                decoration:
-                                                                BoxDecoration(
-                                                                  color: colorPalette
-                                                                      .pinkOrange,
-                                                                  borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                      30),
-                                                                ),
-                                                                child: Text(
-                                                                  '${snapshot.data.response[0].product[index].productStockStatus} Stock',
-                                                                  style:
-                                                                  TextStyle(
-                                                                    fontFamily:
-                                                                    'Roboto',
-                                                                    fontSize:
-                                                                    10,
-                                                                    color: const Color(
-                                                                        0xffffffff),
-                                                                  ),
-                                                                  textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                '₹ ${snapshot.data.response[0].product[index].productSalePrice}',
-                                                                style:
-                                                                TextStyle(
-                                                                  fontFamily:
-                                                                  'Roboto',
-                                                                  fontSize: 10,
-                                                                  color: const Color(
-                                                                      0xff515c6f),
-                                                                  fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                                ),
-                                                                textAlign:
-                                                                TextAlign
-                                                                    .left,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        )
-                                                      ],
-                                                    ),
+                                              },
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    top: 20,
+                                                    left: 10,
+                                                    right: 10),
+                                                height: height / 3.8,
+                                                width: width / 2.8,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: Color(0xffcfcfcf),
                                                   ),
                                                 ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Container(
+                                                      child: showCachedImage(
+                                                        image:
+                                                            '${snapshot.data.response[0].product[index].productImg}',
+                                                        height: height,
+                                                        placeHolderImage:
+                                                            'assets/images/book.png',
+                                                      ),
+                                                      height: height / 5.6,
+                                                      padding: EdgeInsets.only(
+                                                          top: 15),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 3,
+                                                    ),
+                                                    Container(
+                                                      width: width * 0.5,
+                                                      padding: EdgeInsets.only(
+                                                        left: 5.0,
+                                                      ),
+                                                      child: Text(
+                                                        '${snapshot.data.response[0].product[index].productName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 12,
+                                                          color: const Color(
+                                                              0xff000000),
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 3,
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        '${snapshot.data.response[0].product[index].vendorCompanyName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 12,
+                                                          color: const Color(
+                                                              0xff777777),
+                                                          fontWeight:
+                                                              FontWeight.w300,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      padding: EdgeInsets.only(
+                                                          left: 5, right: 5),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                        top: 3,
+                                                        left: 5,
+                                                        right: 5,
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            height: 15,
+                                                            width: 50,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: colorPalette
+                                                                  .pinkOrange,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30),
+                                                            ),
+                                                            child: Text(
+                                                              '${snapshot.data.response[0].product[index].productStockStatus} Stock',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 10,
+                                                                color: const Color(
+                                                                    0xffffffff),
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            '₹ ${snapshot.data.response[0].product[index].productSalePrice}',
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 10,
+                                                              color: const Color(
+                                                                  0xff515c6f),
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                            ),
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
                                           );
                                         },
                                       ),
@@ -366,9 +341,10 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
+                              SizedBox(height: 15.0),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
                                     Header2("Class"),
@@ -384,14 +360,15 @@ class _HomeState extends State<Home> {
                                     color: Color(0xffcfcfcf),
                                   ),
                                 ),
+                                alignment: Alignment.centerLeft,
                                 child: Wrap(
                                   children: List.generate(
-                                      snapshot.data.response[0]
-                                          .responseClass.length,
-                                          (index) => Consumer<CategoryProvider>(
-                                        builder: (_, _categoryProvider,
-                                            child) =>
-                                            GestureDetector(
+                                      snapshot.data.response[0].responseClass
+                                          .length,
+                                      (index) => Consumer<CategoryProvider>(
+                                            builder:
+                                                (_, _categoryProvider, child) =>
+                                                    GestureDetector(
                                               onTap: () {
                                                 // /// category_slug is required, but api response do not contain category_slug...
                                                 // Provider.of<HomeScreenProvider>(
@@ -413,24 +390,144 @@ class _HomeState extends State<Home> {
                                                 Color(0xff6A4B9C),
                                               ),
                                             ),
-                                      )),
+                                          )),
                                 ),
                               ),
-                              SizedBox(height: 30.0),
+                              SizedBox(height: 15.0),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    Header2("Subjects"),
+                                    Spacer(),
+                                    ViewAll(onClick: () {
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
+                                          .selectedString = "AllSubjects";
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
+                                          .selectedBottomIndex = 1;
+                                    })
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: height / 9,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 15),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  border: Border.all(
+                                    color: Color(0xffcfcfcf),
+                                  ),
+                                ),
+                                alignment: Alignment.centerLeft,
+                                child: Column(
+                                  children: [
+                                    SingleChildScrollView(
+                                      physics: BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: List.generate(
+                                            snapshot.data.response[0].subject
+                                                .length,
+                                            (index) =>
+                                                Consumer<CategoryProvider>(
+                                                  builder: (_,
+                                                          _categoryProvider,
+                                                          child) =>
+                                                      GestureDetector(
+                                                    onTap: () {
+                                                      // /// category_slug is required, but api response do not contain category_slug...
+                                                      // Provider.of<HomeScreenProvider>(
+                                                      //     context,
+                                                      //     listen: false)
+                                                      //     .selectedString =
+                                                      // "CategoryInfo";
+                                                      // _categoryProvider
+                                                      //     .selectedCategoryName =
+                                                      //     snapshot
+                                                      //         .data
+                                                      //         .response[0]
+                                                      //         .category[
+                                                      //     index]
+                                                      //         .catSlug;
+                                                    },
+                                                    child: CategoryButtons(
+                                                      "${snapshot.data.response[0].subject[index].subjectName}",
+                                                      colorPalette.navyBlue,
+                                                      Color(0xff6A4B9C),
+                                                    ),
+                                                  ),
+                                                )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.0),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
                                     Header2("Shop by School"),
                                     Spacer(),
                                     ViewAll(onClick: () {
-                                      Provider.of<HomeScreenProvider>(
-                                          context,
-                                          listen: false)
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
                                           .selectedString = "School";
-                                      Provider.of<HomeScreenProvider>(
-                                          context,
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
+                                          .selectedBottomIndex = 2;
+                                    })
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: height / 5,
+                                child: ListView.builder(
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Provider.of<HomeScreenProvider>(context,
+                                                listen: false)
+                                            .selectedString = "SchoolInfo";
+                                        Provider.of<SchoolProvider>(context,
+                                                    listen: false)
+                                                .selectedSchoolSlug =
+                                            "${snapshot.data.response[0].school[index].schoolSlug}";
+                                      },
+                                      child: ImageBox(
+                                          height: height,
+                                          width: width,
+                                          image:
+                                              "${snapshot.data.response[0].school[index].schoolLogo}",
+                                          title:
+                                              "${snapshot.data.response[0].school[index].schoolName}"),
+                                    );
+                                  },
+                                  itemCount:
+                                      snapshot.data.response[0].school.length,
+                                  scrollDirection: Axis.horizontal,
+                                ),
+                              ),
+                              SizedBox(height: 30.0),
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  children: [
+                                    Header2("Publisher"),
+                                    Spacer(),
+                                    ViewAll(onClick: () {
+                                      Provider.of<HomeScreenProvider>(context,
+                                          listen: false)
+                                          .selectedString = "AllPublisher";
+                                      Provider.of<HomeScreenProvider>(context,
                                           listen: false)
                                           .selectedBottomIndex = 2;
                                     })
@@ -443,42 +540,41 @@ class _HomeState extends State<Home> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        Provider.of<HomeScreenProvider>(
-                                            context,
-                                            listen: false)
-                                            .selectedString = "SchoolInfo";
-                                        Provider.of<SchoolProvider>(context,
-                                            listen: false)
-                                            .selectedSchoolSlug =
-                                        "${snapshot.data.response[0].school[index].schoolSlug}";
+                                      //   Provider.of<HomeScreenProvider>(context,
+                                      //       listen: false)
+                                      //       .selectedString = "SchoolInfo";
+                                      //   Provider.of<SchoolProvider>(context,
+                                      //       listen: false)
+                                      //       .selectedSchoolSlug =
+                                      //   "${snapshot.data.response[0].school[index].schoolSlug}";
+
                                       },
                                       child: ImageBox(
                                           height: height,
                                           width: width,
                                           image:
-                                          "${snapshot.data.response[0].school[index].schoolLogo}",
+                                          "${snapshot.data.response[0].publisher[index].publisherImg}",
                                           title:
-                                          "${snapshot.data.response[0].school[index].schoolName}"),
+                                          "${snapshot.data.response[0].publisher[index].publisherName}"),
                                     );
                                   },
-                                  itemCount: snapshot
-                                      .data.response[0].school.length,
+                                  itemCount:
+                                  snapshot.data.response[0].publisher.length,
                                   scrollDirection: Axis.horizontal,
                                 ),
                               ),
-                              SizedBox(height: 40.0),
+                              SizedBox(height: 30.0),
                               Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
                                     Header2("Top Vendors"),
                                     Spacer(),
                                     ViewAll(
                                       onClick: () {
-                                        Provider.of<HomeScreenProvider>(
-                                            context,
-                                            listen: false)
+                                        Provider.of<HomeScreenProvider>(context,
+                                                listen: false)
                                             .selectedString = "Vendors";
                                       },
                                     )
@@ -493,25 +589,24 @@ class _HomeState extends State<Home> {
                                     return GestureDetector(
                                       onTap: () {
                                         Provider.of<VendorProvider>(context,
-                                            listen: false)
-                                            .selectedVendorName =
-                                        "${snapshot.data.response[0].vendor[index].vendorSlug}";
-                                        Provider.of<HomeScreenProvider>(
-                                            context,
-                                            listen: false)
+                                                    listen: false)
+                                                .selectedVendorName =
+                                            "${snapshot.data.response[0].vendor[index].vendorSlug}";
+                                        Provider.of<HomeScreenProvider>(context,
+                                                listen: false)
                                             .selectedString = "VendorInfo";
                                       },
                                       child: ImageBox(
                                           height: height,
                                           width: width,
                                           image:
-                                          "${snapshot.data.response[0].vendor[index].companyLogo}",
+                                              "${snapshot.data.response[0].vendor[index].companyLogo}",
                                           title:
-                                          "${snapshot.data.response[0].vendor[index].companyName}"),
+                                              "${snapshot.data.response[0].vendor[index].companyName}"),
                                     );
                                   },
-                                  itemCount: snapshot
-                                      .data.response[0].vendor.length,
+                                  itemCount:
+                                      snapshot.data.response[0].vendor.length,
                                   scrollDirection: Axis.horizontal,
                                 ),
                               ),
@@ -522,69 +617,68 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   snapshot.data.response[0].popupScreen[0].show == "1" &&
-                      _homeScreenProvider.homeScreenMainPopupShow
+                          _homeScreenProvider.homeScreenMainPopupShow
                       ? Container(
-                    color: Colors.black26,
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 180,
-                      width: MediaQuery.of(context).size.width - 90,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20.0),
-                        color: Colors.white,
-                      ),
-                      padding: EdgeInsets.all(15.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${snapshot.data.response[0].popupScreen[0].title}',
-                            style: TextStyle(
-                              color: colorPalette.navyBlue,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w900,
+                          color: Colors.black26,
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: 180,
+                            width: MediaQuery.of(context).size.width - 90,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              color: Colors.white,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            '${snapshot.data.response[0].popupScreen[0].message}',
-                            style: TextStyle(
-                              color: colorPalette.navyBlue,
-                              fontSize: 17.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Spacer(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              RaisedButton(
-                                onPressed: () {
-                                  _homeScreenProvider
-                                      .homeScreenMainPopupShow =
-                                  false;
-                                },
-                                child: Text(
-                                  'OK',
+                            padding: EdgeInsets.all(15.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${snapshot.data.response[0].popupScreen[0].title}',
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 16.0),
+                                    color: colorPalette.navyBlue,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
-                                color: colorPalette.navyBlue,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(8.0)),
-                              )
-                            ],
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  '${snapshot.data.response[0].popupScreen[0].message}',
+                                  style: TextStyle(
+                                    color: colorPalette.navyBlue,
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Spacer(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    RaisedButton(
+                                      onPressed: () {
+                                        _homeScreenProvider
+                                            .homeScreenMainPopupShow = false;
+                                      },
+                                      child: Text(
+                                        'OK',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 16.0),
+                                      ),
+                                      color: colorPalette.navyBlue,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  )
+                        )
                       : SizedBox()
                 ],
               );

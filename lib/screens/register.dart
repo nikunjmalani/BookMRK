@@ -261,64 +261,65 @@ class _RegisterState extends State<Register> {
                               builder: (context) => NavyBlueButton(
                                   context: context,
                                   onClick: () async {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            MobileVerification(),
-                                      ),
-                                    );
-//                                     _registerProvider.isRegisterInProcess =
-//                                         true;
-//                                     // check for terms and conditions accepted or not...
-//                                     if (_registerProvider
-//                                         .isTermAndConditionAccepted) {
-//                                       // check for fields validation...
-//                                       if (_formKey.currentState.validate()) {
-//                                         // call register use API...
-//
-//                                         dynamic response =
-//                                             await RegisterAPI.registerNewUser(
-//                                           firstName: _registerFirstName.text,
-//                                           lastName: _registerLastName.text,
-//                                           gender: _registerProvider
-//                                               .selectedGenderRegister,
-//                                           email: _registerEmailAddress.text,
-//                                           mobile: _registerMobileNumber.text,
-//                                           dob: _registerDateOfBirth.text,
-//                                           password: _registerPassword.text,
-//                                           confirmPassword:
-//                                               _registerConfirmPassword.text,
-//                                         );
-//                                         if (response['status'] == 200) {
-//                                           if (response['response'][0]
-//                                                   ['already_exists'] !=
-//                                               "0") {
-//                                             _registerProvider
-//                                                 .isRegisterInProcess = false;
-//
-//                                             Scaffold.of(context).showSnackBar(
-//                                                 getSnackBar(
-//                                                     '${response['message']}'));
-//                                           } else {
-//                                             _registerProvider
-//                                                 .isRegisterInProcess = false;
-//                                             Navigator.of(context).pushReplacement(
-//                                                 MaterialPageRoute(
-//                                                     builder: (context) =>
-//                                                         MobileVerification()));
-//                                           }
-//                                         }
-//                                       } else {
-//                                         _registerProvider.isRegisterInProcess =
-//                                             false;
-//                                       }
-//                                     } else {
-//                                       _registerProvider.isRegisterInProcess =
-//                                           false;
-//
-//                                       Scaffold.of(context).showSnackBar(getSnackBar(
-//                                           'Please check terms and conditions'));
-//                                     }
+                                    // Navigator.of(context).push(
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         MobileVerification(),
+                                    //   ),
+                                    // );
+                                    _registerProvider.isRegisterInProcess =
+                                        true;
+                                    // check for terms and conditions accepted or not...
+                                    if (_registerProvider
+                                        .isTermAndConditionAccepted) {
+                                      // check for fields validation...
+                                      if (_formKey.currentState.validate()) {
+                                        // call register use API...
+
+                                        dynamic response =
+                                            await RegisterAPI.registerNewUser(
+                                          firstName: _registerFirstName.text,
+                                          lastName: _registerLastName.text,
+                                          gender: _registerProvider
+                                              .selectedGenderRegister,
+                                          email: _registerEmailAddress.text,
+                                          mobile: _registerMobileNumber.text,
+                                          dob: _registerDateOfBirth.text,
+                                          password: _registerPassword.text,
+                                          confirmPassword:
+                                              _registerConfirmPassword.text,
+                                        );
+                                        print(response);
+                                        if (response['status'] == 200) {
+                                          if (response['response'][0]
+                                                  ['already_exists'] !=
+                                              "0") {
+                                            _registerProvider
+                                                .isRegisterInProcess = false;
+
+                                            Scaffold.of(context).showSnackBar(
+                                                getSnackBar(
+                                                    '${response['message']}'));
+                                          } else {
+                                            _registerProvider
+                                                .isRegisterInProcess = false;
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MobileVerification()));
+                                          }
+                                        }
+                                      } else {
+                                        _registerProvider.isRegisterInProcess =
+                                            false;
+                                      }
+                                    } else {
+                                      _registerProvider.isRegisterInProcess =
+                                          false;
+
+                                      Scaffold.of(context).showSnackBar(getSnackBar(
+                                          'Please check terms and conditions'));
+                                    }
                                   },
                                   title: "CONTINUE"),
                             )

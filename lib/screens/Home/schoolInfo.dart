@@ -10,6 +10,7 @@ import 'package:bookmrk/widgets/indicators.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class SchoolInfo extends StatefulWidget {
@@ -128,6 +129,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                         height: height / 24,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
+                          physics: BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
                             return Container(
                               alignment: Alignment.center,
@@ -204,6 +206,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                       height: height / 2.7,
                                       width: width,
                                       child: ListView.builder(
+                                        physics: BouncingScrollPhysics(),
                                         itemCount:
                                             subCatSnapshot.data.response.length,
                                         scrollDirection: Axis.horizontal,
@@ -258,9 +261,15 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                   top: 30.0,
                                   bottom: 20,
                                 ),
-                                child: Text(
-                                  'No Data',
-                                  style: TextStyle(fontSize: 18.0),
+                                child: Column(
+                                  children: [
+                                    SvgPicture.asset('assets/icons/no_data.svg', height: 100,),
+                                    SizedBox(height: 20.0,),
+                                    Text(
+                                      'Products not found !',
+                                      style: TextStyle(fontSize: 18.0),
+                                    ),
+                                  ],
                                 ),
                               );
                             }
@@ -341,6 +350,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                             itemCount: snapshot
                                 .data.response[0].schoolAllProduct.length,
                             scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               if (_schoolProvider.selectedSchoolProductType ==
                                   "Single") {

@@ -18,6 +18,7 @@ import 'package:bookmrk/screens/Home/vendorsInfo.dart';
 import 'package:bookmrk/screens/cart/addAddress.dart';
 import 'package:bookmrk/screens/cart/changeAddress.dart';
 import 'package:bookmrk/screens/cart/editAddress.dart';
+import 'package:bookmrk/screens/category/subcategory_info.dart';
 import 'package:bookmrk/screens/tabs/cart.dart';
 import 'package:bookmrk/screens/tabs/category_tab.dart';
 import 'package:bookmrk/screens/tabs/home.dart';
@@ -231,13 +232,16 @@ class _HomePageState extends State<HomePage> {
                           : _homeScreenProvider.selectedBottomIndex == 1 &&
                           (_homeScreenProvider.selectedString == "Category" ||
                               _homeScreenProvider.selectedString ==
-                                  "CategoryInfo" ||
+                                  "CategoryInfo" ||_homeScreenProvider.selectedString ==
+                              "SubCategoryInfo" ||
                               _homeScreenProvider.selectedString ==
                                   "ProductInfo")
                           ? _setHomeScreenProvider.selectedString =
                       _homeScreenProvider.selectedString == "CategoryInfo"
                           ? "Category"
-                          : _homeScreenProvider.selectedString == "Category"
+                          : _homeScreenProvider.selectedString == "SubCategoryInfo"
+                          ? "CategoryInfo"
+                          :_homeScreenProvider.selectedString == "Category"
                           ? "Category"
                           : "CategoryInfo"
 
@@ -490,12 +494,16 @@ class _HomePageState extends State<HomePage> {
                                   _homeScreenProvider.selectedString ==
                                       "CategoryInfo" ||
                                   _homeScreenProvider.selectedString ==
+                                      "SubCategoryInfo" ||
+                                  _homeScreenProvider.selectedString ==
                                       "ProductInfo")
                               ? leadingAppBar(
                               title: _homeScreenProvider.selectedString ==
                                   "Category"
                                   ? "Category"
-                                  : "cat",
+                                  : _homeScreenProvider.selectedString ==
+                                  "SubCategoryInfo"
+                                  ? "SubCategory" : "Category",
                               backButton:
                               _homeScreenProvider.selectedString == "Category"
                                   ? false
@@ -505,7 +513,9 @@ class _HomePageState extends State<HomePage> {
                                 _homeScreenProvider.selectedString ==
                                     "CategoryInfo"
                                     ? "Category"
-                                    : "CategoryInfo";
+                                    : _homeScreenProvider.selectedString ==
+                                    "SubCategoryInfo"
+                                    ? "CategoryInfo" : "Category";
                               })
 
                           /// school page appbar ....
@@ -713,6 +723,14 @@ class _HomePageState extends State<HomePage> {
                                               selectedProductSlug: _homeScreenProvider
                                                   .selectedProductSlug))
                                       : _homeScreenProvider.selectedString ==
+                                      "SubCategoryInfo"
+                                      ? Consumer<CategoryProvider>(
+                                    builder: (_, _categoryProvider, child) =>
+                                        SubCategoryInfo(
+                                            _categoryProvider
+                                                .selectedSubCategory),)
+                                      : _homeScreenProvider
+                                      .selectedString ==
                                       "SearchProducts2" ? Search2() : Consumer<
                                       CategoryProvider>(
                                     builder: (_, _categoryProvider, child) =>
@@ -1014,7 +1032,8 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     SvgPicture.asset('assets/icons/loading.svg', width: 150.0,),
                     SizedBox(height: 20.0),
-                    Text('Loading...', style: TextStyle(color: colorPalette.navyBlue, fontSize: 18.0),)
+                    Text('Loading...', style: TextStyle(color: colorPalette
+                        .navyBlue, fontSize: 18.0),)
                   ],
                 )),
               );

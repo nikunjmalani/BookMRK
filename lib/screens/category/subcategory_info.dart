@@ -11,27 +11,28 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CategoryInfo extends StatefulWidget {
-  final String categoryName;
+class SubCategoryInfo extends StatefulWidget {
+  final String subCategoryName;
 
-  const CategoryInfo(this.categoryName);
+  const SubCategoryInfo(this.subCategoryName);
 
   @override
-  _CategoryInfoState createState() => _CategoryInfoState();
+  _SubCategoryInfoState createState() => _SubCategoryInfoState();
 }
 
-class _CategoryInfoState extends State<CategoryInfo> {
+class _SubCategoryInfoState extends State<SubCategoryInfo> {
   Future getCategoryProductsDetails() async {
-    int userId = prefs.read<int>('userId');
+
+    int userId =  prefs.read<int>('userId');
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
-        widget.categoryName, userId.toString());
+        widget.subCategoryName, userId.toString());
     if (categoryProductsDetails['response'].length == "0") {
       NoDataOrderModel _noDataModel =
-          NoDataOrderModel.fromJson(categoryProductsDetails);
+      NoDataOrderModel.fromJson(categoryProductsDetails);
       return _noDataModel;
     } else {
       CategoryProductsModel _categoryProductModelDetails =
-          CategoryProductsModel.fromJson(categoryProductsDetails);
+      CategoryProductsModel.fromJson(categoryProductsDetails);
       return _categoryProductModelDetails;
     }
   }
@@ -60,7 +61,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                     children: [
                       CachedNetworkImage(
                         imageUrl:
-                            '${snapshot.data.response[0].category[0].categoryImg}',
+                        '${snapshot.data.response[0].category[0].categoryImg}',
                         fit: BoxFit.cover,
                         imageBuilder: (context, imageProvider) => Container(
                           margin: EdgeInsets.symmetric(
@@ -103,7 +104,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                         height: height / 12,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -138,72 +139,42 @@ class _CategoryInfoState extends State<CategoryInfo> {
                   Consumer<CategoryProvider>(
                     builder: (_, _categoryProvider, child) =>
                         Consumer<HomeScreenProvider>(
-                      builder: (_, _homeScreenProvider, child) => Container(
-                        height: snapshot.data.response[0].subCategory.length > 0
-                            ? height / 25
-                            : height / 45,
-                        child: snapshot.data.response[0].subCategory.length > 0
-                            ? SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 10.0,
-                                      ),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: colorPalette.navyBlue,
-                                            borderRadius:
-                                                BorderRadius.circular(5.0)),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10.0, vertical: 5.0),
-                                        child: Text(
-                                          'All',
-                                          style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
+                          builder: (_, _homeScreenProvider, child) => Container(
+                            height: snapshot.data.response[0].subCategory.length > 0
+                                ? height / 15
+                                : height / 45,
+                            child: snapshot.data.response[0].subCategory.length > 0
+                                ? ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _homeScreenProvider.selectedString =
+                                    "SubCategoryInfo";
+                                    _categoryProvider.selectedSubCategory =
+                                    "${snapshot.data.response[0].subCategory[index].catSlug}";
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    child: Text(
+                                      '${snapshot.data.response[0].subCategory[index].categoryName}',
+                                      style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontSize: 14,
+                                          color: colorPalette.navyBlue),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    Row(
-                                      children: List.generate(snapshot.data.response[0].subCategory.length, (index) => GestureDetector(
-                                        onTap: () {
-                                          _homeScreenProvider
-                                              .selectedString =
-                                          "SubCategoryInfo";
-                                          _categoryProvider
-                                              .selectedSubCategory =
-                                          "${snapshot.data.response[0].subCategory[index].catSlug}";
-                                        },
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20,
-                                              vertical: 5.0),
-                                          child: Text(
-                                            '${snapshot.data.response[0].subCategory[index].categoryName}',
-                                            style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 14,
-                                                color:
-                                                colorPalette.navyBlue),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ),),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                      ),
-                    ),
+                                  ),
+                                );
+                              },
+                              itemCount: snapshot
+                                  .data.response[0].subCategory.length,
+                            )
+                                : SizedBox(),
+                          ),
+                        ),
                   ),
                   Expanded(
                     child: Padding(
@@ -218,15 +189,15 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           return GestureDetector(
                             onTap: () {
                               Provider.of<HomeScreenProvider>(context,
-                                          listen: false)
-                                      .selectedProductSlug =
-                                  "${snapshot.data.response[0].product[index].productSlug}";
+                                  listen: false)
+                                  .selectedProductSlug =
+                              "${snapshot.data.response[0].product[index].productSlug}";
                               Provider.of<VendorProvider>(context,
-                                          listen: false)
-                                      .selectedVendorName =
-                                  "${snapshot.data.response[0].product[index].vendorSlug}";
+                                  listen: false)
+                                  .selectedVendorName =
+                              "${snapshot.data.response[0].product[index].vendorSlug}";
                               Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
+                                  listen: false)
                                   .selectedString = "ProductInfo";
                             },
                             child: ProductBox(
@@ -234,15 +205,15 @@ class _CategoryInfoState extends State<CategoryInfo> {
                               height: height,
                               width: width,
                               title:
-                                  "${snapshot.data.response[0].product[index].productName}",
+                              "${snapshot.data.response[0].product[index].productName}",
                               image:
-                                  "${snapshot.data.response[0].product[index].productImg}",
+                              "${snapshot.data.response[0].product[index].productImg}",
                               description:
-                                  "${snapshot.data.response[0].product[index].vendorCompanyName}",
+                              "${snapshot.data.response[0].product[index].vendorCompanyName}",
                               price: snapshot
                                   .data.response[0].product[index].productPrice,
                               stock:
-                                  "${snapshot.data.response[0].product[index].productStockStatus}",
+                              "${snapshot.data.response[0].product[index].productStockStatus}",
                             ),
                           );
                         },

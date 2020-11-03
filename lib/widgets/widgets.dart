@@ -45,10 +45,10 @@ Widget ImageBox({height, width, image, title}) {
       border: Border.all(color: Color(0xffcfcfcf)),
       borderRadius: BorderRadius.circular(25),
       image: DecorationImage(
-          image: image != null
+          image: image != null && image != ""
               ? NetworkImage(image)
               : AssetImage('assets/images/logo.png'),
-          fit: BoxFit.fill),
+          fit: BoxFit.contain),
     ),
     child: Container(
       alignment: Alignment.center,
