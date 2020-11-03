@@ -36,8 +36,7 @@ class PrivacyPolicyState extends State<PrivacyPolicy> {
           ),
         ),
         body: WebView(
-          // initialUrl: '$kSiteURL/terms_and_conditions',
-          initialUrl: 'https://flutter.dev',
+          initialUrl: '$kSiteURL/terms_and_conditions',
         ),
       ),
     );

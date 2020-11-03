@@ -160,4 +160,14 @@ class HomeScreenProvider extends ChangeNotifier {
     _totalNewNotifications = totalNotification;
     notifyListeners();
   }
+
+  /// provider for check when show dialog open or not,,,
+  bool _homeScreenMainPopupShow = true;
+
+  bool get homeScreenMainPopupShow => _homeScreenMainPopupShow;
+
+  set homeScreenMainPopupShow(bool value) {
+    _homeScreenMainPopupShow = value;
+    notifyListeners();
+  }
 }

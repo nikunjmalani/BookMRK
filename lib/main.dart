@@ -15,6 +15,7 @@ import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,6 @@ void main() async {
   prefs = GetStorage();
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   @override
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
           create: (context) => MapProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'BookMRK',
         debugShowCheckedModeBanner: false,
         home: SplashScreen(),

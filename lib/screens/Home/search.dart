@@ -9,6 +9,7 @@ import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class Search extends StatefulWidget {
@@ -253,7 +254,18 @@ class _SearchState extends State<Search> {
                       } else {
                         return Padding(
                           padding: EdgeInsets.only(top: 40.0),
-                          child: Text('Please write Correct name'),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/icons/search1.svg',
+                                height: 100.0,
+                              ),
+                              SizedBox(height:30),
+                              Text('Please write Correct names'),
+                            ],
+                          ),
                         );
                       }
                     } else {

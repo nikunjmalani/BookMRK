@@ -1,5 +1,6 @@
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -109,6 +110,32 @@ Widget CustomAppBar(BuildContext context,
                 })
               ],
             ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget MaintananceAppBar(BuildContext context, child) {
+  return AppBar(
+    automaticallyImplyLeading: false,
+    elevation: 0.5,
+    backgroundColor: colorPalette.navyBlue,
+    flexibleSpace: Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 35),
+      decoration: BoxDecoration(boxShadow: [
+        BoxShadow(
+          offset: Offset(0, 1),
+          blurRadius: 8,
+          color: Color(0xff676767).withOpacity(0.05),
+        ),
+      ], color: colorPalette.navyBlue),
+      child: Row(
+        children: [
+          Container(
+            child: child,
+            alignment: Alignment.centerLeft,
           ),
         ],
       ),
