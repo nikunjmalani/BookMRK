@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bookmrk/api/home_page_api.dart';
 import 'package:bookmrk/model/home_page_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
+import 'package:bookmrk/provider/filter_category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
@@ -370,19 +371,30 @@ class _HomeState extends State<Home> {
                                                 (_, _categoryProvider, child) =>
                                                     GestureDetector(
                                               onTap: () {
-                                                // /// category_slug is required, but api response do not contain category_slug...
-                                                // Provider.of<HomeScreenProvider>(
-                                                //     context,
-                                                //     listen: false)
-                                                //     .selectedString =
-                                                // "CategoryInfo";
-                                                // _categoryProvider
-                                                //     .selectedCategoryName =
-                                                //     snapshot
-                                                //         .data
-                                                //         .response[0]
-                                                //         .category[index]
-                                                //         .catSlug;
+
+                                                /// set the selected class to filter....
+                                                Provider.of<FilterCategoryProvider>(
+                                                    context,
+                                                    listen: false)
+                                                    .selectedFilterCategoryClassSlug =
+                                                    snapshot
+                                                        .data
+                                                        .response[0]
+                                                        .responseClass[index]
+                                                        .classSlug;
+
+                                                /// set filter class screen....
+                                                Provider.of<HomeScreenProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .selectedString = "FilterC";
+
+                                                /// set the current selected index 0....
+                                                Provider.of<HomeScreenProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .selectedBottomIndex = 0;
+
                                               },
                                               child: ClassButtons(
                                                 "${snapshot.data.response[0].responseClass[0].className}",
@@ -402,12 +414,22 @@ class _HomeState extends State<Home> {
                                     Header2("Subjects"),
                                     Spacer(),
                                     ViewAll(onClick: () {
+                                      /// set the subject list..
+                                      Provider.of<FilterCategoryProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .allFilterSubjectsList =
+                                          snapshot.data.response[0].subject;
+
+                                      /// set the all subject screen string..
                                       Provider.of<HomeScreenProvider>(context,
                                               listen: false)
                                           .selectedString = "AllSubjects";
+
+                                      /// set the current index 0..
                                       Provider.of<HomeScreenProvider>(context,
                                               listen: false)
-                                          .selectedBottomIndex = 1;
+                                          .selectedBottomIndex = 0;
                                     })
                                   ],
                                 ),
@@ -441,20 +463,39 @@ class _HomeState extends State<Home> {
                                                           child) =>
                                                       GestureDetector(
                                                     onTap: () {
-                                                      // /// category_slug is required, but api response do not contain category_slug...
-                                                      // Provider.of<HomeScreenProvider>(
-                                                      //     context,
-                                                      //     listen: false)
-                                                      //     .selectedString =
-                                                      // "CategoryInfo";
-                                                      // _categoryProvider
-                                                      //     .selectedCategoryName =
-                                                      //     snapshot
-                                                      //         .data
-                                                      //         .response[0]
-                                                      //         .category[
-                                                      //     index]
-                                                      //         .catSlug;
+                                                      /// set the subject slug..
+                                                      Provider.of<FilterCategoryProvider>(
+                                                          context,
+                                                          listen: false)
+                                                          .selectedFilterCategorySubjectSlug =
+                                                          snapshot
+                                                              .data
+                                                              .response[0]
+                                                              .subject[index]
+                                                              .subjectSlug;
+
+                                                      /// set the subject list..
+                                                      Provider.of<FilterCategoryProvider>(
+                                                          context,
+                                                          listen: false)
+                                                          .allFilterSubjectsList =
+                                                          snapshot
+                                                              .data
+                                                              .response[0]
+                                                              .subject;
+
+                                                      /// set the filtersubject page string..
+                                                      Provider.of<HomeScreenProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .selectedString =
+                                                          "FilterS";
+
+                                                      /// set the filter index to 0..
+                                                      Provider.of<HomeScreenProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedBottomIndex = 0;
                                                     },
                                                     child: CategoryButtons(
                                                       "${snapshot.data.response[0].subject[index].subjectName}",
@@ -518,18 +559,28 @@ class _HomeState extends State<Home> {
                               SizedBox(height: 30.0),
                               Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 15),
+                                    const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
                                     Header2("Publisher"),
                                     Spacer(),
                                     ViewAll(onClick: () {
+                                      /// set the publisher list....
+                                      Provider.of<FilterCategoryProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .allPublisherList =
+                                          snapshot.data.response[0].publisher;
+
+                                      /// set the current index 0....
                                       Provider.of<HomeScreenProvider>(context,
-                                          listen: false)
-                                          .selectedString = "AllPublisher";
+                                              listen: false)
+                                          .selectedBottomIndex = 0;
+
+                                      /// set the selected String all publishers...
                                       Provider.of<HomeScreenProvider>(context,
-                                          listen: false)
-                                          .selectedBottomIndex = 2;
+                                              listen: false)
+                                          .selectedString = "AllPublishers";
                                     })
                                   ],
                                 ),
@@ -540,26 +591,41 @@ class _HomeState extends State<Home> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-                                      //   Provider.of<HomeScreenProvider>(context,
-                                      //       listen: false)
-                                      //       .selectedString = "SchoolInfo";
-                                      //   Provider.of<SchoolProvider>(context,
-                                      //       listen: false)
-                                      //       .selectedSchoolSlug =
-                                      //   "${snapshot.data.response[0].school[index].schoolSlug}";
+                                        /// set the selected publisher slug....
+                                        Provider.of<FilterCategoryProvider>(context,
+                                            listen: false)
+                                            .selectedFilterCategoryPublisherSlug =
+                                        "${snapshot.data.response[0].publisher[index].publisherSlug}";
+
+                                        /// set the publiser list...
+                                        Provider.of<FilterCategoryProvider>(
+                                            context,
+                                            listen: false)
+                                            .allPublisherList =
+                                            snapshot.data.response[0].publisher;
+
+                                        /// set the current index 0....
+                                        Provider.of<HomeScreenProvider>(context,
+                                            listen: false)
+                                            .selectedBottomIndex = 0;
+
+                                        /// set the selected String all publishers...
+                                        Provider.of<HomeScreenProvider>(context,
+                                            listen: false)
+                                            .selectedString = "FilterP";
 
                                       },
                                       child: ImageBox(
                                           height: height,
                                           width: width,
                                           image:
-                                          "${snapshot.data.response[0].publisher[index].publisherImg}",
+                                              "${snapshot.data.response[0].publisher[index].publisherImg}",
                                           title:
-                                          "${snapshot.data.response[0].publisher[index].publisherName}"),
+                                              "${snapshot.data.response[0].publisher[index].publisherName}"),
                                     );
                                   },
-                                  itemCount:
-                                  snapshot.data.response[0].publisher.length,
+                                  itemCount: snapshot
+                                      .data.response[0].publisher.length,
                                   scrollDirection: Axis.horizontal,
                                 ),
                               ),
@@ -616,70 +682,70 @@ class _HomeState extends State<Home> {
                       )
                     ],
                   ),
-                  snapshot.data.response[0].popupScreen[0].show == "1" &&
-                          _homeScreenProvider.homeScreenMainPopupShow
-                      ? Container(
-                          color: Colors.black26,
-                          alignment: Alignment.center,
-                          child: Container(
-                            height: 180,
-                            width: MediaQuery.of(context).size.width - 90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              color: Colors.white,
-                            ),
-                            padding: EdgeInsets.all(15.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${snapshot.data.response[0].popupScreen[0].title}',
-                                  style: TextStyle(
-                                    color: colorPalette.navyBlue,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Text(
-                                  '${snapshot.data.response[0].popupScreen[0].message}',
-                                  style: TextStyle(
-                                    color: colorPalette.navyBlue,
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Spacer(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    RaisedButton(
-                                      onPressed: () {
-                                        _homeScreenProvider
-                                            .homeScreenMainPopupShow = false;
-                                      },
-                                      child: Text(
-                                        'OK',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 16.0),
-                                      ),
-                                      color: colorPalette.navyBlue,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0)),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      : SizedBox()
+                  // snapshot.data.response[0].popupScreen[0].show == "1" &&
+                  //         _homeScreenProvider.homeScreenMainPopupShow
+                  //     ? Container(
+                  //         color: Colors.black26,
+                  //         alignment: Alignment.center,
+                  //         child: Container(
+                  //           height: 180,
+                  //           width: MediaQuery.of(context).size.width - 90,
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(20.0),
+                  //             color: Colors.white,
+                  //           ),
+                  //           padding: EdgeInsets.all(15.0),
+                  //           child: Column(
+                  //             mainAxisAlignment: MainAxisAlignment.start,
+                  //             crossAxisAlignment: CrossAxisAlignment.start,
+                  //             children: [
+                  //               Text(
+                  //                 '${snapshot.data.response[0].popupScreen[0].title}',
+                  //                 style: TextStyle(
+                  //                   color: colorPalette.navyBlue,
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.w900,
+                  //                 ),
+                  //               ),
+                  //               SizedBox(
+                  //                 height: 10.0,
+                  //               ),
+                  //               Text(
+                  //                 '${snapshot.data.response[0].popupScreen[0].message}',
+                  //                 style: TextStyle(
+                  //                   color: colorPalette.navyBlue,
+                  //                   fontSize: 17.0,
+                  //                   fontWeight: FontWeight.w500,
+                  //                 ),
+                  //               ),
+                  //               Spacer(),
+                  //               Row(
+                  //                 mainAxisAlignment: MainAxisAlignment.end,
+                  //                 children: [
+                  //                   RaisedButton(
+                  //                     onPressed: () {
+                  //                       _homeScreenProvider
+                  //                           .homeScreenMainPopupShow = false;
+                  //                     },
+                  //                     child: Text(
+                  //                       'OK',
+                  //                       style: TextStyle(
+                  //                           color: Colors.white,
+                  //                           fontWeight: FontWeight.w900,
+                  //                           fontSize: 16.0),
+                  //                     ),
+                  //                     color: colorPalette.navyBlue,
+                  //                     shape: RoundedRectangleBorder(
+                  //                         borderRadius:
+                  //                             BorderRadius.circular(8.0)),
+                  //                   )
+                  //                 ],
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : SizedBox()
                 ],
               );
             },
