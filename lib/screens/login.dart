@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                                   email: _loginEmailAddress.text,
                                   password: _loginPassword.text);
 
-                                print(response);
+
                               if (response['status'] == 200) {
                                 if (response['data'][0]['is_mobile_verified'] ==
                                     "0") {

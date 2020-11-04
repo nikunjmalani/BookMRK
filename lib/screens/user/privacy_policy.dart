@@ -1,9 +1,7 @@
-import 'dart:io';
+
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:webview_flutter/platform_interface.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PrivacyPolicy extends StatefulWidget {

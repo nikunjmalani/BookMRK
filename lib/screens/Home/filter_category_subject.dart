@@ -1,7 +1,4 @@
-import 'package:bookmrk/api/category_api.dart';
-import 'package:bookmrk/constant/constant.dart';
-import 'package:bookmrk/model/category_product_model.dart';
-import 'package:bookmrk/model/no_data_model.dart';
+
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';

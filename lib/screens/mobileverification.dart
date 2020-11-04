@@ -130,7 +130,7 @@ class _MobileVerificationState extends State<MobileVerification> {
                               dynamic response =
                                   await RegisterAPI.verifyMobileNumber(
                                       _mobileVerification.text);
-print(response);
+
                               if (response['status'] == 200) {
                                 try {
                                   _registerProvider

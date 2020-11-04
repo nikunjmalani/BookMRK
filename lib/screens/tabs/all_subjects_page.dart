@@ -2,7 +2,6 @@ import 'package:bookmrk/model/home_page_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/filter_category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
-import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

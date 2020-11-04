@@ -52,7 +52,7 @@ class _HomeState extends State<Home> {
       future: getHomePageDetails(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print(snapshot.data.response[0].appScreen[0].show);
+
 
           return Consumer<HomeScreenProvider>(
             builder: (_, _homeScreenProvider, child) {
