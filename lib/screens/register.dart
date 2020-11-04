@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/register_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
@@ -303,6 +304,8 @@ class _RegisterState extends State<Register> {
                                           } else {
                                             _registerProvider
                                                 .isRegisterInProcess = false;
+                                            prefs.write('userId', response['response'][0]['user_id']);
+                                            _registerProvider.verificationMobileNumberForRegister = _registerMobileNumber.text;
                                             Navigator.of(context).pushReplacement(
                                                 MaterialPageRoute(
                                                     builder: (context) =>

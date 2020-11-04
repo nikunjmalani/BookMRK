@@ -185,6 +185,7 @@ class _HomeState extends State<Home> {
                                                 _vendorProvider
                                                         .selectedVendorName =
                                                     "${snapshot.data.response[0].product[index].vendorSlug}";
+                                                print(_vendorProvider.selectedVendorName);
                                                 Provider.of<HomeScreenProvider>(
                                                             context,
                                                             listen: false)
@@ -397,7 +398,7 @@ class _HomeState extends State<Home> {
 
                                               },
                                               child: ClassButtons(
-                                                "${snapshot.data.response[0].responseClass[0].className}",
+                                                "${snapshot.data.response[0].responseClass[index].className}",
                                                 colorPalette.navyBlue,
                                                 Color(0xff6A4B9C),
                                               ),

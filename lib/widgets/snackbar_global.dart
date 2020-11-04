@@ -9,6 +9,6 @@ Widget getSnackBar(String msg) {
       style: TextStyle(color: Colors.white, fontSize: 16.0),
     ),
     backgroundColor: colorPalette.navyBlue,
-    duration: Duration(seconds: 1),
+    duration: Duration(seconds: 2),
   );
 }

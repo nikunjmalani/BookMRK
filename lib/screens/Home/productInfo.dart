@@ -38,7 +38,7 @@ class _ProductInfoState extends State<ProductInfo> {
   /// TextFields for student name and student roll number...
   TextEditingController _studentNameController = TextEditingController();
   TextEditingController _studentRollNumberController = TextEditingController();
-  TextEditingController _productQuantityController = TextEditingController();
+  TextEditingController _productQuantityController = TextEditingController(text: "1");
 
   /// form key...
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();

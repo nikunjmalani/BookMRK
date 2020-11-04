@@ -7,6 +7,7 @@ import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
+import 'package:bookmrk/screens/login.dart';
 import 'package:bookmrk/screens/resetPassword.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
@@ -231,16 +232,18 @@ class _OtpVerificationState extends State<OtpVerification> {
                                   if (otp.length >= 4) {
                                     if (_registerProvider
                                         .isOTPVerificationPageFromRegisterUser) {
+                                      print("otp varification page...");
                                       /// when mobile number verification..
 
                                       int userId = prefs.read<int>('userId');
+                                      print("userId : $userId");
                                       dynamic response =
                                           await RegisterAPI.verifyMobileWithOTP(
                                               _registerProvider
                                                   .verificationMobileNumberForRegister,
                                               otp,
                                               userId.toString());
-
+  print("otp validation response : ${response}");
                                       if (response['status'] == 200) {
                                         _forgotPasswordProvider
                                                 .forgotPasswordFromPage =
@@ -251,7 +254,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ResetPassword()));
+                                                    Login()));
                                       } else {
                                         _forgotPasswordProvider
                                                 .isOTPVerificationInProgress =
@@ -261,6 +264,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                                 '${response['message']}'));
                                       }
                                     } else {
+                                      print("forgot password page....");
                                       /// when forgot password !
                                       if (otp ==
                                           _forgotPasswordProvider

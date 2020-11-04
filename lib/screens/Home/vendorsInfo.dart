@@ -36,6 +36,8 @@ class _VendorsInfoState extends State<VendorsInfo> {
     VendorSchoolInfoModel _vendorSchoolInfo =
         VendorSchoolInfoModel.fromJson(response2);
     List data = [_vendorProductInfo, _vendorSchoolInfo];
+    print(response);
+    print(response2);
     return data;
   }
 
