@@ -111,8 +111,9 @@ class _SchoolTabState extends State<SchoolTab> {
                   _schoolProvider.isSearchSchoolTabSelected
                       ? Expanded(
                           child: Container(
-                            padding: EdgeInsets.only(bottom: 110),
+                            padding: EdgeInsets.only(bottom: 70),
                             child: GridView.builder(
+                              physics: BouncingScrollPhysics(),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2, childAspectRatio: 1.2),
@@ -181,20 +182,23 @@ class _SchoolTabState extends State<SchoolTab> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: Colors.black.withOpacity(0.39),
+                                          color: Colors.black.withOpacity(0.7),
                                         ),
                                         width: width,
                                         child: Column(
                                           children: [
-                                            Text(
-                                              '${_schoolProvider.schoolsToFilter[index].schoolName}',
-                                              style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 17,
-                                                color: const Color(0xffffffff),
-                                                fontWeight: FontWeight.w700,
+                                            Container(
+                                              padding: EdgeInsets.only(left: 15.0),
+                                              child: Text(
+                                                '${_schoolProvider.schoolsToFilter[index].schoolName}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: 17,
+                                                  color: const Color(0xffffffff),
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                                textAlign: TextAlign.left,
                                               ),
-                                              textAlign: TextAlign.left,
                                             ),
                                             SizedBox(
                                               height: 7,
@@ -258,8 +262,9 @@ class _SchoolTabState extends State<SchoolTab> {
                         )
                       : Expanded(
                           child: Container(
-                            padding: EdgeInsets.only(bottom: 110),
+                            padding: EdgeInsets.only(bottom: 70),
                             child: GridView.builder(
+                              physics: BouncingScrollPhysics(),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2, childAspectRatio: 1.2),
@@ -329,20 +334,23 @@ class _SchoolTabState extends State<SchoolTab> {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          color: Colors.black.withOpacity(0.39),
+                                          color: Colors.black.withOpacity(0.7),
                                         ),
                                         width: width,
                                         child: Column(
                                           children: [
-                                            Text(
-                                              '${snapshot.data.response[index].schoolName}',
-                                              style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 17,
-                                                color: const Color(0xffffffff),
-                                                fontWeight: FontWeight.w700,
+                                            Container(
+                                              padding: EdgeInsets.only(left: 15),
+                                              child: Text(
+                                                '${snapshot.data.response[index].schoolName}',
+                                                style: TextStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: 17,
+                                                  color: const Color(0xffffffff),
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                                textAlign: TextAlign.left,
                                               ),
-                                              textAlign: TextAlign.left,
                                             ),
                                             SizedBox(
                                               height: 7,

@@ -21,7 +21,8 @@ class UserAPI {
       url,
       headers: header,
     );
-
+    print(userId);
+    print(response.body);
     dynamic data = jsonDecode(response.body);
     return data;
   }

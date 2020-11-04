@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
                                         ? height / 2.3
                                         : height / 9,
                                 margin: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 15),
+                                    horizontal: 16, vertical: 5),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(25),
                                   border: Border.all(
@@ -121,9 +121,11 @@ class _HomeState extends State<Home> {
                                   ),
                                 ),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
+                                      physics: BouncingScrollPhysics(),
                                       child: Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -166,6 +168,7 @@ class _HomeState extends State<Home> {
                                                 )),
                                       ),
                                     ),
+
                                     Container(
                                       height: snapshot.data.response[0].product
                                                   .length >
@@ -173,6 +176,7 @@ class _HomeState extends State<Home> {
                                           ? height / 3.2
                                           : 0.0,
                                       child: ListView.builder(
+                                        physics: BouncingScrollPhysics(),
                                         itemCount: snapshot
                                             .data.response[0].product.length,
                                         scrollDirection: Axis.horizontal,
@@ -199,9 +203,9 @@ class _HomeState extends State<Home> {
                                               },
                                               child: Container(
                                                 margin: EdgeInsets.only(
-                                                    top: 20,
+                                                    top: 10,
                                                     left: 10,
-                                                    right: 10),
+                                                    right: 10, bottom: 10,),
                                                 height: height / 3.8,
                                                 width: width / 2.8,
                                                 decoration: BoxDecoration(
@@ -343,25 +347,20 @@ class _HomeState extends State<Home> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 15.0),
+                              SizedBox(height: 5.0),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
-                                    Header2("Class"),
+                                    Header2("Shop by Class"),
                                   ],
                                 ),
                               ),
                               Container(
                                 margin: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 15),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  border: Border.all(
-                                    color: Color(0xffcfcfcf),
-                                  ),
-                                ),
+                                    horizontal: 8, vertical: 15),
+
                                 alignment: Alignment.centerLeft,
                                 child: Wrap(
                                   children: List.generate(
@@ -406,13 +405,13 @@ class _HomeState extends State<Home> {
                                           )),
                                 ),
                               ),
-                              SizedBox(height: 15.0),
+                              SizedBox(height: 5.0),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
-                                    Header2("Subjects"),
+                                    Header2("Shop by Subject"),
                                     Spacer(),
                                     ViewAll(onClick: () {
                                       /// set the subject list..
@@ -438,13 +437,8 @@ class _HomeState extends State<Home> {
                               Container(
                                 height: height / 9,
                                 margin: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 15),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25),
-                                  border: Border.all(
-                                    color: Color(0xffcfcfcf),
-                                  ),
-                                ),
+                                    horizontal: 12, vertical: 5),
+
                                 alignment: Alignment.centerLeft,
                                 child: Column(
                                   children: [
@@ -532,6 +526,7 @@ class _HomeState extends State<Home> {
                               Container(
                                 height: height / 5,
                                 child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
@@ -563,7 +558,7 @@ class _HomeState extends State<Home> {
                                     const EdgeInsets.symmetric(horizontal: 15),
                                 child: Row(
                                   children: [
-                                    Header2("Publisher"),
+                                    Header2("Shop by Publisher"),
                                     Spacer(),
                                     ViewAll(onClick: () {
                                       /// set the publisher list....
@@ -589,6 +584,7 @@ class _HomeState extends State<Home> {
                               Container(
                                 height: height / 5,
                                 child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
@@ -652,6 +648,7 @@ class _HomeState extends State<Home> {
                                 margin: EdgeInsets.only(bottom: 110),
                                 height: height / 5,
                                 child: ListView.builder(
+                                  physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {

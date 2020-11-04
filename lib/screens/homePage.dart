@@ -454,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                             child: Container(
                               height: width / 6,
                               width: width / 2,
-
+                              alignment: Alignment.centerLeft,
                               /// home page appbar...
                               child: _homeScreenProvider.selectedBottomIndex == 0 &&
                                   _homeScreenProvider.selectedString == "Home"
@@ -495,7 +495,7 @@ class _HomePageState extends State<HomePage> {
                                         "ProductInfo" ||
                                         _homeScreenProvider.selectedString ==
                                             "SchoolInfo"
-                                        ? ""
+                                        ? "School"
                                         : _homeScreenProvider.selectedString ==
                                         "AllSubjects"
                                         ? "All Subjects" : _homeScreenProvider

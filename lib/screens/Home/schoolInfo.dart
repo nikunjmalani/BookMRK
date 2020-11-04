@@ -29,8 +29,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
   /// api to get school product details....
   Future getSchoolProductDetails() async {
-
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic data = await SchoolAPI.getSchoolProductDetails(
         widget.schoolSlug, userId.toString());
 
@@ -41,7 +40,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
 
   /// call api for get products of selected subcategory in school...
   Future getSubCategoryProducts(String subCategoryId) async {
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await SchoolAPI.getSubcategoryProductsOfSchool(
         userId.toString(), widget.schoolSlug, subCategoryId.toString());
     SchoolSubcategoryModel _schoolSubcategoryModel =
@@ -135,7 +134,10 @@ class _SchoolInfoState extends State<SchoolInfo> {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: _schoolProvider.selectedSubCategoryId ==
-                                        '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
+                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' ||
+                                        _schoolProvider
+                                                .selectedSchoolCategoryIndex ==
+                                            index
                                     ? colorPalette.navyBlue
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25),
@@ -144,12 +146,15 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                 left: 10,
                               ),
                               height: 25,
-                              width: 100,
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  _schoolProvider.selectedSchoolCategoryIndex = index;
+                                  _schoolProvider.selectedSchoolCategoryIndex =
+                                      index;
                                   _schoolProvider.selectedSubCategoryId =
                                       '${snapshot.data.response[0].schoolCat[index].categoryId}';
+                                  print(
+                                      "${_schoolProvider.selectedSubCategoryId}");
                                 },
                                 child: Text(
                                   '${snapshot.data.response[0].schoolCat[index].categoryName}',
@@ -157,13 +162,19 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                     fontFamily: 'Roboto',
                                     fontSize: 17,
                                     fontWeight: _schoolProvider
-                                                .selectedSubCategoryId ==
-                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
+                                                    .selectedSubCategoryId ==
+                                                '${snapshot.data.response[0].schoolCat[index].categoryId}' ||
+                                            _schoolProvider
+                                                    .selectedSchoolCategoryIndex ==
+                                                index
                                         ? FontWeight.w900
                                         : FontWeight.w500,
                                     color: _schoolProvider
-                                                .selectedSubCategoryId ==
-                                            '${snapshot.data.response[0].schoolCat[index].categoryId}' || _schoolProvider.selectedSchoolCategoryIndex == index
+                                                    .selectedSubCategoryId ==
+                                                '${snapshot.data.response[0].schoolCat[index].categoryId}' ||
+                                            _schoolProvider
+                                                    .selectedSchoolCategoryIndex ==
+                                                index
                                         ? Colors.white
                                         : colorPalette.navyBlue,
                                   ),
@@ -190,7 +201,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          'Category wise Products',
+                                          'Available Products',
                                           style: TextStyle(
                                             fontFamily: 'Roboto',
                                             fontSize: 16,
@@ -203,7 +214,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                     ),
                                   ),
                                   Container(
-                                      height: height / 2.7,
+                                      height: height / 2.9,
                                       width: width,
                                       child: ListView.builder(
                                         physics: BouncingScrollPhysics(),
@@ -248,7 +259,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                                       .response[index]
                                                       .productPrice,
                                                   stock:
-                                                      "${subCatSnapshot.data.response[index].productStockStatus}"),
+                                                      "${subCatSnapshot.data.response[index].productStockStatus}",
+                                                  discount:
+                                                      "${subCatSnapshot.data.response[index].productDiscount}"),
                                             ),
                                           );
                                         },
@@ -263,8 +276,13 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                 ),
                                 child: Column(
                                   children: [
-                                    SvgPicture.asset('assets/icons/no_data.svg', height: 100,),
-                                    SizedBox(height: 20.0,),
+                                    SvgPicture.asset(
+                                      'assets/icons/no_data.svg',
+                                      height: 100,
+                                    ),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
                                     Text(
                                       'Products not found !',
                                       style: TextStyle(fontSize: 18.0),
@@ -291,7 +309,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                         child: Row(
                           children: [
                             Text(
-                              'Available Products ',
+                              'Other Products',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 16,
@@ -311,7 +329,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                   value: "Single",
                                 ),
                                 PopupMenuItem(
-                                  child: Text('set'),
+                                  child: Text('Set'),
                                   value: "Set",
                                 ),
                               ],
@@ -391,7 +409,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                               .schoolAllProduct[index]
                                               .productPrice,
                                           stock:
-                                              "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}"),
+                                              "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}",
+                                          discount:
+                                              "${snapshot.data.response[index].productDiscount}"),
                                     ),
                                   );
                                 } else {
@@ -437,7 +457,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                               .schoolAllProduct[index]
                                               .productPrice,
                                           stock:
-                                              "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}"),
+                                              "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}",
+                                          discount:
+                                              "${snapshot.data.response[index].productDiscount}"),
                                     ),
                                   );
                                 } else {
@@ -478,7 +500,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                             .schoolAllProduct[index]
                                             .productPrice,
                                         stock:
-                                            "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}"),
+                                            "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}",
+                                        discount:
+                                            "${snapshot.data.response[index].productDiscount}"),
                                   ),
                                 );
                               }

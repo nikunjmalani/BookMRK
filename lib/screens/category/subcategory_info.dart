@@ -72,7 +72,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                             image: DecorationImage(
                               image: NetworkImage(
                                   "${snapshot.data.response[0].category[0].categoryImg}"),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -84,7 +84,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -96,7 +96,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
