@@ -33,6 +33,7 @@ class _SearchState extends State<Search> {
     int userId =  prefs.read<int>('userId');
     dynamic response =
         await SearchAPI.searchProductHomePage(productName, userId.toString());
+    print(response);
     if (response['response'].length == 0) {
       NoDataOrderModel _noData = NoDataOrderModel.fromJson(response);
       return _noData;
