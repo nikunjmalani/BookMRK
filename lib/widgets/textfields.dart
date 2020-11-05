@@ -2,7 +2,7 @@ import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
 
 Widget SimpleTextfield(hintText,
-    {TextEditingController controller, Function validator}) {
+    {TextEditingController controller, Function validator, TextInputType keyboardType}) {
   ColorPalette colorPalette = ColorPalette();
 
   if (validator == null) {
@@ -18,6 +18,7 @@ Widget SimpleTextfield(hintText,
   return TextFormField(
     validator: validator,
     controller: controller,
+    keyboardType: keyboardType,
     decoration: InputDecoration(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(13),

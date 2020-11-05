@@ -86,7 +86,7 @@ class _CategoryTabState extends State<CategoryTab> {
                                             BorderRadius.circular(10.0),
                                         image: DecorationImage(
                                             image: AssetImage(
-                                                'assets/images/bookCategory.png'),
+                                                'assets/images/preload.png'),
                                             fit: BoxFit.cover,
                                             colorFilter: ColorFilter.mode(
                                                 Colors.white,
@@ -101,7 +101,7 @@ class _CategoryTabState extends State<CategoryTab> {
                                             BorderRadius.circular(10.0),
                                         image: DecorationImage(
                                             image: AssetImage(
-                                                'assets/images/bookCategory.png'),
+                                                'assets/images/preload.png'),
                                             fit: BoxFit.cover,
                                             colorFilter: ColorFilter.mode(
                                                 Colors.white,

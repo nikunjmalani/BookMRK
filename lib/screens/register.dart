@@ -126,12 +126,12 @@ class _RegisterState extends State<Register> {
                               height: 10,
                             ),
                             SimpleTextfield("Email Address",
-                                controller: _registerEmailAddress),
+                                controller: _registerEmailAddress, keyboardType: TextInputType.emailAddress),
                             SizedBox(
                               height: 10,
                             ),
                             SimpleTextfield("Mobile Number",
-                                controller: _registerMobileNumber),
+                                controller: _registerMobileNumber, keyboardType: TextInputType.number),
                             SizedBox(
                               height: 10,
                             ),
@@ -290,7 +290,7 @@ class _RegisterState extends State<Register> {
                                           confirmPassword:
                                               _registerConfirmPassword.text,
                                         );
-                                        print(response);
+
                                         if (response['status'] == 200) {
                                           if (response['response'][0]
                                                   ['already_exists'] !=

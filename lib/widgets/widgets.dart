@@ -151,8 +151,7 @@ Widget ProductBox(
     fit: expanded == true ? StackFit.expand : StackFit.loose,
     children: [
       Container(
-
-        height: height / 3.2,
+        height: height / 2.9,
         width: width / 2,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
@@ -160,122 +159,120 @@ Widget ProductBox(
               color: Color(0xffcfcfcf),
             ),
             ),
-        child: Stack(
+        child: Column(
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 30, bottom: 25.0),
-                  child: CachedNetworkImage(
-                    imageUrl: image,
-                    height: height / 8,
-                    fit: BoxFit.fill,
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                        ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30, bottom: 25.0),
+              child: CachedNetworkImage(
+                imageUrl: image,
+                height: height / 8,
+                fit: BoxFit.fill,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                    ),
+                  ),
+                ),
+                placeholder: (context, url) => Center(
+                    child: Image.asset('assets/images/preload.png')),
+                errorWidget: (context, url, error) => Center(
+                    child: Image.asset('assets/images/preload.png')),
+              ),
+            ),
+            Spacer(),
+            Container(
+              height: 20.0,
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: const Color(0xff000000),
+                ),
+                textAlign: TextAlign.left,
+              ),
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 5),
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Container(
+              height: 16.0,
+              child: Text(
+                description,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontSize: 14,
+                  color: const Color(0xff777777),
+                  fontWeight: FontWeight.w300,
+                ),
+                textAlign: TextAlign.left,
+              ),
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 5),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 5,
+                left: 5,
+                right: 10,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 5.0, vertical: 3.0),
+                    decoration: BoxDecoration(
+                      color: stock == "IN" ? colorPalette.pinkOrange : Colors.red,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Text(
+                      stock == "IN" ? "In Stock" : "Out of Stock",
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 13,
+                        color: const Color(0xffffffff),
                       ),
+                      textAlign: TextAlign.left,
                     ),
-                    placeholder: (context, url) => Center(
-                        child: Image.asset('assets/images/Sharpner.png')),
-                    errorWidget: (context, url, error) => Center(
-                        child: Image.asset('assets/images/Sharpner.png')),
                   ),
-                ),
-                Container(
-                  height: 20.0,
-                  child: Text(
-                    title,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: 'Roboto',
-                      fontSize: 16,
-                      color: const Color(0xff000000),
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 5),
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                Container(
-                  height: 16.0,
-                  child: Text(
-                    description,
-                    overflow: TextOverflow.ellipsis,
+                  Text(
+                    '₹ $price',
                     style: TextStyle(
                       fontFamily: 'Roboto',
                       fontSize: 14,
-                      color: const Color(0xff777777),
-                      fontWeight: FontWeight.w300,
+                      color: const Color(0xff515c6f),
+                      fontWeight: FontWeight.w700,
                     ),
                     textAlign: TextAlign.left,
                   ),
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.only(left: 5),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 5,
-                    left: 5,
-                    right: 10,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 5.0, vertical: 3.0),
-                        decoration: BoxDecoration(
-                          color: stock == "IN" ? colorPalette.pinkOrange : Colors.red,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Text(
-                          stock == "IN" ? "In Stock" : "Out of Stock",
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 13,
-                            color: const Color(0xffffffff),
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                      Text(
-                        '₹ $price',
-                        style: TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: 14,
-                          color: const Color(0xff515c6f),
-                          fontWeight: FontWeight.w700,
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            discount != "" ? Positioned(
-              left: -20,
-              top: 50,
-              child: Transform(
-                transform: Matrix4.rotationZ(-0.76),
-                child: Container(
-                  color: colorPalette.pinkOrange,
-                  height: 25.0,
-                  width: width / 4,
-                  alignment: Alignment.center,
-                  child: Text('$discount OFF', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),),
-                ),
+                ],
               ),
-            ) : SizedBox(),
+            ),
+            SizedBox(height: 5.0,)
           ],
         ),
       ),
+      discount != "" ? Positioned(
+        left: -25,
+        top: 65,
+        child: Transform(
+          transform: Matrix4.rotationZ(-0.76),
+          child: Container(
+            color: colorPalette.pinkOrange,
+            height: 25.0,
+            width: width / 3,
+            alignment: Alignment.center,
+            child: Text('$discount OFF', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),),
+          ),
+        ),
+      ) : SizedBox(),
       Positioned(
               top: 0,
               right: 0,

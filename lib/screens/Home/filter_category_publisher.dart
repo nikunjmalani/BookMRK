@@ -1,4 +1,8 @@
 
+import 'package:bookmrk/api/category_api.dart';
+import 'package:bookmrk/constant/constant.dart';
+import 'package:bookmrk/model/filter_class_category_model.dart';
+import 'package:bookmrk/model/filter_publisher_category_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
@@ -21,12 +25,14 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
 
   ColorPalette colorPalette = ColorPalette();
 
-
   /// api to get filter category list data....
   Future getFilterCategoryListData() async {
+    int userId = prefs.read<int>('userId');
+    dynamic response = await CategoryAPI.getFilterCategory(userId.toString(), 'publisher', widget.selectedPublisher);
+    FilterPublisherCategoryModel _filterPublisherCategoryModel = FilterPublisherCategoryModel.fromJson(response);
+    return _filterPublisherCategoryModel;
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +56,7 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                     children: [
                       CachedNetworkImage(
                         imageUrl:
-                        '${snapshot.data.response[0].category[0].categoryImg}',
+                        '${snapshot.data.response[0].publisher[0].publisherImg}',
                         fit: BoxFit.cover,
                         imageBuilder: (context, imageProvider) => Container(
                           margin: EdgeInsets.symmetric(
@@ -60,8 +66,8 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: NetworkImage(
-                                  "${snapshot.data.response[0].category[0].categoryImg}"),
-                              fit: BoxFit.fill,
+                                  "${snapshot.data.response[0].publisher[0].publisherImg}"),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -72,8 +78,8 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.fill,
+                              image: AssetImage("assets/images/preload.png"),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -84,8 +90,8 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.fill,
+                              image: AssetImage("assets/images/preload.png"),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -102,17 +108,21 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '${snapshot.data.response[0].category[0].categoryName}',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 20,
-                                color: const Color(0xffffffff),
+                            Container(
+                              width: width/2,
+                              child: Text(
+                                '${snapshot.data.response[0].publisher[0].publisherName}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  color: const Color(0xffffffff),
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
                             ),
                             Text(
-                              '${snapshot.data.response[0].category[0].allProductsCount ?? "0"} Products',
+                              '${snapshot.data.response[0].publisher[0].allProductsCount ?? "0"} Products',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 20,
@@ -125,80 +135,12 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                       )
                     ],
                   ),
-                  Consumer<CategoryProvider>(
-                    builder: (_, _categoryProvider, child) =>
-                        Consumer<HomeScreenProvider>(
-                          builder: (_, _homeScreenProvider, child) => Container(
-                            height: snapshot.data.response[0].subCategory.length > 0
-                                ? height / 25
-                                : height / 45,
-                            child: snapshot.data.response[0].subCategory.length > 0
-                                ? SingleChildScrollView(
-                              physics: BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 10.0,
-                                    ),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: colorPalette.navyBlue,
-                                          borderRadius:
-                                          BorderRadius.circular(5.0)),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.0, vertical: 5.0),
-                                      child: Text(
-                                        'All',
-                                        style: TextStyle(
-                                            fontFamily: 'Roboto',
-                                            fontSize: 14,
-                                            color: Colors.white),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: List.generate(snapshot.data.response[0].subCategory.length, (index) => GestureDetector(
-                                      onTap: () {
-                                        _homeScreenProvider
-                                            .selectedString =
-                                        "SubCategoryInfo";
-                                        _categoryProvider
-                                            .selectedSubCategory =
-                                        "${snapshot.data.response[0].subCategory[index].catSlug}";
-                                      },
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 20,
-                                            vertical: 5.0),
-                                        child: Text(
-                                          '${snapshot.data.response[0].subCategory[index].categoryName}',
-                                          style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 14,
-                                              color:
-                                              colorPalette.navyBlue),
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                    ),),
-                                  ),
-                                ],
-                              ),
-                            )
-                                : SizedBox(),
-                          ),
-                        ),
-                  ),
+
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 70),
                       child: GridView.builder(
+                        physics: BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 300,
                             childAspectRatio: 0.75,
@@ -240,6 +182,7 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                       ),
                     ),
                   ),
+
                 ],
               );
             }

@@ -52,8 +52,6 @@ class _HomeState extends State<Home> {
       future: getHomePageDetails(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
-
           return Consumer<HomeScreenProvider>(
             builder: (_, _homeScreenProvider, child) {
               return Stack(
@@ -189,7 +187,7 @@ class _HomeState extends State<Home> {
                                                 _vendorProvider
                                                         .selectedVendorName =
                                                     "${snapshot.data.response[0].product[index].vendorSlug}";
-                                                print(_vendorProvider.selectedVendorName);
+
                                                 Provider.of<HomeScreenProvider>(
                                                             context,
                                                             listen: false)
@@ -363,6 +361,7 @@ class _HomeState extends State<Home> {
 
                                 alignment: Alignment.centerLeft,
                                 child: Wrap(
+                                  direction: Axis.horizontal,
                                   children: List.generate(
                                       snapshot.data.response[0].responseClass
                                           .length,
@@ -402,7 +401,9 @@ class _HomeState extends State<Home> {
                                                 Color(0xff6A4B9C),
                                               ),
                                             ),
-                                          )),
+                                          ),
+
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 5.0),

@@ -26,13 +26,13 @@ class _CategoryInfoState extends State<CategoryInfo> {
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
         widget.categoryName, userId.toString());
     if (categoryProductsDetails['response'].length == "0") {
-      print("no data");
+
       NoDataOrderModel _noDataModel =
           NoDataOrderModel.fromJson(categoryProductsDetails);
       return _noDataModel;
     } else {
-      print("has data");
-      print(categoryProductsDetails);
+
+
       CategoryProductsModel _categoryProductModelDetails =
           CategoryProductsModel.fromJson(categoryProductsDetails);
       return _categoryProductModelDetails;
@@ -85,7 +85,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
+                              image: AssetImage("assets/images/preload.png"),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -97,7 +97,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
+                              image: AssetImage("assets/images/preload.png"),
                               fit: BoxFit.cover,
                             ),
                           ),

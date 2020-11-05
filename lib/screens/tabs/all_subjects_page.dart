@@ -72,7 +72,7 @@ class _AllSubjectsState extends State<AllSubjects> {
                                     BorderRadius.circular(10.0),
                                     image: DecorationImage(
                                         image: AssetImage(
-                                            'assets/images/bookCategory.png'),
+                                            'assets/images/preload.png'),
                                         fit: BoxFit.fill,
                                         colorFilter: ColorFilter.mode(
                                             Colors.white,
@@ -87,7 +87,7 @@ class _AllSubjectsState extends State<AllSubjects> {
                                         BorderRadius.circular(10.0),
                                         image: DecorationImage(
                                             image: AssetImage(
-                                                'assets/images/bookCategory.png'),
+                                                'assets/images/preload.png'),
                                             fit: BoxFit.fill,
                                             colorFilter: ColorFilter.mode(
                                                 Colors.white,

@@ -74,7 +74,7 @@ class CategoryAPI {
       "Content-Type": "application/x-www-form-urlencoded"
     };
     http.Response response = await http.get(url, headers: header);
-    print(response.body);
+
     return jsonDecode(response.body);
   }
 }

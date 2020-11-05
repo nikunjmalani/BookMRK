@@ -75,4 +75,85 @@ class SchoolProvider extends ChangeNotifier {
     _selectedSchoolCategoryIndex = value;
     notifyListeners();
   }
+
+  /// search school by location selected....
+  bool _isFindSchoolByLocationSelected = false;
+
+  bool get isFindSchoolByLocationSelected => _isFindSchoolByLocationSelected;
+
+  set isFindSchoolByLocationSelected(bool value) {
+    _isFindSchoolByLocationSelected = value;
+    notifyListeners();
+  }
+
+  /// selected school country index...
+  int _selectedCountryIndexForSchool = 0;
+
+  int get selectedCountryIndexForSchool => _selectedCountryIndexForSchool;
+
+  set selectedCountryIndexForSchool(int value) {
+    _selectedCountryIndexForSchool = value;
+    notifyListeners();
+  }
+
+  /// selected school country id ....
+  int _selectedCountryIdForSchool;
+
+  int get selectedCountryIdForSchool => _selectedCountryIdForSchool;
+
+  set selectedCountryIdForSchool(int value) {
+    _selectedCountryIdForSchool = value;
+    notifyListeners();
+  }
+
+  /// selected school state index...
+  int _selectedStateIndexForSchool = 0;
+
+  int get selectedStateIndexForSchool => _selectedStateIndexForSchool;
+
+  set selectedStateIndexForSchool(int value) {
+    _selectedStateIndexForSchool = value;
+    notifyListeners();
+  }
+
+
+  /// selected school state id .....
+  int _selectedStateIdForSchool;
+
+  int get selectedStateIdForSchool => _selectedStateIdForSchool;
+
+  set selectedStateIdForSchool(int value) {
+    _selectedStateIdForSchool = value;
+    notifyListeners();
+  }
+
+  /// selected school city index....
+  int _selectedCityIndexForSchool = 0;
+
+  int get selectedCityIndexForSchool => _selectedCityIndexForSchool;
+
+  set selectedCityIndexForSchool(int value) {
+    _selectedCityIndexForSchool = value;
+    notifyListeners();
+  }
+
+  /// selected school city id....
+  int _selectedCityIdForSchool;
+
+  int get selectedCityIdForSchool => _selectedCityIdForSchool;
+
+  set selectedCityIdForSchool(int value) {
+    _selectedCityIdForSchool = value;
+    notifyListeners();
+  }
+
+  /// selected school pincode .....
+  String _selectedPinCodeForSchool;
+
+  String get selectedPinCodeForSchool => _selectedPinCodeForSchool;
+
+  set selectedPinCodeForSchool(String value) {
+    _selectedPinCodeForSchool = value;
+    notifyListeners();
+  }
 }

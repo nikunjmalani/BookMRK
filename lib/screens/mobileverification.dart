@@ -145,21 +145,20 @@ class _MobileVerificationState extends State<MobileVerification> {
                                   await RegisterAPI.verifyMobileNumber(
                                       _mobileVerification.text,
                                       userId.toString());
-                              print(response);
+
                               if (response['status'] == 200) {
                                 try {
                                   _registerProvider
                                       .isMobileVerificationProcess = false;
                                   _registerProvider.mobileVerificationOTP =
                                       response['response'][0]['otp'].toString();
-                                  print(
-                                      "check if null : ${response['response'][0]['otp'] != null}");
+
                                   if (response['response'][0]['otp'] != null) {
-                                    print('success');
+
                                     _registerProvider.mobileVerificationOTP =
                                         response['response'][0]['otp'].toString();
 
-                                    print("otp to : ${ _registerProvider.mobileVerificationOTP}");
+
 
                                     _registerProvider
                                             .isOTPVerificationPageFromRegisterUser =
@@ -170,15 +169,14 @@ class _MobileVerificationState extends State<MobileVerification> {
                                             builder: (context) =>
                                                 OtpVerification()));
                                   } else {
-                                    print("otp is nulll");
+
                                     _registerProvider
                                         .isMobileVerificationProcess = false;
                                     Scaffold.of(context).showSnackBar(
                                         getSnackBar('${response['message']}'));
                                   }
                                 } catch (e) {
-                                  print("exception : $e");
-                                  print("catch called");
+
                                   _registerProvider
                                       .isMobileVerificationProcess = false;
                                   Scaffold.of(context).showSnackBar(

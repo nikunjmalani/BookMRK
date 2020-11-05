@@ -223,6 +223,17 @@ class _HomePageState extends State<HomePage> {
                             ),);
                           }
 
+                          // else if(_homeScreenProvider.selectedString == "Category"){
+                          //   _homeScreenProvider.selectedString = "Home";
+                          //   _homeScreenProvider.selectedBottomIndex = 0;
+                          // }else if(_homeScreenProvider.selectedString == "School"){
+                          //   _homeScreenProvider.selectedString = "Home";
+                          //   _homeScreenProvider.selectedBottomIndex = 0;
+                          // }else if(_homeScreenProvider.selectedString == "User"){
+                          //   _homeScreenProvider.selectedString = "Home";
+                          //   _homeScreenProvider.selectedBottomIndex = 0;
+                          // }
+
                           /// check when home page is selected......
                           _homeScreenProvider.selectedBottomIndex == 0 &&
                               _homeScreenProvider.selectedString == "Home"
@@ -233,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                               ? "All Vendors"
                               : _homeScreenProvider.selectedString ==
                               "ProductInfo"
-                              ? "VendorInfo"
+                              ? "Home"
                               : _homeScreenProvider.selectedString ==
                               "FilterS"
                               ? "AllSubjects" : _homeScreenProvider
@@ -477,7 +488,7 @@ class _HomePageState extends State<HomePage> {
                                           ? "All Vendors"
                                           : _homeScreenProvider.selectedString ==
                                           "ProductInfo"
-                                          ? "VendorInfo"
+                                          ? "Home"
                                           : _homeScreenProvider.selectedString ==
                                           "FilterS"
                                           ? "AllSubjects" : _homeScreenProvider

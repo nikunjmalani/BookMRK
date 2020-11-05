@@ -53,7 +53,7 @@ Widget ViewAll({onClick}) {
 Widget CategoryButtons(title, color, borderColor) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
-    margin: EdgeInsets.only(left: 5, top: 15, right: 5, bottom :10),
+    margin: EdgeInsets.only(left: 5, top: 10, right: 5, bottom :5),
     height: Get.width / 8,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(10),

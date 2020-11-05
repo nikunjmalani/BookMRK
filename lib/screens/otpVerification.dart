@@ -138,18 +138,18 @@ class _OtpVerificationState extends State<OtpVerification> {
                               if (otp.length >= 4) {
                                 if (_registerProvider
                                     .isOTPVerificationPageFromRegisterUser) {
-                                  print("otp varification page...");
+
                                   /// when mobile number verification..
 
                                   int userId = prefs.read<int>('userId');
-                                  print("userId : $userId");
+
                                   dynamic response =
                                   await RegisterAPI.verifyMobileWithOTP(
                                       _registerProvider
                                           .verificationMobileNumberForRegister,
                                       otp,
                                       userId.toString());
-                                  print("otp validation response : ${response}");
+
                                   if (response['status'] == 200) {
                                     _forgotPasswordProvider
                                         .forgotPasswordFromPage =
@@ -170,7 +170,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                             '${response['message']}'));
                                   }
                                 } else {
-                                  print("forgot password page....");
+
                                   /// when forgot password !
                                   if (otp ==
                                       _forgotPasswordProvider
@@ -304,18 +304,18 @@ class _OtpVerificationState extends State<OtpVerification> {
                                   if (otp.length >= 4) {
                                     if (_registerProvider
                                         .isOTPVerificationPageFromRegisterUser) {
-                                      print("otp varification page...");
+
                                       /// when mobile number verification..
 
                                       int userId = prefs.read<int>('userId');
-                                      print("userId : $userId");
+
                                       dynamic response =
                                           await RegisterAPI.verifyMobileWithOTP(
                                               _registerProvider
                                                   .verificationMobileNumberForRegister,
                                               otp,
                                               userId.toString());
-  print("otp validation response : ${response}");
+
                                       if (response['status'] == 200) {
                                         _forgotPasswordProvider
                                                 .forgotPasswordFromPage =
@@ -336,7 +336,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                                 '${response['message']}'));
                                       }
                                     } else {
-                                      print("forgot password page....");
+
                                       /// when forgot password !
                                       if (otp ==
                                           _forgotPasswordProvider

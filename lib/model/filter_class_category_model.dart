@@ -1,11 +1,15 @@
+// To parse this JSON data, do
+//
+//     final filterCategoryModel = filterCategoryModelFromJson(jsonString);
+
 import 'dart:convert';
 
-SchoolSubcategoryModel schoolSubcategoryModelFromJson(String str) => SchoolSubcategoryModel.fromJson(json.decode(str));
+FilterClassCategoryModel filterClassCategoryModelFromJson(String str) => FilterClassCategoryModel.fromJson(json.decode(str));
 
-String schoolSubcategoryModelToJson(SchoolSubcategoryModel data) => json.encode(data.toJson());
+String filterClassCategoryModelToJson(FilterClassCategoryModel data) => json.encode(data.toJson());
 
-class SchoolSubcategoryModel {
-  SchoolSubcategoryModel({
+class FilterClassCategoryModel {
+  FilterClassCategoryModel({
     this.status,
     this.message,
     this.count,
@@ -17,7 +21,7 @@ class SchoolSubcategoryModel {
   int count;
   List<Response> response;
 
-  factory SchoolSubcategoryModel.fromJson(Map<String, dynamic> json) => SchoolSubcategoryModel(
+  factory FilterClassCategoryModel.fromJson(Map<String, dynamic> json) => FilterClassCategoryModel(
     status: json["status"],
     message: json["message"],
     count: json["count"],
@@ -34,6 +38,26 @@ class SchoolSubcategoryModel {
 
 class Response {
   Response({
+    this.responseClass,
+    this.product,
+  });
+
+  List<Class> responseClass;
+  List<Product> product;
+
+  factory Response.fromJson(Map<String, dynamic> json) => Response(
+    responseClass: List<Class>.from(json["class"].map((x) => Class.fromJson(x))),
+    product: List<Product>.from(json["product"].map((x) => Product.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "class": List<dynamic>.from(responseClass.map((x) => x.toJson())),
+    "product": List<dynamic>.from(product.map((x) => x.toJson())),
+  };
+}
+
+class Product {
+  Product({
     this.productId,
     this.productSlug,
     this.vendorSlug,
@@ -47,7 +71,7 @@ class Response {
     this.productName,
     this.author,
     this.publisher,
-    this.responseClass,
+    this.productClass,
     this.subject,
     this.language,
     this.bookType,
@@ -73,8 +97,8 @@ class Response {
   String productName;
   List<dynamic> author;
   List<dynamic> publisher;
-  List<dynamic> responseClass;
-  List<dynamic> subject;
+  List<dynamic> productClass;
+  List<Subject> subject;
   String language;
   String bookType;
   String productPrice;
@@ -85,7 +109,7 @@ class Response {
   String productStockStatus;
   String productInUserWishlist;
 
-  factory Response.fromJson(Map<String, dynamic> json) => Response(
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
     productId: json["product_id"],
     productSlug: json["product_slug"],
     vendorSlug: json["vendor_slug"],
@@ -99,8 +123,8 @@ class Response {
     productName: json["product_name"],
     author: List<dynamic>.from(json["author"].map((x) => x)),
     publisher: List<dynamic>.from(json["publisher"].map((x) => x)),
-    responseClass: List<dynamic>.from(json["class"].map((x) => x)),
-    subject: List<dynamic>.from(json["subject"].map((x) => x)),
+    productClass: List<dynamic>.from(json["class"].map((x) => x)),
+    subject: List<Subject>.from(json["subject"].map((x) => Subject.fromJson(x))),
     language: json["language"],
     bookType: json["book_type"],
     productPrice: json["product_price"],
@@ -118,7 +142,7 @@ class Response {
     "vendor_slug": vendorSlug,
     "school_slug": schoolSlug,
     "type": type,
-    "product_type": productType,
+    "product_type":productType,
     "variation": variation,
     "additional_set": additionalSet,
     "category_name": categoryName,
@@ -126,8 +150,8 @@ class Response {
     "product_name": productName,
     "author": List<dynamic>.from(author.map((x) => x)),
     "publisher": List<dynamic>.from(publisher.map((x) => x)),
-    "class": List<dynamic>.from(responseClass.map((x) => x)),
-    "subject": List<dynamic>.from(subject.map((x) => x)),
+    "class": List<dynamic>.from(productClass.map((x) => x)),
+    "subject": List<dynamic>.from(subject.map((x) => x.toJson())),
     "language": language,
     "book_type": bookType,
     "product_price": productPrice,
@@ -137,5 +161,74 @@ class Response {
     "vendor_company_name": vendorCompanyName,
     "product_stock_status": productStockStatus,
     "product_in_user_wishlist": productInUserWishlist,
+  };
+}
+
+class Subject {
+  Subject({
+    this.subjectId,
+    this.subjectSlug,
+    this.subjectName,
+    this.subjectImg,
+    this.filterType,
+  });
+
+  String subjectId;
+  String subjectSlug;
+  String subjectName;
+  String subjectImg;
+  String filterType;
+
+  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
+    subjectId: json["subject_id"],
+    subjectSlug: json["subject_slug"],
+    subjectName: json["subject_name"],
+    subjectImg: json["subject_img"],
+    filterType: json["filter_type"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "subject_id": subjectId,
+    "subject_slug": subjectSlug,
+    "subject_name": subjectName,
+    "subject_img": subjectImg,
+    "filter_type": filterType,
+  };
+}
+
+
+class Class {
+  Class({
+    this.classId,
+    this.classSlug,
+    this.className,
+    this.classImg,
+    this.filterType,
+    this.allProductsCount,
+  });
+
+  String classId;
+  String classSlug;
+  String className;
+  String classImg;
+  String filterType;
+  String allProductsCount;
+
+  factory Class.fromJson(Map<String, dynamic> json) => Class(
+    classId: json["class_id"],
+    classSlug: json["class_slug"],
+    className: json["class_name"],
+    classImg: json["class_img"],
+    filterType: json["filter_type"],
+    allProductsCount: json["all_products_count"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "class_id": classId,
+    "class_slug": classSlug,
+    "class_name": className,
+    "class_img": classImg,
+    "filter_type": filterType,
+    "all_products_count": allProductsCount,
   };
 }

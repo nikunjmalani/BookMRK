@@ -83,7 +83,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
+                              image: AssetImage("assets/images/preload.png"),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -95,7 +95,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
+                              image: AssetImage("assets/images/preload.png"),
                               fit: BoxFit.cover,
                             ),
                           ),
