@@ -176,7 +176,8 @@ class _HomePageState extends State<HomePage> {
                                   padding: EdgeInsets.all(10.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
                                     children: [
                                       Text(
                                         'Are you sure you want to exit ?',
@@ -187,14 +188,16 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Spacer(),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .end,
                                         crossAxisAlignment: CrossAxisAlignment
                                             .center,
                                         children: [
                                           FlatButton(onPressed: () {
                                             Navigator.pop(context);
                                           },
-                                              child: Text('NO', style: TextStyle(
+                                              child: Text(
+                                                'NO', style: TextStyle(
                                                   color: colorPalette.navyBlue,
                                                   fontSize: 18.0,
                                                   fontWeight: FontWeight.w900
@@ -205,7 +208,8 @@ class _HomePageState extends State<HomePage> {
                                               SystemNavigator.pop();
                                             },
                                             shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(
+                                                borderRadius: BorderRadius
+                                                    .circular(
                                                     5.0)),
                                             color: colorPalette.navyBlue,
                                             child: Text('YES', style: TextStyle(
@@ -241,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                               : _homeScreenProvider.selectedBottomIndex == 0
                               ? _setHomeScreenProvider.selectedString =
                           _homeScreenProvider.selectedString == "VendorInfo"
-                              ? "All Vendors"
+                              ? "Home"
                               : _homeScreenProvider.selectedString ==
                               "ProductInfo"
                               ? "Home"
@@ -254,7 +258,8 @@ class _HomePageState extends State<HomePage> {
 
                           /// check when category page is selected......
                               : _homeScreenProvider.selectedBottomIndex == 1 &&
-                              (_homeScreenProvider.selectedString == "Category" ||
+                              (_homeScreenProvider.selectedString ==
+                                  "Category" ||
                                   _homeScreenProvider.selectedString ==
                                       "CategoryInfo" || _homeScreenProvider
                                   .selectedString ==
@@ -275,7 +280,8 @@ class _HomePageState extends State<HomePage> {
                               : _homeScreenProvider.selectedBottomIndex == 2 &&
                               (_homeScreenProvider.selectedString ==
                                   "ProductInfo" ||
-                                  _homeScreenProvider.selectedString == "School" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "School" ||
                                   _homeScreenProvider.selectedString ==
                                       "SchoolInfo")
                               ? _setHomeScreenProvider.selectedString =
@@ -291,7 +297,8 @@ class _HomePageState extends State<HomePage> {
                                   "EditProfile" ||
                                   _homeScreenProvider.selectedString ==
                                       "ChangeMobile" ||
-                                  _homeScreenProvider.selectedString == "UserOTP" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "UserOTP" ||
                                   _homeScreenProvider.selectedString ==
                                       "Wishlist" ||
                                   _homeScreenProvider.selectedString ==
@@ -338,7 +345,8 @@ class _HomePageState extends State<HomePage> {
                               : _homeScreenProvider.selectedString ==
                               "NewPassword"
                               ? "ChangePassword"
-                              : _homeScreenProvider.selectedString == "ProductInfo"
+                              : _homeScreenProvider.selectedString ==
+                              "ProductInfo"
                               ? "Wishlist"
                               : "User" : "User";
 
@@ -349,8 +357,10 @@ class _HomePageState extends State<HomePage> {
                         child: Scaffold(
                           appBar: _homeScreenProvider.selectedString ==
                               "ChangeAddress" ||
-                              _homeScreenProvider.selectedString == "AddAddress" ||
-                              _homeScreenProvider.selectedString == "EditAddress" ||
+                              _homeScreenProvider.selectedString ==
+                                  "AddAddress" ||
+                              _homeScreenProvider.selectedString ==
+                                  "EditAddress" ||
                               _homeScreenProvider.selectedString ==
                                   "SearchProducts" ||
                               _homeScreenProvider.selectedString ==
@@ -360,7 +370,8 @@ class _HomePageState extends State<HomePage> {
                                   "UserEditAddress" ||
                               _homeScreenProvider.selectedString ==
                                   "UserAddAddress" ||
-                              _homeScreenProvider.selectedString == "OrderTracking"
+                              _homeScreenProvider.selectedString ==
+                                  "OrderTracking"
                               ? SimpleAppBar(
                               actionIcon: _homeScreenProvider.selectedString ==
                                   "AddAddress" ||
@@ -370,7 +381,8 @@ class _HomePageState extends State<HomePage> {
                                       "SearchProducts" ||
                                   _homeScreenProvider.selectedString ==
                                       "SearchProducts2" ||
-                                  _homeScreenProvider.selectedString == "Filter" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "Filter" ||
                                   _homeScreenProvider.selectedString ==
                                       "UserEditAddress" ||
                                   _homeScreenProvider.selectedString ==
@@ -398,7 +410,8 @@ class _HomePageState extends State<HomePage> {
                                     : _homeScreenProvider.selectedString ==
                                     "SearchProducts"
                                     ? "Home"
-                                    : _homeScreenProvider.selectedString == "Filter"
+                                    : _homeScreenProvider.selectedString ==
+                                    "Filter"
                                     ? "VendorInfo"
                                     : _homeScreenProvider.selectedString ==
                                     "UserEditAddress" ||
@@ -419,7 +432,8 @@ class _HomePageState extends State<HomePage> {
                                   : _homeScreenProvider.selectedString ==
                                   "SearchProducts2" ?
                               "Search Products"
-                                  : _homeScreenProvider.selectedString == "Filter"
+                                  : _homeScreenProvider.selectedString ==
+                                  "Filter"
                                   ? "Filter By Categories"
                                   : _homeScreenProvider.selectedString ==
                                   "UserEditAddress"
@@ -432,6 +446,10 @@ class _HomePageState extends State<HomePage> {
                                   ? "Order Tracking"
                                   : "",
                               icon: Icons.close)
+                              : _homeScreenProvider.selectedString ==
+                              "VendorInfo"
+                              ? PreferredSize(
+                              child: Container(), preferredSize: Size(0.0, 0.0))
                               : CustomAppBar(
                             context,
                             blueCartIcon: _homeScreenProvider.blueCartIcon,
@@ -466,8 +484,10 @@ class _HomePageState extends State<HomePage> {
                               height: width / 6,
                               width: width / 2,
                               alignment: Alignment.centerLeft,
+
                               /// home page appbar...
-                              child: _homeScreenProvider.selectedBottomIndex == 0 &&
+                              child: _homeScreenProvider.selectedBottomIndex ==
+                                  0 &&
                                   _homeScreenProvider.selectedString == "Home"
                                   ? imagePath.logo
                                   : _homeScreenProvider.selectedBottomIndex == 0
@@ -476,7 +496,8 @@ class _HomePageState extends State<HomePage> {
                                   IconButton(
                                     icon: Icon(
                                       Icons.arrow_back_ios,
-                                      color: _homeScreenProvider.selectedString ==
+                                      color: _homeScreenProvider
+                                          .selectedString ==
                                           "VendorInfo"
                                           ? Colors.white
                                           : colorPalette.navyBlue,
@@ -486,10 +507,12 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "VendorInfo"
                                           ? "All Vendors"
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "ProductInfo"
                                           ? "Home"
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "FilterS"
                                           ? "AllSubjects" : _homeScreenProvider
                                           .selectedString ==
@@ -518,7 +541,7 @@ class _HomePageState extends State<HomePage> {
                                         ? "Subject" : _homeScreenProvider
                                         .selectedString ==
                                         "FilterP"
-                                        ? "Publisher" :_homeScreenProvider
+                                        ? "Publisher" : _homeScreenProvider
                                         .selectedString ==
                                         "FilterC"
                                         ? "Class" : 'All Vendors',
@@ -533,7 +556,8 @@ class _HomePageState extends State<HomePage> {
                               )
 
                               /// category page appbar...
-                                  : _homeScreenProvider.selectedBottomIndex == 1 &&
+                                  : _homeScreenProvider.selectedBottomIndex ==
+                                  1 &&
                                   (_homeScreenProvider.selectedString ==
                                       "Category" ||
                                       _homeScreenProvider.selectedString ==
@@ -550,7 +574,8 @@ class _HomePageState extends State<HomePage> {
                                       "SubCategoryInfo"
                                       ? "SubCategory" : "Category",
                                   backButton:
-                                  _homeScreenProvider.selectedString == "Category"
+                                  _homeScreenProvider.selectedString ==
+                                      "Category"
                                       ? false
                                       : true,
                                   onBackTap: () {
@@ -564,7 +589,8 @@ class _HomePageState extends State<HomePage> {
                                   })
 
                               /// school page appbar ....
-                                  : _homeScreenProvider.selectedBottomIndex == 2 &&
+                                  : _homeScreenProvider.selectedBottomIndex ==
+                                  2 &&
                                   (_homeScreenProvider.selectedString ==
                                       "ProductInfo" ||
                                       _homeScreenProvider.selectedString ==
@@ -591,7 +617,8 @@ class _HomePageState extends State<HomePage> {
                               )
 
                               /// user page appbar...
-                                  : _homeScreenProvider.selectedString == "User" ||
+                                  : _homeScreenProvider.selectedString ==
+                                  "User" ||
                                   (_homeScreenProvider.selectedString ==
                                       "EditProfile" ||
                                       _homeScreenProvider.selectedString ==
@@ -617,7 +644,8 @@ class _HomePageState extends State<HomePage> {
                                       || _homeScreenProvider.selectedString ==
                                           "ProductInfo")
                                   ? leadingAppBar(
-                                title: _homeScreenProvider.selectedString == "User"
+                                title: _homeScreenProvider.selectedString ==
+                                    "User"
                                     ? "Account"
                                     : _homeScreenProvider.selectedString ==
                                     "EditProfile"
@@ -708,12 +736,15 @@ class _HomePageState extends State<HomePage> {
                                     children: [
 
                                       /// home page..
-                                      _homeScreenProvider.selectedString == "Home"
+                                      _homeScreenProvider.selectedString ==
+                                          "Home"
                                           ? Home()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "SearchProducts"
                                           ? Search()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "AllSubjects"
                                           ? Consumer<FilterCategoryProvider>(
                                           builder: (_, _filterCategoryProvider,
@@ -721,7 +752,8 @@ class _HomePageState extends State<HomePage> {
                                               AllSubjects(
                                                   subjects: _filterCategoryProvider
                                                       .allFilterSubjectsList))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "FilterS"
                                           ? Consumer<FilterCategoryProvider>(
                                           builder: (_, _filterCategoryProvider,
@@ -729,7 +761,8 @@ class _HomePageState extends State<HomePage> {
                                               FilterCategorySubject(
                                                   _filterCategoryProvider
                                                       .selectedFilterCategorySubjectSlug))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "FilterC"
                                           ? Consumer<FilterCategoryProvider>(
                                           builder: (_, _filterCategoryProvider,
@@ -737,7 +770,8 @@ class _HomePageState extends State<HomePage> {
                                               FilterCategoryClass(
                                                   _filterCategoryProvider
                                                       .selectedFilterCategoryClassSlug))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "FilterP"
                                           ? Consumer<FilterCategoryProvider>(
                                           builder: (_, _filterCategoryProvider,
@@ -745,7 +779,8 @@ class _HomePageState extends State<HomePage> {
                                               FilterCategoryPublisher(
                                                   _filterCategoryProvider
                                                       .selectedFilterCategoryPublisherSlug))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "AllPublishers"
                                           ? Consumer<FilterCategoryProvider>(
                                           builder: (_, _filterCategoryProvider,
@@ -753,43 +788,56 @@ class _HomePageState extends State<HomePage> {
                                               AllPublisher(
                                                   publisher: _filterCategoryProvider
                                                       .allPublisherList))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "VendorInfo"
                                           ? Consumer<VendorProvider>(
-                                          builder: (_, _vendorProvider, child) =>
+                                          builder: (_, _vendorProvider,
+                                              child) =>
                                               VendorsInfo(
                                                   vendorSlug: _vendorProvider
                                                       .selectedVendorName))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "ProductInfo"
                                           ? Consumer<HomeScreenProvider>(
-                                          builder: (_, _homeScreenProvider, child) {
+                                          builder: (_, _homeScreenProvider,
+                                              child) {
                                             return ProductInfo(
                                               selectedProductSlug: _homeScreenProvider
                                                   .selectedProductSlug,);
                                           }
                                       )
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "SchoolInfo"
                                           ? Consumer<SchoolProvider>(
-                                          builder: (_, _schoolProvider, child) =>
-                                              SchoolInfo(schoolSlug: _schoolProvider
-                                                  .selectedSchoolSlug,))
-                                          : _homeScreenProvider.selectedString ==
+                                          builder: (_, _schoolProvider,
+                                              child) =>
+                                              SchoolInfo(
+                                                schoolSlug: _schoolProvider
+                                                    .selectedSchoolSlug,))
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "Filter"
                                           ? Filter()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "School"
                                           ? SchoolTab()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "Category" &&
-                                          _homeScreenProvider.selectedBottomIndex ==
+                                          _homeScreenProvider
+                                              .selectedBottomIndex ==
                                               1
                                           ? CategoryTab()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "CategoryInfo"
                                           ? Consumer<CategoryProvider>(
-                                        builder: (_, _categoryProvider, child) =>
+                                        builder: (_, _categoryProvider,
+                                            child) =>
                                             CategoryInfo(
                                                 _categoryProvider
                                                     .selectedCategoryName),)
@@ -799,7 +847,8 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "Category"
                                           ? CategoryTab()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "ProductInfo"
                                           ? Consumer<HomeScreenProvider>(
                                           builder: (_, _homeScreenProvider,
@@ -807,32 +856,41 @@ class _HomePageState extends State<HomePage> {
                                               ProductInfo(
                                                   selectedProductSlug: _homeScreenProvider
                                                       .selectedProductSlug))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "SubCategoryInfo"
                                           ? Consumer<CategoryProvider>(
-                                        builder: (_, _categoryProvider, child) =>
+                                        builder: (_, _categoryProvider,
+                                            child) =>
                                             SubCategoryInfo(
                                                 _categoryProvider
                                                     .selectedSubCategory),)
                                           : _homeScreenProvider
                                           .selectedString ==
-                                          "SearchProducts2" ? Search2() : Consumer<
+                                          "SearchProducts2"
+                                          ? Search2()
+                                          : Consumer<
                                           CategoryProvider>(
-                                        builder: (_, _categoryProvider, child) =>
+                                        builder: (_, _categoryProvider,
+                                            child) =>
                                             CategoryInfo(
                                                 _categoryProvider
                                                     .selectedCategoryName),),
 
 
                                       /// school page...
-                                      _homeScreenProvider.selectedString == "School"
+                                      _homeScreenProvider.selectedString ==
+                                          "School"
                                           ? SchoolTab()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "SchoolInfo"
                                           ? Consumer<SchoolProvider>(
-                                          builder: (_, _schoolProvider, child) =>
-                                              SchoolInfo(schoolSlug: _schoolProvider
-                                                  .selectedSchoolSlug))
+                                          builder: (_, _schoolProvider,
+                                              child) =>
+                                              SchoolInfo(
+                                                  schoolSlug: _schoolProvider
+                                                      .selectedSchoolSlug))
                                           : Consumer<HomeScreenProvider>(
                                           builder: (_, _homeScreenProvider,
                                               child) =>
@@ -844,42 +902,52 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "EditProfile"
                                           ? EditProfile()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "ChangeMobile"
                                           ? Consumer<UserProvider>(
                                           builder: (_, _userProvider, child) =>
                                               ChangeMobile(
                                                 selectedMobileNumber: _userProvider
                                                     .mobileNumberToChange,))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "UserOTP"
                                           ? UserOTP()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "Wishlist"
                                           ? WishList()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "MyAddress"
                                           ? MyAddress()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "UserEditAddress"
                                           ? Consumer<UserProvider>(
                                           builder: (_, _userProvider, child) =>
                                               UserEditAddress(
                                                 userAddressId: _userProvider
                                                     .selectedUserAddressId,))
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "UserAddAddress"
                                           ? UserAddAddress()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "MyOrders"
                                           ? MyOrders()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "OrderDetails"
                                           ? Consumer<OrderProvider>(
                                           builder: (_, _orderProvider, child) =>
-                                              OrderDetails(_orderProvider.orderId
-                                                  .toString()))
-                                          : _homeScreenProvider.selectedString ==
+                                              OrderDetails(
+                                                  _orderProvider.orderId
+                                                      .toString()))
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "OrderTracking"
                                           ? Consumer<OrderProvider>(
                                           builder: (_, _orderProvider, child) =>
@@ -889,20 +957,24 @@ class _HomePageState extends State<HomePage> {
                                                 userAddressToDeliver: _orderProvider
                                                     .userDeliveryAddress,)
                                       )
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "ChangePassword"
                                           ? Consumer<UserProvider>(
                                         builder: (_, _userProvider, child) =>
                                             ChangePassword(
                                               userMobileNumber: _userProvider
                                                   .mobileNumberToSendOtp,),)
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "NewPassword"
                                           ? NewPassword()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "FeedBack"
                                           ? FeedBack()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "ProductInfo"
                                           ? Consumer<HomeScreenProvider>(
                                           builder: (_, _homeScreenProvider,
@@ -913,12 +985,15 @@ class _HomePageState extends State<HomePage> {
                                           : User(),
 
                                       /// cart page...
-                                      _homeScreenProvider.selectedString == "Cart"
+                                      _homeScreenProvider.selectedString ==
+                                          "Cart"
                                           ? Cart()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "AddAddress"
                                           ? AddAddress()
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "EditAddress"
                                           ? Consumer<UserProvider>(
                                           builder: (_, _userProvider, child) =>
@@ -931,7 +1006,8 @@ class _HomePageState extends State<HomePage> {
                                       NotificationPage(),
                                     ],
                                     onPageChanged: (value) {
-                                      _setHomeScreenProvider.selectedBottomIndex =
+                                      _setHomeScreenProvider
+                                          .selectedBottomIndex =
                                           value;
                                     },
                                     physics: NeverScrollableScrollPhysics(),
@@ -946,9 +1022,10 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "Filter" ||
                                       _homeScreenProvider.selectedString ==
-                                          "UserEditAddress" || _homeScreenProvider
-                                      .selectedString ==
-                                      "ChangeAddress" || _homeScreenProvider
+                                          "UserEditAddress" ||
+                                      _homeScreenProvider
+                                          .selectedString ==
+                                          "ChangeAddress" || _homeScreenProvider
                                       .selectedString ==
                                       "UserAddAddress"
                                       ? SizedBox()
@@ -977,11 +1054,14 @@ class _HomePageState extends State<HomePage> {
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             0;
-                                            _setHomeScreenProvider.selectedString =
+                                            _setHomeScreenProvider
+                                                .selectedString =
                                             "Home";
-                                            _setHomeScreenProvider.blueCartIcon =
+                                            _setHomeScreenProvider
+                                                .blueCartIcon =
                                             false;
-                                            _setHomeScreenProvider.blueBellIcon =
+                                            _setHomeScreenProvider
+                                                .blueBellIcon =
                                             false;
                                           },
                                           child: CircleAvatar(
@@ -1008,11 +1088,14 @@ class _HomePageState extends State<HomePage> {
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             1;
-                                            _setHomeScreenProvider.selectedString =
+                                            _setHomeScreenProvider
+                                                .selectedString =
                                             "Category";
-                                            _setHomeScreenProvider.blueCartIcon =
+                                            _setHomeScreenProvider
+                                                .blueCartIcon =
                                             false;
-                                            _setHomeScreenProvider.blueBellIcon =
+                                            _setHomeScreenProvider
+                                                .blueBellIcon =
                                             false;
                                           },
                                           child: CircleAvatar(
@@ -1039,11 +1122,14 @@ class _HomePageState extends State<HomePage> {
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             2;
-                                            _setHomeScreenProvider.selectedString =
+                                            _setHomeScreenProvider
+                                                .selectedString =
                                             "School";
-                                            _setHomeScreenProvider.blueCartIcon =
+                                            _setHomeScreenProvider
+                                                .blueCartIcon =
                                             false;
-                                            _setHomeScreenProvider.blueBellIcon =
+                                            _setHomeScreenProvider
+                                                .blueBellIcon =
                                             false;
                                           },
                                           child: CircleAvatar(
@@ -1070,11 +1156,14 @@ class _HomePageState extends State<HomePage> {
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             3;
-                                            _setHomeScreenProvider.selectedString =
+                                            _setHomeScreenProvider
+                                                .selectedString =
                                             "User";
-                                            _setHomeScreenProvider.blueCartIcon =
+                                            _setHomeScreenProvider
+                                                .blueCartIcon =
                                             false;
-                                            _setHomeScreenProvider.blueBellIcon =
+                                            _setHomeScreenProvider
+                                                .blueBellIcon =
                                             false;
                                           },
                                           child: CircleAvatar(
@@ -1111,13 +1200,16 @@ class _HomePageState extends State<HomePage> {
                       snapshot.data.response[0].popupScreen[0].show == "1" &&
                           _homeScreenProvider.homeScreenMainPopupShow
                           ? Material(
-color: Colors.transparent,
-                            child: Container(
-                        color: Colors.black26,
-                        alignment: Alignment.center,
+                        color: Colors.transparent,
                         child: Container(
+                          color: Colors.black26,
+                          alignment: Alignment.center,
+                          child: Container(
                             height: 180,
-                            width: MediaQuery.of(context).size.width - 90,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width - 90,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.0),
                               color: Colors.white,
@@ -1128,7 +1220,8 @@ color: Colors.transparent,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${snapshot.data.response[0].popupScreen[0].title}',
+                                  '${snapshot.data.response[0].popupScreen[0]
+                                      .title}',
                                   style: TextStyle(
                                     color: colorPalette.navyBlue,
                                     fontSize: 20.0,
@@ -1139,7 +1232,8 @@ color: Colors.transparent,
                                   height: 10.0,
                                 ),
                                 Text(
-                                  '${snapshot.data.response[0].popupScreen[0].message}',
+                                  '${snapshot.data.response[0].popupScreen[0]
+                                      .message}',
                                   style: TextStyle(
                                     color: colorPalette.navyBlue,
                                     fontSize: 17.0,
@@ -1171,9 +1265,9 @@ color: Colors.transparent,
                                 ),
                               ],
                             ),
+                          ),
                         ),
-                      ),
-                          )
+                      )
                           : SizedBox()
                     ],
                   );
