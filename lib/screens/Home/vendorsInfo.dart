@@ -268,7 +268,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                       '${snapshot.data[0].response[0].vendor.companyName} ',
                                                       style: TextStyle(
                                                         fontFamily: 'Roboto',
-                                                        fontSize: 25,
+                                                        fontSize: 20,
                                                         color: const Color(
                                                             0xffffffff),
                                                         fontWeight:

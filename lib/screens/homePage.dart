@@ -521,36 +521,40 @@ class _HomePageState extends State<HomePage> {
                                     },
                                     iconSize: 30,
                                   ),
-                                  Text(
-                                    _homeScreenProvider.selectedString ==
-                                        "VendorInfo"
-                                        ? ""
-                                        : _homeScreenProvider.selectedString ==
-                                        "ProductInfo" ||
-                                        _homeScreenProvider.selectedString ==
-                                            "SchoolInfo"
-                                        ? "School"
-                                        : _homeScreenProvider.selectedString ==
-                                        "AllSubjects"
-                                        ? "All Subjects" : _homeScreenProvider
-                                        .selectedString ==
-                                        "AllPublishers"
-                                        ? "All Publishers" : _homeScreenProvider
-                                        .selectedString ==
-                                        "FilterS"
-                                        ? "Subject" : _homeScreenProvider
-                                        .selectedString ==
-                                        "FilterP"
-                                        ? "Publisher" : _homeScreenProvider
-                                        .selectedString ==
-                                        "FilterC"
-                                        ? "Class" : 'All Vendors',
-                                    style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 25,
-                                      color: const Color(0xff301869),
+                                  Container(
+                                    width: width / 2.8,
+                                    child: Text(
+                                      _homeScreenProvider.selectedString ==
+                                          "VendorInfo"
+                                          ? ""
+                                          : _homeScreenProvider.selectedString ==
+                                          "ProductInfo" ||
+                                          _homeScreenProvider.selectedString ==
+                                              "SchoolInfo"
+                                          ? "School"
+                                          : _homeScreenProvider.selectedString ==
+                                          "AllSubjects"
+                                          ? "All Subjects" : _homeScreenProvider
+                                          .selectedString ==
+                                          "AllPublishers"
+                                          ? "All Publishers" : _homeScreenProvider
+                                          .selectedString ==
+                                          "FilterS"
+                                          ? "Subject" : _homeScreenProvider
+                                          .selectedString ==
+                                          "FilterP"
+                                          ? "Publisher" : _homeScreenProvider
+                                          .selectedString ==
+                                          "FilterC"
+                                          ? "Class" : 'All Vendors',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 20,
+                                        color: const Color(0xff301869),
+                                      ),
+                                      textAlign: TextAlign.left,
                                     ),
-                                    textAlign: TextAlign.left,
                                   ),
                                 ],
                               )
