@@ -1,7 +1,14 @@
+import 'package:bookmrk/api/location_name_api.dart';
 import 'package:bookmrk/api/school_api.dart';
+import 'package:bookmrk/constant/constant.dart';
+import 'package:bookmrk/model/filter_school_by_category.dart';
+import 'package:bookmrk/model/no_data_model.dart';
 import 'package:bookmrk/model/school_list_model.dart';
+import 'package:bookmrk/provider/city_model.dart';
+import 'package:bookmrk/provider/country_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/school_provider.dart';
+import 'package:bookmrk/provider/state_model.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/textfields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -15,13 +22,45 @@ class SchoolTab extends StatefulWidget {
 }
 
 class _SchoolTabState extends State<SchoolTab> {
+  /// pincode controller...
+  TextEditingController _pincodeController = TextEditingController();
+
+  /// get all the list of school...
   Future<SchoolListModel> getAllSchoolList() async {
     dynamic schoolList = await SchoolAPI.getAllSchoolList();
     SchoolListModel _schoolListModel = SchoolListModel.fromJson(schoolList);
     return _schoolListModel;
   }
 
+  /// get all the school list by the location wise filter....
+  Future getLocationFilterWiseSchool(
+      String countryId, String stateId, String cityId, String pincode) async {
+    int userId = prefs.read<int>('userId');
+    dynamic response = await SchoolAPI.findSchoolByLocation(
+        userId.toString(), countryId, stateId, cityId, pincode);
+    if (response['response'].length > 0) {
+      FilterSchoolByLocation _filterSchoolByLocation =
+          FilterSchoolByLocation.fromJson(response);
+      return _filterSchoolByLocation;
+    } else {
+      NoDataOrderModel _noDataModel = NoDataOrderModel.fromJson(response);
+      return _noDataModel;
+    }
+  }
+
   ColorPalette colorPalette = ColorPalette();
+
+  autoFillFields() {
+    Provider.of<SchoolProvider>(context, listen: false)
+        .isFindSchoolByLocationSelected = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    autoFillFields();
+  }
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -56,6 +95,8 @@ class _SchoolTabState extends State<SchoolTab> {
                           onChanged: (value) {
                             if (value.length < 1) {
                               _schoolProvider.isSearchSchoolTabSelected = false;
+                              _schoolProvider.isFindSchoolByLocationSelected =
+                                  false;
                             } else {
                               _schoolProvider.isSearchSchoolTabSelected = true;
                               _schoolProvider.schoolsToFilter.clear();
@@ -93,10 +134,24 @@ class _SchoolTabState extends State<SchoolTab> {
                               context: context,
                               builder: (context) => LocationDialog(
                                 width: width,
+                                pinCodeController: _pincodeController,
                                 onCancelTap: () {
                                   Navigator.pop(context);
                                 },
-                                onSearchTap: () {},
+                                onSearchTap: () {
+
+                                  /// assign zero if any fileds are null...
+
+                                  _schoolProvider.selectedCityIdForSchool = _schoolProvider.selectedCityIdForSchool == null ? 0 : _schoolProvider.selectedCityIdForSchool;
+                                  _schoolProvider.selectedStateIdForSchool = _schoolProvider.selectedStateIdForSchool == null ? 0 : _schoolProvider.selectedStateIdForSchool;
+                                  _schoolProvider.selectedCountryIdForSchool = _schoolProvider.selectedCountryIdForSchool == null ? 0 : _schoolProvider.selectedCountryIdForSchool;
+                                  _pincodeController.text = _pincodeController.text == "" || _pincodeController.text == null ? "123123" : _pincodeController.text;
+                                  _schoolProvider.selectedPinCodeForSchool =
+                                      _pincodeController.text;
+                                  _schoolProvider
+                                      .isFindSchoolByLocationSelected = true;
+                                  Navigator.pop(context);
+                                },
                               ),
                             );
                           },
@@ -108,302 +163,536 @@ class _SchoolTabState extends State<SchoolTab> {
                       )
                     ],
                   ),
-                  _schoolProvider.isSearchSchoolTabSelected
-                      ? Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 110),
-                            child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, childAspectRatio: 1.2),
-                              itemCount: _schoolProvider.schoolsToFilter.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    _schoolProvider.selectedSchoolSlug =
-                                        "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
-                                    Provider.of<HomeScreenProvider>(context,
-                                            listen: false)
-                                        .selectedString = "SchoolInfo";
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                            '${_schoolProvider.schoolsToFilter[index].schoolLogo}',
-                                        height: height / 5.2,
-                                        fit: BoxFit.fill,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
+                  _schoolProvider.isFindSchoolByLocationSelected
+                      ? FutureBuilder(
+                          future: getLocationFilterWiseSchool(
+                              _schoolProvider.selectedCountryIdForSchool
+                                  .toString(),
+                              _schoolProvider.selectedStateIdForSchool
+                                  .toString(),
+                              _schoolProvider.selectedCityIdForSchool
+                                  .toString(),
+                              _schoolProvider.selectedPinCodeForSchool),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              if (snapshot.data.response.length > 0) {
+                                return Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(bottom: 70),
+                                    child: GridView.builder(
+                                      physics: BouncingScrollPhysics(),
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              childAspectRatio: 1.2),
+                                      itemCount: snapshot.data.response.length,
+                                      itemBuilder: (context, index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            _schoolProvider.selectedSchoolSlug =
+                                                "${snapshot.data.response[index].schoolSlug}";
 
-                                            ),
-                                          ),
-                                        ),
-                                        placeholder: (context, url) =>
-                                            Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/schoolImage.png"),
-                                              fit: BoxFit.cover,
-
-                                            ),
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/schoolImage.png"),
-                                              fit: BoxFit.cover,
-
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.black.withOpacity(0.39),
-                                        ),
-                                        width: width,
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              '${_schoolProvider.schoolsToFilter[index].schoolName}',
-                                              style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 17,
-                                                color: const Color(0xffffffff),
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                              textAlign: TextAlign.left,
-                                            ),
-                                            SizedBox(
-                                              height: 7,
-                                            ),
-                                            Container(
-                                              width: width * 0.4,
-                                              child: Text(
-                                                '${_schoolProvider.schoolsToFilter[index].address}, ${_schoolProvider.schoolsToFilter[index].city}, ${_schoolProvider.schoolsToFilter[index].pincode}',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14,
-                                                  color:
-                                                      const Color(0xfff5f5f5),
+                                            Provider.of<HomeScreenProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .selectedString = "SchoolInfo";
+                                          },
+                                          child: Stack(
+                                            children: [
+                                              CachedNetworkImage(
+                                                imageUrl:
+                                                    '${snapshot.data.response[index].schoolLogo}',
+                                                height: height / 5.2,
+                                                fit: BoxFit.fill,
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  margin: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
                                                 ),
-                                                textAlign: TextAlign.left,
+                                                placeholder: (context, url) =>
+                                                    Container(
+                                                  margin: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    image: DecorationImage(
+                                                      image: AssetImage(
+                                                          "assets/images/preload.png"),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Container(
+                                                  margin: EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    image: DecorationImage(
+                                                      image: AssetImage(
+                                                          "assets/images/preload.png"),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(right: 10),
-                                              child: Container(
+                                              Container(
+                                                margin: EdgeInsets.all(5),
                                                 decoration: BoxDecoration(
                                                   borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 2,
-                                                  ),
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.black
+                                                      .withOpacity(0.7),
                                                 ),
-                                                height: 22,
-                                                width: 90,
-                                                child: Text(
-                                                  'View Products',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 12,
-                                                    color:
-                                                        const Color(0xffffffff),
-                                                  ),
-                                                  textAlign: TextAlign.left,
+                                                width: width,
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 15),
+                                                      child: Text(
+                                                        '${snapshot.data.response[index].schoolName}',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 17,
+                                                          color: const Color(
+                                                              0xffffffff),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 7,
+                                                    ),
+                                                    Container(
+                                                      width: width * 0.4,
+                                                      child: Text(
+                                                        '${snapshot.data.response[index].address}, ${snapshot.data.response[index].city}, ${snapshot.data.response[index].pincode}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 14,
+                                                          color: const Color(
+                                                              0xfff5f5f5),
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          right: 10),
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          border: Border.all(
+                                                            color: Colors.white,
+                                                            width: 2,
+                                                          ),
+                                                        ),
+                                                        height: 22,
+                                                        width: 90,
+                                                        child: Text(
+                                                          'View Products',
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontSize: 12,
+                                                            color: const Color(
+                                                                0xffffffff),
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                        ),
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: 5,
+                                                                top: 3),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                 ),
-                                                padding: EdgeInsets.only(
-                                                    left: 5, top: 3),
                                               ),
-                                            ),
-                                          ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                        ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return GestureDetector(
+                                  onTap: (){
+                                    _schoolProvider.isFindSchoolByLocationSelected = false;
+                                  },
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(height: 50.0),
+                                      SvgPicture.asset(
+                                        'assets/icons/no_data.svg',
+                                        height: 100,
                                       ),
+                                      SizedBox(height: 20.0),
+                                      Text(
+                                        'No Data',
+                                        style: TextStyle(
+                                          color: colorPalette.navyBlue,
+                                          fontSize: 20.0,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 );
-                              },
-                            ),
-                          ),
-                        )
-                      : Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 110),
-                            child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2, childAspectRatio: 1.2),
-                              itemCount: snapshot.data.response.length,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    _schoolProvider.selectedSchoolSlug =
-                                        "${snapshot.data.response[index].schoolSlug}";
-
-                                    Provider.of<HomeScreenProvider>(context,
-                                            listen: false)
-                                        .selectedString = "SchoolInfo";
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                            '${snapshot.data.response[index].schoolLogo}',
-                                        height: height / 5.2,
-                                        fit: BoxFit.fill,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
+                              }
+                            } else {
+                              return Container(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation(
+                                      colorPalette.navyBlue),
+                                ),
+                              );
+                            }
+                          })
+                      : _schoolProvider.isSearchSchoolTabSelected
+                          ? Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 70),
+                                child: GridView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 1.2),
+                                  itemCount:
+                                      _schoolProvider.schoolsToFilter.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _schoolProvider.selectedSchoolSlug =
+                                            "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
+                                        Provider.of<HomeScreenProvider>(context,
+                                                listen: false)
+                                            .selectedString = "SchoolInfo";
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          CachedNetworkImage(
+                                            imageUrl:
+                                                '${_schoolProvider.schoolsToFilter[index].schoolLogo}',
+                                            height: height / 5.2,
+                                            fit: BoxFit.fill,
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              margin: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) =>
                                                 Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-
-                                            ),
-                                          ),
-                                        ),
-                                        placeholder: (context, url) =>
-                                            Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/schoolImage.png"),
-                                              fit: BoxFit.cover,
-
-                                            ),
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: AssetImage(
-                                                  "assets/images/schoolImage.png"),
-                                              fit: BoxFit.cover,
-
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: Colors.black.withOpacity(0.39),
-                                        ),
-                                        width: width,
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              '${snapshot.data.response[index].schoolName}',
-                                              style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 17,
-                                                color: const Color(0xffffffff),
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                              textAlign: TextAlign.left,
-                                            ),
-                                            SizedBox(
-                                              height: 7,
-                                            ),
-                                            Container(
-                                              width: width * 0.4,
-                                              child: Text(
-                                                '${snapshot.data.response[index].address}, ${snapshot.data.response[index].city}, ${snapshot.data.response[index].pincode}',
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14,
-                                                  color:
-                                                      const Color(0xfff5f5f5),
+                                              margin: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/images/preload.png"),
+                                                  fit: BoxFit.cover,
                                                 ),
-                                                textAlign: TextAlign.left,
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 10,
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Container(
+                                              margin: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/images/preload.png"),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
-                                            Container(
-                                              padding:
-                                                  EdgeInsets.only(right: 10),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 2,
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                            ),
+                                            width: width,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: 15.0),
+                                                  child: Text(
+                                                    '${_schoolProvider.schoolsToFilter[index].schoolName}',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Roboto',
+                                                      fontSize: 17,
+                                                      color: const Color(
+                                                          0xffffffff),
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    textAlign: TextAlign.left,
                                                   ),
                                                 ),
-                                                height: 22,
-                                                width: 90,
-                                                child: Text(
-                                                  'View Products',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 12,
-                                                    color:
-                                                        const Color(0xffffffff),
-                                                  ),
-                                                  textAlign: TextAlign.left,
+                                                SizedBox(
+                                                  height: 7,
                                                 ),
-                                                padding: EdgeInsets.only(
-                                                    left: 5, top: 3),
+                                                Container(
+                                                  width: width * 0.4,
+                                                  child: Text(
+                                                    '${_schoolProvider.schoolsToFilter[index].address}, ${_schoolProvider.schoolsToFilter[index].city}, ${_schoolProvider.schoolsToFilter[index].pincode}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Roboto',
+                                                      fontSize: 14,
+                                                      color: const Color(
+                                                          0xfff5f5f5),
+                                                    ),
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      right: 10),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                    height: 22,
+                                                    width: 90,
+                                                    child: Text(
+                                                      'View Products',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12,
+                                                        color: const Color(
+                                                            0xffffffff),
+                                                      ),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                    padding: EdgeInsets.only(
+                                                        left: 5, top: 3),
+                                                  ),
+                                                ),
+                                              ],
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                          : Expanded(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 70),
+                                child: GridView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: 1.2),
+                                  itemCount: snapshot.data.response.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _schoolProvider.selectedSchoolSlug =
+                                            "${snapshot.data.response[index].schoolSlug}";
+
+                                        Provider.of<HomeScreenProvider>(context,
+                                                listen: false)
+                                            .selectedString = "SchoolInfo";
+                                      },
+                                      child: Stack(
+                                        children: [
+                                          CachedNetworkImage(
+                                            imageUrl:
+                                                '${snapshot.data.response[index].schoolLogo}',
+                                            height: height / 5.2,
+                                            fit: BoxFit.fill,
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              margin: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
-                                          ],
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                        ),
+                                            placeholder: (context, url) =>
+                                                Container(
+                                              margin: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/images/preload.png"),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Container(
+                                              margin: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "assets/images/preload.png"),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              color:
+                                                  Colors.black.withOpacity(0.7),
+                                            ),
+                                            width: width,
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  padding:
+                                                      EdgeInsets.only(left: 15),
+                                                  child: Text(
+                                                    '${snapshot.data.response[index].schoolName}',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Roboto',
+                                                      fontSize: 17,
+                                                      color: const Color(
+                                                          0xffffffff),
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                    ),
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 7,
+                                                ),
+                                                Container(
+                                                  width: width * 0.4,
+                                                  child: Text(
+                                                    '${snapshot.data.response[index].address}, ${snapshot.data.response[index].city}, ${snapshot.data.response[index].pincode}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Roboto',
+                                                      fontSize: 14,
+                                                      color: const Color(
+                                                          0xfff5f5f5),
+                                                    ),
+                                                    textAlign: TextAlign.left,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      right: 10),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                    height: 22,
+                                                    width: 90,
+                                                    child: Text(
+                                                      'View Products',
+                                                      style: TextStyle(
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 12,
+                                                        color: const Color(
+                                                            0xffffffff),
+                                                      ),
+                                                      textAlign: TextAlign.left,
+                                                    ),
+                                                    padding: EdgeInsets.only(
+                                                        left: 5, top: 3),
+                                                  ),
+                                                ),
+                                              ],
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        )
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
                 ],
               );
             });
@@ -422,8 +711,33 @@ class _SchoolTabState extends State<SchoolTab> {
   }
 }
 
-Widget LocationDialog({width, onSearchTap, onCancelTap}) {
+Widget LocationDialog(
+    {width,
+    onSearchTap,
+    onCancelTap,
+    TextEditingController pinCodeController}) {
   ColorPalette colorPalette = ColorPalette();
+
+  /// get all country
+  Future getAllCountry() async {
+    dynamic response = await LocationNameAPI.getAllCountryName();
+    CountryModel _countryModel = CountryModel.fromJson(response);
+    return _countryModel;
+  }
+
+  /// get all state of selected country
+  Future getAllStateOfSelectedCountry(int countryId) async {
+    dynamic response = await LocationNameAPI.getAllStateOfCountry(countryId);
+    StateModel _stateModel = StateModel.fromJson(response);
+    return _stateModel;
+  }
+
+  /// get all city of selected state
+  Future getAllCityOfSelectedState(int stateId) async {
+    dynamic response = await LocationNameAPI.getAllCityOfState(stateId);
+    CityModel _cityModel = CityModel.fromJson(response);
+    return _cityModel;
+  }
 
   return Dialog(
     elevation: 100,
@@ -434,65 +748,324 @@ Widget LocationDialog({width, onSearchTap, onCancelTap}) {
       width: width - 32,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              'Search by Location',
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                color: const Color(0xff000000),
-              ),
-              textAlign: TextAlign.left,
-            ),
-            SimpleTextfield(
-              "Zip Code",
-            ),
-            SimpleTextfield("State"),
-            SimpleTextfield("City"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Consumer<SchoolProvider>(
+            builder: (_, _schoolProvider, child) => Column(
               children: [
-                GestureDetector(
-                  onTap: onCancelTap,
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: width / 8,
-                    width: width / 2.8,
-                    decoration: BoxDecoration(
-                        color: colorPalette.navyBlue.withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(18)),
-                    child: Text(
-                      "Cancel",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
+                SizedBox(height: 20.0),
+                Text(
+                  'Search by Location',
+                  style: TextStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 20,
+                    color: const Color(0xff000000),
                   ),
+                  textAlign: TextAlign.left,
                 ),
-                GestureDetector(
-                  onTap: onSearchTap,
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: width / 8,
-                    width: width / 2.8,
-                    decoration: BoxDecoration(
-                        color: colorPalette.navyBlue,
-                        borderRadius: BorderRadius.circular(18)),
-                    child: Text(
-                      "Search",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
+                SizedBox(height: 20.0),
+                SimpleTextfield("Pin Code",
+                    controller: pinCodeController,
+                    keyboardType: TextInputType.number),
+                SizedBox(height: 20.0),
+                FutureBuilder(
+                    future: getAllCountry(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13.0),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DropdownButton(
+                            underline: Container(),
+                            isExpanded: true,
+                            style: TextStyle(
+                              color: colorPalette.lightGrey,
+                              fontSize: 16,
+                            ),
+
+                            value: snapshot
+                                .data
+                                .response[_schoolProvider
+                                    .selectedCountryIndexForSchool]
+                                .name,
+                            items: List.generate(
+                                snapshot.data.response.length,
+                                (index) => DropdownMenuItem(
+                                      child: Text(
+                                        '${snapshot.data.response[index].name}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      value:
+                                          '${snapshot.data.response[index].name}',
+                                      onTap: () {
+
+                                        _schoolProvider
+                                                .selectedCountryIndexForSchool =
+                                            index;
+                                        _schoolProvider
+                                                .selectedCountryIdForSchool =
+                                            int.parse(snapshot.data
+                                                .response[index].countryId);
+                                      },
+                                    )),
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13.0),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DropdownButton(
+                            underline: Container(),
+                            isExpanded: true,
+                            onChanged: (value) {},
+                            value: 'loading',
+                            style: TextStyle(
+                              color: colorPalette.lightGrey,
+                              fontSize: 16,
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                child: Text('Loading'),
+                                value: 'loading',
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    }),
+                SizedBox(height: 20.0),
+                FutureBuilder(
+                    future: getAllStateOfSelectedCountry(
+                        _schoolProvider.selectedCountryIdForSchool),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data.response.length > 0) {
+                        return Container(
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13.0),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DropdownButton(
+                            underline: Container(),
+                            isExpanded: true,
+                            style: TextStyle(
+                              color: colorPalette.lightGrey,
+                              fontSize: 16,
+                            ),
+
+                            value: snapshot
+                                .data
+                                .response[
+                                    _schoolProvider.selectedStateIndexForSchool]
+                                .name,
+                            items: List.generate(
+                                snapshot.data.response.length,
+                                (index) => DropdownMenuItem(
+                                      child: Text(
+                                        '${snapshot.data.response[index].name}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      value:
+                                          '${snapshot.data.response[index].name}',
+                                      onTap: () {
+                                        _schoolProvider
+                                                .selectedStateIndexForSchool =
+                                            index;
+                                        _schoolProvider
+                                                .selectedStateIdForSchool =
+                                            int.parse(snapshot
+                                                .data.response[index].stateId);
+                                      },
+                                    )),
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13.0),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DropdownButton(
+                            underline: Container(),
+                            isExpanded: true,
+                            onChanged: (value) {},
+                            value: 'state',
+                            style: TextStyle(
+                              color: colorPalette.lightGrey,
+                              fontSize: 16,
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                child: Text('State'),
+                                value: 'state',
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    }),
+                SizedBox(height: 20.0),
+                FutureBuilder(
+                    future: getAllCityOfSelectedState(
+                        _schoolProvider.selectedStateIdForSchool),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data.response.length > 0) {
+                        return Container(
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13.0),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DropdownButton(
+                            underline: Container(),
+                            isExpanded: true,
+                            style: TextStyle(
+                              color: colorPalette.lightGrey,
+                              fontSize: 16,
+                            ),
+
+                            value: snapshot
+                                .data
+                                .response[
+                                    _schoolProvider.selectedCityIndexForSchool]
+                                .name,
+                            items: List.generate(
+                                snapshot.data.response.length,
+                                (index) => DropdownMenuItem(
+                                      child: Text(
+                                        '${snapshot.data.response[index].name}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      value:
+                                          '${snapshot.data.response[index].name}',
+                                      onTap: () {
+                                        _schoolProvider
+                                            .selectedCityIndexForSchool = index;
+                                        _schoolProvider
+                                                .selectedCityIdForSchool =
+                                            int.parse(snapshot
+                                                .data.response[index].cityId);
+                                      },
+                                    )),
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          height: 60.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13.0),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          child: DropdownButton(
+                            underline: Container(),
+                            isExpanded: true,
+                            onChanged: (value) {},
+                            value: 'city',
+                            style: TextStyle(
+                              color: colorPalette.lightGrey,
+                              fontSize: 16,
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                child: Text('City'),
+                                value: 'city',
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    }),
+                SizedBox(height: 40.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: onCancelTap,
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: width / 8,
+                        width: width / 2.8,
+                        decoration: BoxDecoration(
+                            color: colorPalette.navyBlue.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(18)),
+                        child: Text(
+                          "Cancel",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: onSearchTap,
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: width / 8,
+                        width: width / 2.8,
+                        decoration: BoxDecoration(
+                            color: colorPalette.navyBlue,
+                            borderRadius: BorderRadius.circular(18)),
+                        child: Text(
+                          "Search",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height: 30)
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     ),

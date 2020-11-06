@@ -1,4 +1,5 @@
 import 'package:bookmrk/api/register_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
@@ -125,12 +126,12 @@ class _RegisterState extends State<Register> {
                               height: 10,
                             ),
                             SimpleTextfield("Email Address",
-                                controller: _registerEmailAddress),
+                                controller: _registerEmailAddress, keyboardType: TextInputType.emailAddress),
                             SizedBox(
                               height: 10,
                             ),
                             SimpleTextfield("Mobile Number",
-                                controller: _registerMobileNumber),
+                                controller: _registerMobileNumber, keyboardType: TextInputType.number),
                             SizedBox(
                               height: 10,
                             ),
@@ -289,7 +290,7 @@ class _RegisterState extends State<Register> {
                                           confirmPassword:
                                               _registerConfirmPassword.text,
                                         );
-                                        print(response);
+
                                         if (response['status'] == 200) {
                                           if (response['response'][0]
                                                   ['already_exists'] !=
@@ -303,6 +304,8 @@ class _RegisterState extends State<Register> {
                                           } else {
                                             _registerProvider
                                                 .isRegisterInProcess = false;
+                                            prefs.write('userId', response['response'][0]['user_id']);
+                                            _registerProvider.verificationMobileNumberForRegister = _registerMobileNumber.text;
                                             Navigator.of(context).pushReplacement(
                                                 MaterialPageRoute(
                                                     builder: (context) =>

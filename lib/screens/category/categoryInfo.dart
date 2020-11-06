@@ -26,10 +26,13 @@ class _CategoryInfoState extends State<CategoryInfo> {
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
         widget.categoryName, userId.toString());
     if (categoryProductsDetails['response'].length == "0") {
+
       NoDataOrderModel _noDataModel =
           NoDataOrderModel.fromJson(categoryProductsDetails);
       return _noDataModel;
     } else {
+
+
       CategoryProductsModel _categoryProductModelDetails =
           CategoryProductsModel.fromJson(categoryProductsDetails);
       return _categoryProductModelDetails;
@@ -71,7 +74,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                             image: DecorationImage(
                               image: NetworkImage(
                                   "${snapshot.data.response[0].category[0].categoryImg}"),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -82,8 +85,8 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.fill,
+                              image: AssetImage("assets/images/preload.png"),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -94,8 +97,8 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
-                              image: AssetImage("assets/images/book.png"),
-                              fit: BoxFit.fill,
+                              image: AssetImage("assets/images/preload.png"),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),

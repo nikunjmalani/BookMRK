@@ -38,7 +38,7 @@ class _ProductInfoState extends State<ProductInfo> {
   /// TextFields for student name and student roll number...
   TextEditingController _studentNameController = TextEditingController();
   TextEditingController _studentRollNumberController = TextEditingController();
-  TextEditingController _productQuantityController = TextEditingController();
+  TextEditingController _productQuantityController = TextEditingController(text: "1");
 
   /// form key...
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -1014,7 +1014,7 @@ Widget _productCarasoul(BuildContext context,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: AssetImage("assets/images/book.png"),
+                          image: AssetImage("assets/images/preload.png"),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -1026,7 +1026,7 @@ Widget _productCarasoul(BuildContext context,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                          image: AssetImage("assets/images/book.png"),
+                          image: AssetImage("assets/images/preload.png"),
                           fit: BoxFit.fill,
                         ),
                       ),

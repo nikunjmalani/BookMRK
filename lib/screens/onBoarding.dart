@@ -41,7 +41,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   child: Image.asset("assets/images/logo.png"),
                 )),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 7,
+              height: MediaQuery.of(context).size.height / 12,
             ),
             Expanded(
               child: PageView.builder(

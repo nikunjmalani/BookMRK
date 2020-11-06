@@ -12,7 +12,7 @@ Widget showCachedImage({String image, double height, String placeHolderImage}) {
         image: DecorationImage(
             image: imageProvider,
             fit: BoxFit.fill,
-            colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
+            ),
       ),
     ),
     placeholder: (context, url) => Center(child: Image.asset(placeHolderImage)),
@@ -20,3 +20,7 @@ Widget showCachedImage({String image, double height, String placeHolderImage}) {
         Center(child: Image.asset(placeHolderImage)),
   );
 }
+
+
+/// mitul@gmail.com
+/// mitul123123

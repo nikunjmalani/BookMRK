@@ -1,5 +1,6 @@
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/category_provider.dart';
+import 'package:bookmrk/provider/filter_category_provider.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/location_name_provider.dart';
@@ -75,6 +76,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => MapProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => FilterCategoryProvider(),
+        ),
+
       ],
       child: GetMaterialApp(
         title: 'BookMRK',

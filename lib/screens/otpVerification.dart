@@ -7,6 +7,7 @@ import 'package:bookmrk/provider/forgot_password_provider.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
+import 'package:bookmrk/screens/login.dart';
 import 'package:bookmrk/screens/resetPassword.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
@@ -128,7 +129,79 @@ class _OtpVerificationState extends State<OtpVerification> {
                           OtpBox(context, _otp1, _otpF1),
                           OtpBox(context, _otp2, _otpF2),
                           OtpBox(context, _otp3, _otpF3),
-                          OtpBox(context, _otp4, _otpF4),
+                          Consumer<RegisterProvider>(
+                            builder: (_, _registerProvider, child)=>OtpBox(context, _otp4, _otpF4, doneCallBack: () async {
+                              _forgotPasswordProvider
+                                  .isOTPVerificationInProgress = true;
+                              var otp =
+                                  "${_otp1.text}${_otp2.text}${_otp3.text}${_otp4.text}";
+                              if (otp.length >= 4) {
+                                if (_registerProvider
+                                    .isOTPVerificationPageFromRegisterUser) {
+
+                                  /// when mobile number verification..
+
+                                  int userId = prefs.read<int>('userId');
+
+                                  dynamic response =
+                                  await RegisterAPI.verifyMobileWithOTP(
+                                      _registerProvider
+                                          .verificationMobileNumberForRegister,
+                                      otp,
+                                      userId.toString());
+
+                                  if (response['status'] == 200) {
+                                    _forgotPasswordProvider
+                                        .forgotPasswordFromPage =
+                                    "MobileVerification";
+                                    _forgotPasswordProvider
+                                        .isOTPVerificationInProgress =
+                                    false;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Login()));
+                                  } else {
+                                    _forgotPasswordProvider
+                                        .isOTPVerificationInProgress =
+                                    false;
+                                    Scaffold.of(context).showSnackBar(
+                                        getSnackBar(
+                                            '${response['message']}'));
+                                  }
+                                } else {
+
+                                  /// when forgot password !
+                                  if (otp ==
+                                      _forgotPasswordProvider
+                                          .forgotPasswordOTP) {
+                                    _forgotPasswordProvider
+                                        .forgotPasswordFromPage =
+                                    "ForgotPassword";
+                                    _forgotPasswordProvider
+                                        .isOTPVerificationInProgress =
+                                    false;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ResetPassword()));
+                                  } else {
+                                    _forgotPasswordProvider
+                                        .isOTPVerificationInProgress =
+                                    false;
+                                    Scaffold.of(context).showSnackBar(
+                                        getSnackBar('OTP does not match'));
+                                  }
+                                }
+                              } else {
+                                _forgotPasswordProvider
+                                    .isOTPVerificationInProgress = false;
+
+                                Scaffold.of(context).showSnackBar(
+                                    getSnackBar('Please fill valid OTP !'));
+                              }
+                            }),
+                          ),
                         ],
                       ),
                     ),
@@ -231,9 +304,11 @@ class _OtpVerificationState extends State<OtpVerification> {
                                   if (otp.length >= 4) {
                                     if (_registerProvider
                                         .isOTPVerificationPageFromRegisterUser) {
+
                                       /// when mobile number verification..
 
                                       int userId = prefs.read<int>('userId');
+
                                       dynamic response =
                                           await RegisterAPI.verifyMobileWithOTP(
                                               _registerProvider
@@ -251,7 +326,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ResetPassword()));
+                                                    Login()));
                                       } else {
                                         _forgotPasswordProvider
                                                 .isOTPVerificationInProgress =
@@ -261,6 +336,7 @@ class _OtpVerificationState extends State<OtpVerification> {
                                                 '${response['message']}'));
                                       }
                                     } else {
+
                                       /// when forgot password !
                                       if (otp ==
                                           _forgotPasswordProvider

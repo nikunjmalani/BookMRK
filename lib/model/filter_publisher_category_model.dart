@@ -1,12 +1,11 @@
-
 import 'dart:convert';
 
-CategoryProductsModel categoryProductsModelFromJson(String str) => CategoryProductsModel.fromJson(json.decode(str));
+FilterPublisherCategoryModel filterPublisherCategoryModelFromJson(String str) => FilterPublisherCategoryModel.fromJson(json.decode(str));
 
-String categoryProductsModelToJson(CategoryProductsModel data) => json.encode(data.toJson());
+String filterPublisherCategoryModelToJson(FilterPublisherCategoryModel data) => json.encode(data.toJson());
 
-class CategoryProductsModel {
-  CategoryProductsModel({
+class FilterPublisherCategoryModel {
+  FilterPublisherCategoryModel({
     this.status,
     this.message,
     this.count,
@@ -18,7 +17,7 @@ class CategoryProductsModel {
   int count;
   List<Response> response;
 
-  factory CategoryProductsModel.fromJson(Map<String, dynamic> json) => CategoryProductsModel(
+  factory FilterPublisherCategoryModel.fromJson(Map<String, dynamic> json) => FilterPublisherCategoryModel(
     status: json["status"],
     message: json["message"],
     count: json["count"],
@@ -35,57 +34,21 @@ class CategoryProductsModel {
 
 class Response {
   Response({
-    this.category,
-    this.subCategory,
+    this.publisher,
     this.product,
   });
 
-  List<Category> category;
-  List<Category> subCategory;
+  List<Publisher> publisher;
   List<Product> product;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
-    category: List<Category>.from(json["category"].map((x) => Category.fromJson(x))),
-    subCategory: List<Category>.from(json["sub_category"].map((x) => Category.fromJson(x))),
+    publisher: List<Publisher>.from(json["publisher"].map((x) => Publisher.fromJson(x))),
     product: List<Product>.from(json["product"].map((x) => Product.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "category": List<dynamic>.from(category.map((x) => x.toJson())),
-    "sub_category": List<dynamic>.from(subCategory.map((x) => x.toJson())),
+    "publisher": List<dynamic>.from(publisher.map((x) => x.toJson())),
     "product": List<dynamic>.from(product.map((x) => x.toJson())),
-  };
-}
-
-class Category {
-  Category({
-    this.categoryId,
-    this.catSlug,
-    this.categoryName,
-    this.categoryImg,
-    this.allProductsCount,
-  });
-
-  String categoryId;
-  String catSlug;
-  String categoryName;
-  String categoryImg;
-  String allProductsCount;
-
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-    categoryId: json["category_id"],
-    catSlug: json["cat_slug"],
-    categoryName: json["category_name"],
-    categoryImg: json["category_img"],
-    allProductsCount: json["all_products_count"] == null ? null : json["all_products_count"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "category_id": categoryId,
-    "cat_slug": catSlug,
-    "category_name": categoryName,
-    "category_img": categoryImg,
-    "all_products_count": allProductsCount == null ? null : allProductsCount,
   };
 }
 
@@ -151,7 +114,7 @@ class Product {
     productType: json["product_type"],
     variation: json["variation"],
     additionalSet: json["additional_set"],
-    categoryName:json["category_name"],
+    categoryName: json["category_name"],
     productImg: json["Product_img"],
     productName: json["product_name"],
     author: List<dynamic>.from(json["author"].map((x) => x)),
@@ -172,13 +135,13 @@ class Product {
   Map<String, dynamic> toJson() => {
     "product_id": productId,
     "product_slug": productSlug,
-    "vendor_slug":vendorSlug,
+    "vendor_slug": vendorSlug,
     "school_slug": schoolSlug,
     "type": type,
     "product_type": productType,
     "variation": variation,
-    "additional_set":additionalSet,
-    "category_name":categoryName,
+    "additional_set": additionalSet,
+    "category_name": categoryName,
     "Product_img": productImg,
     "product_name": productName,
     "author": List<dynamic>.from(author.map((x) => x)),
@@ -226,5 +189,41 @@ class Subject {
     "subject_name": subjectName,
     "subject_img": subjectImg,
     "filter_type": filterType,
+  };
+}
+
+class Publisher {
+  Publisher({
+    this.publisherId,
+    this.publisherSlug,
+    this.publisherName,
+    this.publisherImg,
+    this.filterType,
+    this.allProductsCount,
+  });
+
+  String publisherId;
+  String publisherSlug;
+  String publisherName;
+  String publisherImg;
+  String filterType;
+  String allProductsCount;
+
+  factory Publisher.fromJson(Map<String, dynamic> json) => Publisher(
+    publisherId: json["publisher_id"],
+    publisherSlug: json["publisher_slug"],
+    publisherName: json["publisher_name"],
+    publisherImg: json["publisher_img"],
+    filterType: json["filter_type"],
+    allProductsCount: json["all_products_count"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "publisher_id": publisherId,
+    "publisher_slug": publisherSlug,
+    "publisher_name": publisherName,
+    "publisher_img": publisherImg,
+    "filter_type": filterType,
+    "all_products_count": allProductsCount,
   };
 }

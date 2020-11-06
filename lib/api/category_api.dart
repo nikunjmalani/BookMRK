@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bookmrk/constant/constant.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class CategoryAPI {
@@ -38,7 +39,6 @@ class CategoryAPI {
       "Auth-Key": "simplerestapi",
       "Content-Type": "application/x-www-form-urlencoded",
     };
-
     http.Response response = await http.get(
       url,
       headers: header,
@@ -74,7 +74,7 @@ class CategoryAPI {
       "Content-Type": "application/x-www-form-urlencoded"
     };
     http.Response response = await http.get(url, headers: header);
-    print(response.body);
+
     return jsonDecode(response.body);
   }
 }

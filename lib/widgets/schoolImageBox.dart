@@ -27,7 +27,7 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
-                  image: AssetImage('assets/images/school.png'),
+                  image: AssetImage('assets/images/preload.png'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -38,7 +38,7 @@ Widget SchoolImageBox({onTap, height, image, title, description}) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.0),
                 image: DecorationImage(
-                  image: AssetImage('assets/images/school.png'),
+                  image: AssetImage('assets/images/preload.png'),
                   fit: BoxFit.cover,
                 ),
               ),

@@ -1,9 +1,11 @@
 import 'package:bookmrk/api/register_api.dart';
+import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/register_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'otpVerification.dart';
@@ -18,6 +20,17 @@ class _MobileVerificationState extends State<MobileVerification> {
   TextEditingController _mobileVerification = TextEditingController();
 
   ColorPalette colorPalette = ColorPalette();
+
+  autoFillFields(){
+    _mobileVerification.text = Provider.of<RegisterProvider>(context, listen: false).verificationMobileNumberForRegister;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    autoFillFields();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,36 +140,43 @@ class _MobileVerificationState extends State<MobileVerification> {
                                 true;
                             if (_mobileVerification.text != "" &&
                                 _mobileVerification.text != null) {
+                              int userId = prefs.read<int>('userId');
                               dynamic response =
                                   await RegisterAPI.verifyMobileNumber(
-                                      _mobileVerification.text);
-print(response);
+                                      _mobileVerification.text,
+                                      userId.toString());
+
                               if (response['status'] == 200) {
                                 try {
                                   _registerProvider
                                       .isMobileVerificationProcess = false;
                                   _registerProvider.mobileVerificationOTP =
-                                      response['response'][0]['otp'];
+                                      response['response'][0]['otp'].toString();
 
                                   if (response['response'][0]['otp'] != null) {
+
                                     _registerProvider.mobileVerificationOTP =
-                                        response['response'][0]['otp'];
+                                        response['response'][0]['otp'].toString();
+
+
 
                                     _registerProvider
                                             .isOTPVerificationPageFromRegisterUser =
-                                        false;
+                                        true;
 
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 OtpVerification()));
                                   } else {
+
                                     _registerProvider
                                         .isMobileVerificationProcess = false;
                                     Scaffold.of(context).showSnackBar(
                                         getSnackBar('${response['message']}'));
                                   }
                                 } catch (e) {
+
                                   _registerProvider
                                       .isMobileVerificationProcess = false;
                                   Scaffold.of(context).showSnackBar(

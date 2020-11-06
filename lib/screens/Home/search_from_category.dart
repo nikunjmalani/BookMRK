@@ -128,11 +128,11 @@ class _Search2State extends State<Search2> {
                                             ),
                                             placeholder: (context, url) => Center(
                                                 child: Image.asset(
-                                                    'assets/images/Sharpner.png')),
+                                                    'assets/images/preload.png')),
                                             errorWidget:
                                                 (context, url, error) => Center(
                                                     child: Image.asset(
-                                                        'assets/images/Sharpner.png')),
+                                                        'assets/images/preload.png')),
                                           ),
                                         ),
                                         Container(

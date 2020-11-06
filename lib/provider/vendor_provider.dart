@@ -32,4 +32,24 @@ class VendorProvider extends ChangeNotifier {
     _isVendorBarSelected = value;
     notifyListeners();
   }
+
+  /// vendor custom scroll ...
+  bool _isCustomScrollAtLimit = false;
+
+  bool get isCustomScrollAtLimit => _isCustomScrollAtLimit;
+
+  set isCustomScrollAtLimit(bool value) {
+    _isCustomScrollAtLimit = value;
+    notifyListeners();
+  }
+
+  /// scroll pixels...
+  double _customScrollCurrentPixels = 0.0;
+
+  double get customScrollCurrentPixels => _customScrollCurrentPixels;
+
+  set customScrollCurrentPixels(double value) {
+    _customScrollCurrentPixels = value;
+    notifyListeners();
+  }
 }

@@ -1,7 +1,8 @@
+
 import 'package:bookmrk/api/category_api.dart';
 import 'package:bookmrk/constant/constant.dart';
-import 'package:bookmrk/model/category_product_model.dart';
-import 'package:bookmrk/model/no_data_model.dart';
+import 'package:bookmrk/model/filter_class_category_model.dart';
+import 'package:bookmrk/model/filter_publisher_category_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
@@ -11,40 +12,34 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SubCategoryInfo extends StatefulWidget {
-  final String subCategoryName;
+class FilterCategoryPublisher extends StatefulWidget {
+  final String selectedPublisher;
 
-  const SubCategoryInfo(this.subCategoryName);
+  const FilterCategoryPublisher(this.selectedPublisher);
 
   @override
-  _SubCategoryInfoState createState() => _SubCategoryInfoState();
+  _FilterCategoryPublisherState createState() => _FilterCategoryPublisherState();
 }
 
-class _SubCategoryInfoState extends State<SubCategoryInfo> {
-  Future getCategoryProductsDetails() async {
-
-    int userId =  prefs.read<int>('userId');
-    dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
-        widget.subCategoryName, userId.toString());
-    if (categoryProductsDetails['response'].length == "0") {
-      NoDataOrderModel _noDataModel =
-      NoDataOrderModel.fromJson(categoryProductsDetails);
-      return _noDataModel;
-    } else {
-      CategoryProductsModel _categoryProductModelDetails =
-      CategoryProductsModel.fromJson(categoryProductsDetails);
-      return _categoryProductModelDetails;
-    }
-  }
+class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
 
   ColorPalette colorPalette = ColorPalette();
+
+  /// api to get filter category list data....
+  Future getFilterCategoryListData() async {
+    int userId = prefs.read<int>('userId');
+    dynamic response = await CategoryAPI.getFilterCategory(userId.toString(), 'publisher', widget.selectedPublisher);
+    FilterPublisherCategoryModel _filterPublisherCategoryModel = FilterPublisherCategoryModel.fromJson(response);
+    return _filterPublisherCategoryModel;
+
+  }
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return FutureBuilder(
-        future: getCategoryProductsDetails(),
+        future: getFilterCategoryListData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.response.length <= 0) {
@@ -61,7 +56,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                     children: [
                       CachedNetworkImage(
                         imageUrl:
-                        '${snapshot.data.response[0].category[0].categoryImg}',
+                        '${snapshot.data.response[0].publisher[0].publisherImg}',
                         fit: BoxFit.cover,
                         imageBuilder: (context, imageProvider) => Container(
                           margin: EdgeInsets.symmetric(
@@ -71,7 +66,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                             borderRadius: BorderRadius.circular(10),
                             image: DecorationImage(
                               image: NetworkImage(
-                                  "${snapshot.data.response[0].category[0].categoryImg}"),
+                                  "${snapshot.data.response[0].publisher[0].publisherImg}"),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -113,17 +108,21 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              '${snapshot.data.response[0].category[0].categoryName}',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 20,
-                                color: const Color(0xffffffff),
+                            Container(
+                              width: width/2,
+                              child: Text(
+                                '${snapshot.data.response[0].publisher[0].publisherName}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  color: const Color(0xffffffff),
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
                             ),
                             Text(
-                              '${snapshot.data.response[0].category[0].allProductsCount ?? "0"} Products',
+                              '${snapshot.data.response[0].publisher[0].allProductsCount ?? "0"} Products',
                               style: TextStyle(
                                 fontFamily: 'Roboto',
                                 fontSize: 20,
@@ -136,50 +135,12 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                       )
                     ],
                   ),
-                  Consumer<CategoryProvider>(
-                    builder: (_, _categoryProvider, child) =>
-                        Consumer<HomeScreenProvider>(
-                          builder: (_, _homeScreenProvider, child) => Container(
-                            height: snapshot.data.response[0].subCategory.length > 0
-                                ? height / 15
-                                : height / 45,
-                            child: snapshot.data.response[0].subCategory.length > 0
-                                ? ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    _homeScreenProvider.selectedString =
-                                    "SubCategoryInfo";
-                                    _categoryProvider.selectedSubCategory =
-                                    "${snapshot.data.response[0].subCategory[index].catSlug}";
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
-                                    child: Text(
-                                      '${snapshot.data.response[0].subCategory[index].categoryName}',
-                                      style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontSize: 14,
-                                          color: colorPalette.navyBlue),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                );
-                              },
-                              itemCount: snapshot
-                                  .data.response[0].subCategory.length,
-                            )
-                                : SizedBox(),
-                          ),
-                        ),
-                  ),
+
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 70),
                       child: GridView.builder(
+                        physics: BouncingScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 300,
                             childAspectRatio: 0.75,
@@ -221,6 +182,7 @@ class _SubCategoryInfoState extends State<SubCategoryInfo> {
                       ),
                     ),
                   ),
+
                 ],
               );
             }

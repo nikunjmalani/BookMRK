@@ -33,6 +33,7 @@ class _SearchState extends State<Search> {
     int userId =  prefs.read<int>('userId');
     dynamic response =
         await SearchAPI.searchProductHomePage(productName, userId.toString());
+
     if (response['response'].length == 0) {
       NoDataOrderModel _noData = NoDataOrderModel.fromJson(response);
       return _noData;
@@ -128,11 +129,11 @@ class _SearchState extends State<Search> {
                                             ),
                                             placeholder: (context, url) => Center(
                                                 child: Image.asset(
-                                                    'assets/images/Sharpner.png')),
+                                                    'assets/images/preload.png')),
                                             errorWidget:
                                                 (context, url, error) => Center(
                                                     child: Image.asset(
-                                                        'assets/images/Sharpner.png')),
+                                                        'assets/images/preload.png')),
                                           ),
                                         ),
                                         Container(

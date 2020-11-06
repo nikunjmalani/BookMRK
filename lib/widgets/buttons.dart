@@ -53,15 +53,15 @@ Widget ViewAll({onClick}) {
 Widget CategoryButtons(title, color, borderColor) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
-    margin: EdgeInsets.only(left: 14, top: 15, right: 14, bottom :15),
+    margin: EdgeInsets.only(left: 5, top: 10, right: 5, bottom :5),
     height: Get.width / 8,
-    width: Get.width / 4.4,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(10),
       color: color,
-      border: Border.all(color: borderColor, width: 5),
+      // border: Border.all(color: borderColor, width: 5),
     ),
     alignment: Alignment.center,
+    padding: EdgeInsets.symmetric(horizontal: 10, ),
     child: Text(
       title,
       overflow: TextOverflow.ellipsis,
@@ -79,13 +79,13 @@ Widget CategoryButtons(title, color, borderColor) {
 Widget ClassButtons(title, color, borderColor) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
-    margin: EdgeInsets.only(left: 14, top: 15, right: 14, bottom :15),
+    margin: EdgeInsets.only(left: 10, top:5, bottom :5),
     height: Get.width / 8,
-    width: Get.width / 4.3,
+    width: Get.width / 3.5,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(10),
       color: color,
-      border: Border.all(color: borderColor, width: 5),
+      // border: Border.all(color: borderColor, width: 5),
     ),
     alignment: Alignment.center,
     child: Text(

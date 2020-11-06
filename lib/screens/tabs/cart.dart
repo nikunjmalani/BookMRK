@@ -214,11 +214,11 @@ class _CartState extends State<Cart> {
                                                                   str,
                                                                   stackTrace) =>
                                                               Image.asset(
-                                                                  'assets/images/Sharpner.png'),
+                                                                  'assets/images/preload.png'),
                                                           placeholder: (context,
                                                                   str) =>
                                                               Image.asset(
-                                                                  'assets/images/Sharpner.png'),
+                                                                  'assets/images/preload.png'),
                                                         ),
                                                       ),
                                                     ),
