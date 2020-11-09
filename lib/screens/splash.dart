@@ -4,6 +4,7 @@ import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 import 'homePage.dart';
@@ -20,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   navigateToAnotherScreen() async {
     await Future.delayed(Duration(seconds: 2), () async {
+      prefs = GetStorage();
       _homeScreenProvider.selectedString = "Home";
       bool isLogin = prefs.read<bool>("isLogin");
       if (isLogin ?? false) {

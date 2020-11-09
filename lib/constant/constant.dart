@@ -10,3 +10,8 @@ final String kSiteURL = "http://solutionconesites.tech";
 
 /// store data in local....
 GetStorage prefs;
+
+
+/// store key salt....
+final String easeBuzKey = "";
+final String easeBuzzSalt = "";

@@ -22,10 +22,9 @@ import 'package:provider/provider.dart';
 
 /// new push from the backend branch...
 void main() async {
+  await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await GetStorage.init();
-  prefs = GetStorage();
   runApp(MyApp());
 }
 

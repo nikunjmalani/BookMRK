@@ -14,7 +14,9 @@ import 'package:bookmrk/widgets/indicators.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 
@@ -787,7 +789,9 @@ class _ProductInfoState extends State<ProductInfo> {
                                           title: "ADD TO CART"),
                                     ),
                                     NavyBlueButton(
-                                        onClick: () {},
+                                        onClick: () {
+                                          checkOut();
+                                        },
                                         context: context,
                                         title: "BUY NOW")
                                   ],
@@ -825,6 +829,44 @@ class _ProductInfoState extends State<ProductInfo> {
                 );
               }
             }));
+  }
+
+  checkOut() async {
+
+    MethodChannel _channel = MethodChannel('easebuzz');
+    String txnid = "TRX123"; //This txnid should be unique every time.
+    String amount = "2.0";
+    String productinfo= "test info";
+    String firstname= "test user";
+    String email = "testing@gamil.com";
+    String phone = "1234567890";
+    String s_url = "";
+    String f_url = "";
+    String key = "XXXXXXXXXXX";
+    String udf1 = "";
+    String udf2 = "";
+    String udf3 = "";
+    String udf4 = "";
+    String udf5 = "";
+    String address1="test address one";
+    String address2="test address two";
+    String city="";
+    String state="";
+    String country="";
+    String zipcode="";
+    String hash="${sha256.convert(utf8.encode("key|txnid|amount|productinfo|firstname|email_id|udf1|udf2|udf3|udf4|udf5||||||salt"))}";
+    String pay_mode="production";
+    String unique_id="11345";
+    Object parameters = {"txnid":txnid,"amount":amount, "productinfo":productinfo,
+      "firstname":firstname,"email":email,"phone":phone,
+      "s_url":s_url,"f_url":f_url,"key":key,
+      "udf1":udf1,"udf2":udf2,"udf3":udf3,"udf4":udf4,"udf5":udf5,
+      "address1":address1,"address2":address2,"city":city,
+      "state":state,"country":country,"zipcode":zipcode,"hash":hash,
+      "pay_mode":pay_mode,"unique_id":unique_id};
+
+    final payment_response = await _channel.invokeMethod("payWithEasebuzz", parameters);
+
   }
 }
 
