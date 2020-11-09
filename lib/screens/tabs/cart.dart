@@ -171,6 +171,7 @@ class _CartState extends State<Cart> {
                               } else {
                                 totalItem = 0;
                                 return ListView.builder(
+                                  physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     if (index <
                                         snapshot.data.response[0].cart.length) {
@@ -309,6 +310,7 @@ class _CartState extends State<Cart> {
                                                           _productOrderProvider
                                                                   .isProductRemovingFromCartInProgress =
                                                               false;
+                                                          Provider.of<HomeScreenProvider>(context, listen: false).getCartCount();
                                                           setState(() {});
                                                         },
                                                         child: SvgPicture.asset(
@@ -331,19 +333,19 @@ class _CartState extends State<Cart> {
                                                         textAlign:
                                                             TextAlign.left,
                                                       ),
-                                                      Text(
-                                                        '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
-                                                        style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          fontSize: 16,
-                                                          color: const Color(
-                                                              0xff515c6f),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
+                                                      // Text(
+                                                      //   '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
+                                                      //   style: TextStyle(
+                                                      //     fontFamily: 'Roboto',
+                                                      //     fontSize: 16,
+                                                      //     color: const Color(
+                                                      //         0xff515c6f),
+                                                      //     fontWeight:
+                                                      //         FontWeight.w700,
+                                                      //   ),
+                                                      //   textAlign:
+                                                      //       TextAlign.left,
+                                                      // ),
                                                       Text(
                                                         'Total : ${snapshot.data.response[0].cart[index].productFinalTotal} ₹',
                                                         style: TextStyle(

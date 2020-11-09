@@ -254,7 +254,10 @@ class _HomePageState extends State<HomePage> {
                               ? "AllSubjects" : _homeScreenProvider
                               .selectedString ==
                               "FilterP"
-                              ? "AllPublishers" : "Home"
+                              ? "AllPublishers" :
+                          _homeScreenProvider.selectedString ==
+                              "SubCategoryInfo"
+                              ? "CategoryInfo" : "Home"
 
                           /// check when category page is selected......
                               : _homeScreenProvider.selectedBottomIndex == 1 &&
@@ -433,6 +436,9 @@ class _HomePageState extends State<HomePage> {
                                   "SearchProducts2" ?
                               "Search Products"
                                   : _homeScreenProvider.selectedString ==
+                                  "SearchProducts2" ?
+                              "Search Products" : _homeScreenProvider
+                                  .selectedString ==
                                   "Filter"
                                   ? "Filter By Categories"
                                   : _homeScreenProvider.selectedString ==
@@ -517,7 +523,10 @@ class _HomePageState extends State<HomePage> {
                                           ? "AllSubjects" : _homeScreenProvider
                                           .selectedString ==
                                           "FilterP"
-                                          ? "AllPublishers" : "Home";
+                                          ? "AllPublishers" :
+                                      _homeScreenProvider.selectedString ==
+                                          "SubCategoryInfo"
+                                          ? "CategoryInfo" : "Home";
                                     },
                                     iconSize: 30,
                                   ),
@@ -527,30 +536,46 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "VendorInfo"
                                           ? ""
-                                          : _homeScreenProvider.selectedString ==
-                                          "ProductInfo" ||
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "ProductInfo" ? "Product" :
                                           _homeScreenProvider.selectedString ==
                                               "SchoolInfo"
                                           ? "School"
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "AllSubjects"
-                                          ? "All Subjects" : _homeScreenProvider
+                                          ? "All Subjects"
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "CategoryInfo"
+                                          ? "Category"
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "SubCategoryInfo"
+                                          ? "SubCategory"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "AllPublishers"
-                                          ? "All Publishers" : _homeScreenProvider
+                                          ? "All Publishers"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "FilterS"
-                                          ? "Subject" : _homeScreenProvider
+                                          ? "Subject"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "FilterP"
-                                          ? "Publisher" : _homeScreenProvider
+                                          ? "Publisher"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "FilterC"
-                                          ? "Class" : 'All Vendors',
+                                          ? "Class"
+                                          : 'All Vendors',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontFamily: 'Roboto',
-                                        fontSize: 20,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
                                         color: const Color(0xff301869),
                                       ),
                                       textAlign: TextAlign.left,
@@ -845,6 +870,15 @@ class _HomePageState extends State<HomePage> {
                                             CategoryInfo(
                                                 _categoryProvider
                                                     .selectedCategoryName),)
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "SubCategoryInfo"
+                                          ? Consumer<CategoryProvider>(
+                                        builder: (_, _categoryProvider,
+                                            child) =>
+                                            SubCategoryInfo(
+                                                _categoryProvider
+                                                    .selectedSubCategory),)
                                           : AllVendors(),
 
                                       /// category page...

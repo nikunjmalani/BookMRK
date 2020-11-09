@@ -752,6 +752,7 @@ class _ProductInfoState extends State<ProductInfo> {
                                                     _productOrderProvider
                                                             .isAddToCartInProgress =
                                                         false;
+                                                    Provider.of<HomeScreenProvider>(context, listen: false).totalNumberOfOrdersInCart += 1;
                                                     Scaffold.of(context)
                                                         .showSnackBar(getSnackBar(
                                                             'Product added To cart !'));

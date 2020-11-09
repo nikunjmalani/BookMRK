@@ -53,7 +53,10 @@ Widget ImageBox({height, width, image, title}) {
           decoration: BoxDecoration(
             border: Border.all(color: Color(0xffcfcfcf)),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15), topRight: Radius.circular(15.0)),
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15.0),
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15.0)),
           ),
           padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 20),
           child: Image(
@@ -154,11 +157,11 @@ Widget ProductBox(
         height: height / 2.9,
         width: width / 2,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Color(0xffcfcfcf),
-            ),
-            ),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Color(0xffcfcfcf),
+          ),
+        ),
         child: Column(
           children: [
             Padding(
@@ -174,10 +177,10 @@ Widget ProductBox(
                     ),
                   ),
                 ),
-                placeholder: (context, url) => Center(
-                    child: Image.asset('assets/images/preload.png')),
-                errorWidget: (context, url, error) => Center(
-                    child: Image.asset('assets/images/preload.png')),
+                placeholder: (context, url) =>
+                    Center(child: Image.asset('assets/images/preload.png')),
+                errorWidget: (context, url, error) =>
+                    Center(child: Image.asset('assets/images/preload.png')),
               ),
             ),
             Spacer(),
@@ -226,10 +229,11 @@ Widget ProductBox(
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 5.0, vertical: 3.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
                     decoration: BoxDecoration(
-                      color: stock == "IN" ? colorPalette.pinkOrange : Colors.red,
+                      color:
+                          stock == "IN" ? colorPalette.pinkOrange : Colors.red,
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Text(
@@ -255,24 +259,34 @@ Widget ProductBox(
                 ],
               ),
             ),
-            SizedBox(height: 5.0,)
+            SizedBox(
+              height: 5.0,
+            )
           ],
         ),
       ),
-      discount != "" ? Positioned(
-        left: -25,
-        top: 65,
-        child: Transform(
-          transform: Matrix4.rotationZ(-0.76),
-          child: Container(
-            color: colorPalette.pinkOrange,
-            height: 25.0,
-            width: width / 3,
-            alignment: Alignment.center,
-            child: Text('$discount OFF', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w700),),
-          ),
-        ),
-      ) : SizedBox(),
+      discount != ""
+          ? Positioned(
+              left: -25,
+              top: 65,
+              child: Transform(
+                transform: Matrix4.rotationZ(-0.76),
+                child: Container(
+                  color: colorPalette.pinkOrange,
+                  height: 25.0,
+                  width: width / 3,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '$discount OFF',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+            )
+          : SizedBox(),
       Positioned(
               top: 0,
               right: 0,

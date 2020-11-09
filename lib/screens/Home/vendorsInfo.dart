@@ -399,91 +399,94 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                           ?
 
                                       /// when filter is selected then show filtered list of product...
-                                      Container(
-                                          height: height,
-                                          width: width,
-                                          color: Colors.blue,
-                                          child: Padding(
-                                            padding: const EdgeInsets
-                                                .symmetric(
-                                                horizontal: 10),
-                                            child:
-                                            SingleChildScrollView(
-                                              child: Wrap(
-                                                  direction:
-                                                  Axis.horizontal,
-                                                  children:
-                                                  List.generate(
-                                                    snapshot
-                                                        .data[0]
-                                                        .response[0]
-                                                        .vendorProduct
-                                                        .length,
-                                                        (index) {
-                                                      if (_categoryProvider
-                                                          .selectedFilterCategoryList
-                                                          .contains(snapshot
-                                                          .data[0]
-                                                          .response[
-                                                      0]
-                                                          .vendorProduct[
-                                                      index]
-                                                          .categoryName)) {
-                                                        return GestureDetector(
-                                                          onTap:
-                                                              () async {
-                                                            Provider.of<ProductOrderProvider>(
-                                                                context,
-                                                                listen: false)
-                                                                .selectedVariation2Option = null;
-                                                            _homeScreenProvider
-                                                                .selectedProductSlug =
-                                                            "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
-                                                            _vendorProvider
-                                                                .selectedVendorName =
-                                                            "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
-                                                            _homeScreenProvider
-                                                                .selectedString =
-                                                            "ProductInfo";
-                                                          },
-                                                          child:
-                                                          Container(
-                                                            width: (width /
-                                                                2) -
-                                                                30.0,
-                                                            margin: EdgeInsets.only(
-                                                                right:
-                                                                10.0,
-                                                                bottom:
-                                                                10.0),
-                                                            height:
-                                                            230,
-                                                            child: ProductBox(
-                                                                expanded:
-                                                                true,
+                                      Column(
+                                        children: [
+                                          Container(
+                                              child: Padding(
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                    horizontal: 10),
+                                                child:
+                                                SingleChildScrollView(
+                                                  physics: NeverScrollableScrollPhysics(),
+                                                  child: Wrap(
+                                                      direction:
+                                                      Axis.horizontal,
+                                                      children:
+                                                      List.generate(
+                                                        snapshot
+                                                            .data[0]
+                                                            .response[0]
+                                                            .vendorProduct
+                                                            .length,
+                                                            (index) {
+                                                          if (_categoryProvider
+                                                              .selectedFilterCategoryList
+                                                              .contains(snapshot
+                                                              .data[0]
+                                                              .response[
+                                                          0]
+                                                              .vendorProduct[
+                                                          index]
+                                                              .categoryName)) {
+                                                            return GestureDetector(
+                                                              onTap:
+                                                                  () async {
+                                                                Provider.of<ProductOrderProvider>(
+                                                                    context,
+                                                                    listen: false)
+                                                                    .selectedVariation2Option = null;
+                                                                _homeScreenProvider
+                                                                    .selectedProductSlug =
+                                                                "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
+                                                                _vendorProvider
+                                                                    .selectedVendorName =
+                                                                "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
+                                                                _homeScreenProvider
+                                                                    .selectedString =
+                                                                "ProductInfo";
+                                                              },
+                                                              child:
+                                                              Container(
+                                                                width: (width /
+                                                                    2) -
+                                                                    30.0,
+                                                                margin: EdgeInsets.only(
+                                                                    right:
+                                                                    10.0,
+                                                                    bottom:
+                                                                    10.0),
                                                                 height:
-                                                                height,
-                                                                width:
-                                                                width,
-                                                                title:
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].productName}",
-                                                                description:
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
-                                                                price:
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
-                                                                stock:
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
-                                                                image:
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
-                                                          ),
-                                                        );
-                                                      } else {
-                                                        return SizedBox();
-                                                      }
-                                                    },
-                                                  )),
-                                            ),
-                                          ))
+                                                                230,
+                                                                child: ProductBox(
+                                                                    expanded:
+                                                                    true,
+                                                                    height:
+                                                                    height,
+                                                                    width:
+                                                                    width,
+                                                                    title:
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productName}",
+                                                                    description:
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
+                                                                    price:
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                                                    stock:
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
+                                                                    image:
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                                              ),
+                                                            );
+                                                          } else {
+                                                            return SizedBox();
+                                                          }
+                                                        },
+                                                      )),
+                                                ),
+                                              )),
+                                          SizedBox(height: 70,)
+                                        ],
+                                      )
                                           :
 
                                       /// when any filter is not selected then show list of all products...
@@ -493,75 +496,80 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                           .vendorProduct
                                           .length >
                                           0
-                                          ? Container(
+                                          ? Column(
+                                            children: [
+                                              Container(
                                         child: Padding(
-                                          padding:
-                                          const EdgeInsets
-                                              .symmetric(
-                                              horizontal:
-                                              10),
-                                          child:
-                                          GridView.builder(
-                                            shrinkWrap: true,
-                                            physics:
-                                            NeverScrollableScrollPhysics(),
-                                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                                maxCrossAxisExtent:
-                                                300,
-                                                childAspectRatio:
-                                                0.75,
-                                                crossAxisSpacing:
-                                                10,
-                                                mainAxisSpacing:
-                                                10),
-                                            itemBuilder:
-                                                (context,
-                                                index) {
-                                              return GestureDetector(
-                                                onTap:
-                                                    () async {
-                                                  Provider.of<ProductOrderProvider>(
-                                                      context,
-                                                      listen:
-                                                      false)
-                                                      .selectedVariation2Option = null;
-                                                  _homeScreenProvider
-                                                      .selectedProductSlug =
-                                                  "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
-                                                  _vendorProvider
-                                                      .selectedVendorName =
-                                                  "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
-                                                  _homeScreenProvider
-                                                      .selectedString =
-                                                  "ProductInfo";
+                                              padding:
+                                              const EdgeInsets
+                                                  .symmetric(
+                                                  horizontal:
+                                                  10),
+                                              child:
+                                              GridView.builder(
+                                                shrinkWrap: true,
+                                                physics:
+                                                NeverScrollableScrollPhysics(),
+                                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                                    maxCrossAxisExtent:
+                                                    300,
+                                                    childAspectRatio:
+                                                    0.75,
+                                                    crossAxisSpacing:
+                                                    10,
+                                                    mainAxisSpacing:
+                                                    10),
+                                                itemBuilder:
+                                                    (context,
+                                                    index) {
+                                                  return GestureDetector(
+                                                    onTap:
+                                                        () async {
+                                                      Provider.of<ProductOrderProvider>(
+                                                          context,
+                                                          listen:
+                                                          false)
+                                                          .selectedVariation2Option = null;
+                                                      _homeScreenProvider
+                                                          .selectedProductSlug =
+                                                      "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
+                                                      _vendorProvider
+                                                          .selectedVendorName =
+                                                      "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
+                                                      _homeScreenProvider
+                                                          .selectedString =
+                                                      "ProductInfo";
+                                                    },
+                                                    child: ProductBox(
+                                                        expanded:
+                                                        true,
+                                                        height:
+                                                        height,
+                                                        width:
+                                                        width,
+                                                        title:
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productName}",
+                                                        description:
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
+                                                        price:
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                                        stock:
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
+                                                        image:
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                                  );
                                                 },
-                                                child: ProductBox(
-                                                    expanded:
-                                                    true,
-                                                    height:
-                                                    height,
-                                                    width:
-                                                    width,
-                                                    title:
-                                                    "${snapshot.data[0].response[0].vendorProduct[index].productName}",
-                                                    description:
-                                                    "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
-                                                    price:
-                                                    "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
-                                                    stock:
-                                                    "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
-                                                    image:
-                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
-                                              );
-                                            },
-                                            itemCount: snapshot
-                                                .data[0]
-                                                .response[0]
-                                                .vendorProduct
-                                                .length,
-                                          ),
+                                                itemCount: snapshot
+                                                    .data[0]
+                                                    .response[0]
+                                                    .vendorProduct
+                                                    .length,
+                                              ),
                                         ),
-                                      )
+                                      ),
+                                              SizedBox(height: 70.0)
+                                            ],
+                                          )
                                           : Column(
                                         children: [
                                           SvgPicture.asset(
@@ -583,114 +591,119 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                           :
 
                                       /// when school tab selected then show school list...
-                                      Container(
-                                        child: _schoolProvider
-                                            .isSearchSchoolTabSelected
-                                            ? ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                          NeverScrollableScrollPhysics(),
-                                          itemBuilder:
-                                              (context, index) {
-                                            return Padding(
-                                              padding: index == 14
-                                                  ? EdgeInsets
-                                                  .only(
-                                                  bottom:
-                                                  70)
-                                                  : EdgeInsets
-                                                  .all(0),
-                                              child:
-                                              SchoolImageBox(
-                                                  height:
-                                                  height,
-                                                  image:
-                                                  "${_schoolProvider.schoolsToFilter[index].schoolLogo}",
-                                                  description:
-                                                  "${_schoolProvider.schoolsToFilter[index].address}, ${_schoolProvider.schoolsToFilter[index].city}, ${_schoolProvider.schoolsToFilter[index].pincode}",
-                                                  title:
-                                                  "${_schoolProvider.schoolsToFilter[index].schoolName}",
-                                                  onTap: () {
-                                                    Provider.of<SchoolProvider>(
-                                                        context,
-                                                        listen: false)
-                                                        .selectedSchoolSlug = "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
-                                                    Provider.of<HomeScreenProvider>(
-                                                        context,
-                                                        listen: false)
-                                                        .selectedString = "SchoolInfo";
-                                                  }),
-                                            );
-                                          },
-                                          itemCount:
-                                          _schoolProvider
-                                              .schoolsToFilter
-                                              .length,
-                                        )
-                                            : snapshot
-                                            .data[1]
-                                            .response[0]
-                                            .vendorSchool
-                                            .length >
-                                            0
-                                            ? ListView.builder(
-                                          shrinkWrap: true,
-                                          physics:
-                                          NeverScrollableScrollPhysics(),
-                                          itemBuilder:
-                                              (context,
-                                              index) {
-                                            return Padding(
-                                              padding: index ==
-                                                  14
-                                                  ? EdgeInsets.only(
-                                                  bottom:
-                                                  70)
-                                                  : EdgeInsets
-                                                  .all(0),
-                                              child:
-                                              SchoolImageBox(
-                                                  height:
-                                                  height,
-                                                  image:
-                                                  "${snapshot.data[1].response[0].vendorSchool[index].schoolLogo}",
-                                                  description:
-                                                  "${snapshot.data[1].response[0].vendorSchool[index].address}, ${snapshot.data[1].response[0].vendorSchool[index].city}, ${snapshot.data[1].response[0].vendorSchool[index].pincode}",
-                                                  title:
-                                                  "${snapshot.data[1].response[0].vendorSchool[index].schoolName}",
-                                                  onTap:
-                                                      () {
-                                                    Provider.of<SchoolProvider>(context, listen: false).selectedSchoolSlug =
-                                                    "${snapshot.data[1].response[0].vendorSchool[index].schoolSlug}";
-                                                    Provider.of<HomeScreenProvider>(context, listen: false).selectedString =
-                                                    "SchoolInfo";
-                                                  }),
-                                            );
-                                          },
-                                          itemCount: snapshot
-                                              .data[1]
-                                              .response[0]
-                                              .vendorSchool
-                                              .length,
-                                        )
-                                            : Column(
-                                          children: [
-                                            SvgPicture.asset(
-                                                'assets/icons/no_data.svg',
-                                                height: 100),
-                                            SizedBox(
-                                              height: 20.0,
-                                            ),
-                                            Text(
-                                              '0 School',
-                                              style: TextStyle(
-                                                  color: colorPalette
-                                                      .navyBlue,
-                                                  fontSize:
-                                                  20),
+                                      Column(
+                                        children: [
+                                          Container(
+                                            child: _schoolProvider
+                                                .isSearchSchoolTabSelected
+                                                ? ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                              NeverScrollableScrollPhysics(),
+                                              itemBuilder:
+                                                  (context, index) {
+                                                return Padding(
+                                                  padding: index == 14
+                                                      ? EdgeInsets
+                                                      .only(
+                                                      bottom:
+                                                      70)
+                                                      : EdgeInsets
+                                                      .all(0),
+                                                  child:
+                                                  SchoolImageBox(
+                                                      height:
+                                                      height,
+                                                      image:
+                                                      "${_schoolProvider.schoolsToFilter[index].schoolLogo}",
+                                                      description:
+                                                      "${_schoolProvider.schoolsToFilter[index].address}, ${_schoolProvider.schoolsToFilter[index].city}, ${_schoolProvider.schoolsToFilter[index].pincode}",
+                                                      title:
+                                                      "${_schoolProvider.schoolsToFilter[index].schoolName}",
+                                                      onTap: () {
+                                                        Provider.of<SchoolProvider>(
+                                                            context,
+                                                            listen: false)
+                                                            .selectedSchoolSlug = "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
+                                                        Provider.of<HomeScreenProvider>(
+                                                            context,
+                                                            listen: false)
+                                                            .selectedString = "SchoolInfo";
+                                                      }),
+                                                );
+                                              },
+                                              itemCount:
+                                              _schoolProvider
+                                                  .schoolsToFilter
+                                                  .length,
                                             )
-                                          ],
-                                        ),
+                                                : snapshot
+                                                .data[1]
+                                                .response[0]
+                                                .vendorSchool
+                                                .length >
+                                                0
+                                                ? ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                              NeverScrollableScrollPhysics(),
+                                              itemBuilder:
+                                                  (context,
+                                                  index) {
+                                                return Padding(
+                                                  padding: index ==
+                                                      14
+                                                      ? EdgeInsets.only(
+                                                      bottom:
+                                                      70)
+                                                      : EdgeInsets
+                                                      .all(0),
+                                                  child:
+                                                  SchoolImageBox(
+                                                      height:
+                                                      height,
+                                                      image:
+                                                      "${snapshot.data[1].response[0].vendorSchool[index].schoolLogo}",
+                                                      description:
+                                                      "${snapshot.data[1].response[0].vendorSchool[index].address}, ${snapshot.data[1].response[0].vendorSchool[index].city}, ${snapshot.data[1].response[0].vendorSchool[index].pincode}",
+                                                      title:
+                                                      "${snapshot.data[1].response[0].vendorSchool[index].schoolName}",
+                                                      onTap:
+                                                          () {
+                                                        Provider.of<SchoolProvider>(context, listen: false).selectedSchoolSlug =
+                                                        "${snapshot.data[1].response[0].vendorSchool[index].schoolSlug}";
+                                                        Provider.of<HomeScreenProvider>(context, listen: false).selectedString =
+                                                        "SchoolInfo";
+                                                      }),
+                                                );
+                                              },
+                                              itemCount: snapshot
+                                                  .data[1]
+                                                  .response[0]
+                                                  .vendorSchool
+                                                  .length,
+                                            )
+                                                : Column(
+                                              children: [
+                                                SvgPicture.asset(
+                                                    'assets/icons/no_data.svg',
+                                                    height: 100),
+                                                SizedBox(
+                                                  height: 20.0,
+                                                ),
+                                                Text(
+                                                  '0 School',
+                                                  style: TextStyle(
+                                                      color: colorPalette
+                                                          .navyBlue,
+                                                      fontSize:
+                                                      20),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 80,)
+                                        ],
                                       ),
                                     ],
                                   ),
