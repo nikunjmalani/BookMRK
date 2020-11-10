@@ -59,7 +59,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  PageController pageController = PageController(initialPage: 0);
+  // PageController pageController = PageController(initialPage: 0);
   ColorPalette colorPalette = ColorPalette();
   ImagePath imagePath = ImagePath();
   HomeScreenProvider _setHomeScreenProvider;
@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
 
     return Consumer<HomeScreenProvider>(
       builder: (context, _homeScreenProvider, child) {
+
         return FutureBuilder(
           future: getHomePageDetails(),
           builder: (context, snapshot) {
@@ -227,16 +228,32 @@ class _HomePageState extends State<HomePage> {
                             ),);
                           }
 
-                          // else if(_homeScreenProvider.selectedString == "Category"){
-                          //   _homeScreenProvider.selectedString = "Home";
-                          //   _homeScreenProvider.selectedBottomIndex = 0;
-                          // }else if(_homeScreenProvider.selectedString == "School"){
-                          //   _homeScreenProvider.selectedString = "Home";
-                          //   _homeScreenProvider.selectedBottomIndex = 0;
-                          // }else if(_homeScreenProvider.selectedString == "User"){
-                          //   _homeScreenProvider.selectedString = "Home";
-                          //   _homeScreenProvider.selectedBottomIndex = 0;
-                          // }
+                          else if (_homeScreenProvider.selectedString ==
+                              "Category") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else
+                          if (_homeScreenProvider.selectedString == "School") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else
+                          if (_homeScreenProvider.selectedString == "User") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else if (_homeScreenProvider.selectedString ==
+                              "Notifications") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          }else if (_homeScreenProvider.selectedString ==
+                              "Cart") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          }
 
                           /// check when home page is selected......
                           _homeScreenProvider.selectedBottomIndex == 0 &&
@@ -275,9 +292,7 @@ class _HomePageState extends State<HomePage> {
                               : _homeScreenProvider.selectedString ==
                               "SubCategoryInfo"
                               ? "CategoryInfo"
-                              : _homeScreenProvider.selectedString == "Category"
-                              ? "Category"
-                              : "CategoryInfo"
+                              : "Category"
 
                           /// check when school page is selected.......
                               : _homeScreenProvider.selectedBottomIndex == 2 &&
@@ -461,7 +476,7 @@ class _HomePageState extends State<HomePage> {
                             blueCartIcon: _homeScreenProvider.blueCartIcon,
                             blueBellIcon: _homeScreenProvider.blueBellIcon,
                             onBellTap: () {
-                              pageController.jumpToPage(5);
+                              _homeScreenProvider.pageController.jumpToPage(5);
 
                               _setHomeScreenProvider.selectedString =
                               "Notifications";
@@ -470,7 +485,7 @@ class _HomePageState extends State<HomePage> {
                               _setHomeScreenProvider.blueBellIcon = true;
                             },
                             onCartTap: () {
-                              pageController.jumpToPage(4);
+                              _homeScreenProvider.pageController.jumpToPage(4);
 
                               _setHomeScreenProvider.selectedString = "Cart";
                               _setHomeScreenProvider.selectedBottomIndex = 4;
@@ -538,10 +553,10 @@ class _HomePageState extends State<HomePage> {
                                           ? ""
                                           : _homeScreenProvider
                                           .selectedString ==
-                                          "ProductInfo" ? "Product" :
-                                          _homeScreenProvider.selectedString ==
-                                              "SchoolInfo"
-                                          ? "School"
+                                          "ProductInfo" ? "${_homeScreenProvider.selectedTitle}" :
+                                      _homeScreenProvider.selectedString ==
+                                          "SchoolInfo"
+                                          ? "${_homeScreenProvider.selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "AllSubjects"
@@ -549,7 +564,7 @@ class _HomePageState extends State<HomePage> {
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "CategoryInfo"
-                                          ? "Category"
+                                          ? "${_homeScreenProvider.selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "SubCategoryInfo"
@@ -561,15 +576,15 @@ class _HomePageState extends State<HomePage> {
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "FilterS"
-                                          ? "Subject"
+                                          ? "${_homeScreenProvider.selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "FilterP"
-                                          ? "Publisher"
+                                          ? "${_homeScreenProvider.selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "FilterC"
-                                          ? "Class"
+                                          ? "${_homeScreenProvider.selectedTitle}"
                                           : 'All Vendors',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -601,7 +616,7 @@ class _HomePageState extends State<HomePage> {
                                       ? "Category"
                                       : _homeScreenProvider.selectedString ==
                                       "SubCategoryInfo"
-                                      ? "SubCategory" : "Category",
+                                      ? "SubCategory" : "${_homeScreenProvider.selectedTitle}",
                                   backButton:
                                   _homeScreenProvider.selectedString ==
                                       "Category"
@@ -630,7 +645,7 @@ class _HomePageState extends State<HomePage> {
                                 title: _homeScreenProvider.selectedString ==
                                     "School"
                                     ? "Schools"
-                                    : "",
+                                    : "${_homeScreenProvider.selectedTitle}",
                                 backButton:
                                 _homeScreenProvider.selectedString == "School"
                                     ? false
@@ -644,6 +659,7 @@ class _HomePageState extends State<HomePage> {
                                       "ProductInfo" ? "SchoolInfo" : "School";
                                 },
                               )
+
 
                               /// user page appbar...
                                   : _homeScreenProvider.selectedString ==
@@ -761,7 +777,8 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Container(
                                   child: PageView(
-                                    controller: pageController,
+                                    controller: _homeScreenProvider
+                                        .pageController,
                                     children: [
 
                                       /// home page..
@@ -870,16 +887,23 @@ class _HomePageState extends State<HomePage> {
                                             CategoryInfo(
                                                 _categoryProvider
                                                     .selectedCategoryName),)
-                                          : _homeScreenProvider
+                                          :
+                                      _homeScreenProvider
                                           .selectedString ==
-                                          "SubCategoryInfo"
-                                          ? Consumer<CategoryProvider>(
-                                        builder: (_, _categoryProvider,
-                                            child) =>
-                                            SubCategoryInfo(
-                                                _categoryProvider
-                                                    .selectedSubCategory),)
-                                          : AllVendors(),
+                                          "SearchProducts2"
+                                          ? Search2()
+                                          :
+                                      // _homeScreenProvider
+                                      //     .selectedString ==
+                                      //     "SubCategoryInfo"
+                                      //     ? Consumer<CategoryProvider>(
+                                      //   builder: (_, _categoryProvider,
+                                      //       child) =>
+                                      //       SubCategoryInfo(
+                                      //           _categoryProvider
+                                      //               .selectedSubCategory),)
+                                      //     :
+                                      AllVendors(),
 
                                       /// category page...
                                       _homeScreenProvider.selectedString ==
@@ -894,16 +918,18 @@ class _HomePageState extends State<HomePage> {
                                               ProductInfo(
                                                   selectedProductSlug: _homeScreenProvider
                                                       .selectedProductSlug))
-                                          : _homeScreenProvider
-                                          .selectedString ==
-                                          "SubCategoryInfo"
-                                          ? Consumer<CategoryProvider>(
-                                        builder: (_, _categoryProvider,
-                                            child) =>
-                                            SubCategoryInfo(
-                                                _categoryProvider
-                                                    .selectedSubCategory),)
-                                          : _homeScreenProvider
+                                          :
+                                      // _homeScreenProvider
+                                      //     .selectedString ==
+                                      //     "SubCategoryInfo"
+                                      //     ? Consumer<CategoryProvider>(
+                                      //   builder: (_, _categoryProvider,
+                                      //       child) =>
+                                      //       SubCategoryInfo(
+                                      //           _categoryProvider
+                                      //               .selectedSubCategory),)
+                                      //     :
+                                      _homeScreenProvider
                                           .selectedString ==
                                           "SearchProducts2"
                                           ? Search2()
@@ -1088,7 +1114,8 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(0);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(0);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             0;
@@ -1122,7 +1149,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(1);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(1);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             1;
@@ -1156,7 +1184,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(2);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(2);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             2;
@@ -1190,7 +1219,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(3);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(3);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             3;

@@ -432,6 +432,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                             return GestureDetector(
                                                               onTap:
                                                                   () async {
+                                                                _homeScreenProvider.selectedTitle = "${snapshot.data[0].response[0].vendorProduct[index].productName}";
                                                                 Provider.of<ProductOrderProvider>(
                                                                     context,
                                                                     listen: false)
@@ -525,7 +526,9 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                   return GestureDetector(
                                                     onTap:
                                                         () async {
-                                                      Provider.of<ProductOrderProvider>(
+                                                          _homeScreenProvider.selectedTitle = "${snapshot.data[0].response[0].vendorProduct[index].productName}";
+
+                                                          Provider.of<ProductOrderProvider>(
                                                           context,
                                                           listen:
                                                           false)

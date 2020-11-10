@@ -139,13 +139,33 @@ class _SchoolTabState extends State<SchoolTab> {
                                   Navigator.pop(context);
                                 },
                                 onSearchTap: () {
-
                                   /// assign zero if any fileds are null...
 
-                                  _schoolProvider.selectedCityIdForSchool = _schoolProvider.selectedCityIdForSchool == null ? 0 : _schoolProvider.selectedCityIdForSchool;
-                                  _schoolProvider.selectedStateIdForSchool = _schoolProvider.selectedStateIdForSchool == null ? 0 : _schoolProvider.selectedStateIdForSchool;
-                                  _schoolProvider.selectedCountryIdForSchool = _schoolProvider.selectedCountryIdForSchool == null ? 0 : _schoolProvider.selectedCountryIdForSchool;
-                                  _pincodeController.text = _pincodeController.text == "" || _pincodeController.text == null ? "123123" : _pincodeController.text;
+                                  _schoolProvider.selectedCityIdForSchool =
+                                      _schoolProvider.selectedCityIdForSchool ==
+                                              null
+                                          ? 0
+                                          : _schoolProvider
+                                              .selectedCityIdForSchool;
+                                  _schoolProvider.selectedStateIdForSchool =
+                                      _schoolProvider
+                                                  .selectedStateIdForSchool ==
+                                              null
+                                          ? 0
+                                          : _schoolProvider
+                                              .selectedStateIdForSchool;
+                                  _schoolProvider.selectedCountryIdForSchool =
+                                      _schoolProvider
+                                                  .selectedCountryIdForSchool ==
+                                              null
+                                          ? 0
+                                          : _schoolProvider
+                                              .selectedCountryIdForSchool;
+                                  _pincodeController.text =
+                                      _pincodeController.text == "" ||
+                                              _pincodeController.text == null
+                                          ? "123123"
+                                          : _pincodeController.text;
                                   _schoolProvider.selectedPinCodeForSchool =
                                       _pincodeController.text;
                                   _schoolProvider
@@ -189,6 +209,12 @@ class _SchoolTabState extends State<SchoolTab> {
                                       itemBuilder: (context, index) {
                                         return GestureDetector(
                                           onTap: () {
+                                            Provider.of<HomeScreenProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .selectedTitle =
+                                                "${snapshot.data.response[index].schoolName}";
+
                                             _schoolProvider.selectedSchoolSlug =
                                                 "${snapshot.data.response[index].schoolSlug}";
 
@@ -346,8 +372,9 @@ class _SchoolTabState extends State<SchoolTab> {
                                 );
                               } else {
                                 return GestureDetector(
-                                  onTap: (){
-                                    _schoolProvider.isFindSchoolByLocationSelected = false;
+                                  onTap: () {
+                                    _schoolProvider
+                                        .isFindSchoolByLocationSelected = false;
                                   },
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -393,6 +420,11 @@ class _SchoolTabState extends State<SchoolTab> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+                                        Provider.of<HomeScreenProvider>(context,
+                                                    listen: false)
+                                                .selectedTitle =
+                                            "${_schoolProvider.schoolsToFilter[index].schoolName}";
+
                                         _schoolProvider.selectedSchoolSlug =
                                             "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
                                         Provider.of<HomeScreenProvider>(context,
@@ -549,6 +581,10 @@ class _SchoolTabState extends State<SchoolTab> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+                                        Provider.of<HomeScreenProvider>(context,
+                                                    listen: false)
+                                                .selectedTitle =
+                                            "${snapshot.data.response[index].schoolName}";
                                         _schoolProvider.selectedSchoolSlug =
                                             "${snapshot.data.response[index].schoolSlug}";
 
@@ -783,13 +819,13 @@ Widget LocationDialog(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: DropdownButton(
+                            onChanged: (v){},
                             underline: Container(),
                             isExpanded: true,
                             style: TextStyle(
                               color: colorPalette.lightGrey,
                               fontSize: 16,
                             ),
-
                             value: snapshot
                                 .data
                                 .response[_schoolProvider
@@ -809,7 +845,6 @@ Widget LocationDialog(
                                       value:
                                           '${snapshot.data.response[index].name}',
                                       onTap: () {
-
                                         _schoolProvider
                                                 .selectedCountryIndexForSchool =
                                             index;
@@ -869,13 +904,13 @@ Widget LocationDialog(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: DropdownButton(
+                            onChanged: (v){},
                             underline: Container(),
                             isExpanded: true,
                             style: TextStyle(
                               color: colorPalette.lightGrey,
                               fontSize: 16,
                             ),
-
                             value: snapshot
                                 .data
                                 .response[
@@ -960,7 +995,6 @@ Widget LocationDialog(
                               color: colorPalette.lightGrey,
                               fontSize: 16,
                             ),
-
                             value: snapshot
                                 .data
                                 .response[

@@ -44,7 +44,7 @@ dependencies:
   flutter_polyline_points: ^0.2.4
   get:
   crypto:
-
+  search_place_autocomplete: ^0.1.1
 
 dev_dependencies:
   flutter_test:

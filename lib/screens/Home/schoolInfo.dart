@@ -260,6 +260,8 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                                 "Single") {
                                               return GestureDetector(
                                                 onTap: () {
+
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${subCatSnapshot.data.response[index].productName}";
                                                   Provider.of<VendorProvider>(
                                                               context,
                                                               listen: false)
@@ -314,6 +316,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                                 "Set") {
                                               return GestureDetector(
                                                 onTap: () {
+
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${subCatSnapshot.data.response[index].productName}";
+
                                                   Provider.of<VendorProvider>(
                                                               context,
                                                               listen: false)
@@ -361,6 +366,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                           } else {
                                             return GestureDetector(
                                               onTap: () {
+
+                                                Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${subCatSnapshot.data.response[index].productName}";
+
                                                 Provider.of<VendorProvider>(
                                                             context,
                                                             listen: false)
@@ -473,6 +481,9 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                 itemBuilder: (context, index) {
                                   return GestureDetector(
                                     onTap: () {
+
+                                      Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${snapshot.data.response[index].productName}";
+
                                       Provider.of<VendorProvider>(context,
                                                   listen: false)
                                               .selectedVendorName =

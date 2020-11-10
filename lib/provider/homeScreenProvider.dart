@@ -193,4 +193,24 @@ class HomeScreenProvider extends ChangeNotifier {
     _markAllAsReadNotification = value;
     notifyListeners();
   }
+
+  /// page controller.....
+  PageController _pageController = PageController(initialPage: 0);
+
+  PageController get pageController => _pageController;
+
+  set pageController(PageController value) {
+    _pageController = value;
+    notifyListeners();
+  }
+
+  /// selected title name....
+  String _selectedTitle = "";
+
+  String get selectedTitle => _selectedTitle;
+
+  set selectedTitle(String value) {
+    _selectedTitle = value;
+    notifyListeners();
+  }
 }

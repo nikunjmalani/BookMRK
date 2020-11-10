@@ -57,8 +57,9 @@ class _NotificationPageState extends State<NotificationPage> {
                                     userId.toString(),
                                     snapshot.data.response[i].notificationId
                                         .toString());
-                              }
 
+                                print(response);
+                              }
                             }
 
                             _homeScreenProvider.markAllAsReadNotification = false;

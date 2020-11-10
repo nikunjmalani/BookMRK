@@ -149,6 +149,11 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
+
+                              Provider.of<HomeScreenProvider>(context,
+                                  listen: false)
+                                  .selectedTitle = "${snapshot.data.response[0].product[index].productName}";
+
                               Provider.of<HomeScreenProvider>(context,
                                   listen: false)
                                   .selectedProductSlug =

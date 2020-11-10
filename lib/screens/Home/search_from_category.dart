@@ -82,6 +82,7 @@ class _Search2State extends State<Search2> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
+                                    _homeScreenProvider.selectedTitle = "${snapshot.data.response[index].productName}";
                                     Provider.of<VendorProvider>(context,
                                                 listen: false)
                                             .selectedVendorName =

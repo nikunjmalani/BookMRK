@@ -26,13 +26,25 @@ class _CategoryInfoState extends State<CategoryInfo> {
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
         widget.categoryName, userId.toString());
     if (categoryProductsDetails['response'].length == "0") {
-
       NoDataOrderModel _noDataModel =
           NoDataOrderModel.fromJson(categoryProductsDetails);
       return _noDataModel;
     } else {
+      CategoryProductsModel _categoryProductModelDetails =
+          CategoryProductsModel.fromJson(categoryProductsDetails);
+      return _categoryProductModelDetails;
+    }
+  }
 
-
+  Future getSubCategoryProductsDetails(String subCategoryName) async {
+    int userId = prefs.read<int>('userId');
+    dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
+        subCategoryName, userId.toString());
+    if (categoryProductsDetails['response'].length == "0") {
+      NoDataOrderModel _noDataModel =
+          NoDataOrderModel.fromJson(categoryProductsDetails);
+      return _noDataModel;
+    } else {
       CategoryProductsModel _categoryProductModelDetails =
           CategoryProductsModel.fromJson(categoryProductsDetails);
       return _categoryProductModelDetails;
@@ -147,8 +159,8 @@ class _CategoryInfoState extends State<CategoryInfo> {
                             : height / 45,
                         child: snapshot.data.response[0].subCategory.length > 0
                             ? SingleChildScrollView(
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.horizontal,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,47 +171,83 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                       ),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: colorPalette.navyBlue,
+                                            color: _categoryProvider
+                                                            .selectedSubCategory ==
+                                                        "" ||
+                                                    _categoryProvider
+                                                            .selectedSubCategory ==
+                                                        null
+                                                ? colorPalette.navyBlue
+                                                : Colors.white,
                                             borderRadius:
                                                 BorderRadius.circular(5.0)),
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 10.0, vertical: 5.0),
-                                        child: Text(
-                                          'All',
-                                          style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 14,
-                                              color: Colors.white),
-                                          textAlign: TextAlign.left,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            _categoryProvider
+                                                .selectedSubCategory = "";
+                                          },
+                                          child: Text(
+                                            'All',
+                                            style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontSize: 14,
+                                                color: _categoryProvider
+                                                                .selectedSubCategory ==
+                                                            "" ||
+                                                        _categoryProvider
+                                                                .selectedSubCategory ==
+                                                            null
+                                                    ? Colors.white
+                                                    : colorPalette.navyBlue),
+                                            textAlign: TextAlign.left,
+                                          ),
                                         ),
                                       ),
                                     ),
                                     Row(
-                                      children: List.generate(snapshot.data.response[0].subCategory.length, (index) => GestureDetector(
-                                        onTap: () {
-                                          _homeScreenProvider
-                                              .selectedString =
-                                          "SubCategoryInfo";
-                                          _categoryProvider
-                                              .selectedSubCategory =
-                                          "${snapshot.data.response[0].subCategory[index].catSlug}";
-                                        },
-                                        child: Padding(
-                                          padding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 20,
-                                              vertical: 5.0),
-                                          child: Text(
-                                            '${snapshot.data.response[0].subCategory[index].categoryName}',
-                                            style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontSize: 14,
-                                                color:
-                                                colorPalette.navyBlue),
-                                            textAlign: TextAlign.left,
+                                      children: List.generate(
+                                        snapshot.data.response[0].subCategory
+                                            .length,
+                                        (index) => GestureDetector(
+                                          onTap: () {
+                                            // _homeScreenProvider
+                                            //     .selectedString =
+                                            // "SubCategoryInfo";
+                                            _categoryProvider
+                                                    .selectedSubCategory =
+                                                "${snapshot.data.response[0].subCategory[index].catSlug}";
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                color: _categoryProvider
+                                                            .selectedSubCategory ==
+                                                        "${snapshot.data.response[0].subCategory[index].catSlug}"
+                                                    ? colorPalette.navyBlue
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0)),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.0,
+                                                vertical: 5.0),
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 10.0),
+                                            child: Text(
+                                              '${snapshot.data.response[0].subCategory[index].categoryName}',
+                                              style: TextStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: 14,
+                                                  color: _categoryProvider
+                                                              .selectedSubCategory ==
+                                                          "${snapshot.data.response[0].subCategory[index].catSlug}"
+                                                      ? Colors.white
+                                                      : colorPalette.navyBlue),
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
                                         ),
-                                      ),),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -208,51 +256,135 @@ class _CategoryInfoState extends State<CategoryInfo> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: 300,
-                            childAspectRatio: 0.75,
-                            crossAxisSpacing: 10,
-                            mainAxisSpacing: 10),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Provider.of<HomeScreenProvider>(context,
+                  Consumer<CategoryProvider>(
+                      builder: (_, _categoryProvider, child) {
+                    if (_categoryProvider.selectedSubCategory == "" ||
+                        _categoryProvider.selectedSubCategory == null) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 300,
+                                    childAspectRatio: 0.75,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
+                                          .selectedTitle =
+                                      "${snapshot.data.response[0].product[index].productName}";
+
+                                  Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
+                                          .selectedProductSlug =
+                                      "${snapshot.data.response[0].product[index].productSlug}";
+                                  Provider.of<VendorProvider>(context,
+                                              listen: false)
+                                          .selectedVendorName =
+                                      "${snapshot.data.response[0].product[index].vendorSlug}";
+                                  Provider.of<HomeScreenProvider>(context,
                                           listen: false)
-                                      .selectedProductSlug =
-                                  "${snapshot.data.response[0].product[index].productSlug}";
-                              Provider.of<VendorProvider>(context,
-                                          listen: false)
-                                      .selectedVendorName =
-                                  "${snapshot.data.response[0].product[index].vendorSlug}";
-                              Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
-                                  .selectedString = "ProductInfo";
+                                      .selectedString = "ProductInfo";
+                                },
+                                child: ProductBox(
+                                  expanded: true,
+                                  height: height,
+                                  width: width,
+                                  title:
+                                      "${snapshot.data.response[0].product[index].productName}",
+                                  image:
+                                      "${snapshot.data.response[0].product[index].productImg}",
+                                  description:
+                                      "${snapshot.data.response[0].product[index].vendorCompanyName}",
+                                  price: snapshot.data.response[0]
+                                      .product[index].productPrice,
+                                  stock:
+                                      "${snapshot.data.response[0].product[index].productStockStatus}",
+                                ),
+                              );
                             },
-                            child: ProductBox(
-                              expanded: true,
-                              height: height,
-                              width: width,
-                              title:
-                                  "${snapshot.data.response[0].product[index].productName}",
-                              image:
-                                  "${snapshot.data.response[0].product[index].productImg}",
-                              description:
-                                  "${snapshot.data.response[0].product[index].vendorCompanyName}",
-                              price: snapshot
-                                  .data.response[0].product[index].productPrice,
-                              stock:
-                                  "${snapshot.data.response[0].product[index].productStockStatus}",
-                            ),
-                          );
-                        },
-                        itemCount: snapshot.data.response[0].product.length,
-                      ),
-                    ),
-                  ),
+                            itemCount: snapshot.data.response[0].product.length,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return FutureBuilder(
+                          future: getSubCategoryProductsDetails(
+                              _categoryProvider.selectedSubCategory),
+                          builder: (context, subSnap) {
+                            if (subSnap.hasData) {
+                              return Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 300,
+                                            childAspectRatio: 0.75,
+                                            crossAxisSpacing: 10,
+                                            mainAxisSpacing: 10),
+                                    itemBuilder: (context, index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Provider.of<HomeScreenProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .selectedTitle =
+                                              "${subSnap.data.response[0].product[index].productName}";
+                                          Provider.of<HomeScreenProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .selectedProductSlug =
+                                              "${subSnap.data.response[0].product[index].productSlug}";
+                                          Provider.of<VendorProvider>(context,
+                                                      listen: false)
+                                                  .selectedVendorName =
+                                              "${subSnap.data.response[0].product[index].vendorSlug}";
+                                          Provider.of<HomeScreenProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .selectedString = "ProductInfo";
+                                        },
+                                        child: ProductBox(
+                                          expanded: true,
+                                          height: height,
+                                          width: width,
+                                          title:
+                                              "${subSnap.data.response[0].product[index].productName}",
+                                          image:
+                                              "${subSnap.data.response[0].product[index].productImg}",
+                                          description:
+                                              "${subSnap.data.response[0].product[index].vendorCompanyName}",
+                                          price: subSnap.data.response[0]
+                                              .product[index].productPrice,
+                                          stock:
+                                              "${subSnap.data.response[0].product[index].productStockStatus}",
+                                        ),
+                                      );
+                                    },
+                                    itemCount:
+                                        subSnap.data.response[0].product.length,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Container(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                        colorPalette.navyBlue),
+                                  ),
+                                ),
+                              );
+                            }
+                          });
+                    }
+                  }),
                 ],
               );
             }

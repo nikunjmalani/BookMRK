@@ -38,6 +38,7 @@ class _AllSubjectsState extends State<AllSubjects> {
                     return GestureDetector(
                       onTap: () {
                         /// FilterSPC for filter category Subject, Publisher, Class wise....
+                        data.selectedTitle = "${widget.subjects[index].subjectName}";
                         data.selectedString = "FilterS";
                         data.selectedBottomIndex = 0;
                         Provider.of<FilterCategoryProvider>(context,

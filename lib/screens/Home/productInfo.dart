@@ -789,8 +789,203 @@ class _ProductInfoState extends State<ProductInfo> {
                                           title: "ADD TO CART"),
                                     ),
                                     NavyBlueButton(
-                                        onClick: () {
-                                          checkOut();
+                                        onClick: () async {
+                                          _productOrderProvider
+                                              .isAddToCartInProgress = true;
+
+                                          /// check if quantity is entered or not...
+                                          if (_productQuantityController
+                                              .text !=
+                                              "" &&
+                                              _productQuantityController
+                                                  .text !=
+                                                  null) {
+                                            dynamic response;
+                                            dynamic variationInfo;
+                                            String pvsmId;
+
+                                            /// set userId ....
+                                            int userId =
+                                            prefs.read<int>('userId');
+
+                                            /// set productId ....
+                                            String productId = snapshot
+                                                .data.response[0].productId;
+
+                                            if (snapshot.data.response[0]
+                                                .variation ==
+                                                "YES") {
+                                              /// structure for two variations ....
+                                              List twoVariationsStructure = [
+                                                {
+                                                  "variations_data_id":
+                                                  "${_productOrderProvider.selectedVariations1Id}",
+                                                  "variations_options_name":
+                                                  "${_productOrderProvider.selectedVariation1OptionName}",
+                                                  "variation_name":
+                                                  "${_productOrderProvider.selectedVariation1Name}",
+                                                  "var_img":
+                                                  "${_productOrderProvider.selectedVariation1Img}",
+                                                },
+                                                {
+                                                  "variations_data_id":
+                                                  "${_productOrderProvider.selectedVariation2Id}",
+                                                  "variations_options_name":
+                                                  "${_productOrderProvider.selectedVariation2Option}",
+                                                  "variation_name":
+                                                  "${_productOrderProvider.selectedVariation2Name}",
+                                                  "var_img":
+                                                  "${_productOrderProvider.selectedVariation2Img}",
+                                                }
+                                              ];
+
+                                              /// Structure for single variation ....
+                                              List oneVariationStructure = [
+                                                {
+                                                  "variations_data_id":
+                                                  _productOrderProvider
+                                                      .selectedVariations1Id,
+                                                  "variations_options_name":
+                                                  "${_productOrderProvider.selectedVariation1OptionName}",
+                                                  "variation_name":
+                                                  "${_productOrderProvider.selectedVariation1Name}",
+                                                  "var_img":
+                                                  "${_productOrderProvider.selectedVariation1Img}",
+                                                }
+                                              ];
+
+                                              // code block for get pvsm_id in response .............................
+                                              /// check when the variations are multiple or single ....
+
+                                              if (snapshot
+                                                  .data
+                                                  .response[0]
+                                                  .variationsDetails[0]
+                                                  .varValue
+                                                  .length >
+                                                  1) {
+                                                /// code for two variations...
+                                                response = await ProductAPI
+                                                    .getVariationDetails(
+                                                  userId.toString(),
+                                                  productId,
+                                                  twoVariationsStructure,
+                                                );
+                                                variationInfo =
+                                                    twoVariationsStructure;
+
+                                                pvsmId = response['response']
+                                                [0]['pvsm_id']
+                                                    .toString();
+
+                                                /// code for two variations end...
+                                              } else {
+                                                /// code for single variation...
+                                                response = await ProductAPI
+                                                    .getVariationDetails(
+                                                    userId.toString(),
+                                                    productId,
+                                                    jsonEncode(
+                                                        oneVariationStructure));
+                                                pvsmId = response['response']
+                                                [0]['pvsm_id']
+                                                    .toString();
+                                                variationInfo =
+                                                    oneVariationStructure;
+
+                                                /// code for single variation end...
+                                              }
+                                              // end code block for get pvsm_id in response .............................
+
+                                            } else {
+                                              pvsmId = null;
+                                              variationInfo = null;
+                                              response = {"status": 200};
+                                            }
+
+                                            if (response['status'] == 200) {
+                                              /// check if the product type is set or not....
+                                              if (snapshot.data.response[0]
+                                                  .productType ==
+                                                  "Set") {
+                                                _productOrderProvider
+                                                    .isAddToCartInProgress =
+                                                false;
+
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return _addToCartDialog(
+                                                        context,
+                                                        studentNameController:
+                                                        _studentNameController,
+                                                        studentRollNumberController:
+                                                        _studentRollNumberController,
+                                                        productQuantityController:
+                                                        _productQuantityController,
+                                                        userId:
+                                                        userId.toString(),
+                                                        productId: productId
+                                                            .toString(),
+                                                        pvsmId: pvsmId,
+                                                        variationInfo:
+                                                        variationInfo,
+                                                      );
+                                                    });
+                                              } else {
+                                                dynamic response2 =
+                                                await CartAPI
+                                                    .addProductToCart(
+                                                  userId.toString(),
+                                                  productId,
+                                                  int.parse(
+                                                      _productQuantityController
+                                                          .text),
+                                                  null,
+                                                  null,
+                                                  pvsmId,
+                                                  variationInfo,
+                                                );
+
+                                                /// check if the product added to cart or not....
+                                                if (response2['status'] ==
+                                                    200) {
+                                                  _productOrderProvider
+                                                      .isAddToCartInProgress =
+                                                  false;
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).totalNumberOfOrdersInCart += 1;
+                                                  // Scaffold.of(context)
+                                                  //     .showSnackBar(getSnackBar(
+                                                  //     'Product added To cart !'));
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedString = "Cart";
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedBottomIndex = 4;
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).pageController.jumpToPage(4);
+                                                } else {
+                                                  _productOrderProvider
+                                                      .isAddToCartInProgress =
+                                                  false;
+                                                  Scaffold.of(context)
+                                                      .showSnackBar(getSnackBar(
+                                                      '${response2['message']}'));
+                                                }
+                                              }
+                                            } else {
+                                              _productOrderProvider
+                                                  .isAddToCartInProgress =
+                                              false;
+                                              Scaffold.of(context)
+                                                  .showSnackBar(getSnackBar(
+                                                  "${response['message']}"));
+                                            }
+                                          } else {
+                                            _productOrderProvider
+                                                .isAddToCartInProgress =
+                                            false;
+
+                                            Scaffold.of(context).showSnackBar(
+                                                getSnackBar(
+                                                    'Please enter quantity !'));
+                                          }
                                         },
                                         context: context,
                                         title: "BUY NOW")

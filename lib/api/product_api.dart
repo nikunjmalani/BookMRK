@@ -41,4 +41,53 @@ class ProductAPI {
         headers: header, body: body, encoding: Encoding.getByName('utf-8'));
     return jsonDecode(response.body);
   }
+
+  /// pre payment api call.....
+  static Future prePaymentAPICall(String userId, String appVersion,
+      String paymentMethod, String paymentSource) async {
+    String url = "$kBaseURL/payment_call/payment_pre_post";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "app_version": "$appVersion",
+      "payment_method": "$paymentMethod",
+      "payment_source": "$paymentSource",
+    };
+
+    http.Response response = await http.post(url, headers: header, body: body);
+    return jsonDecode(response.body);
+  }
+
+  /// final payment status.....
+  static Future finalPaymentStatus(String userId, String orderCost,
+      String orderNo, String orderStatus, String paymentResponse) async {
+    String url = "$kBaseURL/payment_call/payment_final_status";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, String> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "order_total_cost": "$orderCost",
+      "order_no": "$orderNo",
+      "order_status": "$orderStatus",
+      "payment_response": "$paymentResponse",
+    };
+
+    http.Response response = await http.post(url, headers: header, body: body);
+    return jsonDecode(response.body);
+  }
 }
