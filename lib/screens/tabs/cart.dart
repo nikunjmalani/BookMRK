@@ -453,7 +453,8 @@ class _CartState extends State<Cart> {
                                                 appVersion,
                                                 'online',
                                                 'online');
-                                            if(response['status'] == 200){
+                                            print(response);
+                                            if (response['status'] == 200) {
 
                                               /// method channel call for payment......
                                               MethodChannel _channel = MethodChannel('easebuzz');
@@ -463,8 +464,8 @@ class _CartState extends State<Cart> {
                                               String firstname = "${response['response'][0]['user_name']}";
                                               String email = "${response['response'][0]['user_email']}";
                                               String phone = "${response['response'][0]['user_mobile']}";
-                                              String s_url = "https://www.bookmrk.in/";
-                                              String f_url = "https://www.bookmrk.in/";
+                                              String s_url = "";
+                                              String f_url = "";
                                               String key = "$easeBuzzKey";
                                               String udf1 = "";
                                               String udf2 = "";
@@ -477,11 +478,12 @@ class _CartState extends State<Cart> {
                                               String state = "${response['response'][0]['user_state']}";
                                               String country = "${response['response'][0]['user_countries']}";
                                               String zipcode = "${response['response'][0]['user_pincode']}";
+                                              String salt = "$easeBuzzKey";
                                               String hash =
                                                   "${sha512.convert(utf8.encode(
-                                                  "$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$easeBuzzSalt"))}";
+                                                  "$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt"))}";
                                               String pay_mode = "production";
-                                              String unique_id = "${response['response'][0]['order_no']}";
+                                              String unique_id = "11346";
                                               Object parameters = {
                                                 "txnid": txnid,
                                                 "amount": amount,
@@ -505,11 +507,14 @@ class _CartState extends State<Cart> {
                                                 "zipcode": zipcode,
                                                 "hash": hash,
                                                 "pay_mode": pay_mode,
-                                                "unique_id": unique_id
+                                                "unique_id": unique_id,
+                                                "salt":salt
                                               };
 
                                               final payment_response =
-                                              await _channel.invokeMethod("payWithEasebuzz", parameters);
+                                              await _channel.invokeMethod(
+                                                  "payWithEasebuzz",
+                                                  parameters);
                                               print(payment_response);
                                             }
 

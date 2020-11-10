@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "900667127033",
+    "firebase_url": "https://bookmrkapp.firebaseio.com",
+    "project_id": "bookmrkapp",
+    "storage_bucket": "bookmrkapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900667127033:android:7c608c156c75e5022bde28",
+        "android_client_info": {
+          "package_name": "com.example.bookmrk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900667127033-45ei1qrfb48otbg1dje11t8a78p79npv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIbNLY8rEAuxFKURdtKL7XyQDE7URLnKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900667127033-45ei1qrfb48otbg1dje11t8a78p79npv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

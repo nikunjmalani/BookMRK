@@ -14,6 +14,8 @@ import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/screens/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,9 +26,36 @@ import 'package:provider/provider.dart';
 void main() async {
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MyApp());
 }
+
+
+// class MyApp2 extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//           child: RaisedButton(
+//             onPressed: (){
+//               FirebaseMessaging().getToken().then((token){
+//                 print(token);
+//               });
+//               FirebaseMessaging().configure(
+//                 onLaunch: (data) async {
+//                   return MyApp();
+//                 }
+//               );
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 
 class MyApp extends StatelessWidget {
   @override
