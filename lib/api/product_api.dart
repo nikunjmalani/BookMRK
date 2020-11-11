@@ -68,7 +68,7 @@ class ProductAPI {
 
   /// final payment status.....
   static Future finalPaymentStatus(String userId, String orderCost,
-      String orderNo, String orderStatus, String paymentResponse) async {
+      String orderNo, String orderStatus, dynamic paymentResponse) async {
     String url = "$kBaseURL/payment_call/payment_final_status";
     Map<String, String> header = {
       "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
@@ -84,7 +84,7 @@ class ProductAPI {
       "order_total_cost": "$orderCost",
       "order_no": "$orderNo",
       "order_status": "$orderStatus",
-      "payment_response": "$paymentResponse",
+      "payment_response": "${jsonEncode(paymentResponse)}",
     };
 
     http.Response response = await http.post(url, headers: header, body: body);
