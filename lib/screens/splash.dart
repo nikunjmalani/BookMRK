@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/images.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,8 @@ class _SplashScreenState extends State<SplashScreen> {
       }
     });
   }
+
+
 
   @override
   void initState() {

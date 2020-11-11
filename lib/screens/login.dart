@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:bookmrk/api/home_page_api.dart';
 import 'package:bookmrk/api/login_api.dart';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/login_provider.dart';
@@ -9,6 +12,8 @@ import 'package:bookmrk/screens/register.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:bookmrk/widgets/textfields.dart';
+import 'package:device_info/device_info.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -113,11 +118,45 @@ class _LoginState extends State<Login> {
                                   email: _loginEmailAddress.text,
                                   password: _loginPassword.text);
 
-
-
                               if (response['status'] == 200) {
                                 if (response['data'][0]['is_mobile_verified'] ==
                                     "1") {
+                                  /// get device information....
+                                  DeviceInfoPlugin deviceInfo =
+                                      DeviceInfoPlugin();
+                                  dynamic deviceId;
+                                  dynamic osInfo;
+                                  dynamic modelName;
+                                  dynamic moreInfo;
+
+                                  if (Platform.isAndroid) {
+                                    AndroidDeviceInfo androidInfo =
+                                        await deviceInfo.androidInfo;
+                                    osInfo = Platform.operatingSystem;
+                                    modelName = androidInfo.model;
+                                  } else {
+                                    IosDeviceInfo iosInfo =
+                                        await deviceInfo.iosInfo;
+                                    osInfo = Platform.operatingSystem;
+                                    modelName = iosInfo.model;
+                                  }
+
+                                  /// get firebase token....
+                                  deviceId = await FirebaseMessaging()
+                                      .getToken()
+                                      .toString();
+
+                                  int userId = prefs.read<int>('userId');
+                                  dynamic updateAppResponse =
+                                      await HomePageApi.updateApplicationInfo(
+                                          userId.toString(),
+                                          deviceId.toString(),
+                                          osInfo.toString(),
+                                          modelName.toString(),
+                                          kAppVersion.toString(),
+                                          moreInfo.toString());
+
+                                  print(updateAppResponse);
                                   _loginProvider.isPasswordChecking = false;
                                   prefs.write('isLogin', true);
                                   prefs.write(

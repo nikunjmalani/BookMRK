@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/filter_category_provider.dart';
@@ -14,6 +16,7 @@ import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/screens/splash.dart';
+import 'package:device_info/device_info.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -32,32 +35,8 @@ void main() async {
 }
 
 
-// class MyApp2 extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         body: Center(
-//           child: RaisedButton(
-//             onPressed: (){
-//               FirebaseMessaging().getToken().then((token){
-//                 print(token);
-//               });
-//               FirebaseMessaging().configure(
-//                 onLaunch: (data) async {
-//                   return MyApp();
-//                 }
-//               );
-//             },
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -107,7 +86,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => FilterCategoryProvider(),
         ),
-
       ],
       child: GetMaterialApp(
         title: 'BookMRK',

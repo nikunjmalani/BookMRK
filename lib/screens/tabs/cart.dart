@@ -450,7 +450,7 @@ class _CartState extends State<Cart> {
                                                 .prePaymentAPICall(
                                                 userId
                                                     .toString(),
-                                                appVersion,
+                                                kAppVersion,
                                                 'online',
                                                 'online');
                                             print(response);

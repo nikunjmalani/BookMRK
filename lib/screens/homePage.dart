@@ -45,6 +45,7 @@ import 'package:bookmrk/screens/user/user_edit_address.dart';
 import 'package:bookmrk/screens/user/user_otp.dart';
 import 'package:bookmrk/screens/user/wishlist.dart';
 import 'package:bookmrk/widgets/appBar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -72,6 +73,54 @@ class _HomePageState extends State<HomePage> {
     return _homePageDetails;
   }
 
+  notificationAction() {
+    FirebaseMessaging().configure(onLaunch: (data) async {
+      print('on launch');
+      print(data);
+    },
+
+        onResume: (value) async {
+          print('on resume');
+          print(value['data']['open_page']);
+          print(value);
+          if (value['data']['open_page'] == "user") {
+            print('redirect');
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex =
+              3;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString =
+              "User";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueCartIcon =
+              false;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueBellIcon =
+              false;
+              print('redirect2');
+            } catch (e) {
+              print(e);
+            }
+          }
+        });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    notificationAction();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +138,6 @@ class _HomePageState extends State<HomePage> {
 
     return Consumer<HomeScreenProvider>(
       builder: (context, _homeScreenProvider, child) {
-
         return FutureBuilder(
           future: getHomePageDetails(),
           builder: (context, snapshot) {
@@ -248,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                             _homeScreenProvider.selectedString = "Home";
                             _homeScreenProvider.selectedBottomIndex = 0;
                             _homeScreenProvider.pageController.jumpToPage(0);
-                          }else if (_homeScreenProvider.selectedString ==
+                          } else if (_homeScreenProvider.selectedString ==
                               "Cart") {
                             _homeScreenProvider.selectedString = "Home";
                             _homeScreenProvider.selectedBottomIndex = 0;
@@ -553,10 +601,12 @@ class _HomePageState extends State<HomePage> {
                                           ? ""
                                           : _homeScreenProvider
                                           .selectedString ==
-                                          "ProductInfo" ? "${_homeScreenProvider.selectedTitle}" :
+                                          "ProductInfo" ? "${_homeScreenProvider
+                                          .selectedTitle}" :
                                       _homeScreenProvider.selectedString ==
                                           "SchoolInfo"
-                                          ? "${_homeScreenProvider.selectedTitle}"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "AllSubjects"
@@ -564,7 +614,8 @@ class _HomePageState extends State<HomePage> {
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "CategoryInfo"
-                                          ? "${_homeScreenProvider.selectedTitle}"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "SubCategoryInfo"
@@ -576,15 +627,18 @@ class _HomePageState extends State<HomePage> {
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "FilterS"
-                                          ? "${_homeScreenProvider.selectedTitle}"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "FilterP"
-                                          ? "${_homeScreenProvider.selectedTitle}"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
                                           : _homeScreenProvider
                                           .selectedString ==
                                           "FilterC"
-                                          ? "${_homeScreenProvider.selectedTitle}"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
                                           : 'All Vendors',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -616,7 +670,8 @@ class _HomePageState extends State<HomePage> {
                                       ? "Category"
                                       : _homeScreenProvider.selectedString ==
                                       "SubCategoryInfo"
-                                      ? "SubCategory" : "${_homeScreenProvider.selectedTitle}",
+                                      ? "SubCategory" : "${_homeScreenProvider
+                                      .selectedTitle}",
                                   backButton:
                                   _homeScreenProvider.selectedString ==
                                       "Category"

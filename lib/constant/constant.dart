@@ -18,4 +18,4 @@ final String easeBuzzSalt = "B9RSMMOVG4";
 
 
 /// app version.....
-final String appVersion = "1.0.0";
+final String kAppVersion = "1.0.0";

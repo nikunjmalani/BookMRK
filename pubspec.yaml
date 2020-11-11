@@ -47,6 +47,8 @@ dependencies:
   search_place_autocomplete: ^0.1.1
   firebase_core:
   firebase_messaging:
+  device_info:
+
 
 dev_dependencies:
   flutter_test:
