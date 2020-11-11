@@ -125,6 +125,8 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                       GestureDetector(
                                                         onTap: (){
                                                           _homeScreenProvider.selectedString = "Home";
+
+
                                                         },
                                                         child: Icon(
                                                           Icons.arrow_back_ios,
@@ -140,7 +142,15 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                 ),
                                                 Spacer(),
                                                 GestureDetector(
-                                                  onTap: (){},
+                                                  onTap: (){
+
+                                                    _homeScreenProvider.pageController.jumpToPage(4);
+
+                                                    _homeScreenProvider.selectedString = "Cart";
+                                                    _homeScreenProvider.selectedBottomIndex = 4;
+                                                    _homeScreenProvider.blueCartIcon = true;
+                                                    _homeScreenProvider.blueBellIcon = false;
+                                                  },
                                                   child: Stack(
                                                     alignment: Alignment.topRight,
                                                     children: [
@@ -177,7 +187,16 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                   width: 5,
                                                 ),
                                                 GestureDetector(
-                                                  onTap: (){},
+                                                  onTap: (){
+
+                                                    _homeScreenProvider.pageController.jumpToPage(5);
+
+                                                    _homeScreenProvider.selectedString =
+                                                    "Notifications";
+                                                    _homeScreenProvider.selectedBottomIndex = 5;
+                                                    _homeScreenProvider.blueCartIcon = false;
+                                                    _homeScreenProvider.blueBellIcon = true;
+                                                  },
                                                   child: Stack(
                                                     alignment: Alignment.topRight,
                                                     children: [

@@ -48,6 +48,7 @@ dependencies:
   firebase_core:
   firebase_messaging:
   device_info:
+  cool_alert:
 
 
 dev_dependencies:

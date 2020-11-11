@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final trackOrderModel = trackOrderModelFromJson(jsonString);
+
 import 'dart:convert';
 
 TrackOrderModel trackOrderModelFromJson(String str) => TrackOrderModel.fromJson(json.decode(str));
@@ -42,6 +46,7 @@ class Response {
     this.orderPackedDate,
     this.trackingNumber,
     this.shippingInfo,
+    this.shippingInfoDate,
     this.assignDeliveryUserId,
     this.assignDeliveryUserName,
     this.assignDeliveryUserMobileNo,
@@ -59,6 +64,8 @@ class Response {
     this.deliveredDate,
     this.deliveryUserLatitudes,
     this.deliveryUserLongitude,
+    this.isInvoiceMade,
+    this.invoiceLink,
     this.orderId,
     this.orderNo,
     this.userId,
@@ -73,26 +80,29 @@ class Response {
   DateTime orderConfirmedDate;
   String isManual;
   String orderPacked;
-  DateTime orderPackedDate;
+  String orderPackedDate;
   String trackingNumber;
   String shippingInfo;
+  String shippingInfoDate;
   String assignDeliveryUserId;
   String assignDeliveryUserName;
   String assignDeliveryUserMobileNo;
-  DateTime assignDeliveryUserDate;
+  String assignDeliveryUserDate;
   String orderPickup;
-  DateTime orderPickupDate;
+  String orderPickupDate;
   String inTransit;
-  DateTime inTransitDate;
-  DateTime expectedDateTime;
+  String inTransitDate;
+  String expectedDateTime;
   String outOfDelivery;
-  DateTime outOfDeliveryDate;
-  DateTime deliveryDateTime;
+  String outOfDeliveryDate;
+  String deliveryDateTime;
   String userVerifyCode;
   String delivered;
   String deliveredDate;
   String deliveryUserLatitudes;
   String deliveryUserLongitude;
+  String isInvoiceMade;
+  String invoiceLink;
   String orderId;
   String orderNo;
   String userId;
@@ -107,26 +117,29 @@ class Response {
     orderConfirmedDate: DateTime.parse(json["order_confirmed_date"]),
     isManual: json["is_manual"],
     orderPacked: json["order_packed"],
-    orderPackedDate: DateTime.parse(json["order_packed_date"]),
+    orderPackedDate: json["order_packed_date"],
     trackingNumber: json["tracking_number"],
     shippingInfo: json["shipping_info"],
+    shippingInfoDate: json["shipping_info_date"],
     assignDeliveryUserId: json["assign_delivery_user_id"],
     assignDeliveryUserName: json["assign_delivery_user_name"],
     assignDeliveryUserMobileNo: json["assign_delivery_user_mobile_no"],
-    assignDeliveryUserDate: DateTime.parse(json["assign_delivery_user_date"]),
+    assignDeliveryUserDate: json["assign_delivery_user_date"],
     orderPickup: json["order_pickup"],
-    orderPickupDate: DateTime.parse(json["order_pickup_date"]),
+    orderPickupDate: json["order_pickup_date"],
     inTransit: json["in_transit"],
-    inTransitDate: DateTime.parse(json["in_transit_date"]),
-    expectedDateTime: DateTime.parse(json["expected_date_time"]),
+    inTransitDate: json["in_transit_date"],
+    expectedDateTime: json["expected_date_time"],
     outOfDelivery: json["out_of_delivery"],
-    outOfDeliveryDate: DateTime.parse(json["out_of_delivery_date"]),
-    deliveryDateTime: DateTime.parse(json["delivery_date_time"]),
+    outOfDeliveryDate: json["out_of_delivery_date"],
+    deliveryDateTime: json["delivery_date_time"],
     userVerifyCode: json["user_verify_code"],
     delivered: json["delivered"],
     deliveredDate: json["delivered_date"],
     deliveryUserLatitudes: json["delivery_user_latitudes"],
     deliveryUserLongitude: json["delivery_user_longitude"],
+    isInvoiceMade: json["is_invoice_made"],
+    invoiceLink: json["invoice_link"],
     orderId: json["order_id"],
     orderNo: json["order_no"],
     userId: json["user_id"],
@@ -142,26 +155,29 @@ class Response {
     "order_confirmed_date": orderConfirmedDate.toIso8601String(),
     "is_manual": isManual,
     "order_packed": orderPacked,
-    "order_packed_date": orderPackedDate.toIso8601String(),
+    "order_packed_date": orderPackedDate,
     "tracking_number": trackingNumber,
     "shipping_info": shippingInfo,
+    "shipping_info_date": shippingInfoDate,
     "assign_delivery_user_id": assignDeliveryUserId,
     "assign_delivery_user_name": assignDeliveryUserName,
     "assign_delivery_user_mobile_no": assignDeliveryUserMobileNo,
-    "assign_delivery_user_date": assignDeliveryUserDate.toIso8601String(),
+    "assign_delivery_user_date": assignDeliveryUserDate,
     "order_pickup": orderPickup,
-    "order_pickup_date": orderPickupDate.toIso8601String(),
+    "order_pickup_date": orderPickupDate,
     "in_transit": inTransit,
-    "in_transit_date": inTransitDate.toIso8601String(),
-    "expected_date_time": expectedDateTime.toIso8601String(),
+    "in_transit_date": inTransitDate,
+    "expected_date_time": expectedDateTime,
     "out_of_delivery": outOfDelivery,
-    "out_of_delivery_date": outOfDeliveryDate.toIso8601String(),
-    "delivery_date_time": deliveryDateTime.toIso8601String(),
+    "out_of_delivery_date": outOfDeliveryDate,
+    "delivery_date_time": deliveryDateTime,
     "user_verify_code": userVerifyCode,
     "delivered": delivered,
     "delivered_date": deliveredDate,
     "delivery_user_latitudes": deliveryUserLatitudes,
     "delivery_user_longitude": deliveryUserLongitude,
+    "is_invoice_made": isInvoiceMade,
+    "invoice_link": invoiceLink,
     "order_id": orderId,
     "order_no": orderNo,
     "user_id": userId,

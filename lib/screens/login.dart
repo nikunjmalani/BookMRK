@@ -142,10 +142,12 @@ class _LoginState extends State<Login> {
                                   }
 
                                   /// get firebase token....
-                                  deviceId = await FirebaseMessaging()
-                                      .getToken()
-                                      .toString();
+                                  await FirebaseMessaging()
+                                      .getToken().then((value){
+                                        deviceId = value.toString();
+                                  });
 
+                                  print("deviceId : $deviceId");
                                   int userId = prefs.read<int>('userId');
                                   dynamic updateAppResponse =
                                       await HomePageApi.updateApplicationInfo(

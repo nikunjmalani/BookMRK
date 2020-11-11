@@ -60,12 +60,14 @@ class _MyOrdersState extends State<MyOrders> {
                         if (snapshot.data.response.length != 0) {
                           return Expanded(
                             child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
                               itemBuilder: (context, index) {
                                 List data = [];
                                 snapshot.data.response[index].orderData
                                     .forEach((element) {
                                   element.orderDetail.forEach((b) {
                                     data.add(b);
+                                    print("_____ORDER B : $b}");
                                   });
                                 });
 
@@ -73,6 +75,7 @@ class _MyOrdersState extends State<MyOrders> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
+                                        print("bottom index : ${homeProvider.selectedBottomIndex}");
                                         Provider.of<OrderProvider>(context,
                                                     listen: false)
                                                 .orderId =

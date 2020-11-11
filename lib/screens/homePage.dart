@@ -110,6 +110,92 @@ class _HomePageState extends State<HomePage> {
             } catch (e) {
               print(e);
             }
+          } else if (value['data']['open_page'] == "order_details") {
+            print('order details called');
+            print(value['data']['detail_id']);
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+              Provider
+                  .of<OrderProvider>(context,
+                  listen: false)
+                  .orderId =
+              "${value['data']['detail_id']}";
+
+
+              Provider
+                  .of<HomeScreenProvider>(context,
+                  listen: false)
+                  .selectedString =
+              "OrderDetails";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex =
+              3;
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "cart") {
+            print('cart called');
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(4);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "Cart";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 4;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueCartIcon = true;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueBellIcon = false;
+            } catch (e) {
+              print(e);
+            }
+          }else if (value['data']['open_page'] == "order") {
+            /// redirect to order page....
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 3;
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "MyOrders";
+            } catch (e) {
+              print(e);
+            }
+          }else if (value['data']['open_page'] == "home") {
+            /// redirect to home page from notification....
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(0);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 0;
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "Home";
+            } catch (e) {
+              print(e);
+            }
           }
         });
   }

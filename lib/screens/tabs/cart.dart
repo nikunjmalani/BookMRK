@@ -8,12 +8,14 @@ import 'package:bookmrk/model/cart_details_model.dart';
 import 'package:bookmrk/model/no_data_cart_model.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/order_provider.dart';
 import 'package:bookmrk/provider/product_order_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
 import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -422,10 +424,10 @@ class _CartState extends State<Cart> {
                                                                 'status'] ==
                                                             200) {
                                                           /// method channel call for payment......
-
                                                           String txnid =
                                                               "${response['response'][0]['order_no']}"; //This txnid should be unique every time.
-                                                          String amount = "1.0";
+                                                          String amount = "${double.parse("${response['response'][0]['order_total_cost']}").roundToDouble()}";
+                                                          // String amount = "1.0";
                                                           String productinfo =
                                                               "Books";
                                                           String firstname =
@@ -460,7 +462,7 @@ class _CartState extends State<Cart> {
                                                           String hash =
                                                               "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
                                                           String pay_mode =
-                                                              "production";
+                                                              "test";
                                                           String unique_id =
                                                               "11345";
 
@@ -510,6 +512,14 @@ class _CartState extends State<Cart> {
                                                                 .showSnackBar(
                                                                     getSnackBar(
                                                                         'Transaction Failed !'));
+                                                          }else if (payment_response[
+                                                          'result'] ==
+                                                              "user_cancelled") {
+                                                            print('calleds');
+                                                            Scaffold.of(context)
+                                                                .showSnackBar(
+                                                                getSnackBar(
+                                                                    'Transaction Failed !'));
                                                           }
 
                                                           /// call final payment status api....
@@ -519,24 +529,57 @@ class _CartState extends State<Cart> {
                                                                   userId
                                                                       .toString(),
                                                                   "${response['response'][0]['order_total_cost']}",
-                                                                  "${response['response'][0]['10401605083114']}",
+                                                                  "${response['response'][0]['order_no']}",
                                                                   payment_response[
                                                                           'payment_response']
                                                                       [
                                                                       'status'],
                                                                   payment_response);
 
-                                                          print(finalPaymentResponse);
+                                                          print("from api : ${finalPaymentResponse}");
+
+                                                          if(finalPaymentResponse['status'] == 200){
+                                                            /// show final payment success dialog...
+                                                            CoolAlert.show(
+                                                              context: context,
+                                                              type: CoolAlertType.success,
+                                                              text: "Your transaction was successful !",
+                                                              confirmBtnColor: colorPalette.navyBlue,
+                                                              title: "Payment Done.",
+                                                              animType: CoolAlertAnimType.scale,
+                                                            );
+
+                                                            try {
+                                                              Provider
+                                                                  .of<HomeScreenProvider>(context, listen: false)
+                                                                  .pageController
+                                                                  .jumpToPage(3);
+                                                              Provider
+                                                                  .of<OrderProvider>(context,
+                                                                  listen: false)
+                                                                  .orderId =
+                                                              "${response['response'][0]['order_no']}";
+
+
+                                                              Provider
+                                                                  .of<HomeScreenProvider>(context,
+                                                                  listen: false)
+                                                                  .selectedString =
+                                                              "OrderDetails";
+                                                              Provider
+                                                                  .of<HomeScreenProvider>(context, listen: false)
+                                                                  .selectedBottomIndex =
+                                                              3;
+                                                            } catch (e) {
+                                                              print(e);
+                                                            }
+
+                                                          }
+
+
                                                         }
 
-                                                        // print(response);
-                                                        // print("order total cost : ${response['response'][0]['order_total_cost']}");
-                                                        // print("order no : ${response['response'][0]['order_no']}");
-                                                        // dynamic paymentResponse = await ProductAPI
-                                                        //     .finalPaymentStatus(
-                                                        //     userId.toString(), orderCost,
-                                                        //     orderNo, orderStatus,
-                                                        //     paymentResponse)
+
                                                       }
                                                     : null,
                                               )

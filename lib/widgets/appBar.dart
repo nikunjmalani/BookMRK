@@ -55,7 +55,7 @@ Widget CustomAppBar(BuildContext context,
                 ),
                Consumer<HomeScreenProvider>(
                    builder: (_, _homeScreenProvider, child) {
-                 return CircleAvatar(
+                 return _homeScreenProvider.totalNumberOfOrdersInCart == 0 ? SizedBox() : CircleAvatar(
                    radius: 10,
                    child: Text(
                      '${_homeScreenProvider.totalNumberOfOrdersInCart}',
@@ -94,7 +94,7 @@ Widget CustomAppBar(BuildContext context,
                 ),
                 Consumer<HomeScreenProvider>(
                     builder: (_, _homeScreenProvider, child) {
-                  return CircleAvatar(
+                  return _homeScreenProvider.totalNewNotifications == 0 ? SizedBox() :CircleAvatar(
                     radius: 10,
                     child: Text(
                       '${_homeScreenProvider.totalNewNotifications}',

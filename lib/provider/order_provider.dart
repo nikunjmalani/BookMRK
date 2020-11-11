@@ -31,4 +31,20 @@ class OrderProvider extends ChangeNotifier {
     _userDeliveryAddress = value;
     notifyListeners();
   }
+
+  /// expand view....
+  List<bool> _orderTrackExpandList = [];
+
+  List<bool> get orderTrackExpandList => _orderTrackExpandList;
+
+  set orderTrackExpandList(List<bool> value) {
+    _orderTrackExpandList = value;
+    notifyListeners();
+  }
+
+  void orderTrackExpandListSingleUpdate(int index, bool value){
+    _orderTrackExpandList[index] = value;
+    notifyListeners();
+  }
+
 }
