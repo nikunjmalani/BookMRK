@@ -117,14 +117,7 @@ class _SearchState extends State<Search> {
                                                     Container(
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: imageProvider,
-                                                    colorFilter:
-                                                        ColorFilter.mode(
-                                                            Colors.red
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            BlendMode
-                                                                .colorBurn)),
+                                                    image: imageProvider,),
                                               ),
                                             ),
                                             placeholder: (context, url) => Center(

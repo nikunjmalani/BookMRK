@@ -39,6 +39,66 @@ Widget OtpBox(context, TextEditingController controller, FocusNode fn,
   );
 }
 
+Widget ImageBoxV({height, width, image, title}) {
+  ColorPalette colorPalette = ColorPalette();
+  return Container(
+    alignment: Alignment.center,
+    child: Stack(
+      children: [
+        Container(
+          alignment: Alignment.bottomCenter,
+          margin: EdgeInsets.only(left: 10, top: 15),
+          height: height / 8,
+          width: height / 5.5,
+          decoration: BoxDecoration(
+            border: Border.all(color: Color(0xffcfcfcf)),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15.0),
+              // bottomLeft: Radius.circular(5),
+              // bottomRight: Radius.circular(5.0)
+            ),
+          ),
+          padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 20),
+          child: Image(
+            image: image != null && image != ""
+                ? NetworkImage(image)
+                : AssetImage('assets/images/logo.png'),
+            fit: BoxFit.contain,
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(left: 10, top: 15),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(25)),
+              color: colorPalette.orange,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: 5.0,
+            ),
+            height: 40,
+            width: height / 5.5,
+            child: Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                backgroundColor: colorPalette.orange,
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: const Color(0xffffffff),
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        )
+      ],
+    ),
+  );
+}
+
 Widget ImageBox({height, width, image, title}) {
   ColorPalette colorPalette = ColorPalette();
   return Container(
@@ -55,8 +115,9 @@ Widget ImageBox({height, width, image, title}) {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(15),
                 topRight: Radius.circular(15.0),
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15.0)),
+                // bottomLeft: Radius.circular(5),
+                // bottomRight: Radius.circular(5.0)
+            ),
           ),
           padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 20),
           child: Image(

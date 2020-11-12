@@ -262,8 +262,9 @@ class _CategoryInfoState extends State<CategoryInfo> {
                         _categoryProvider.selectedSubCategory == null) {
                       return Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 70),
                           child: GridView.builder(
+                            physics: BouncingScrollPhysics(),
                             gridDelegate:
                                 SliverGridDelegateWithMaxCrossAxisExtent(
                                     maxCrossAxisExtent: 300,

@@ -803,86 +803,97 @@ Widget LocationDialog(
                 SimpleTextfield("Pin Code",
                     controller: pinCodeController,
                     keyboardType: TextInputType.number),
-                SizedBox(height: 20.0),
+                // SizedBox(height: 20.0),
                 FutureBuilder(
                     future: getAllCountry(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
+                        int index1 = 0;
+                        snapshot.data.response.forEach((e){
+                          if((e.name.toString().toLowerCase()) == "india"){
+                            Provider.of<SchoolProvider>(context, listen: false).selectedCountryIndexForSchool = index1;
+
+                            Provider.of<SchoolProvider>(context, listen: false).selectedCountryIdForSchool =
+                                int.parse(snapshot.data
+                                    .response[index1].countryId);
+                          }
+                          index1++;
+                        });
                         return Container(
-                          height: 60.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13.0),
-                            border: Border.all(
-                              color: Colors.black.withOpacity(0.4),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: DropdownButton(
-                            onChanged: (v){},
-                            underline: Container(),
-                            isExpanded: true,
-                            style: TextStyle(
-                              color: colorPalette.lightGrey,
-                              fontSize: 16,
-                            ),
-                            value: snapshot
-                                .data
-                                .response[_schoolProvider
-                                    .selectedCountryIndexForSchool]
-                                .name,
-                            items: List.generate(
-                                snapshot.data.response.length,
-                                (index) => DropdownMenuItem(
-                                      child: Text(
-                                        '${snapshot.data.response[index].name}',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      value:
-                                          '${snapshot.data.response[index].name}',
-                                      onTap: () {
-                                        _schoolProvider
-                                                .selectedCountryIndexForSchool =
-                                            index;
-                                        _schoolProvider
-                                                .selectedCountryIdForSchool =
-                                            int.parse(snapshot.data
-                                                .response[index].countryId);
-                                      },
-                                    )),
-                          ),
+                          // height: 60.0,
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(13.0),
+                          //   border: Border.all(
+                          //     color: Colors.black.withOpacity(0.4),
+                          //   ),
+                          // ),
+                          // alignment: Alignment.center,
+                          // padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          // child: DropdownButton(
+                          //   onChanged: (v){},
+                          //   underline: Container(),
+                          //   isExpanded: true,
+                          //   style: TextStyle(
+                          //     color: colorPalette.lightGrey,
+                          //     fontSize: 16,
+                          //   ),
+                          //   value: snapshot
+                          //       .data
+                          //       .response[_schoolProvider
+                          //           .selectedCountryIndexForSchool]
+                          //       .name,
+                          //   items: List.generate(
+                          //       snapshot.data.response.length,
+                          //       (index) => DropdownMenuItem(
+                          //             child: Text(
+                          //               '${snapshot.data.response[index].name}',
+                          //               overflow: TextOverflow.ellipsis,
+                          //               style: TextStyle(
+                          //                 color: Colors.black,
+                          //                 fontSize: 16,
+                          //               ),
+                          //             ),
+                          //             value:
+                          //                 '${snapshot.data.response[index].name}',
+                          //             onTap: () {
+                          //               _schoolProvider
+                          //                       .selectedCountryIndexForSchool =
+                          //                   index;
+                          //               _schoolProvider
+                          //                       .selectedCountryIdForSchool =
+                          //                   int.parse(snapshot.data
+                          //                       .response[index].countryId);
+                          //             },
+                          //           )),
+                          // ),
                         );
                       } else {
                         return Container(
-                          height: 60.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13.0),
-                            border: Border.all(
-                              color: Colors.black.withOpacity(0.4),
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: DropdownButton(
-                            underline: Container(),
-                            isExpanded: true,
-                            onChanged: (value) {},
-                            value: 'loading',
-                            style: TextStyle(
-                              color: colorPalette.lightGrey,
-                              fontSize: 16,
-                            ),
-                            items: [
-                              DropdownMenuItem(
-                                child: Text('Loading'),
-                                value: 'loading',
-                              )
-                            ],
-                          ),
+                          // height: 60.0,
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(13.0),
+                          //   border: Border.all(
+                          //     color: Colors.black.withOpacity(0.4),
+                          //   ),
+                          // ),
+                          // alignment: Alignment.center,
+                          // padding: EdgeInsets.symmetric(horizontal: 10.0),
+                          // child: DropdownButton(
+                          //   underline: Container(),
+                          //   isExpanded: true,
+                          //   onChanged: (value) {},
+                          //   value: 'loading',
+                          //   style: TextStyle(
+                          //     color: colorPalette.lightGrey,
+                          //     fontSize: 16,
+                          //   ),
+                          //   items: [
+                          //     DropdownMenuItem(
+                          //       child: Text('Loading'),
+                          //       value: 'loading',
+                          //     )
+                          //   ],
+                          // ),
                         );
                       }
                     }),

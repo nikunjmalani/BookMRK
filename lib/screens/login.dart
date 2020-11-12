@@ -127,7 +127,7 @@ class _LoginState extends State<Login> {
                                   dynamic deviceId;
                                   dynamic osInfo;
                                   dynamic modelName;
-                                  dynamic moreInfo;
+                                  dynamic moreInfo = {"date":"${DateTime.now()}"};
 
                                   if (Platform.isAndroid) {
                                     AndroidDeviceInfo androidInfo =

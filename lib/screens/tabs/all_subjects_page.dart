@@ -59,9 +59,7 @@ class _AllSubjectsState extends State<AllSubjects> {
                                 borderRadius: BorderRadius.circular(10.0),
                                 image: DecorationImage(
                                     image: imageProvider,
-                                    fit: BoxFit.fill,
-                                    colorFilter: ColorFilter.mode(
-                                        Colors.red, BlendMode.colorBurn)),
+                                    fit: BoxFit.fill,),
                               ),
                             ),
                             placeholder: (context, url) => Container(

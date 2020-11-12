@@ -49,7 +49,7 @@ dependencies:
   firebase_messaging:
   device_info:
   cool_alert:
-
+  share:
 
 dev_dependencies:
   flutter_test:

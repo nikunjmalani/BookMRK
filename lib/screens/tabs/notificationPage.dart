@@ -85,10 +85,9 @@ class _NotificationPageState extends State<NotificationPage> {
                                 physics: BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   return Container(
-                                    padding: EdgeInsets.only(left: 7),
+                                    padding: EdgeInsets.only(left: 7, top: 10, bottom: 10),
                                     margin: EdgeInsets.only(
                                         top: 15, left: 15, right: 15),
-                                    height: height / 12,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       border: Border.all(
@@ -119,7 +118,6 @@ class _NotificationPageState extends State<NotificationPage> {
                                               width: width / 1.4,
                                               child: Text(
                                                 '${snapshot.data.response[index].msg}',
-                                                overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                   fontFamily: 'Roboto',
                                                   fontSize: 14,
@@ -129,6 +127,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                                 textAlign: TextAlign.left,
                                               ),
                                             ),
+                                            SizedBox(height: 5.0),
                                             Text(
                                               '${snapshot.data.response[index].datetime}',
                                               style: TextStyle(

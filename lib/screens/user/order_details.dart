@@ -193,7 +193,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                             Row(
                                               children: [
                                                 Image.asset(
-                                                  "assets/images/Sharpner.png",
+                                                  "assets/images/preload.png",
                                                   height: width / 5.5,
                                                 ),
                                                 SizedBox(
@@ -599,7 +599,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 Row(
                                                   children: [
                                                     Image.asset(
-                                                      "assets/images/Sharpner.png",
+                                                      "assets/images/preload.png",
                                                       height: width / 5.5,
                                                     ),
                                                     SizedBox(

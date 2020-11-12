@@ -63,6 +63,7 @@ class Response {
     this.productStockStatus,
     this.productImgs,
     this.productInUserWishlist,
+    this.productShareLink,
   });
 
   String productId;
@@ -90,6 +91,7 @@ class Response {
   String productStockStatus;
   List<ProductImg> productImgs;
   String productInUserWishlist;
+  String productShareLink;
 
   factory Response.fromJson(Map<String, dynamic> json) => Response(
         productId: json["product_id"],
@@ -121,6 +123,7 @@ class Response {
         productImgs: List<ProductImg>.from(
             json["product_imgs"].map((x) => ProductImg.fromJson(x))),
         productInUserWishlist: json["product_in_user_wishlist"],
+      productShareLink : json["product_share_link"]
       );
 
   Map<String, dynamic> toJson() => {
@@ -150,6 +153,7 @@ class Response {
         "product_stock_status": productStockStatus,
         "product_imgs": List<dynamic>.from(productImgs.map((x) => x.toJson())),
         "product_in_user_wishlist": productInUserWishlist,
+        "product_share_link":productShareLink
       };
 }
 

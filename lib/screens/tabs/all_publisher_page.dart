@@ -31,7 +31,7 @@ class _AllPublisherState extends State<AllPublisher> {
                 physics: BouncingScrollPhysics(),
                 itemCount: widget.publisher.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 2.3),
+                    crossAxisCount: 2, childAspectRatio: 1.2),
                 itemBuilder: (context, index) {
                   return Consumer<CategoryProvider>(
                       builder: (_, _categoryProvider, child) {
@@ -60,8 +60,7 @@ class _AllPublisherState extends State<AllPublisher> {
                                 image: DecorationImage(
                                     image: imageProvider,
                                     fit: BoxFit.fill,
-                                    colorFilter: ColorFilter.mode(
-                                        Colors.red, BlendMode.colorBurn)),
+                                ),
                               ),
                             ),
                             placeholder: (context, url) => Container(
@@ -95,7 +94,7 @@ class _AllPublisherState extends State<AllPublisher> {
                             margin: EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.black.withOpacity(0.5),
+                              color: Colors.black.withOpacity(0.7),
                             ),
                             child: Text(
                               '${widget.publisher[index].publisherName}',

@@ -19,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class ProductInfo extends StatefulWidget {
   final String selectedProductSlug;
@@ -40,15 +41,15 @@ class _ProductInfoState extends State<ProductInfo> {
   /// TextFields for student name and student roll number...
   TextEditingController _studentNameController = TextEditingController();
   TextEditingController _studentRollNumberController = TextEditingController();
-  TextEditingController _productQuantityController = TextEditingController(text: "1");
+  TextEditingController _productQuantityController =
+      TextEditingController(text: "1");
 
   /// form key...
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   /// get the product details...
   Future getProductDetails() async {
-
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await ProductAPI.getProductDetails(
         widget.selectedProductSlug, userId.toString());
 
@@ -130,6 +131,8 @@ class _ProductInfoState extends State<ProductInfo> {
                             child: Column(
                               children: [
                                 _productCarasoul(context,
+                                    "${snapshot.data.response[0].productName}",
+                                    url: snapshot.data.response[0].productShareLink.toString(),
                                     isInwishlist: snapshot.data.response[0]
                                                 .productInUserWishlist ==
                                             "1"
@@ -553,34 +556,43 @@ class _ProductInfoState extends State<ProductInfo> {
                                       )
                                     : SizedBox(height: 20.0),
                                 SizedBox(height: 10.0),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  child: TextFormField(
-                                    controller: _productQuantityController,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        borderSide: BorderSide(
-                                            color: colorPalette.navyBlue,
-                                            width: 1.0),
+                                Container(
+                                  height: 70.0,
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0, vertical: 5),
+                                        child: TextFormField(
+                                          controller: _productQuantityController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(10.0),
+                                              borderSide: BorderSide(
+                                                  color: colorPalette.navyBlue,
+                                                  width: 1.0),
+                                            ),
+                                            labelText: "Product Quantity",
+                                            labelStyle: TextStyle(
+                                                color: colorPalette.navyBlue),
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return "Amount must contains only digits !";
+                                            }
+                                            if (!(double.tryParse(value) != null)) {
+                                              return "Amount must contains only digits !";
+                                            }
+                                            return null;
+                                          },
+                                        ),
                                       ),
-                                      labelText: "Product Quantity",
-                                      labelStyle: TextStyle(
-                                          color: colorPalette.navyBlue),
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return "Amount must contains only digits !";
-                                      }
-                                      if (!(double.tryParse(value) != null)) {
-                                        return "Amount must contains only digits !";
-                                      }
-                                      return null;
-                                    },
-                                    autovalidate: true,
+                                      "${snapshot.data.response[0].additionalSet}" == "NO" ? Container() : Container(
+                                        color: Colors.transparent,
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 SizedBox(height: 20.0),
@@ -754,7 +766,10 @@ class _ProductInfoState extends State<ProductInfo> {
                                                     _productOrderProvider
                                                             .isAddToCartInProgress =
                                                         false;
-                                                    Provider.of<HomeScreenProvider>(context, listen: false).totalNumberOfOrdersInCart += 1;
+                                                    Provider.of<HomeScreenProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .totalNumberOfOrdersInCart += 1;
                                                     Scaffold.of(context)
                                                         .showSnackBar(getSnackBar(
                                                             'Product added To cart !'));
@@ -794,11 +809,9 @@ class _ProductInfoState extends State<ProductInfo> {
                                               .isAddToCartInProgress = true;
 
                                           /// check if quantity is entered or not...
-                                          if (_productQuantityController
-                                              .text !=
-                                              "" &&
-                                              _productQuantityController
-                                                  .text !=
+                                          if (_productQuantityController.text !=
+                                                  "" &&
+                                              _productQuantityController.text !=
                                                   null) {
                                             dynamic response;
                                             dynamic variationInfo;
@@ -806,36 +819,36 @@ class _ProductInfoState extends State<ProductInfo> {
 
                                             /// set userId ....
                                             int userId =
-                                            prefs.read<int>('userId');
+                                                prefs.read<int>('userId');
 
                                             /// set productId ....
                                             String productId = snapshot
                                                 .data.response[0].productId;
 
                                             if (snapshot.data.response[0]
-                                                .variation ==
+                                                    .variation ==
                                                 "YES") {
                                               /// structure for two variations ....
                                               List twoVariationsStructure = [
                                                 {
                                                   "variations_data_id":
-                                                  "${_productOrderProvider.selectedVariations1Id}",
+                                                      "${_productOrderProvider.selectedVariations1Id}",
                                                   "variations_options_name":
-                                                  "${_productOrderProvider.selectedVariation1OptionName}",
+                                                      "${_productOrderProvider.selectedVariation1OptionName}",
                                                   "variation_name":
-                                                  "${_productOrderProvider.selectedVariation1Name}",
+                                                      "${_productOrderProvider.selectedVariation1Name}",
                                                   "var_img":
-                                                  "${_productOrderProvider.selectedVariation1Img}",
+                                                      "${_productOrderProvider.selectedVariation1Img}",
                                                 },
                                                 {
                                                   "variations_data_id":
-                                                  "${_productOrderProvider.selectedVariation2Id}",
+                                                      "${_productOrderProvider.selectedVariation2Id}",
                                                   "variations_options_name":
-                                                  "${_productOrderProvider.selectedVariation2Option}",
+                                                      "${_productOrderProvider.selectedVariation2Option}",
                                                   "variation_name":
-                                                  "${_productOrderProvider.selectedVariation2Name}",
+                                                      "${_productOrderProvider.selectedVariation2Name}",
                                                   "var_img":
-                                                  "${_productOrderProvider.selectedVariation2Img}",
+                                                      "${_productOrderProvider.selectedVariation2Img}",
                                                 }
                                               ];
 
@@ -843,14 +856,14 @@ class _ProductInfoState extends State<ProductInfo> {
                                               List oneVariationStructure = [
                                                 {
                                                   "variations_data_id":
-                                                  _productOrderProvider
-                                                      .selectedVariations1Id,
+                                                      _productOrderProvider
+                                                          .selectedVariations1Id,
                                                   "variations_options_name":
-                                                  "${_productOrderProvider.selectedVariation1OptionName}",
+                                                      "${_productOrderProvider.selectedVariation1OptionName}",
                                                   "variation_name":
-                                                  "${_productOrderProvider.selectedVariation1Name}",
+                                                      "${_productOrderProvider.selectedVariation1Name}",
                                                   "var_img":
-                                                  "${_productOrderProvider.selectedVariation1Img}",
+                                                      "${_productOrderProvider.selectedVariation1Img}",
                                                 }
                                               ];
 
@@ -858,11 +871,11 @@ class _ProductInfoState extends State<ProductInfo> {
                                               /// check when the variations are multiple or single ....
 
                                               if (snapshot
-                                                  .data
-                                                  .response[0]
-                                                  .variationsDetails[0]
-                                                  .varValue
-                                                  .length >
+                                                      .data
+                                                      .response[0]
+                                                      .variationsDetails[0]
+                                                      .varValue
+                                                      .length >
                                                   1) {
                                                 /// code for two variations...
                                                 response = await ProductAPI
@@ -874,8 +887,8 @@ class _ProductInfoState extends State<ProductInfo> {
                                                 variationInfo =
                                                     twoVariationsStructure;
 
-                                                pvsmId = response['response']
-                                                [0]['pvsm_id']
+                                                pvsmId = response['response'][0]
+                                                        ['pvsm_id']
                                                     .toString();
 
                                                 /// code for two variations end...
@@ -883,12 +896,12 @@ class _ProductInfoState extends State<ProductInfo> {
                                                 /// code for single variation...
                                                 response = await ProductAPI
                                                     .getVariationDetails(
-                                                    userId.toString(),
-                                                    productId,
-                                                    jsonEncode(
-                                                        oneVariationStructure));
-                                                pvsmId = response['response']
-                                                [0]['pvsm_id']
+                                                        userId.toString(),
+                                                        productId,
+                                                        jsonEncode(
+                                                            oneVariationStructure));
+                                                pvsmId = response['response'][0]
+                                                        ['pvsm_id']
                                                     .toString();
                                                 variationInfo =
                                                     oneVariationStructure;
@@ -906,11 +919,11 @@ class _ProductInfoState extends State<ProductInfo> {
                                             if (response['status'] == 200) {
                                               /// check if the product type is set or not....
                                               if (snapshot.data.response[0]
-                                                  .productType ==
+                                                      .productType ==
                                                   "Set") {
                                                 _productOrderProvider
-                                                    .isAddToCartInProgress =
-                                                false;
+                                                        .isAddToCartInProgress =
+                                                    false;
 
                                                 showDialog(
                                                     context: context,
@@ -918,24 +931,24 @@ class _ProductInfoState extends State<ProductInfo> {
                                                       return _addToCartDialog(
                                                         context,
                                                         studentNameController:
-                                                        _studentNameController,
+                                                            _studentNameController,
                                                         studentRollNumberController:
-                                                        _studentRollNumberController,
+                                                            _studentRollNumberController,
                                                         productQuantityController:
-                                                        _productQuantityController,
+                                                            _productQuantityController,
                                                         userId:
-                                                        userId.toString(),
+                                                            userId.toString(),
                                                         productId: productId
                                                             .toString(),
                                                         pvsmId: pvsmId,
                                                         variationInfo:
-                                                        variationInfo,
+                                                            variationInfo,
                                                       );
                                                     });
                                               } else {
                                                 dynamic response2 =
-                                                await CartAPI
-                                                    .addProductToCart(
+                                                    await CartAPI
+                                                        .addProductToCart(
                                                   userId.toString(),
                                                   productId,
                                                   int.parse(
@@ -951,36 +964,48 @@ class _ProductInfoState extends State<ProductInfo> {
                                                 if (response2['status'] ==
                                                     200) {
                                                   _productOrderProvider
-                                                      .isAddToCartInProgress =
-                                                  false;
-                                                  Provider.of<HomeScreenProvider>(context, listen: false).totalNumberOfOrdersInCart += 1;
+                                                          .isAddToCartInProgress =
+                                                      false;
+                                                  Provider.of<HomeScreenProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .totalNumberOfOrdersInCart += 1;
                                                   // Scaffold.of(context)
                                                   //     .showSnackBar(getSnackBar(
                                                   //     'Product added To cart !'));
-                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedString = "Cart";
-                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedBottomIndex = 4;
-                                                  Provider.of<HomeScreenProvider>(context, listen: false).pageController.jumpToPage(4);
+                                                  Provider.of<HomeScreenProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .selectedString = "Cart";
+                                                  Provider.of<HomeScreenProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .selectedBottomIndex = 4;
+                                                  Provider.of<HomeScreenProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .pageController
+                                                      .jumpToPage(4);
                                                 } else {
                                                   _productOrderProvider
-                                                      .isAddToCartInProgress =
-                                                  false;
+                                                          .isAddToCartInProgress =
+                                                      false;
                                                   Scaffold.of(context)
                                                       .showSnackBar(getSnackBar(
-                                                      '${response2['message']}'));
+                                                          '${response2['message']}'));
                                                 }
                                               }
                                             } else {
                                               _productOrderProvider
-                                                  .isAddToCartInProgress =
-                                              false;
-                                              Scaffold.of(context)
-                                                  .showSnackBar(getSnackBar(
-                                                  "${response['message']}"));
+                                                      .isAddToCartInProgress =
+                                                  false;
+                                              Scaffold.of(context).showSnackBar(
+                                                  getSnackBar(
+                                                      "${response['message']}"));
                                             }
                                           } else {
                                             _productOrderProvider
-                                                .isAddToCartInProgress =
-                                            false;
+                                                .isAddToCartInProgress = false;
 
                                             Scaffold.of(context).showSnackBar(
                                                 getSnackBar(
@@ -1027,12 +1052,11 @@ class _ProductInfoState extends State<ProductInfo> {
   }
 
   checkOut() async {
-
     MethodChannel _channel = MethodChannel('easebuzz');
     String txnid = "TRX123"; //This txnid should be unique every time.
     String amount = "2.0";
-    String productinfo= "test info";
-    String firstname= "test user";
+    String productinfo = "test info";
+    String firstname = "test user";
     String email = "testing@gamil.com";
     String phone = "1234567890";
     String s_url = "";
@@ -1043,25 +1067,44 @@ class _ProductInfoState extends State<ProductInfo> {
     String udf3 = "";
     String udf4 = "";
     String udf5 = "";
-    String address1="test address one";
-    String address2="test address two";
-    String city="";
-    String state="";
-    String country="";
-    String zipcode="";
-    String hash="${sha256.convert(utf8.encode("key|txnid|amount|productinfo|firstname|email_id|udf1|udf2|udf3|udf4|udf5||||||salt"))}";
-    String pay_mode="production";
-    String unique_id="11345";
-    Object parameters = {"txnid":txnid,"amount":amount, "productinfo":productinfo,
-      "firstname":firstname,"email":email,"phone":phone,
-      "s_url":s_url,"f_url":f_url,"key":key,
-      "udf1":udf1,"udf2":udf2,"udf3":udf3,"udf4":udf4,"udf5":udf5,
-      "address1":address1,"address2":address2,"city":city,
-      "state":state,"country":country,"zipcode":zipcode,"hash":hash,
-      "pay_mode":pay_mode,"unique_id":unique_id};
+    String address1 = "test address one";
+    String address2 = "test address two";
+    String city = "";
+    String state = "";
+    String country = "";
+    String zipcode = "";
+    String hash =
+        "${sha256.convert(utf8.encode("key|txnid|amount|productinfo|firstname|email_id|udf1|udf2|udf3|udf4|udf5||||||salt"))}";
+    String pay_mode = "production";
+    String unique_id = "11345";
+    Object parameters = {
+      "txnid": txnid,
+      "amount": amount,
+      "productinfo": productinfo,
+      "firstname": firstname,
+      "email": email,
+      "phone": phone,
+      "s_url": s_url,
+      "f_url": f_url,
+      "key": key,
+      "udf1": udf1,
+      "udf2": udf2,
+      "udf3": udf3,
+      "udf4": udf4,
+      "udf5": udf5,
+      "address1": address1,
+      "address2": address2,
+      "city": city,
+      "state": state,
+      "country": country,
+      "zipcode": zipcode,
+      "hash": hash,
+      "pay_mode": pay_mode,
+      "unique_id": unique_id
+    };
 
-    final payment_response = await _channel.invokeMethod("payWithEasebuzz", parameters);
-
+    final payment_response =
+        await _channel.invokeMethod("payWithEasebuzz", parameters);
   }
 }
 
@@ -1208,8 +1251,9 @@ Widget _addToCartDialog(
   );
 }
 
-Widget _productCarasoul(BuildContext context,
+Widget _productCarasoul(BuildContext context, String pName,
     {height,
+      String url,
     pageController,
     onChange,
     currentPage,
@@ -1283,8 +1327,7 @@ Widget _productCarasoul(BuildContext context,
             Consumer<HomeScreenProvider>(
               builder: (_, _homeScreenProvider, child) => IconButton(
                 onPressed: () async {
-
-                  int userId =  prefs.read<int>('userId');
+                  int userId = prefs.read<int>('userId');
                   dynamic response = await WishListAPI.addProductInWishList(
                       userId.toString(), productId);
                 },
@@ -1296,7 +1339,9 @@ Widget _productCarasoul(BuildContext context,
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Share.share('Product Name : $pName\n$url', subject: 'Share Product');
+              },
               icon: Icon(
                 Icons.share,
                 color: colorPalette.navyBlue,

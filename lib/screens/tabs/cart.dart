@@ -462,7 +462,7 @@ class _CartState extends State<Cart> {
                                                           String hash =
                                                               "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
                                                           String pay_mode =
-                                                              "test";
+                                                              "production";
                                                           String unique_id =
                                                               "11345";
 

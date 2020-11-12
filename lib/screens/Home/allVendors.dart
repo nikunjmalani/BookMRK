@@ -76,7 +76,7 @@ class _AllVendorsState extends State<AllVendors> {
                                             listen: false)
                                         .selectedString = "VendorInfo";
                                   },
-                                  child: ImageBox(
+                                  child: ImageBoxV(
                                       height: height,
                                       width: width,
                                       image:
@@ -105,7 +105,7 @@ class _AllVendorsState extends State<AllVendors> {
                                             listen: false)
                                         .selectedString = "VendorInfo";
                                   },
-                                  child: ImageBox(
+                                  child: ImageBoxV(
                                       height: height,
                                       width: width,
                                       image:
