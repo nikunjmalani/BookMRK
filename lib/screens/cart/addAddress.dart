@@ -41,6 +41,12 @@ class _AddAddressState extends State<AddAddress> {
   Future getAllCountry() async {
     dynamic response = await LocationNameAPI.getAllCountryName();
     CountryModel _countryModel = CountryModel.fromJson(response);
+    _countryModel.response.forEach((country) {
+      if(country.name.toLowerCase() == "india"){
+        Provider.of<LocationProvider>(context, listen: false).selectedCountryName = country.name;
+        Provider.of<LocationProvider>(context,listen: false).selectedCountryId = int.parse(country.countryId);
+      }
+    });
     return _countryModel;
   }
 

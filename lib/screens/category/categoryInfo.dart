@@ -115,37 +115,40 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                        height: height / 12,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black.withOpacity(0.5),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              '${snapshot.data.response[0].category[0].categoryName}',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 20,
-                                color: const Color(0xffffffff),
+                      Consumer<CategoryProvider>(
+                        builder: (_, _categoryProvider, child) => Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 20),
+                          height: height / 12,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${_categoryProvider.selectedCategoryNameToShow == "" || _categoryProvider.selectedCategoryNameToShow == null ? snapshot.data.response[0].category[0].categoryName : _categoryProvider.selectedCategoryNameToShow}',
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  color: const Color(0xffffffff),
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
-                            ),
-                            Text(
-                              '${snapshot.data.response[0].category[0].allProductsCount ?? "0"} Products',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 20,
-                                color: const Color(0xffffffff),
+                              Text(
+                                '${_categoryProvider.totalCategoryProduct} Products',
+                                // '${snapshot.data.response[0].category[0].allProductsCount ?? "0"} Products',
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  color: const Color(0xffffffff),
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -187,6 +190,8 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                           onTap: () {
                                             _categoryProvider
                                                 .selectedSubCategory = "";
+                                            _categoryProvider
+                                                .selectedCategoryNameToShow = "";
                                           },
                                           child: Text(
                                             'All',
@@ -218,6 +223,9 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                             _categoryProvider
                                                     .selectedSubCategory =
                                                 "${snapshot.data.response[0].subCategory[index].catSlug}";
+                                            _categoryProvider
+                                                    .selectedCategoryNameToShow =
+                                                "${snapshot.data.response[0].subCategory[index].categoryName}";
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -260,9 +268,15 @@ class _CategoryInfoState extends State<CategoryInfo> {
                       builder: (_, _categoryProvider, child) {
                     if (_categoryProvider.selectedSubCategory == "" ||
                         _categoryProvider.selectedSubCategory == null) {
+                      Provider.of<CategoryProvider>(context,
+                          listen: false)
+                          .totalCategoryProduct =
+                          int.parse(snapshot.data.response[0].category[0]
+                              .allProductsCount);
                       return Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 70),
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 10, bottom: 70),
                           child: GridView.builder(
                             physics: BouncingScrollPhysics(),
                             gridDelegate:
@@ -318,6 +332,17 @@ class _CategoryInfoState extends State<CategoryInfo> {
                               _categoryProvider.selectedSubCategory),
                           builder: (context, subSnap) {
                             if (subSnap.hasData) {
+                              try{
+                                Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .totalCategoryProduct =
+                                    int.parse(subSnap.data.response[0]
+                                        .category[0].allProductsCount);
+                              }catch(e){
+                                Provider.of<CategoryProvider>(context,
+                                    listen: false)
+                                    .totalCategoryProduct = 0;
+                              }
                               return Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(

@@ -408,6 +408,9 @@ class _CartState extends State<Cart> {
                                                             .hideCheckoutButton ==
                                                         "NO"
                                                     ? () async {
+
+                                                  _productOrderProvider.isProductRemovingFromCartInProgress = true;
+
                                                         int userId =
                                                             prefs.read<int>(
                                                                 'userId');
@@ -512,6 +515,8 @@ class _CartState extends State<Cart> {
                                                                 .showSnackBar(
                                                                     getSnackBar(
                                                                         'Transaction Failed !'));
+                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
+
                                                           }else if (payment_response[
                                                           'result'] ==
                                                               "user_cancelled") {
@@ -520,6 +525,8 @@ class _CartState extends State<Cart> {
                                                                 .showSnackBar(
                                                                 getSnackBar(
                                                                     'Transaction Failed !'));
+                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
+
                                                           }
 
                                                           /// call final payment status api....
@@ -561,6 +568,7 @@ class _CartState extends State<Cart> {
                                                               "${response['response'][0]['order_no']}";
 
 
+                                                              _productOrderProvider.isProductRemovingFromCartInProgress = false;
                                                               Provider
                                                                   .of<HomeScreenProvider>(context,
                                                                   listen: false)
@@ -571,9 +579,12 @@ class _CartState extends State<Cart> {
                                                                   .selectedBottomIndex =
                                                               3;
                                                             } catch (e) {
+                                                              _productOrderProvider.isProductRemovingFromCartInProgress = false;
                                                               print(e);
                                                             }
 
+                                                          }else{
+                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
                                                           }
 
 

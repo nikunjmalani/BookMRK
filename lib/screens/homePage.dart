@@ -1424,55 +1424,58 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white,
                             ),
                             padding: EdgeInsets.all(15.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${snapshot.data.response[0].popupScreen[0]
-                                      .title}',
-                                  style: TextStyle(
-                                    color: colorPalette.navyBlue,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Text(
-                                  '${snapshot.data.response[0].popupScreen[0]
-                                      .message}',
-                                  style: TextStyle(
-                                    color: colorPalette.navyBlue,
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Spacer(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    RaisedButton(
-                                      onPressed: () {
-                                        _homeScreenProvider
-                                            .homeScreenMainPopupShow = false;
-                                      },
-                                      child: Text(
-                                        'OK',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 16.0),
-                                      ),
+                            child: SingleChildScrollView(
+                              physics: BouncingScrollPhysics(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${snapshot.data.response[0].popupScreen[0]
+                                        .title}',
+                                    style: TextStyle(
                                       color: colorPalette.navyBlue,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(8.0)),
-                                    )
-                                  ],
-                                ),
-                              ],
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    '${snapshot.data.response[0].popupScreen[0]
+                                        .message}',
+                                    style: TextStyle(
+                                      color: colorPalette.navyBlue,
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      RaisedButton(
+                                        onPressed: () {
+                                          _homeScreenProvider
+                                              .homeScreenMainPopupShow = false;
+                                        },
+                                        child: Text(
+                                          'OK',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 16.0),
+                                        ),
+                                        color: colorPalette.navyBlue,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
