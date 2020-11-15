@@ -1,16 +1,24 @@
+import 'dart:convert';
+
 import 'package:bookmrk/api/cart_api.dart';
+import 'package:bookmrk/api/product_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/cart_details_model.dart';
 import 'package:bookmrk/model/no_data_cart_model.dart';
 import 'package:bookmrk/model/user_address_model.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
+import 'package:bookmrk/provider/order_provider.dart';
 import 'package:bookmrk/provider/product_order_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/priceDetailWidget.dart';
+import 'package:bookmrk/widgets/snackbar_global.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +29,7 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   ColorPalette colorPalette = ColorPalette();
+  static MethodChannel _channel = MethodChannel('easebuzz');
 
   /// total item count ...
   int totalItem = 0;
@@ -40,8 +49,7 @@ class _CartState extends State<Cart> {
 
   /// get selected address details...
   Future getSelectedAddressInCart() async {
-
-    int userId =  prefs.read<int>('userId');
+    int userId = prefs.read<int>('userId');
     dynamic response = await UserAPI.getUserAddress(userId.toString());
     UserAddressModel _userAddress = UserAddressModel.fromJson(response);
     return _userAddress;
@@ -94,7 +102,10 @@ class _CartState extends State<Cart> {
                                           textAlign: TextAlign.left,
                                         ),
                                         Container(
-                                          width: MediaQuery.of(context).size.width / 1.5 ,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.5,
                                           child: Text(
                                             '${snapshot.data.response[selectedAddressIndex].address1},\n${snapshot.data.response[selectedAddressIndex].city}, ${snapshot.data.response[selectedAddressIndex].state}\n${snapshot.data.response[selectedAddressIndex].pincode} ',
                                             style: TextStyle(
@@ -171,6 +182,7 @@ class _CartState extends State<Cart> {
                               } else {
                                 totalItem = 0;
                                 return ListView.builder(
+                                  physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     if (index <
                                         snapshot.data.response[0].cart.length) {
@@ -293,8 +305,9 @@ class _CartState extends State<Cart> {
                                                                   .isProductRemovingFromCartInProgress =
                                                               true;
 
-                                                          int userId =  prefs
-                                                              .read<int>('userId');
+                                                          int userId =
+                                                              prefs.read<int>(
+                                                                  'userId');
                                                           dynamic response =
                                                               await CartAPI.removeCart(
                                                                   userId
@@ -309,6 +322,10 @@ class _CartState extends State<Cart> {
                                                           _productOrderProvider
                                                                   .isProductRemovingFromCartInProgress =
                                                               false;
+                                                          Provider.of<HomeScreenProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .getCartCount();
                                                           setState(() {});
                                                         },
                                                         child: SvgPicture.asset(
@@ -331,19 +348,19 @@ class _CartState extends State<Cart> {
                                                         textAlign:
                                                             TextAlign.left,
                                                       ),
-                                                      Text(
-                                                        '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
-                                                        style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          fontSize: 16,
-                                                          color: const Color(
-                                                              0xff515c6f),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
+                                                      // Text(
+                                                      //   '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
+                                                      //   style: TextStyle(
+                                                      //     fontFamily: 'Roboto',
+                                                      //     fontSize: 16,
+                                                      //     color: const Color(
+                                                      //         0xff515c6f),
+                                                      //     fontWeight:
+                                                      //         FontWeight.w700,
+                                                      //   ),
+                                                      //   textAlign:
+                                                      //       TextAlign.left,
+                                                      // ),
                                                       Text(
                                                         'Total : ${snapshot.data.response[0].cart[index].productFinalTotal} ₹',
                                                         style: TextStyle(
@@ -390,7 +407,191 @@ class _CartState extends State<Cart> {
                                                             .cartInfo[0]
                                                             .hideCheckoutButton ==
                                                         "NO"
-                                                    ? () {}
+                                                    ? () async {
+
+                                                  _productOrderProvider.isProductRemovingFromCartInProgress = true;
+
+                                                        int userId =
+                                                            prefs.read<int>(
+                                                                'userId');
+                                                        dynamic response =
+                                                            await ProductAPI
+                                                                .prePaymentAPICall(
+                                                                    userId
+                                                                        .toString(),
+                                                                    kAppVersion,
+                                                                    'online',
+                                                                    'online');
+                                                        print(response);
+                                                        if (response[
+                                                                'status'] ==
+                                                            200) {
+                                                          /// method channel call for payment......
+                                                          String txnid =
+                                                              "${response['response'][0]['order_no']}"; //This txnid should be unique every time.
+                                                          String amount = "${double.parse("${response['response'][0]['order_total_cost']}").roundToDouble()}";
+                                                          // String amount = "1.0";
+                                                          String productinfo =
+                                                              "Books";
+                                                          String firstname =
+                                                              "${response['response'][0]['user_name']}";
+                                                          String email =
+                                                              "${response['response'][0]['user_email']}";
+                                                          String phone =
+                                                              "${response['response'][0]['user_mobile']}";
+                                                          String s_url = "";
+                                                          String f_url = "";
+                                                          String key =
+                                                              "$easeBuzzKey";
+                                                          String udf1 = "";
+                                                          String udf2 = "";
+                                                          String udf3 = "";
+                                                          String udf4 = "";
+                                                          String udf5 = "";
+                                                          String address1 =
+                                                              "${response['response'][0]['user_address1']}";
+                                                          String address2 =
+                                                              "${response['response'][0]['user_address2']}";
+                                                          String city =
+                                                              "${response['response'][0]['user_countries']}";
+                                                          String state =
+                                                              "${response['response'][0]['user_state']}";
+                                                          String country =
+                                                              "${response['response'][0]['user_city']}";
+                                                          String zipcode =
+                                                              "${response['response'][0]['user_pincode']}";
+                                                          String salt =
+                                                              "$easeBuzzSalt";
+                                                          String hash =
+                                                              "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
+                                                          String pay_mode =
+                                                              "production";
+                                                          String unique_id =
+                                                              "11345";
+
+                                                          Object parameters = {
+                                                            "txnid": txnid,
+                                                            "amount": amount,
+                                                            "productinfo":
+                                                                productinfo,
+                                                            "firstname":
+                                                                firstname,
+                                                            "email": email,
+                                                            "phone": phone,
+                                                            "s_url": s_url,
+                                                            "f_url": f_url,
+                                                            "key": key,
+                                                            "udf1": udf1,
+                                                            "udf2": udf2,
+                                                            "udf3": udf3,
+                                                            "udf4": udf4,
+                                                            "udf5": udf5,
+                                                            "address1":
+                                                                address1,
+                                                            "address2":
+                                                                address2,
+                                                            "city": city,
+                                                            "state": state,
+                                                            "country": country,
+                                                            "zipcode": zipcode,
+                                                            "hash": hash,
+                                                            "pay_mode":
+                                                                pay_mode,
+                                                            "unique_id":
+                                                                unique_id
+                                                          };
+
+                                                          final payment_response =
+                                                              await _channel
+                                                                  .invokeMethod(
+                                                                      "payWithEasebuzz",
+                                                                      parameters);
+                                                          print(
+                                                              payment_response);
+                                                          if (payment_response[
+                                                                  'result'] ==
+                                                              "payment_failed") {
+                                                            Scaffold.of(context)
+                                                                .showSnackBar(
+                                                                    getSnackBar(
+                                                                        'Transaction Failed !'));
+                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
+
+                                                          }else if (payment_response[
+                                                          'result'] ==
+                                                              "user_cancelled") {
+                                                            print('calleds');
+                                                            Scaffold.of(context)
+                                                                .showSnackBar(
+                                                                getSnackBar(
+                                                                    'Transaction Failed !'));
+                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
+
+                                                          }
+
+                                                          /// call final payment status api....
+                                                          dynamic
+                                                              finalPaymentResponse =
+                                                              await ProductAPI.finalPaymentStatus(
+                                                                  userId
+                                                                      .toString(),
+                                                                  "${response['response'][0]['order_total_cost']}",
+                                                                  "${response['response'][0]['order_no']}",
+                                                                  payment_response[
+                                                                          'payment_response']
+                                                                      [
+                                                                      'status'],
+                                                                  payment_response);
+
+                                                          print("from api : ${finalPaymentResponse}");
+
+                                                          if(finalPaymentResponse['status'] == 200){
+                                                            /// show final payment success dialog...
+                                                            CoolAlert.show(
+                                                              context: context,
+                                                              type: CoolAlertType.success,
+                                                              text: "Your transaction was successful !",
+                                                              confirmBtnColor: colorPalette.navyBlue,
+                                                              title: "Payment Done.",
+                                                              animType: CoolAlertAnimType.scale,
+                                                            );
+
+                                                            try {
+                                                              Provider
+                                                                  .of<HomeScreenProvider>(context, listen: false)
+                                                                  .pageController
+                                                                  .jumpToPage(3);
+                                                              Provider
+                                                                  .of<OrderProvider>(context,
+                                                                  listen: false)
+                                                                  .orderId =
+                                                              "${response['response'][0]['order_no']}";
+
+
+                                                              _productOrderProvider.isProductRemovingFromCartInProgress = false;
+                                                              Provider
+                                                                  .of<HomeScreenProvider>(context,
+                                                                  listen: false)
+                                                                  .selectedString =
+                                                              "OrderDetails";
+                                                              Provider
+                                                                  .of<HomeScreenProvider>(context, listen: false)
+                                                                  .selectedBottomIndex =
+                                                              3;
+                                                            } catch (e) {
+                                                              _productOrderProvider.isProductRemovingFromCartInProgress = false;
+                                                              print(e);
+                                                            }
+
+                                                          }else{
+                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
+                                                          }
+
+
+                                                        }
+
+
+                                                      }
                                                     : null,
                                               )
                                             ],

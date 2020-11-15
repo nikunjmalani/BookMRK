@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:search_place_autocomplete/search_place_autocomplete.dart';
 
 class UserAddAddress extends StatefulWidget {
   @override
@@ -40,6 +41,13 @@ class _UserAddAddressState extends State<UserAddAddress> {
   Future getAllCountry() async {
     dynamic response = await LocationNameAPI.getAllCountryName();
     CountryModel _countryModel = CountryModel.fromJson(response);
+    _countryModel.response.forEach((country) {
+      if(country.name.toLowerCase() == "india"){
+        Provider.of<LocationProvider>(context, listen: false).selectedCountryName = country.name;
+        Provider.of<LocationProvider>(context,listen: false).selectedCountryId = int.parse(country.countryId);
+      }
+    });
+    Provider.of<LocationProvider>(context, listen: false).selectedCountryName;
     return _countryModel;
   }
 
@@ -91,6 +99,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
+      resizeToAvoidBottomPadding: false,
       body: Consumer<LocationProvider>(
         builder: (_, _locationProvider, child) => Consumer<UserProvider>(
           builder: (_, _userProvider, child) => Stack(
@@ -130,6 +139,189 @@ class _UserAddAddressState extends State<UserAddAddress> {
                           width: width,
                           title: "Contact Number",
                           controller: _contactNumberAddressController),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      Row(
+                        children: [
+                          AddressTextFields(
+                              width: width / 1.43,
+                              title: "Address Line 1",
+                              controller: _firstAddressController),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Container(
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 40.0, vertical: 150.0),
+                                      color: colorPalette.navyBlue,
+                                      child: Material(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 50,
+                                              color: colorPalette.navyBlue,
+                                              child: Row(
+                                                children: [
+                                                  Spacer(),
+                                                  Consumer<MapProvider>(
+                                                    builder: (_, _mapProvider,
+                                                        child) {
+                                                      return GestureDetector(
+                                                        onTap: () async {
+                                                          dynamic response = await MapAPI
+                                                              .getAddressFromLatLng(
+                                                                  _mapProvider
+                                                                      .addressSelectedLatLng
+                                                                      .latitude,
+                                                                  _mapProvider
+                                                                      .addressSelectedLatLng
+                                                                      .longitude);
+
+                                                          if (response[
+                                                                  'status'] ==
+                                                              "OK") {
+                                                            _mapProvider
+                                                                    .addressLine1FromLatLng =
+                                                                response['results']
+                                                                        [0][
+                                                                    'formatted_address'];
+                                                            _mapProvider
+                                                                    .isLatLngSelected =
+                                                                true;
+                                                            _firstAddressController
+                                                                    .text =
+                                                                _mapProvider
+                                                                    .addressLine1FromLatLng;
+                                                            Navigator.pop(
+                                                                context);
+                                                          } else {
+                                                            _mapProvider
+                                                                .addressLine1FromLatLng = "";
+                                                            _firstAddressController
+                                                                    .text =
+                                                                _mapProvider
+                                                                    .addressLine1FromLatLng;
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+                                                        },
+                                                        child: Text(
+                                                          'Done',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18.0),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20.0,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                child: Consumer<MapProvider>(
+                                                  builder: (_, _mapProvider,
+                                                          child) =>
+                                                      Stack(
+                                                    children: [
+                                                      GoogleMap(
+                                                        initialCameraPosition:
+                                                            CameraPosition(
+                                                          target: LatLng(
+                                                              _mapProvider
+                                                                  .addressSelectedLatLng
+                                                                  .latitude,
+                                                              _mapProvider
+                                                                  .addressSelectedLatLng
+                                                                  .longitude),
+                                                          zoom: 14,
+                                                        ),
+                                                        onTap: (position) {
+                                                          _mapProvider
+                                                                  .addressSelectedLatLng =
+                                                              position;
+                                                        },
+                                                        minMaxZoomPreference:
+                                                            MinMaxZoomPreference(
+                                                                9, 20),
+                                                        markers: {
+                                                          Marker(
+                                                              markerId:
+                                                                  MarkerId("1"),
+                                                              visible: true,
+                                                              position: LatLng(
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .latitude,
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .longitude,
+                                                              ))
+                                                        },
+                                                      ),
+                                                      Container(
+                                                        child: Material(
+                                                          child:
+                                                              SearchPlaceAutoCompleteWidget(
+                                                            // YOUR GOOGLE MAPS API KEY
+                                                            apiKey: kMapKey,
+                                                            // Language that you want. Default is English='en'
+                                                            language: 'en',
+                                                            // Country that you want to filter for. Default is Ethopia='ET'
+                                                            components: "IN",
+
+                                                            placeholder:
+                                                                "Your current location",
+
+                                                            onSelected:
+                                                                (Place place) {
+                                                              print(place
+                                                                  .description);
+                                                              place.geolocation.then((value){
+                                                                _mapProvider.addressSelectedLatLng = value.coordinates;
+                                                              });
+
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            },
+                            child: Container(
+                              height: 60,
+                              width: width / 5.5,
+                              margin: EdgeInsets.only(top: 23.0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border: Border.all(
+                                      width: 1.2, color: Color(0x80515c6f))),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.map,
+                                size: 30.0,
+                                color: colorPalette.navyBlue,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: width / 20,
                       ),
@@ -378,160 +570,6 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                 );
                               }
                             },
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: width / 20,
-                      ),
-                      Row(
-                        children: [
-                          AddressTextFields(
-                              width: width / 1.43,
-                              title: "Address Line 1",
-                              controller: _firstAddressController),
-                          Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return Container(
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 40.0, vertical: 150.0),
-                                      color: colorPalette.navyBlue,
-                                      child: Material(
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 50,
-                                              color: colorPalette.navyBlue,
-                                              child: Row(
-                                                children: [
-                                                  Spacer(),
-                                                  Consumer<MapProvider>(
-                                                    builder: (_, _mapProvider,
-                                                        child) {
-                                                      return GestureDetector(
-                                                        onTap: () async {
-
-                                                          dynamic response = await MapAPI
-                                                              .getAddressFromLatLng(
-                                                                  _mapProvider
-                                                                      .addressSelectedLatLng
-                                                                      .latitude,
-                                                                  _mapProvider
-                                                                      .addressSelectedLatLng
-                                                                      .longitude);
-
-                                                          if (response[
-                                                                  'status'] ==
-                                                              "OK") {
-                                                            _mapProvider
-                                                                    .addressLine1FromLatLng =
-                                                                response['results']
-                                                                        [0][
-                                                                    'formatted_address'];
-                                                            _mapProvider
-                                                                    .isLatLngSelected =
-                                                                true;
-                                                            _firstAddressController
-                                                                    .text =
-                                                                _mapProvider
-                                                                    .addressLine1FromLatLng;
-                                                            Navigator.pop(
-                                                                context);
-                                                          } else {
-                                                            _mapProvider
-                                                                .addressLine1FromLatLng = "";
-                                                            _firstAddressController
-                                                                    .text =
-                                                                _mapProvider
-                                                                    .addressLine1FromLatLng;
-                                                            Navigator.pop(
-                                                                context);
-                                                          }
-                                                        },
-                                                        child: Text(
-                                                          'Done',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 18.0),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                  SizedBox(
-                                                    width: 20.0,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                child: Consumer<MapProvider>(
-                                                  builder: (_, _mapProvider,
-                                                          child) =>
-                                                      GoogleMap(
-                                                    initialCameraPosition:
-                                                        CameraPosition(
-                                                      target: LatLng(
-                                                          _mapProvider
-                                                              .addressSelectedLatLng
-                                                              .latitude,
-                                                          _mapProvider
-                                                              .addressSelectedLatLng
-                                                              .longitude),
-                                                      zoom: 14,
-                                                    ),
-                                                    onTap: (position) {
-                                                      _mapProvider
-                                                              .addressSelectedLatLng =
-                                                          position;
-                                                    },
-                                                    minMaxZoomPreference:
-                                                        MinMaxZoomPreference(
-                                                            9, 20),
-                                                    markers: {
-                                                      Marker(
-                                                          markerId:
-                                                              MarkerId("1"),
-                                                          visible: true,
-                                                          position: LatLng(
-                                                            _mapProvider
-                                                                .addressSelectedLatLng
-                                                                .latitude,
-                                                            _mapProvider
-                                                                .addressSelectedLatLng
-                                                                .longitude,
-                                                          ))
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  });
-                            },
-                            child: Container(
-                              height: 60,
-                              width: width / 5.5,
-                              margin: EdgeInsets.only(top: 23.0),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  border: Border.all(
-                                      width: 1.2, color: Color(0x80515c6f))),
-                              alignment: Alignment.center,
-                              child: Icon(
-                                Icons.map,
-                                size: 30.0,
-                                color: colorPalette.navyBlue,
-                              ),
-                            ),
                           ),
                         ],
                       ),

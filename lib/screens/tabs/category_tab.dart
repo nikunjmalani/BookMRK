@@ -53,6 +53,7 @@ class _CategoryTabState extends State<CategoryTab> {
                               builder: (_, _categoryProvider, child) {
                             return GestureDetector(
                               onTap: () {
+                                data.selectedTitle = "${snapshot.data.response[index].categoryName}";
                                 data.selectedString = "CategoryInfo";
                                 _categoryProvider.selectedCategoryName =
                                     snapshot.data.response[index].catSlug;
@@ -73,10 +74,7 @@ class _CategoryTabState extends State<CategoryTab> {
                                             BorderRadius.circular(10.0),
                                         image: DecorationImage(
                                             image: imageProvider,
-                                            fit: BoxFit.cover,
-                                            colorFilter: ColorFilter.mode(
-                                                Colors.red,
-                                                BlendMode.colorBurn)),
+                                            fit: BoxFit.cover,),
                                       ),
                                     ),
                                     placeholder: (context, url) => Container(

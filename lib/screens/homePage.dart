@@ -45,6 +45,7 @@ import 'package:bookmrk/screens/user/user_edit_address.dart';
 import 'package:bookmrk/screens/user/user_otp.dart';
 import 'package:bookmrk/screens/user/wishlist.dart';
 import 'package:bookmrk/widgets/appBar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,7 +60,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  PageController pageController = PageController(initialPage: 0);
+  // PageController pageController = PageController(initialPage: 0);
   ColorPalette colorPalette = ColorPalette();
   ImagePath imagePath = ImagePath();
   HomeScreenProvider _setHomeScreenProvider;
@@ -70,6 +71,140 @@ class _HomePageState extends State<HomePage> {
     dynamic data = await HomePageApi.getHomePageDetails();
     HomePageModel _homePageDetails = HomePageModel.fromJson(data);
     return _homePageDetails;
+  }
+
+  notificationAction() {
+    FirebaseMessaging().configure(onLaunch: (data) async {
+      print('on launch');
+      print(data);
+    },
+
+        onResume: (value) async {
+          print('on resume');
+          print(value['data']['open_page']);
+          print(value);
+          if (value['data']['open_page'] == "user") {
+            print('redirect');
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex =
+              3;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString =
+              "User";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueCartIcon =
+              false;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueBellIcon =
+              false;
+              print('redirect2');
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "order_details") {
+            print('order details called');
+            print(value['data']['detail_id']);
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+              Provider
+                  .of<OrderProvider>(context,
+                  listen: false)
+                  .orderId =
+              "${value['data']['detail_id']}";
+
+
+              Provider
+                  .of<HomeScreenProvider>(context,
+                  listen: false)
+                  .selectedString =
+              "OrderDetails";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex =
+              3;
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "cart") {
+            print('cart called');
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(4);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "Cart";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 4;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueCartIcon = true;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueBellIcon = false;
+            } catch (e) {
+              print(e);
+            }
+          }else if (value['data']['open_page'] == "order") {
+            /// redirect to order page....
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 3;
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "MyOrders";
+            } catch (e) {
+              print(e);
+            }
+          }else if (value['data']['open_page'] == "home") {
+            /// redirect to home page from notification....
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(0);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 0;
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "Home";
+            } catch (e) {
+              print(e);
+            }
+          }
+        });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    notificationAction();
   }
 
 
@@ -227,16 +362,32 @@ class _HomePageState extends State<HomePage> {
                             ),);
                           }
 
-                          // else if(_homeScreenProvider.selectedString == "Category"){
-                          //   _homeScreenProvider.selectedString = "Home";
-                          //   _homeScreenProvider.selectedBottomIndex = 0;
-                          // }else if(_homeScreenProvider.selectedString == "School"){
-                          //   _homeScreenProvider.selectedString = "Home";
-                          //   _homeScreenProvider.selectedBottomIndex = 0;
-                          // }else if(_homeScreenProvider.selectedString == "User"){
-                          //   _homeScreenProvider.selectedString = "Home";
-                          //   _homeScreenProvider.selectedBottomIndex = 0;
-                          // }
+                          else if (_homeScreenProvider.selectedString ==
+                              "Category") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else
+                          if (_homeScreenProvider.selectedString == "School") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else
+                          if (_homeScreenProvider.selectedString == "User") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else if (_homeScreenProvider.selectedString ==
+                              "Notifications") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          } else if (_homeScreenProvider.selectedString ==
+                              "Cart") {
+                            _homeScreenProvider.selectedString = "Home";
+                            _homeScreenProvider.selectedBottomIndex = 0;
+                            _homeScreenProvider.pageController.jumpToPage(0);
+                          }
 
                           /// check when home page is selected......
                           _homeScreenProvider.selectedBottomIndex == 0 &&
@@ -254,7 +405,10 @@ class _HomePageState extends State<HomePage> {
                               ? "AllSubjects" : _homeScreenProvider
                               .selectedString ==
                               "FilterP"
-                              ? "AllPublishers" : "Home"
+                              ? "AllPublishers" :
+                          _homeScreenProvider.selectedString ==
+                              "SubCategoryInfo"
+                              ? "CategoryInfo" : "Home"
 
                           /// check when category page is selected......
                               : _homeScreenProvider.selectedBottomIndex == 1 &&
@@ -272,9 +426,7 @@ class _HomePageState extends State<HomePage> {
                               : _homeScreenProvider.selectedString ==
                               "SubCategoryInfo"
                               ? "CategoryInfo"
-                              : _homeScreenProvider.selectedString == "Category"
-                              ? "Category"
-                              : "CategoryInfo"
+                              : "Category"
 
                           /// check when school page is selected.......
                               : _homeScreenProvider.selectedBottomIndex == 2 &&
@@ -433,6 +585,9 @@ class _HomePageState extends State<HomePage> {
                                   "SearchProducts2" ?
                               "Search Products"
                                   : _homeScreenProvider.selectedString ==
+                                  "SearchProducts2" ?
+                              "Search Products" : _homeScreenProvider
+                                  .selectedString ==
                                   "Filter"
                                   ? "Filter By Categories"
                                   : _homeScreenProvider.selectedString ==
@@ -455,7 +610,7 @@ class _HomePageState extends State<HomePage> {
                             blueCartIcon: _homeScreenProvider.blueCartIcon,
                             blueBellIcon: _homeScreenProvider.blueBellIcon,
                             onBellTap: () {
-                              pageController.jumpToPage(5);
+                              _homeScreenProvider.pageController.jumpToPage(5);
 
                               _setHomeScreenProvider.selectedString =
                               "Notifications";
@@ -464,7 +619,7 @@ class _HomePageState extends State<HomePage> {
                               _setHomeScreenProvider.blueBellIcon = true;
                             },
                             onCartTap: () {
-                              pageController.jumpToPage(4);
+                              _homeScreenProvider.pageController.jumpToPage(4);
 
                               _setHomeScreenProvider.selectedString = "Cart";
                               _setHomeScreenProvider.selectedBottomIndex = 4;
@@ -517,7 +672,10 @@ class _HomePageState extends State<HomePage> {
                                           ? "AllSubjects" : _homeScreenProvider
                                           .selectedString ==
                                           "FilterP"
-                                          ? "AllPublishers" : "Home";
+                                          ? "AllPublishers" :
+                                      _homeScreenProvider.selectedString ==
+                                          "SubCategoryInfo"
+                                          ? "CategoryInfo" : "Home";
                                     },
                                     iconSize: 30,
                                   ),
@@ -527,30 +685,52 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "VendorInfo"
                                           ? ""
-                                          : _homeScreenProvider.selectedString ==
-                                          "ProductInfo" ||
-                                          _homeScreenProvider.selectedString ==
-                                              "SchoolInfo"
-                                          ? "School"
-                                          : _homeScreenProvider.selectedString ==
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "ProductInfo" ? "${_homeScreenProvider
+                                          .selectedTitle}" :
+                                      _homeScreenProvider.selectedString ==
+                                          "SchoolInfo"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
+                                          : _homeScreenProvider
+                                          .selectedString ==
                                           "AllSubjects"
-                                          ? "All Subjects" : _homeScreenProvider
+                                          ? "All Subjects"
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "CategoryInfo"
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
+                                          : _homeScreenProvider
+                                          .selectedString ==
+                                          "SubCategoryInfo"
+                                          ? "SubCategory"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "AllPublishers"
-                                          ? "All Publishers" : _homeScreenProvider
+                                          ? "All Publishers"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "FilterS"
-                                          ? "Subject" : _homeScreenProvider
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "FilterP"
-                                          ? "Publisher" : _homeScreenProvider
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
+                                          : _homeScreenProvider
                                           .selectedString ==
                                           "FilterC"
-                                          ? "Class" : 'All Vendors',
+                                          ? "${_homeScreenProvider
+                                          .selectedTitle}"
+                                          : 'All Vendors',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontFamily: 'Roboto',
-                                        fontSize: 20,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
                                         color: const Color(0xff301869),
                                       ),
                                       textAlign: TextAlign.left,
@@ -576,7 +756,8 @@ class _HomePageState extends State<HomePage> {
                                       ? "Category"
                                       : _homeScreenProvider.selectedString ==
                                       "SubCategoryInfo"
-                                      ? "SubCategory" : "Category",
+                                      ? "SubCategory" : "${_homeScreenProvider
+                                      .selectedTitle}",
                                   backButton:
                                   _homeScreenProvider.selectedString ==
                                       "Category"
@@ -605,7 +786,7 @@ class _HomePageState extends State<HomePage> {
                                 title: _homeScreenProvider.selectedString ==
                                     "School"
                                     ? "Schools"
-                                    : "",
+                                    : "${_homeScreenProvider.selectedTitle}",
                                 backButton:
                                 _homeScreenProvider.selectedString == "School"
                                     ? false
@@ -619,6 +800,7 @@ class _HomePageState extends State<HomePage> {
                                       "ProductInfo" ? "SchoolInfo" : "School";
                                 },
                               )
+
 
                               /// user page appbar...
                                   : _homeScreenProvider.selectedString ==
@@ -736,7 +918,8 @@ class _HomePageState extends State<HomePage> {
                               children: [
                                 Container(
                                   child: PageView(
-                                    controller: pageController,
+                                    controller: _homeScreenProvider
+                                        .pageController,
                                     children: [
 
                                       /// home page..
@@ -845,7 +1028,23 @@ class _HomePageState extends State<HomePage> {
                                             CategoryInfo(
                                                 _categoryProvider
                                                     .selectedCategoryName),)
-                                          : AllVendors(),
+                                          :
+                                      _homeScreenProvider
+                                          .selectedString ==
+                                          "SearchProducts2"
+                                          ? Search2()
+                                          :
+                                      // _homeScreenProvider
+                                      //     .selectedString ==
+                                      //     "SubCategoryInfo"
+                                      //     ? Consumer<CategoryProvider>(
+                                      //   builder: (_, _categoryProvider,
+                                      //       child) =>
+                                      //       SubCategoryInfo(
+                                      //           _categoryProvider
+                                      //               .selectedSubCategory),)
+                                      //     :
+                                      AllVendors(),
 
                                       /// category page...
                                       _homeScreenProvider.selectedString ==
@@ -860,16 +1059,18 @@ class _HomePageState extends State<HomePage> {
                                               ProductInfo(
                                                   selectedProductSlug: _homeScreenProvider
                                                       .selectedProductSlug))
-                                          : _homeScreenProvider
-                                          .selectedString ==
-                                          "SubCategoryInfo"
-                                          ? Consumer<CategoryProvider>(
-                                        builder: (_, _categoryProvider,
-                                            child) =>
-                                            SubCategoryInfo(
-                                                _categoryProvider
-                                                    .selectedSubCategory),)
-                                          : _homeScreenProvider
+                                          :
+                                      // _homeScreenProvider
+                                      //     .selectedString ==
+                                      //     "SubCategoryInfo"
+                                      //     ? Consumer<CategoryProvider>(
+                                      //   builder: (_, _categoryProvider,
+                                      //       child) =>
+                                      //       SubCategoryInfo(
+                                      //           _categoryProvider
+                                      //               .selectedSubCategory),)
+                                      //     :
+                                      _homeScreenProvider
                                           .selectedString ==
                                           "SearchProducts2"
                                           ? Search2()
@@ -1054,7 +1255,8 @@ class _HomePageState extends State<HomePage> {
                                       children: [
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(0);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(0);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             0;
@@ -1088,7 +1290,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(1);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(1);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             1;
@@ -1122,7 +1325,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(2);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(2);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             2;
@@ -1156,7 +1360,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
-                                            pageController.jumpToPage(3);
+                                            _homeScreenProvider.pageController
+                                                .jumpToPage(3);
                                             _setHomeScreenProvider
                                                 .selectedBottomIndex =
                                             3;
@@ -1219,55 +1424,58 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white,
                             ),
                             padding: EdgeInsets.all(15.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${snapshot.data.response[0].popupScreen[0]
-                                      .title}',
-                                  style: TextStyle(
-                                    color: colorPalette.navyBlue,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Text(
-                                  '${snapshot.data.response[0].popupScreen[0]
-                                      .message}',
-                                  style: TextStyle(
-                                    color: colorPalette.navyBlue,
-                                    fontSize: 17.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Spacer(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    RaisedButton(
-                                      onPressed: () {
-                                        _homeScreenProvider
-                                            .homeScreenMainPopupShow = false;
-                                      },
-                                      child: Text(
-                                        'OK',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 16.0),
-                                      ),
+                            child: SingleChildScrollView(
+                              physics: BouncingScrollPhysics(),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${snapshot.data.response[0].popupScreen[0]
+                                        .title}',
+                                    style: TextStyle(
                                       color: colorPalette.navyBlue,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(8.0)),
-                                    )
-                                  ],
-                                ),
-                              ],
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  Text(
+                                    '${snapshot.data.response[0].popupScreen[0]
+                                        .message}',
+                                    style: TextStyle(
+                                      color: colorPalette.navyBlue,
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.0,),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      RaisedButton(
+                                        onPressed: () {
+                                          _homeScreenProvider
+                                              .homeScreenMainPopupShow = false;
+                                        },
+                                        child: Text(
+                                          'OK',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 16.0),
+                                        ),
+                                        color: colorPalette.navyBlue,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

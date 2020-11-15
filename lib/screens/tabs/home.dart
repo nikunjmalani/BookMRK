@@ -137,7 +137,12 @@ class _HomeState extends State<Home> {
                                                           child) =>
                                                       GestureDetector(
                                                     onTap: () {
-                                                      /// category_slug is required, but api response do not contain category_slug...
+                                                      Provider.of<HomeScreenProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .selectedTitle =
+                                                          "${snapshot.data.response[0].category[index].categoryName}";
+
                                                       Provider.of<HomeScreenProvider>(
                                                                   context,
                                                                   listen: false)
@@ -166,7 +171,6 @@ class _HomeState extends State<Home> {
                                                 )),
                                       ),
                                     ),
-
                                     Container(
                                       height: snapshot.data.response[0].product
                                                   .length >
@@ -184,6 +188,9 @@ class _HomeState extends State<Home> {
                                                 (_, _vendorProvider, child) =>
                                                     GestureDetector(
                                               onTap: () {
+
+                                                // _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].product[index].vendorSlug}";3
+                                                _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].product[index].productName}";
                                                 _vendorProvider
                                                         .selectedVendorName =
                                                     "${snapshot.data.response[0].product[index].vendorSlug}";
@@ -201,9 +208,11 @@ class _HomeState extends State<Home> {
                                               },
                                               child: Container(
                                                 margin: EdgeInsets.only(
-                                                    top: 10,
-                                                    left: 10,
-                                                    right: 10, bottom: 10,),
+                                                  top: 10,
+                                                  left: 10,
+                                                  right: 10,
+                                                  bottom: 10,
+                                                ),
                                                 height: height / 3.8,
                                                 width: width / 2.8,
                                                 decoration: BoxDecoration(
@@ -358,51 +367,48 @@ class _HomeState extends State<Home> {
                               Container(
                                 margin: EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 15),
-
                                 alignment: Alignment.centerLeft,
                                 child: Wrap(
                                   direction: Axis.horizontal,
                                   children: List.generate(
-                                      snapshot.data.response[0].responseClass
-                                          .length,
-                                      (index) => Consumer<CategoryProvider>(
-                                            builder:
-                                                (_, _categoryProvider, child) =>
-                                                    GestureDetector(
-                                              onTap: () {
+                                    snapshot
+                                        .data.response[0].responseClass.length,
+                                    (index) => Consumer<CategoryProvider>(
+                                      builder: (_, _categoryProvider, child) =>
+                                          GestureDetector(
+                                        onTap: () {
 
-                                                /// set the selected class to filter....
-                                                Provider.of<FilterCategoryProvider>(
-                                                    context,
-                                                    listen: false)
-                                                    .selectedFilterCategoryClassSlug =
-                                                    snapshot
-                                                        .data
-                                                        .response[0]
-                                                        .responseClass[index]
-                                                        .classSlug;
+                                          _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].responseClass[index].className}";
+                                          /// set the selected class to filter....
+                                          Provider.of<FilterCategoryProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .selectedFilterCategoryClassSlug =
+                                              snapshot
+                                                  .data
+                                                  .response[0]
+                                                  .responseClass[index]
+                                                  .classSlug;
 
-                                                /// set filter class screen....
-                                                Provider.of<HomeScreenProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .selectedString = "FilterC";
+                                          /// set filter class screen....
+                                          Provider.of<HomeScreenProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .selectedString = "FilterC";
 
-                                                /// set the current selected index 0....
-                                                Provider.of<HomeScreenProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .selectedBottomIndex = 0;
-
-                                              },
-                                              child: ClassButtons(
-                                                "${snapshot.data.response[0].responseClass[index].className}",
-                                                colorPalette.navyBlue,
-                                                Color(0xff6A4B9C),
-                                              ),
-                                            ),
-                                          ),
-
+                                          /// set the current selected index 0....
+                                          Provider.of<HomeScreenProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .selectedBottomIndex = 0;
+                                        },
+                                        child: ClassButtons(
+                                          "${snapshot.data.response[0].responseClass[index].className}",
+                                          colorPalette.navyBlue,
+                                          Color(0xff6A4B9C),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -415,6 +421,7 @@ class _HomeState extends State<Home> {
                                     Header2("Shop by Subject"),
                                     Spacer(),
                                     ViewAll(onClick: () {
+
                                       /// set the subject list..
                                       Provider.of<FilterCategoryProvider>(
                                                   context,
@@ -439,7 +446,6 @@ class _HomeState extends State<Home> {
                                 height: height / 9,
                                 margin: EdgeInsets.symmetric(
                                     horizontal: 12, vertical: 5),
-
                                 alignment: Alignment.centerLeft,
                                 child: Column(
                                   children: [
@@ -459,11 +465,13 @@ class _HomeState extends State<Home> {
                                                           child) =>
                                                       GestureDetector(
                                                     onTap: () {
+
+                                                      _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].subject[index].subjectName}";
                                                       /// set the subject slug..
                                                       Provider.of<FilterCategoryProvider>(
-                                                          context,
-                                                          listen: false)
-                                                          .selectedFilterCategorySubjectSlug =
+                                                                  context,
+                                                                  listen: false)
+                                                              .selectedFilterCategorySubjectSlug =
                                                           snapshot
                                                               .data
                                                               .response[0]
@@ -472,9 +480,9 @@ class _HomeState extends State<Home> {
 
                                                       /// set the subject list..
                                                       Provider.of<FilterCategoryProvider>(
-                                                          context,
-                                                          listen: false)
-                                                          .allFilterSubjectsList =
+                                                                  context,
+                                                                  listen: false)
+                                                              .allFilterSubjectsList =
                                                           snapshot
                                                               .data
                                                               .response[0]
@@ -531,6 +539,7 @@ class _HomeState extends State<Home> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+                                        _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].school[index].schoolName}";
                                         Provider.of<HomeScreenProvider>(context,
                                                 listen: false)
                                             .selectedString = "SchoolInfo";
@@ -589,29 +598,32 @@ class _HomeState extends State<Home> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
+
+                                        _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].publisher[index].publisherName}";
+
                                         /// set the selected publisher slug....
-                                        Provider.of<FilterCategoryProvider>(context,
-                                            listen: false)
-                                            .selectedFilterCategoryPublisherSlug =
-                                        "${snapshot.data.response[0].publisher[index].publisherSlug}";
+                                        Provider.of<FilterCategoryProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .selectedFilterCategoryPublisherSlug =
+                                            "${snapshot.data.response[0].publisher[index].publisherSlug}";
 
                                         /// set the publiser list...
                                         Provider.of<FilterCategoryProvider>(
-                                            context,
-                                            listen: false)
-                                            .allPublisherList =
+                                                    context,
+                                                    listen: false)
+                                                .allPublisherList =
                                             snapshot.data.response[0].publisher;
 
                                         /// set the current index 0....
                                         Provider.of<HomeScreenProvider>(context,
-                                            listen: false)
+                                                listen: false)
                                             .selectedBottomIndex = 0;
 
                                         /// set the selected String all publishers...
                                         Provider.of<HomeScreenProvider>(context,
-                                            listen: false)
+                                                listen: false)
                                             .selectedString = "FilterP";
-
                                       },
                                       child: ImageBox(
                                           height: height,

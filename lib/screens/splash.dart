@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/res/images.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 import 'homePage.dart';
@@ -20,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   navigateToAnotherScreen() async {
     await Future.delayed(Duration(seconds: 2), () async {
+      prefs = GetStorage();
       _homeScreenProvider.selectedString = "Home";
       bool isLogin = prefs.read<bool>("isLogin");
       if (isLogin ?? false) {
@@ -32,6 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+
+
   @override
   void initState() {
     super.initState();
@@ -42,8 +47,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     _homeScreenProvider =
         Provider.of<HomeScreenProvider>(context, listen: false);
-    Timer.periodic(Duration(seconds: 30), (timer) {
+    Timer.periodic(Duration(seconds: 10), (timer) {
       _homeScreenProvider.getNotification();
+      _homeScreenProvider.getCartCount();
     });
     return Scaffold(
       body: GestureDetector(

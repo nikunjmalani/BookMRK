@@ -61,4 +61,24 @@ class CategoryProvider extends ChangeNotifier {
     _selectedSubCategoryId = value;
     notifyListeners();
   }
+
+  /// number of proudct...
+  int _totalCategoryProduct = 0;
+
+  int get totalCategoryProduct => _totalCategoryProduct;
+
+  set totalCategoryProduct(int value) {
+    _totalCategoryProduct = value;
+    notifyListeners();
+  }
+
+  /// selected category name....
+  String _selectedCategoryNameToShow;
+
+  String get selectedCategoryNameToShow => _selectedCategoryNameToShow;
+
+  set selectedCategoryNameToShow(String value) {
+    _selectedCategoryNameToShow = value;
+    notifyListeners();
+  }
 }

@@ -12,7 +12,7 @@ class LocationProvider extends ChangeNotifier {
   }
 
   /// selected country name ..
-  String _selectedCountryName = "Select Country";
+  String _selectedCountryName = "";
 
   String get selectedCountryName => _selectedCountryName;
 

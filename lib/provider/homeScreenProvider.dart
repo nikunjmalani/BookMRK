@@ -1,3 +1,4 @@
+import 'package:bookmrk/api/cart_api.dart';
 import 'package:bookmrk/api/notification_api.dart';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/notification_model.dart';
@@ -146,6 +147,18 @@ class HomeScreenProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  getCartCount() async {
+    int counter  = 0;
+    int userId = prefs.read<int>('userId');
+    dynamic response = await CartAPI.getCartData(userId.toString());
+    if(response['status'] == 200){
+      response['response'][0]['cart'].forEach((cart){
+        counter += int.parse(cart['qty']);
+      });
+    }
+    _totalNumberOfOrdersInCart = counter;
+  }
+
   getNotification() async {
     int userId = prefs.read<int>('userId');
     dynamic response =
@@ -168,6 +181,36 @@ class HomeScreenProvider extends ChangeNotifier {
 
   set homeScreenMainPopupShow(bool value) {
     _homeScreenMainPopupShow = value;
+    notifyListeners();
+  }
+
+  /// notification mark all as read in progress...
+  bool _markAllAsReadNotification = false;
+
+  bool get markAllAsReadNotification => _markAllAsReadNotification;
+
+  set markAllAsReadNotification(bool value) {
+    _markAllAsReadNotification = value;
+    notifyListeners();
+  }
+
+  /// page controller.....
+  PageController _pageController = PageController(initialPage: 0);
+
+  PageController get pageController => _pageController;
+
+  set pageController(PageController value) {
+    _pageController = value;
+    notifyListeners();
+  }
+
+  /// selected title name....
+  String _selectedTitle = "";
+
+  String get selectedTitle => _selectedTitle;
+
+  set selectedTitle(String value) {
+    _selectedTitle = value;
     notifyListeners();
   }
 }

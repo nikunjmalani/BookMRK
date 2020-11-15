@@ -153,6 +153,10 @@ class _FilterCategorySubjectState extends State<FilterCategorySubject> {
                             onTap: () {
                               Provider.of<HomeScreenProvider>(context,
                                   listen: false)
+                                  .selectedTitle = "${snapshot.data.response[0].product[index].productName}";
+
+                              Provider.of<HomeScreenProvider>(context,
+                                  listen: false)
                                   .selectedProductSlug =
                               "${snapshot.data.response[0].product[index].productSlug}";
                               Provider.of<VendorProvider>(context,

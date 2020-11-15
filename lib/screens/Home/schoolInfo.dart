@@ -52,12 +52,13 @@ class _SchoolInfoState extends State<SchoolInfo> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Consumer<SchoolProvider>(
-      builder: (_, _schoolProvider, child) => FutureBuilder(
-        future: getSchoolProductDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Consumer<HomeScreenProvider>(
+    return FutureBuilder(
+      future: getSchoolProductDetails(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Consumer<SchoolProvider>(
+            builder: (_, _schoolProvider, child) =>
+                Consumer<HomeScreenProvider>(
               builder: (context, data, child) {
                 return SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
@@ -153,7 +154,6 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                       index;
                                   _schoolProvider.selectedSubCategoryId =
                                       '${snapshot.data.response[0].schoolCat[index].categoryId}';
-
                                 },
                                 child: Text(
                                   '${snapshot.data.response[0].schoolCat[index].categoryName}',
@@ -225,7 +225,8 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                             ),
                                           ],
                                           onSelected: (value) {
-                                            _schoolProvider.selectedSchoolProductType =
+                                            _schoolProvider
+                                                    .selectedSchoolProductType =
                                                 value;
                                           },
                                           child: Row(
@@ -246,100 +247,117 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                       height: height / 2.7,
                                       width: width,
                                       child: ListView.builder(
-                                        itemCount: subCatSnapshot
-                                            .data.response.length,
+                                        itemCount:
+                                            subCatSnapshot.data.response.length,
                                         scrollDirection: Axis.horizontal,
                                         physics: BouncingScrollPhysics(),
                                         itemBuilder: (context, index) {
-                                          if (_schoolProvider.selectedSchoolProductType ==
+                                          if (_schoolProvider
+                                                  .selectedSchoolProductType ==
                                               "Single") {
                                             if (subCatSnapshot.data.response[0]
-                                                .productType ==
+                                                    .productType ==
                                                 "Single") {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  Provider.of<VendorProvider>(context,
-                                                      listen: false)
-                                                      .selectedVendorName =
-                                                  "${subCatSnapshot.data.response[index].vendorSlug}";
 
-                                                  Provider.of<HomeScreenProvider>(context,
-                                                      listen: false)
-                                                      .selectedProductSlug =
-                                                  "${subCatSnapshot.data.response[index].productSlug}";
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${subCatSnapshot.data.response[index].productName}";
+                                                  Provider.of<VendorProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedVendorName =
+                                                      "${subCatSnapshot.data.response[index].vendorSlug}";
 
-                                                  Provider.of<HomeScreenProvider>(context,
-                                                      listen: false)
-                                                      .selectedString = "ProductInfo";
+                                                  Provider.of<HomeScreenProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedProductSlug =
+                                                      "${subCatSnapshot.data.response[index].productSlug}";
+
+                                                  Provider.of<HomeScreenProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedString =
+                                                      "ProductInfo";
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.only(left: 15),
+                                                  margin:
+                                                      EdgeInsets.only(left: 15),
                                                   child: ProductBox(
                                                       expanded: false,
                                                       height: height,
                                                       width: width,
                                                       title:
-                                                      "${subCatSnapshot.data.response[index].productName}",
+                                                          "${subCatSnapshot.data.response[index].productName}",
                                                       image:
-                                                      "${subCatSnapshot.data.response[index].productImg}",
+                                                          "${subCatSnapshot.data.response[index].productImg}",
                                                       description:
-                                                      "${subCatSnapshot.data.response[index].vendorCompanyName}",
+                                                          "${subCatSnapshot.data.response[index].vendorCompanyName}",
                                                       price: subCatSnapshot
                                                           .data
                                                           .response[index]
                                                           .productPrice,
                                                       stock:
-                                                      "${subCatSnapshot.data.response[index].productStockStatus}",
+                                                          "${subCatSnapshot.data.response[index].productStockStatus}",
                                                       discount:
-                                                      "${subCatSnapshot.data.response[index].productDiscount}"),
+                                                          "${subCatSnapshot.data.response[index].productDiscount}"),
                                                 ),
                                               );
                                             } else {
                                               return SizedBox();
                                             }
                                           } else if (_schoolProvider
-                                              .selectedSchoolProductType ==
+                                                  .selectedSchoolProductType ==
                                               "Set") {
-                                            if (subCatSnapshot.data.response[index]
-                                                .productType ==
+                                            if (subCatSnapshot
+                                                    .data
+                                                    .response[index]
+                                                    .productType ==
                                                 "Set") {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  Provider.of<VendorProvider>(context,
-                                                      listen: false)
-                                                      .selectedVendorName =
-                                                  "${subCatSnapshot.data.response[index].vendorSlug}";
 
-                                                  Provider.of<HomeScreenProvider>(context,
-                                                      listen: false)
-                                                      .selectedProductSlug =
-                                                  "${subCatSnapshot.data.response[index].productSlug}";
+                                                  Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${subCatSnapshot.data.response[index].productName}";
 
-                                                  Provider.of<HomeScreenProvider>(context,
-                                                      listen: false)
-                                                      .selectedString = "ProductInfo";
+                                                  Provider.of<VendorProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedVendorName =
+                                                      "${subCatSnapshot.data.response[index].vendorSlug}";
+
+                                                  Provider.of<HomeScreenProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedProductSlug =
+                                                      "${subCatSnapshot.data.response[index].productSlug}";
+
+                                                  Provider.of<HomeScreenProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedString =
+                                                      "ProductInfo";
                                                 },
                                                 child: Container(
-                                                  margin: EdgeInsets.only(left: 15),
+                                                  margin:
+                                                      EdgeInsets.only(left: 15),
                                                   child: ProductBox(
                                                       expanded: false,
                                                       height: height,
                                                       width: width,
                                                       title:
-                                                      "${subCatSnapshot.data.response[index].productName}",
+                                                          "${subCatSnapshot.data.response[index].productName}",
                                                       image:
-                                                      "${subCatSnapshot.data.response[index].productImg}",
+                                                          "${subCatSnapshot.data.response[index].productImg}",
                                                       description:
-                                                      "${subCatSnapshot.data.response[index].vendorCompanyName}",
+                                                          "${subCatSnapshot.data.response[index].vendorCompanyName}",
                                                       price: subCatSnapshot
                                                           .data
                                                           .response[index]
-
                                                           .productPrice,
                                                       stock:
-                                                      "${subCatSnapshot.data.response[index].productStockStatus}",
+                                                          "${subCatSnapshot.data.response[index].productStockStatus}",
                                                       discount:
-                                                      "${subCatSnapshot.data.response[index].productDiscount}"),
+                                                          "${subCatSnapshot.data.response[index].productDiscount}"),
                                                 ),
                                               );
                                             } else {
@@ -348,41 +366,48 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                           } else {
                                             return GestureDetector(
                                               onTap: () {
-                                                Provider.of<VendorProvider>(context,
-                                                    listen: false)
-                                                    .selectedVendorName =
-                                                "${subCatSnapshot.data.response[index].vendorSlug}";
 
-                                                Provider.of<HomeScreenProvider>(context,
-                                                    listen: false)
-                                                    .selectedProductSlug =
-                                                "${subCatSnapshot.data.response[index].productSlug}";
+                                                Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${subCatSnapshot.data.response[index].productName}";
 
-                                                Provider.of<HomeScreenProvider>(context,
-                                                    listen: false)
-                                                    .selectedString = "ProductInfo";
+                                                Provider.of<VendorProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .selectedVendorName =
+                                                    "${subCatSnapshot.data.response[index].vendorSlug}";
+
+                                                Provider.of<HomeScreenProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .selectedProductSlug =
+                                                    "${subCatSnapshot.data.response[index].productSlug}";
+
+                                                Provider.of<HomeScreenProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .selectedString =
+                                                    "ProductInfo";
                                               },
                                               child: Container(
-                                                margin: EdgeInsets.only(left: 15),
+                                                margin:
+                                                    EdgeInsets.only(left: 15),
                                                 child: ProductBox(
                                                     expanded: false,
                                                     height: height,
                                                     width: width,
                                                     title:
-                                                    "${subCatSnapshot.data.response[index].productName}",
+                                                        "${subCatSnapshot.data.response[index].productName}",
                                                     image:
-                                                    "${subCatSnapshot.data.response[index].productImg}",
+                                                        "${subCatSnapshot.data.response[index].productImg}",
                                                     description:
-                                                    "${subCatSnapshot.data.response[index].vendorCompanyName}",
+                                                        "${subCatSnapshot.data.response[index].vendorCompanyName}",
                                                     price: subCatSnapshot
                                                         .data
                                                         .response[index]
-
                                                         .productPrice,
                                                     stock:
-                                                    "${subCatSnapshot.data.response[index].productStockStatus}",
+                                                        "${subCatSnapshot.data.response[index].productStockStatus}",
                                                     discount:
-                                                    "${subCatSnapshot.data.response[index].productDiscount}"),
+                                                        "${subCatSnapshot.data.response[index].productDiscount}"),
                                               ),
                                             );
                                           }
@@ -425,90 +450,97 @@ class _SchoolInfoState extends State<SchoolInfo> {
                           }
                         },
                       ),
-                      snapshot.data.response[0].schoolAllProduct.length> 0 ? Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 20),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Other Products',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 16,
-                                color: const Color(0xffb7b7b7),
+                      snapshot.data.response[0].schoolAllProduct.length > 0
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 20),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Other Products',
+                                    style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 16,
+                                      color: const Color(0xffb7b7b7),
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ],
                               ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
-                        ),
-                      ): SizedBox(),
-                      snapshot.data.response[0].schoolAllProduct.length > 0 ? Container(
-                          height: height / 2.7,
-                          width: width,
-                          child: ListView.builder(
-                            itemCount: snapshot
-                                .data.response[0].schoolAllProduct.length,
-                            scrollDirection: Axis.horizontal,
-                            physics: BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Provider.of<VendorProvider>(context,
-                                      listen: false)
-                                      .selectedVendorName =
-                                  "${snapshot.data.response[0].schoolAllProduct[index].vendorSlug}";
+                            )
+                          : SizedBox(),
+                      snapshot.data.response[0].schoolAllProduct.length > 0
+                          ? Container(
+                              height: height / 2.7,
+                              width: width,
+                              child: ListView.builder(
+                                itemCount: snapshot
+                                    .data.response[0].schoolAllProduct.length,
+                                scrollDirection: Axis.horizontal,
+                                physics: BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
 
-                                  Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
-                                      .selectedProductSlug =
-                                  "${snapshot.data.response[0].schoolAllProduct[index].productSlug}";
+                                      Provider.of<HomeScreenProvider>(context, listen: false).selectedTitle = "${snapshot.data.response[index].productName}";
 
-                                  Provider.of<HomeScreenProvider>(context,
-                                      listen: false)
-                                      .selectedString = "ProductInfo";
+                                      Provider.of<VendorProvider>(context,
+                                                  listen: false)
+                                              .selectedVendorName =
+                                          "${snapshot.data.response[0].schoolAllProduct[index].vendorSlug}";
+
+                                      Provider.of<HomeScreenProvider>(context,
+                                                  listen: false)
+                                              .selectedProductSlug =
+                                          "${snapshot.data.response[0].schoolAllProduct[index].productSlug}";
+
+                                      Provider.of<HomeScreenProvider>(context,
+                                              listen: false)
+                                          .selectedString = "ProductInfo";
+                                    },
+                                    child: Container(
+                                      margin: EdgeInsets.only(left: 15),
+                                      child: ProductBox(
+                                          expanded: false,
+                                          height: height,
+                                          width: width,
+                                          title:
+                                              "${snapshot.data.response[0].schoolAllProduct[index].productName}",
+                                          image:
+                                              "${snapshot.data.response[0].schoolAllProduct[index].productImg}",
+                                          description:
+                                              "${snapshot.data.response[0].schoolAllProduct[index].vendorCompanyName}",
+                                          price: snapshot
+                                              .data
+                                              .response[0]
+                                              .schoolAllProduct[index]
+                                              .productPrice,
+                                          stock:
+                                              "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}",
+                                          discount:
+                                              "${snapshot.data.response[index].productDiscount}"),
+                                    ),
+                                  );
                                 },
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 15),
-                                  child: ProductBox(
-                                      expanded: false,
-                                      height: height,
-                                      width: width,
-                                      title:
-                                      "${snapshot.data.response[0].schoolAllProduct[index].productName}",
-                                      image:
-                                      "${snapshot.data.response[0].schoolAllProduct[index].productImg}",
-                                      description:
-                                      "${snapshot.data.response[0].schoolAllProduct[index].vendorCompanyName}",
-                                      price: snapshot
-                                          .data
-                                          .response[0]
-                                          .schoolAllProduct[index]
-                                          .productPrice,
-                                      stock:
-                                      "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}",
-                                      discount:
-                                      "${snapshot.data.response[index].productDiscount}"),
-                                ),
-                              );
-                            },
-                          )) : SizedBox(),
+                              ))
+                          : SizedBox(),
                       SizedBox(height: 50),
                     ],
                   ),
                 );
               },
-            );
-          } else {
-            return Container(
-              child: Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
-                ),
+            ),
+          );
+        } else {
+          return Container(
+            child: Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(colorPalette.navyBlue),
               ),
-            );
-          }
-        },
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 }

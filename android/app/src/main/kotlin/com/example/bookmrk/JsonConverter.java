@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonConverter {
+
     static Map<String, Object> convertToMap(JSONObject json) throws JSONException {
         Map<String, Object> retMap = new HashMap<>();
 

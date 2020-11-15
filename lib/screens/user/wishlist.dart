@@ -50,6 +50,7 @@ class _WishListState extends State<WishList> {
                   ),
                   Expanded(
                     child: GridView.builder(
+                      physics: BouncingScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                           maxCrossAxisExtent: 300,
                           childAspectRatio: 0.75,

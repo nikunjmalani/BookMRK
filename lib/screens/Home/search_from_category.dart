@@ -82,6 +82,7 @@ class _Search2State extends State<Search2> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
+                                    _homeScreenProvider.selectedTitle = "${snapshot.data.response[index].productName}";
                                     Provider.of<VendorProvider>(context,
                                                 listen: false)
                                             .selectedVendorName =
@@ -116,14 +117,7 @@ class _Search2State extends State<Search2> {
                                                     Container(
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
-                                                    image: imageProvider,
-                                                    colorFilter:
-                                                        ColorFilter.mode(
-                                                            Colors.red
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            BlendMode
-                                                                .colorBurn)),
+                                                    image: imageProvider,),
                                               ),
                                             ),
                                             placeholder: (context, url) => Center(
