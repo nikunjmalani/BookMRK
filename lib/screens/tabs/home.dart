@@ -300,8 +300,7 @@ class _HomeState extends State<Home> {
                                                           Container(
                                                             alignment: Alignment
                                                                 .center,
-                                                            height: 15,
-                                                            width: 50,
+                                                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                                                             decoration:
                                                                 BoxDecoration(
                                                               color: colorPalette
