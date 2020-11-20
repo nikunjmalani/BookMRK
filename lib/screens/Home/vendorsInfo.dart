@@ -212,7 +212,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                       ),
                                                       Consumer<HomeScreenProvider>(
                                                           builder: (_, _homeScreenProvider, child) {
-                                                            return CircleAvatar(
+                                                            return _homeScreenProvider.totalNewNotifications == 0 ? SizedBox() : CircleAvatar(
                                                               radius: 10,
                                                               child: Text(
                                                                 '${_homeScreenProvider.totalNewNotifications}',
