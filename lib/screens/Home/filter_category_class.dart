@@ -176,6 +176,7 @@ class _FilterCategoryClassState extends State<FilterCategoryClass> {
                                   .data.response[0].product[index].productPrice,
                               stock:
                               "${snapshot.data.response[0].product[index].productStockStatus}",
+                              discount: "${snapshot.data.response[0].product[index].productDiscount}"
                             ),
                           );
                         },

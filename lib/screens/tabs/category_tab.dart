@@ -39,6 +39,7 @@ class _CategoryTabState extends State<CategoryTab> {
                       onTap: () {
                         Provider.of<HomeScreenProvider>(context, listen: false)
                             .selectedString = "SearchProducts2";
+                        Provider.of<HomeScreenProvider>(context, listen: false).findHomeScreenProduct = "";
                       },
                       title: "Search Products",
                     ),

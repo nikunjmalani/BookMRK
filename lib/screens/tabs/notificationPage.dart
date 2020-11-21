@@ -146,6 +146,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 itemCount: snapshot.data.response.length,
                               ),
                             ),
+                            SizedBox(height: 70,)
                           ],
                         )
                       : Center(

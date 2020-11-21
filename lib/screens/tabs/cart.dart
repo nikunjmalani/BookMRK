@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bookmrk/api/cart_api.dart';
 import 'package:bookmrk/api/product_api.dart';
 import 'package:bookmrk/api/user_api.dart';
+import 'package:bookmrk/api/wishlist_api.dart';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/cart_details_model.dart';
 import 'package:bookmrk/model/no_data_cart_model.dart';
@@ -32,7 +33,7 @@ class _CartState extends State<Cart> {
   static MethodChannel _channel = MethodChannel('easebuzz');
 
   /// total item count ...
-  int totalItem = 0;
+  // int totalItem = 0;
 
   /// get cart details of user...
   Future getCartDetails() async {
@@ -180,16 +181,16 @@ class _CartState extends State<Cart> {
                                   ),
                                 );
                               } else {
-                                totalItem = 0;
+                                // totalItem = 0;
                                 return ListView.builder(
                                   physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    if (index <
-                                        snapshot.data.response[0].cart.length) {
-                                      totalItem = totalItem +
-                                          (int.parse(
-                                              '${snapshot.data.response[0].cart[index].qty}'));
-                                    }
+                                    // if (index <
+                                    //     snapshot.data.response[0].cart.length) {
+                                    //   totalItem = totalItem +
+                                    //       (int.parse(
+                                    //           '${snapshot.data.response[0].cart[index].qty}'));
+                                    // }
 
                                     return index <
                                             snapshot
@@ -212,26 +213,66 @@ class _CartState extends State<Cart> {
                                                       padding:
                                                           const EdgeInsets.only(
                                                               left: 5, top: 0),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.0),
-                                                        child:
-                                                            CachedNetworkImage(
-                                                          imageUrl:
-                                                              '${snapshot.data.response[0].cart[index].productImg}',
-                                                          height: width / 3.5,
-                                                          width: width / 3.5,
-                                                          errorWidget: (context,
-                                                                  str,
-                                                                  stackTrace) =>
-                                                              Image.asset(
-                                                                  'assets/images/preload.png'),
-                                                          placeholder: (context,
-                                                                  str) =>
-                                                              Image.asset(
-                                                                  'assets/images/preload.png'),
-                                                        ),
+                                                      child: Stack(
+                                                        children: [
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.0),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl:
+                                                                  '${snapshot.data.response[0].cart[index].productImg}',
+                                                              height:
+                                                                  width / 3.5,
+                                                              width:
+                                                                  width / 3.5,
+                                                              errorWidget: (context,
+                                                                      str,
+                                                                      stackTrace) =>
+                                                                  Image.asset(
+                                                                      'assets/images/preload.png'),
+                                                              placeholder: (context,
+                                                                      str) =>
+                                                                  Image.asset(
+                                                                      'assets/images/preload.png'),
+                                                            ),
+                                                          ),
+                                                          snapshot
+                                                                      .data
+                                                                      .response[
+                                                                          0]
+                                                                      .cart[
+                                                                          index]
+                                                                      .productStockStatus !=
+                                                                  "IN"
+                                                              ? Positioned(
+                                                                  top: 40,
+                                                                  left: 10,
+                                                                  child:
+                                                                      Container(
+                                                                    height: 30,
+                                                                    width: 90,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: Text(
+                                                                      'OUT OF STOCK',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .red,
+                                                                          fontSize:
+                                                                              12.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w700),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : SizedBox(),
+                                                        ],
                                                       ),
                                                     ),
                                                     Column(
@@ -335,19 +376,29 @@ class _CartState extends State<Cart> {
                                                         ),
                                                       ),
                                                       SizedBox(width: 10.0),
-                                                      Text(
-                                                        '${snapshot.data.response[0].cart[index].qty} Items',
-                                                        style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          fontSize: 16,
-                                                          color: const Color(
-                                                              0xff515c6f),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
+                                                      snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .productStockStatus ==
+                                                              "IN"
+                                                          ? Text(
+                                                              '${snapshot.data.response[0].cart[index].qty} Qty',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 16,
+                                                                color: const Color(
+                                                                    0xff515c6f),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            )
+                                                          : SizedBox(),
                                                       // Text(
                                                       //   '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
                                                       //   style: TextStyle(
@@ -361,19 +412,96 @@ class _CartState extends State<Cart> {
                                                       //   textAlign:
                                                       //       TextAlign.left,
                                                       // ),
-                                                      Text(
-                                                        'Total : ${snapshot.data.response[0].cart[index].productFinalTotal} ₹',
-                                                        style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          fontSize: 16,
-                                                          color: const Color(
-                                                              0xff515c6f),
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
+                                                      snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .productStockStatus ==
+                                                              "IN"
+                                                          ? Text(
+                                                              'Total : ₹ ${snapshot.data.response[0].cart[index].productFinalTotal} ',
+                                                              style: TextStyle(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 16,
+                                                                color: const Color(
+                                                                    0xff515c6f),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ),
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                            )
+                                                          : GestureDetector(
+                                                              onTap: () async {
+                                                                int userId =
+                                                                    prefs.read<
+                                                                            int>(
+                                                                        'userId');
+                                                                dynamic response = await WishListAPI.addProductInWishList(
+                                                                    userId
+                                                                        .toString(),
+                                                                    snapshot
+                                                                        .data
+                                                                        .response[
+                                                                            0]
+                                                                        .cart[
+                                                                            index]
+                                                                        .productId);
+                                                                print(response);
+                                                                if (response[
+                                                                        'status'] ==
+                                                                    200) {
+                                                                  Scaffold.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          getSnackBar(
+                                                                              "${response['message']}")).closed.then((value) async {
+                                                                    _productOrderProvider
+                                                                        .isProductRemovingFromCartInProgress =
+                                                                    true;
+
+                                                                    int userId =
+                                                                    prefs.read<int>(
+                                                                        'userId');
+                                                                    dynamic response =
+                                                                        await CartAPI.removeCart(
+                                                                        userId
+                                                                            .toString(),
+                                                                        snapshot
+                                                                            .data
+                                                                            .response[
+                                                                        0]
+                                                                            .cart[
+                                                                        index]
+                                                                            .cartId);
+                                                                    _productOrderProvider
+                                                                        .isProductRemovingFromCartInProgress =
+                                                                    false;
+                                                                    Provider.of<HomeScreenProvider>(
+                                                                        context,
+                                                                        listen: false)
+                                                                        .getCartCount();
+                                                                  });
+
+
+
+
+
+                                                                }
+                                                              },
+                                                              child: Text(
+                                                                'Add To Wishlist',
+                                                                style: TextStyle(
+                                                                    color: colorPalette
+                                                                        .navyBlue,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w800),
+                                                              ),
+                                                            ),
                                                     ],
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -388,7 +516,7 @@ class _CartState extends State<Cart> {
                                               PriceDetail(
                                                 width: width,
                                                 height: height,
-                                                itemCount: totalItem,
+                                                // itemCount: totalItem,
                                                 totalOfItem:
                                                     '${snapshot.data.response[0].cartInfo[0].finalPrice}',
                                                 tax:
@@ -399,7 +527,7 @@ class _CartState extends State<Cart> {
                                                     '${snapshot.data.response[0].cartInfo[0].finalTotalPrice}',
                                               ),
                                               BlueLongButton(
-                                                title: "PROCESS TO CHECKOUT",
+                                                title: "PROCEED TO CHECKOUT",
                                                 height: height,
                                                 onTap: snapshot
                                                             .data
@@ -408,8 +536,9 @@ class _CartState extends State<Cart> {
                                                             .hideCheckoutButton ==
                                                         "NO"
                                                     ? () async {
-
-                                                  _productOrderProvider.isProductRemovingFromCartInProgress = true;
+                                                        _productOrderProvider
+                                                                .isProductRemovingFromCartInProgress =
+                                                            true;
 
                                                         int userId =
                                                             prefs.read<int>(
@@ -429,7 +558,8 @@ class _CartState extends State<Cart> {
                                                           /// method channel call for payment......
                                                           String txnid =
                                                               "${response['response'][0]['order_no']}"; //This txnid should be unique every time.
-                                                          String amount = "${double.parse("${response['response'][0]['order_total_cost']}").roundToDouble()}";
+                                                          String amount =
+                                                              "${double.parse("${response['response'][0]['order_total_cost']}").roundToDouble()}";
                                                           // String amount = "1.0";
                                                           String productinfo =
                                                               "Books";
@@ -442,7 +572,7 @@ class _CartState extends State<Cart> {
                                                           String s_url = "";
                                                           String f_url = "";
                                                           String key =
-                                                              "$easeBuzzKey";
+                                                              "$easeBuzzKeyTest";
                                                           String udf1 = "";
                                                           String udf2 = "";
                                                           String udf3 = "";
@@ -461,11 +591,11 @@ class _CartState extends State<Cart> {
                                                           String zipcode =
                                                               "${response['response'][0]['user_pincode']}";
                                                           String salt =
-                                                              "$easeBuzzSalt";
+                                                              "$easeBuzzSaltTest";
                                                           String hash =
                                                               "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
                                                           String pay_mode =
-                                                              "production";
+                                                              "test";
                                                           String unique_id =
                                                               "11345";
 
@@ -515,18 +645,20 @@ class _CartState extends State<Cart> {
                                                                 .showSnackBar(
                                                                     getSnackBar(
                                                                         'Transaction Failed !'));
-                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
-
-                                                          }else if (payment_response[
-                                                          'result'] ==
+                                                            _productOrderProvider
+                                                                    .isProductRemovingFromCartInProgress =
+                                                                false;
+                                                          } else if (payment_response[
+                                                                  'result'] ==
                                                               "user_cancelled") {
                                                             print('calleds');
                                                             Scaffold.of(context)
                                                                 .showSnackBar(
-                                                                getSnackBar(
-                                                                    'Transaction Failed !'));
-                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
-
+                                                                    getSnackBar(
+                                                                        'Transaction Failed !'));
+                                                            _productOrderProvider
+                                                                    .isProductRemovingFromCartInProgress =
+                                                                false;
                                                           }
 
                                                           /// call final payment status api....
@@ -543,54 +675,71 @@ class _CartState extends State<Cart> {
                                                                       'status'],
                                                                   payment_response);
 
-                                                          print("from api : ${finalPaymentResponse}");
+                                                          print(
+                                                              "from api : ${finalPaymentResponse}");
 
-                                                          if(finalPaymentResponse['status'] == 200){
+                                                          if (finalPaymentResponse[
+                                                                  'status'] ==
+                                                              200) {
                                                             /// show final payment success dialog...
                                                             CoolAlert.show(
                                                               context: context,
-                                                              type: CoolAlertType.success,
-                                                              text: "Your transaction was successful !",
-                                                              confirmBtnColor: colorPalette.navyBlue,
-                                                              title: "Payment Done.",
-                                                              animType: CoolAlertAnimType.scale,
+                                                              type:
+                                                                  CoolAlertType
+                                                                      .success,
+                                                              text:
+                                                                  "Your transaction was successful !",
+                                                              confirmBtnColor:
+                                                                  colorPalette
+                                                                      .navyBlue,
+                                                              title:
+                                                                  "Payment Done.",
+                                                              animType:
+                                                                  CoolAlertAnimType
+                                                                      .scale,
                                                             );
 
                                                             try {
-                                                              Provider
-                                                                  .of<HomeScreenProvider>(context, listen: false)
+                                                              Provider.of<HomeScreenProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
                                                                   .pageController
-                                                                  .jumpToPage(3);
-                                                              Provider
-                                                                  .of<OrderProvider>(context,
-                                                                  listen: false)
-                                                                  .orderId =
-                                                              "${response['response'][0]['order_no']}";
+                                                                  .jumpToPage(
+                                                                      3);
+                                                              Provider.of<OrderProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .orderId =
+                                                                  "${response['response'][0]['order_no']}";
 
-
-                                                              _productOrderProvider.isProductRemovingFromCartInProgress = false;
-                                                              Provider
-                                                                  .of<HomeScreenProvider>(context,
-                                                                  listen: false)
-                                                                  .selectedString =
-                                                              "OrderDetails";
-                                                              Provider
-                                                                  .of<HomeScreenProvider>(context, listen: false)
-                                                                  .selectedBottomIndex =
-                                                              3;
+                                                              _productOrderProvider
+                                                                      .isProductRemovingFromCartInProgress =
+                                                                  false;
+                                                              Provider.of<HomeScreenProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .selectedString =
+                                                                  "OrderDetails";
+                                                              Provider.of<HomeScreenProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .selectedBottomIndex = 3;
                                                             } catch (e) {
-                                                              _productOrderProvider.isProductRemovingFromCartInProgress = false;
+                                                              _productOrderProvider
+                                                                      .isProductRemovingFromCartInProgress =
+                                                                  false;
                                                               print(e);
                                                             }
-
-                                                          }else{
-                                                            _productOrderProvider.isProductRemovingFromCartInProgress = false;
+                                                          } else {
+                                                            _productOrderProvider
+                                                                    .isProductRemovingFromCartInProgress =
+                                                                false;
                                                           }
-
-
                                                         }
-
-
                                                       }
                                                     : null,
                                               )

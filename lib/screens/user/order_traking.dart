@@ -121,7 +121,7 @@ class _OrderTrackingState extends State<OrderTracking> {
               if (snapshot.hasData) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                 children:[
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 10),

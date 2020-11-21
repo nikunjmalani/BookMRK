@@ -7,6 +7,7 @@ import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
+import 'package:bookmrk/widgets/widgets.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -60,7 +61,7 @@ class _Search2State extends State<Search2> {
               }),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 75.0),
               child: FutureBuilder(
                   future:
                       searchProducts(_homeScreenProvider.findHomeScreenProduct),
@@ -96,119 +97,28 @@ class _Search2State extends State<Search2> {
                                   child: Container(
                                     height: height / 3,
                                     width: width / 2,
+                                    margin: EdgeInsets.only(bottom: 10.0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       border: Border.all(
                                         color: Color(0xffcfcfcf),
                                       ),
                                     ),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 30, bottom: 25.0),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                "${snapshot.data.response[index].productImg}",
-                                            height: height / 8,
-                                            fit: BoxFit.fill,
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: imageProvider,),
-                                              ),
-                                            ),
-                                            placeholder: (context, url) => Center(
-                                                child: Image.asset(
-                                                    'assets/images/preload.png')),
-                                            errorWidget:
-                                                (context, url, error) => Center(
-                                                    child: Image.asset(
-                                                        'assets/images/preload.png')),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 20.0,
-                                          child: Text(
-                                            "${snapshot.data.response[index].productName}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 16,
-                                              color: const Color(0xff000000),
-                                            ),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                          alignment: Alignment.centerLeft,
-                                          padding: EdgeInsets.only(left: 5),
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Container(
-                                          height: 16.0,
-                                          child: Text(
-                                            "${snapshot.data.response[index].vendorCompanyName}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontFamily: 'Roboto',
-                                              fontSize: 14,
-                                              color: const Color(0xff777777),
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                            textAlign: TextAlign.left,
-                                          ),
-                                          alignment: Alignment.centerLeft,
-                                          padding: EdgeInsets.only(left: 5),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 5,
-                                            left: 5,
-                                            right: 10,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                alignment: Alignment.center,
-                                                height: 20,
-                                                width: 70,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      colorPalette.pinkOrange,
-                                                  borderRadius:
-                                                      BorderRadius.circular(30),
-                                                ),
-                                                child: Text(
-                                                  '${snapshot.data.response[index].productStockStatus} Stock',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 13,
-                                                    color:
-                                                        const Color(0xffffffff),
-                                                  ),
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                              ),
-                                              Text(
-                                                '₹ ${snapshot.data.response[index].productSalePrice}',
-                                                style: TextStyle(
-                                                  fontFamily: 'Roboto',
-                                                  fontSize: 14,
-                                                  color:
-                                                      const Color(0xff515c6f),
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                                textAlign: TextAlign.left,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                                    child: ProductBox(
+                                        expanded: true,
+                                        height: height,
+                                        width: width,
+                                        title:
+                                        "${snapshot.data.response[index].productName}",
+                                        image:
+                                        "${snapshot.data.response[index].productImg}",
+                                        description:
+                                        "${snapshot.data.response[index].vendorCompanyName}",
+                                        price: snapshot
+                                            .data.response[index].productPrice,
+                                        stock:
+                                        "${snapshot.data.response[index].productStockStatus}",
+                                        discount: "${snapshot.data.response[index].productDiscount}"
                                     ),
                                   ),
                                 ),
@@ -255,7 +165,7 @@ class _Search2State extends State<Search2> {
                                 height: 100.0,
                               ),
                               SizedBox(height:30),
-                              Text('Please write Correct names'),
+                              Text('Search entire store here...'),
                             ],
                           ),
                         );

@@ -114,6 +114,8 @@ class _LoginState extends State<Login> {
                             context: context,
                             onClick: () async {
                               _loginProvider.isPasswordChecking = true;
+                              print(_loginEmailAddress.text);
+                              print(_loginPassword.text);
                               dynamic response = await LoginAPI.checkLogin(
                                   email: _loginEmailAddress.text,
                                   password: _loginPassword.text);
@@ -121,6 +123,14 @@ class _LoginState extends State<Login> {
                               if (response['status'] == 200) {
                                 if (response['data'][0]['is_mobile_verified'] ==
                                     "1") {
+
+                                  prefs.write('isLogin', true);
+                                  prefs.write(
+                                      'userId',
+                                      int.parse(response['data'][0]['user_id']
+                                          .toString()));
+
+
                                   /// get device information....
                                   DeviceInfoPlugin deviceInfo =
                                       DeviceInfoPlugin();
@@ -141,13 +151,15 @@ class _LoginState extends State<Login> {
                                     modelName = iosInfo.model;
                                   }
 
+
+
                                   /// get firebase token....
                                   await FirebaseMessaging()
                                       .getToken().then((value){
                                         deviceId = value.toString();
                                   });
 
-                                  print("deviceId : $deviceId");
+                                  // print("deviceId : $deviceId");
                                   int userId = prefs.read<int>('userId');
                                   dynamic updateAppResponse =
                                       await HomePageApi.updateApplicationInfo(
@@ -160,11 +172,7 @@ class _LoginState extends State<Login> {
 
                                   print(updateAppResponse);
                                   _loginProvider.isPasswordChecking = false;
-                                  prefs.write('isLogin', true);
-                                  prefs.write(
-                                      'userId',
-                                      int.parse(response['data'][0]['user_id']
-                                          .toString()));
+
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

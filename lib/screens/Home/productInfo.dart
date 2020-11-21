@@ -155,8 +155,11 @@ class _ProductInfoState extends State<ProductInfo> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                BlueHeader(
-                                    "${snapshot.data.response[0].productName}"),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: BlueHeader(
+                                      "${snapshot.data.response[0].productName}"),
+                                ),
                                 descrip(
                                     "${snapshot.data.response[0].vendorCompanyName}"),
                                 Text(
@@ -171,17 +174,15 @@ class _ProductInfoState extends State<ProductInfo> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                Row(
+                                snapshot.data.response[0].productDiscount == "" ? SizedBox():Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '₹ ${snapshot.data.response[0].productPrice}',
+                                      '₹ ${snapshot.data.response[0].productSalePrice}',
                                       style: TextStyle(
                                         fontFamily: 'Roboto',
                                         fontSize: 17,
-                                        color: Colors.black,
-                                        decoration: TextDecoration.lineThrough,
-                                        decorationColor: Colors.black,
+                                        color: const Color(0xff000000),
                                         fontWeight: FontWeight.w700,
                                       ),
                                       textAlign: TextAlign.left,
@@ -199,15 +200,18 @@ class _ProductInfoState extends State<ProductInfo> {
                                   ],
                                 ),
                                 Text(
-                                  '₹ ${snapshot.data.response[0].productSalePrice}',
+                                  '₹ ${snapshot.data.response[0].productPrice}',
                                   style: TextStyle(
                                     fontFamily: 'Roboto',
                                     fontSize: 17,
-                                    color: const Color(0xff000000),
+                                    color: Colors.black,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: Colors.black,
                                     fontWeight: FontWeight.w700,
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
+
                                 title("Specifications"),
                                 SizedBox(
                                   height: 15,

@@ -35,6 +35,7 @@ class _HomeState extends State<Home> {
   /// get data for home page..
   Future<HomePageModel> getHomePageDetails() async {
     dynamic data = await HomePageApi.getHomePageDetails();
+    print(data);
     HomePageModel _homePageDetails = HomePageModel.fromJson(data);
     return _homePageDetails;
   }
@@ -71,6 +72,8 @@ class _HomeState extends State<Home> {
                                   Provider.of<HomeScreenProvider>(context,
                                           listen: false)
                                       .selectedString = "SearchProducts";
+                                  Provider.of<HomeScreenProvider>(context, listen: false).findHomeScreenProduct = "";
+
                                 },
                               ),
                               Carasoul(
@@ -108,7 +111,7 @@ class _HomeState extends State<Home> {
                               Container(
                                 height:
                                     snapshot.data.response[0].product.length > 0
-                                        ? height / 2.3
+                                        ? height / 2.45
                                         : height / 9,
                                 margin: EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 5),
@@ -211,138 +214,26 @@ class _HomeState extends State<Home> {
                                                   top: 10,
                                                   left: 10,
                                                   right: 10,
-                                                  bottom: 10,
+                                                  bottom: 0,
                                                 ),
                                                 height: height / 3.8,
-                                                width: width / 2.8,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                    color: Color(0xffcfcfcf),
-                                                  ),
-                                                ),
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Container(
-                                                      child: showCachedImage(
-                                                        image:
-                                                            '${snapshot.data.response[0].product[index].productImg}',
-                                                        height: height,
-                                                        placeHolderImage:
-                                                            'assets/images/book.png',
-                                                      ),
-                                                      height: height / 5.6,
-                                                      padding: EdgeInsets.only(
-                                                          top: 15),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 3,
-                                                    ),
-                                                    Container(
-                                                      width: width * 0.5,
-                                                      padding: EdgeInsets.only(
-                                                        left: 5.0,
-                                                      ),
-                                                      child: Text(
-                                                        '${snapshot.data.response[0].product[index].productName}',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          fontSize: 12,
-                                                          color: const Color(
-                                                              0xff000000),
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 3,
-                                                    ),
-                                                    Container(
-                                                      child: Text(
-                                                        '${snapshot.data.response[0].product[index].vendorCompanyName}',
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontFamily: 'Roboto',
-                                                          fontSize: 12,
-                                                          color: const Color(
-                                                              0xff777777),
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                        ),
-                                                        textAlign:
-                                                            TextAlign.left,
-                                                      ),
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      padding: EdgeInsets.only(
-                                                          left: 5, right: 5),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                        top: 3,
-                                                        left: 5,
-                                                        right: 5,
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: colorPalette
-                                                                  .pinkOrange,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          30),
-                                                            ),
-                                                            child: Text(
-                                                              '${snapshot.data.response[0].product[index].productStockStatus} Stock',
-                                                              style: TextStyle(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontSize: 10,
-                                                                color: const Color(
-                                                                    0xffffffff),
-                                                              ),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .left,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            '₹ ${snapshot.data.response[0].product[index].productSalePrice}',
-                                                            style: TextStyle(
-                                                              fontFamily:
-                                                                  'Roboto',
-                                                              fontSize: 10,
-                                                              color: const Color(
-                                                                  0xff515c6f),
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                            ),
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
+                                                width: width / 2.3,
+
+                                                child:ProductBox(
+                                                    expanded: true,
+                                                    height: height,
+                                                    width: width,
+                                                    title:
+                                                    "${snapshot.data.response[0].product[index].productName}",
+                                                    image:
+                                                    "${snapshot.data.response[0].product[index].productImg}",
+                                                    description:
+                                                    "${snapshot.data.response[0].product[index].vendorCompanyName}",
+                                                    price: snapshot
+                                                        .data.response[0].product[index].productPrice,
+                                                    stock:
+                                                    "${snapshot.data.response[0].product[index].productStockStatus}",
+                                                    discount: "${snapshot.data.response[0].product[index].productDiscount}"
                                                 ),
                                               ),
                                             ),

@@ -19,6 +19,7 @@ class _WishListState extends State<WishList> {
   Future<WishListModel> getWishList() async {
     int userId = prefs.read<int>('userId');
     dynamic response = await WishListAPI.getWishListProducts(userId.toString());
+    print(response);
     WishListModel _wishListModel = WishListModel.fromJson(response);
     return _wishListModel;
   }
@@ -74,13 +75,13 @@ class _WishListState extends State<WishList> {
                               icon: GestureDetector(
                                   onTap: () async {
                                     int userId = prefs.read<int>('userId');
-                                    
+
                                     dynamic response = await WishListAPI
                                         .removeProductFromWishList(
                                             userId.toString(),
                                             snapshot.data.response[index]
                                                 .productId);
-                                    setState(() {});
+                                    print(response);
                                   },
                                   child: SvgPicture.asset(
                                       "assets/icons/trash.svg")),
@@ -96,7 +97,9 @@ class _WishListState extends State<WishList> {
                               description:
                                   "${snapshot.data.response[index].vendorCompanyName}",
                               price: snapshot
-                                  .data.response[index].productSalePrice),
+                                  .data.response[index].productSalePrice,
+                            discount: "${snapshot.data.response[index].productDiscount}"
+                          ),
                         );
                       },
                       itemCount: snapshot.data.response.length,

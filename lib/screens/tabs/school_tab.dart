@@ -53,6 +53,8 @@ class _SchoolTabState extends State<SchoolTab> {
   autoFillFields() {
     Provider.of<SchoolProvider>(context, listen: false)
         .isFindSchoolByLocationSelected = false;
+    Provider.of<SchoolProvider>(context, listen: false).isSearchSchoolTabSelected = false;
+    Provider.of<SchoolProvider>(context, listen: false).selectedCountryIdForSchool = 101;
   }
 
   @override
@@ -164,7 +166,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                   _pincodeController.text =
                                       _pincodeController.text == "" ||
                                               _pincodeController.text == null
-                                          ? "123123"
+                                          ? ""
                                           : _pincodeController.text;
                                   _schoolProvider.selectedPinCodeForSchool =
                                       _pincodeController.text;
@@ -948,6 +950,7 @@ Widget LocationDialog(
                                                 .selectedStateIdForSchool =
                                             int.parse(snapshot
                                                 .data.response[index].stateId);
+                                        _schoolProvider.selectedCityIndexForSchool = 0;
                                       },
                                     )),
                           ),
@@ -1000,6 +1003,7 @@ Widget LocationDialog(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: DropdownButton(
+                            onChanged: (v){},
                             underline: Container(),
                             isExpanded: true,
                             style: TextStyle(

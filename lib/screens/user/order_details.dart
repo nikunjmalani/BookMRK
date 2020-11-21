@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderDetails extends StatefulWidget {
   final String orderId;
@@ -46,9 +47,21 @@ class _OrderDetailsState extends State<OrderDetails> {
     int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
         userId.toString(), orderIdToTrack);
-
     TrackOrderModel _trackOrderModel = TrackOrderModel.fromJson(response);
     return _trackOrderModel;
+  }
+
+  Future<void> _launchInBrowser(String url) async {
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        forceSafariVC: false,
+        forceWebView: false,
+        headers: <String, String>{'my_header_key': 'my_header_value'},
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -266,7 +279,15 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                       .orderData[index]
                                                       .isManual ==
                                                   "1"
-                                              ? () {}
+                                              ? () {
+                                            print('manual2');
+                                            _orderProvider
+                                                .orderTrackExpandListSingleUpdate(
+                                                index,
+                                                !_orderProvider
+                                                    .orderTrackExpandList[
+                                                index]);
+                                          }
                                               : () {
                                                   _orderProvider
                                                           .orderIdToTrack =
@@ -323,6 +344,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                                           title: "TRACK",
                                         ),
                                       ),
+                                      snapshot.data.response[0].orderData[index].isInvoiceMade == "1" ? BlueOutlineButton(
+                                        width: width,
+                                        onTap:  ( ) async {
+                                          _launchInBrowser("${snapshot.data.response[0].orderData[index].invoiceLink}");
+                                        },
+                                        title: "INVOICE",
+                                      ) : SizedBox(),
                                       RichText(
                                         text: TextSpan(
                                           children: [
@@ -681,12 +709,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                           .isManual ==
                                                       "1"
                                                   ? () {
+                                                print('manual');
                                                       _orderProvider
                                                           .orderTrackExpandListSingleUpdate(
                                                               index,
                                                               !_orderProvider
                                                                       .orderTrackExpandList[
                                                                   index]);
+                                                      print('manual3');
                                                     }
                                                   : () {
                                                       _orderProvider
@@ -749,6 +779,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                                               title: "TRACK",
                                             ),
                                           ),
+                                          snapshot.data.response[0].orderData[index].isInvoiceMade == "1" ? BlueOutlineButton(
+                                            width: width,
+                                            onTap:  ( ) async {
+                                              _launchInBrowser("${snapshot.data.response[0].orderData[index].invoiceLink}");
+                                            },
+                                            title: "INVOICE",
+                                          ) : SizedBox(),
+                                          SizedBox(width: 20.0,),
                                           RichText(
                                             text: TextSpan(
                                               children: [
@@ -820,6 +858,16 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 SizedBox(height: 5),
                                                 Text(
                                                   "Order Shipping Date : ${snapshot.data.response[0].shippingInfoDate}",
+                                                  style: TextStyle(
+                                                      fontSize: 16.0,
+                                                      color:
+                                                      colorPalette.navyBlue,
+                                                      fontWeight:
+                                                      FontWeight.w200),
+                                                ),
+                                                SizedBox(height: 5),
+                                                Text(
+                                                  "Order Shipping Info : ${snapshot.data.response[0].shippingInfo}",
                                                   style: TextStyle(
                                                       fontSize: 16.0,
                                                       color:

@@ -285,6 +285,7 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                                 (Place place) {
                                                               print(place
                                                                   .description);
+                                                              print(place.fullJSON);
                                                               place.geolocation.then((value){
                                                                 _mapProvider.addressSelectedLatLng = value.coordinates;
                                                               });

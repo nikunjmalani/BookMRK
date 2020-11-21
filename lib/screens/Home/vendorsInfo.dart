@@ -494,7 +494,10 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                                     stock:
                                                                     "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
                                                                     image:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
+                                                                    discount: "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+
+                                                                ),
                                                               ),
                                                             );
                                                           } else {
@@ -578,7 +581,10 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                         stock:
                                                         "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
                                                         image:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
+                                                   discount: "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+                                                    ),
+
                                                   );
                                                 },
                                                 itemCount: snapshot

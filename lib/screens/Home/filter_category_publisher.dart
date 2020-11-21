@@ -180,6 +180,7 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                                   .data.response[0].product[index].productPrice,
                               stock:
                               "${snapshot.data.response[0].product[index].productStockStatus}",
+                              discount: "${snapshot.data.response[0].product[index].productDiscount}",
                             ),
                           );
                         },
