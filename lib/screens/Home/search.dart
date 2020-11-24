@@ -114,7 +114,7 @@ class _SearchState extends State<Search> {
                                         description:
                                         "${snapshot.data.response[index].vendorCompanyName}",
                                         price: snapshot
-                                            .data.response[index].productPrice,
+                                            .data.response[index].productSalePrice,
                                         stock:
                                         "${snapshot.data.response[index].productStockStatus}",
                                         discount: "${snapshot.data.response[index].productDiscount}"

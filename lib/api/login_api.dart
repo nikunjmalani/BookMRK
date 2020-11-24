@@ -29,8 +29,10 @@ class LoginAPI {
       encoding: Encoding.getByName("utf-8"),
     );
 
-    dynamic data = jsonDecode(response.body);
     print(response.body);
+
+    dynamic data = jsonDecode(response.body);
+
 
     if (data['status'] == 200) {
       return {

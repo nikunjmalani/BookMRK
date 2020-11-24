@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
   /// get data for home page..
   Future<HomePageModel> getHomePageDetails() async {
     dynamic data = await HomePageApi.getHomePageDetails();
-    print(data);
+
     HomePageModel _homePageDetails = HomePageModel.fromJson(data);
     return _homePageDetails;
   }
@@ -230,7 +230,7 @@ class _HomeState extends State<Home> {
                                                     description:
                                                     "${snapshot.data.response[0].product[index].vendorCompanyName}",
                                                     price: snapshot
-                                                        .data.response[0].product[index].productPrice,
+                                                        .data.response[0].product[index].productSalePrice,
                                                     stock:
                                                     "${snapshot.data.response[0].product[index].productStockStatus}",
                                                     discount: "${snapshot.data.response[0].product[index].productDiscount}"

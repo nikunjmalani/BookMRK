@@ -69,7 +69,7 @@ class _MyOrdersState extends State<MyOrders> {
                                       .forEach((element) {
                                     element.orderDetail.forEach((b) {
                                       data.add(b);
-                                      print("_____ORDER B : $b}");
+
                                     });
                                   });
 
@@ -77,7 +77,7 @@ class _MyOrdersState extends State<MyOrders> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
-                                          print("bottom index : ${homeProvider.selectedBottomIndex}");
+
                                           Provider.of<OrderProvider>(context,
                                                       listen: false)
                                                   .orderId =
@@ -214,7 +214,7 @@ class _MyOrdersState extends State<MyOrders> {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: "₹ 869.00",
+                                                      text: "₹ ${snapshot.data.response[index].orderTotalCost}",
                                                       style: TextStyle(
                                                         fontFamily: 'Roboto',
                                                         fontSize: 15,
@@ -318,6 +318,10 @@ class _MyOrdersState extends State<MyOrders> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
+                                          Provider.of<OrderProvider>(context,
+                                              listen: false)
+                                              .orderId =
+                                          "${snapshot.data.response[index].orderNo}";
                                           homeProvider.selectedString =
                                               "OrderDetails";
                                         },
@@ -447,7 +451,7 @@ class _MyOrdersState extends State<MyOrders> {
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: "₹ 869.00",
+                                                      text: "₹ ${snapshot.data.response[index].orderTotalCost}",
                                                       style: TextStyle(
                                                         fontFamily: 'Roboto',
                                                         fontSize: 15,

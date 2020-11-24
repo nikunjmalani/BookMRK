@@ -177,7 +177,7 @@ class _FilterCategoryPublisherState extends State<FilterCategoryPublisher> {
                               description:
                               "${snapshot.data.response[0].product[index].vendorCompanyName}",
                               price: snapshot
-                                  .data.response[0].product[index].productPrice,
+                                  .data.response[0].product[index].productSalePrice,
                               stock:
                               "${snapshot.data.response[0].product[index].productStockStatus}",
                               discount: "${snapshot.data.response[0].product[index].productDiscount}",

@@ -213,4 +213,14 @@ class HomeScreenProvider extends ChangeNotifier {
     _selectedTitle = value;
     notifyListeners();
   }
+
+  /// when do not showing map..
+  bool _showMapInTrackingPage = true;
+
+  bool get showMapInTrackingPage => _showMapInTrackingPage;
+
+  set showMapInTrackingPage(bool value) {
+    _showMapInTrackingPage = value;
+    notifyListeners();
+  }
 }

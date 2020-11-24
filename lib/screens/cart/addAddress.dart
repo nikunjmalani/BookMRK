@@ -276,8 +276,7 @@ class _AddAddressState extends State<AddAddress> {
 
                                                               onSelected:
                                                                   (Place place) {
-                                                                print(place
-                                                                    .description);
+
 
                                                                 place.geolocation.then((value){
                                                                   _mapProvider.addressSelectedLatLng = value.coordinates;

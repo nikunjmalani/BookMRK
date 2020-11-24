@@ -490,7 +490,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                                     description:
                                                                     "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
                                                                     price:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
                                                                     stock:
                                                                     "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
                                                                     image:
@@ -577,7 +577,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                         description:
                                                         "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
                                                         price:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
                                                         stock:
                                                         "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
                                                         image:

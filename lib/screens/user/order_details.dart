@@ -47,6 +47,8 @@ class _OrderDetailsState extends State<OrderDetails> {
     int userId = prefs.read<int>('userId');
     dynamic response = await OrderHistoryAPI.getTrackingDetailsOfOrder(
         userId.toString(), orderIdToTrack);
+
+
     TrackOrderModel _trackOrderModel = TrackOrderModel.fromJson(response);
     return _trackOrderModel;
   }
@@ -280,7 +282,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                       .isManual ==
                                                   "1"
                                               ? () {
-                                            print('manual2');
+
                                             _orderProvider
                                                 .orderTrackExpandListSingleUpdate(
                                                 index,
@@ -289,57 +291,114 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                 index]);
                                           }
                                               : () {
-                                                  _orderProvider
-                                                          .orderIdToTrack =
-                                                      "${snapshot.data.response[0].orderData[index].subOrderNo}";
-                                                  _orderProvider
-                                                          .userDeliveryAddress =
-                                                      LatLng(
+
+                                            try{
+                                              _orderProvider
+                                                  .orderIdToTrack =
+                                              "${snapshot.data.response[0].orderData[index].subOrderNo}";
+                                              _orderProvider
+                                                  .userDeliveryAddress =
+                                                  LatLng(
                                                     double.parse(snapshot
-                                                                    .data
-                                                                    .response[0]
-                                                                    .userDeliveryAddress[
-                                                                        0]
-                                                                    .latitudes ==
-                                                                "" ||
-                                                            snapshot
-                                                                    .data
-                                                                    .response[0]
-                                                                    .userDeliveryAddress[
-                                                                        0]
-                                                                    .latitudes ==
-                                                                null
+                                                        .data
+                                                        .response[0]
+                                                        .userDeliveryAddress[
+                                                    0]
+                                                        .latitudes ==
+                                                        "" ||
+                                                        snapshot
+                                                            .data
+                                                            .response[0]
+                                                            .userDeliveryAddress[
+                                                        0]
+                                                            .latitudes ==
+                                                            null
                                                         ? "21.969138705424697"
                                                         : snapshot
+                                                        .data
+                                                        .response[0]
+                                                        .userDeliveryAddress[
+                                                    0]
+                                                        .longitude),
+                                                    double.parse(snapshot
+                                                        .data
+                                                        .response[0]
+                                                        .userDeliveryAddress[
+                                                    0]
+                                                        .longitude ==
+                                                        "" ||
+                                                        snapshot
                                                             .data
                                                             .response[0]
                                                             .userDeliveryAddress[
-                                                                0]
-                                                            .longitude),
-                                                    double.parse(snapshot
-                                                                    .data
-                                                                    .response[0]
-                                                                    .userDeliveryAddress[
-                                                                        0]
-                                                                    .longitude ==
-                                                                "" ||
-                                                            snapshot
-                                                                    .data
-                                                                    .response[0]
-                                                                    .userDeliveryAddress[
-                                                                        0]
-                                                                    .longitude ==
-                                                                null
+                                                        0]
+                                                            .longitude ==
+                                                            null
                                                         ? "77.69074838608503"
                                                         : snapshot
-                                                            .data
-                                                            .response[0]
-                                                            .userDeliveryAddress[
-                                                                0]
-                                                            .longitude),
+                                                        .data
+                                                        .response[0]
+                                                        .userDeliveryAddress[
+                                                    0]
+                                                        .longitude),
                                                   );
-                                                  homeProvider.selectedString =
-                                                      "OrderTracking";
+                                              homeProvider.selectedString =
+                                              "OrderTracking";
+                                            }catch(e){
+                                              _orderProvider
+                                                  .orderIdToTrack =
+                                              "${snapshot.data.response[0].orderData[index].subOrderNo}";
+                                              // _orderProvider
+                                              //     .userDeliveryAddress =
+                                              //     LatLng(
+                                              //       double.parse(snapshot
+                                              //           .data
+                                              //           .response[0]
+                                              //           .userDeliveryAddress[
+                                              //       0]
+                                              //           .latitudes ==
+                                              //           "" ||
+                                              //           snapshot
+                                              //               .data
+                                              //               .response[0]
+                                              //               .userDeliveryAddress[
+                                              //           0]
+                                              //               .latitudes ==
+                                              //               null
+                                              //           ? "21.969138705424697"
+                                              //           : snapshot
+                                              //           .data
+                                              //           .response[0]
+                                              //           .userDeliveryAddress[
+                                              //       0]
+                                              //           .longitude),
+                                              //       double.parse(snapshot
+                                              //           .data
+                                              //           .response[0]
+                                              //           .userDeliveryAddress[
+                                              //       0]
+                                              //           .longitude ==
+                                              //           "" ||
+                                              //           snapshot
+                                              //               .data
+                                              //               .response[0]
+                                              //               .userDeliveryAddress[
+                                              //           0]
+                                              //               .longitude ==
+                                              //               null
+                                              //           ? "77.69074838608503"
+                                              //           : snapshot
+                                              //           .data
+                                              //           .response[0]
+                                              //           .userDeliveryAddress[
+                                              //       0]
+                                              //           .longitude),
+                                              //     );
+                                              homeProvider.showMapInTrackingPage = false;
+                                              homeProvider.selectedString =
+                                              "OrderTracking";
+                                            }
+
                                                 },
                                           title: "TRACK",
                                         ),
@@ -501,8 +560,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 );
               }
             } catch (e) {
-              // print("is manual _________");
-              // print(snapshot.data.response[0].orderData[0].isManual);
+
 
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -638,7 +696,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                           MediaQuery.of(context)
                                                                   .size
                                                                   .width *
-                                                              0.5,
+                                                              0.4,
                                                       child: Text(
                                                         '${snapshot.data.response[0].orderData[index].orderDetail[indexP].productName}',
                                                         overflow: TextOverflow
@@ -709,72 +767,133 @@ class _OrderDetailsState extends State<OrderDetails> {
                                                           .isManual ==
                                                       "1"
                                                   ? () {
-                                                print('manual');
+
                                                       _orderProvider
                                                           .orderTrackExpandListSingleUpdate(
                                                               index,
                                                               !_orderProvider
                                                                       .orderTrackExpandList[
                                                                   index]);
-                                                      print('manual3');
+
                                                     }
                                                   : () {
-                                                      _orderProvider
-                                                              .orderIdToTrack =
-                                                          "${snapshot.data.response[0].orderData[index].subOrderNo}";
-                                                      _orderProvider
-                                                              .userDeliveryAddress =
-                                                          LatLng(
+                                                try{
+                                                  _orderProvider
+                                                      .orderIdToTrack =
+                                                  "${snapshot.data.response[0].orderData[index].subOrderNo}";
+                                                  _orderProvider
+                                                      .userDeliveryAddress =
+                                                      LatLng(
                                                         double.parse(snapshot
-                                                                        .data
-                                                                        .response[
-                                                                            0]
-                                                                        .userDeliveryAddress[
-                                                                            0]
-                                                                        .latitudes ==
-                                                                    "" ||
-                                                                snapshot
-                                                                        .data
-                                                                        .response[
-                                                                            0]
-                                                                        .userDeliveryAddress[
-                                                                            0]
-                                                                        .latitudes ==
-                                                                    null
+                                                            .data
+                                                            .response[
+                                                        0]
+                                                            .userDeliveryAddress[
+                                                        0]
+                                                            .latitudes ==
+                                                            "" ||
+                                                            snapshot
+                                                                .data
+                                                                .response[
+                                                            0]
+                                                                .userDeliveryAddress[
+                                                            0]
+                                                                .latitudes ==
+                                                                null
                                                             ? "21.969138705424697"
                                                             : snapshot
-                                                                .data
-                                                                .response[0]
-                                                                .userDeliveryAddress[
-                                                                    0]
-                                                                .longitude),
+                                                            .data
+                                                            .response[0]
+                                                            .userDeliveryAddress[
+                                                        0]
+                                                            .longitude),
                                                         double.parse(snapshot
-                                                                        .data
-                                                                        .response[
-                                                                            0]
-                                                                        .userDeliveryAddress[
-                                                                            0]
-                                                                        .longitude ==
-                                                                    "" ||
-                                                                snapshot
-                                                                        .data
-                                                                        .response[
-                                                                            0]
-                                                                        .userDeliveryAddress[
-                                                                            0]
-                                                                        .longitude ==
-                                                                    null
+                                                            .data
+                                                            .response[
+                                                        0]
+                                                            .userDeliveryAddress[
+                                                        0]
+                                                            .longitude ==
+                                                            "" ||
+                                                            snapshot
+                                                                .data
+                                                                .response[
+                                                            0]
+                                                                .userDeliveryAddress[
+                                                            0]
+                                                                .longitude ==
+                                                                null
                                                             ? "77.69074838608503"
                                                             : snapshot
-                                                                .data
-                                                                .response[0]
-                                                                .userDeliveryAddress[
-                                                                    0]
-                                                                .longitude),
+                                                            .data
+                                                            .response[0]
+                                                            .userDeliveryAddress[
+                                                        0]
+                                                            .longitude),
                                                       );
-                                                      homeProvider
-                                                              .selectedString =
-                                                          "OrderTracking";
+                                                  homeProvider
+                                                      .selectedString =
+                                                  "OrderTracking";
+                                                }catch(e){
+                                                  _orderProvider
+                                                      .orderIdToTrack =
+                                                  "${snapshot.data.response[0].orderData[index].subOrderNo}";
+                                                  // _orderProvider
+                                                  //     .userDeliveryAddress =
+                                                  //     LatLng(
+                                                  //       double.parse(snapshot
+                                                  //           .data
+                                                  //           .response[
+                                                  //       0]
+                                                  //           .userDeliveryAddress[
+                                                  //       0]
+                                                  //           .latitudes ==
+                                                  //           "" ||
+                                                  //           snapshot
+                                                  //               .data
+                                                  //               .response[
+                                                  //           0]
+                                                  //               .userDeliveryAddress[
+                                                  //           0]
+                                                  //               .latitudes ==
+                                                  //               null
+                                                  //           ? "21.969138705424697"
+                                                  //           : snapshot
+                                                  //           .data
+                                                  //           .response[0]
+                                                  //           .userDeliveryAddress[
+                                                  //       0]
+                                                  //           .longitude),
+                                                  //       double.parse(snapshot
+                                                  //           .data
+                                                  //           .response[
+                                                  //       0]
+                                                  //           .userDeliveryAddress[
+                                                  //       0]
+                                                  //           .longitude ==
+                                                  //           "" ||
+                                                  //           snapshot
+                                                  //               .data
+                                                  //               .response[
+                                                  //           0]
+                                                  //               .userDeliveryAddress[
+                                                  //           0]
+                                                  //               .longitude ==
+                                                  //               null
+                                                  //           ? "77.69074838608503"
+                                                  //           : snapshot
+                                                  //           .data
+                                                  //           .response[0]
+                                                  //           .userDeliveryAddress[
+                                                  //       0]
+                                                  //           .longitude),
+                                                  //     );
+                                                  homeProvider.showMapInTrackingPage = false;
+                                                  homeProvider
+                                                      .selectedString =
+                                                  "OrderTracking";
+                                                }
+
                                                     },
                                               title: "TRACK",
                                             ),

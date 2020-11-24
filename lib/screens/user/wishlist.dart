@@ -19,7 +19,7 @@ class _WishListState extends State<WishList> {
   Future<WishListModel> getWishList() async {
     int userId = prefs.read<int>('userId');
     dynamic response = await WishListAPI.getWishListProducts(userId.toString());
-    print(response);
+
     WishListModel _wishListModel = WishListModel.fromJson(response);
     return _wishListModel;
   }
@@ -81,7 +81,7 @@ class _WishListState extends State<WishList> {
                                             userId.toString(),
                                             snapshot.data.response[index]
                                                 .productId);
-                                    print(response);
+
                                   },
                                   child: SvgPicture.asset(
                                       "assets/icons/trash.svg")),

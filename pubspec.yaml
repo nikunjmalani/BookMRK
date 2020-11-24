@@ -51,6 +51,8 @@ dependencies:
   cool_alert:
   share:
   url_launcher: ^5.7.10
+  geocoder:
+  geolocator:
 
 
 dev_dependencies:

@@ -310,8 +310,7 @@ class _EditAddressState extends State<EditAddress> {
 
                                                               onSelected:
                                                                   (Place place) {
-                                                                print(place
-                                                                    .description);
+
                                                                 place.geolocation.then((value){
                                                                   _mapProvider.addressSelectedLatLng = value.coordinates;
                                                                 });

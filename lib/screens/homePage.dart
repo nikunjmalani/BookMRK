@@ -75,8 +75,7 @@ class _HomePageState extends State<HomePage> {
 
   notificationAction() {
     FirebaseMessaging().configure(onLaunch: (data) async {
-      print('on launch');
-      print(data);
+
     },
 
         onResume: (value) async {
@@ -160,7 +159,7 @@ class _HomePageState extends State<HomePage> {
             } catch (e) {
               print(e);
             }
-          }else if (value['data']['open_page'] == "order") {
+          } else if (value['data']['open_page'] == "order") {
             /// redirect to order page....
             try {
               Provider
@@ -178,7 +177,7 @@ class _HomePageState extends State<HomePage> {
             } catch (e) {
               print(e);
             }
-          }else if (value['data']['open_page'] == "home") {
+          } else if (value['data']['open_page'] == "home") {
             /// redirect to home page from notification....
             try {
               Provider
@@ -222,8 +221,11 @@ class _HomePageState extends State<HomePage> {
         .size
         .width;
 
+
     return Consumer<HomeScreenProvider>(
       builder: (context, _homeScreenProvider, child) {
+        print(_homeScreenProvider.selectedBottomIndex);
+        print(_homeScreenProvider.selectedString);
         return FutureBuilder(
           future: getHomePageDetails(),
           builder: (context, snapshot) {
@@ -444,9 +446,10 @@ class _HomePageState extends State<HomePage> {
                               "ProductInfo" ? "SchoolInfo" : "School"
 
                           /// check when user is selected........
-                              : _homeScreenProvider.selectedString == "User" ||
-                              (_homeScreenProvider.selectedString ==
-                                  "EditProfile" ||
+                              : _homeScreenProvider.selectedBottomIndex == 3 ||
+                              (_homeScreenProvider.selectedString == "User" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "EditProfile" ||
                                   _homeScreenProvider.selectedString ==
                                       "ChangeMobile" ||
                                   _homeScreenProvider.selectedString ==
@@ -803,32 +806,33 @@ class _HomePageState extends State<HomePage> {
 
 
                               /// user page appbar...
-                                  : _homeScreenProvider.selectedString ==
+                                  : _homeScreenProvider.selectedBottomIndex ==
+                                  3 && (_homeScreenProvider.selectedString ==
                                   "User" ||
-                                  (_homeScreenProvider.selectedString ==
+                                  _homeScreenProvider.selectedString ==
                                       "EditProfile" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "ChangeMobile" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "UserOTP" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "Wishlist" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "MyAddress" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "MyOrders" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "OrderDetails" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "OrderTracking" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "ChangePassword" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "NewPassword" ||
-                                      _homeScreenProvider.selectedString ==
-                                          "FeedBack"
-                                      || _homeScreenProvider.selectedString ==
-                                          "ProductInfo")
+                                  _homeScreenProvider.selectedString ==
+                                      "ChangeMobile" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "UserOTP" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "Wishlist" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "MyAddress" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "MyOrders" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "OrderDetails" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "OrderTracking" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "ChangePassword" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "NewPassword" ||
+                                  _homeScreenProvider.selectedString ==
+                                      "FeedBack"
+                                  || _homeScreenProvider.selectedString ==
+                                      "ProductInfo")
                                   ? leadingAppBar(
                                 title: _homeScreenProvider.selectedString ==
                                     "User"
@@ -923,6 +927,8 @@ class _HomePageState extends State<HomePage> {
                                     children: [
 
                                       /// home page..
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          0 ?
                                       _homeScreenProvider.selectedString ==
                                           "Home"
                                           ? Home()
@@ -1044,9 +1050,11 @@ class _HomePageState extends State<HomePage> {
                                       //           _categoryProvider
                                       //               .selectedSubCategory),)
                                       //     :
-                                      AllVendors(),
+                                      Home() :
 
                                       /// category page...
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          1 ?
                                       _homeScreenProvider.selectedString ==
                                           "Category"
                                           ? CategoryTab()
@@ -1080,10 +1088,12 @@ class _HomePageState extends State<HomePage> {
                                             child) =>
                                             CategoryInfo(
                                                 _categoryProvider
-                                                    .selectedCategoryName),),
+                                                    .selectedCategoryName),) :
 
 
                                       /// school page...
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          2 ?
                                       _homeScreenProvider.selectedString ==
                                           "School"
                                           ? SchoolTab()
@@ -1101,9 +1111,11 @@ class _HomePageState extends State<HomePage> {
                                               child) =>
                                               ProductInfo(
                                                   selectedProductSlug: _homeScreenProvider
-                                                      .selectedProductSlug)),
+                                                      .selectedProductSlug)) :
 
                                       /// user page...
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          3 ?
                                       _homeScreenProvider.selectedString ==
                                           "EditProfile"
                                           ? EditProfile()
@@ -1187,9 +1199,11 @@ class _HomePageState extends State<HomePage> {
                                               ProductInfo(
                                                 selectedProductSlug: _homeScreenProvider
                                                     .selectedProductSlug,))
-                                          : User(),
+                                          : User() :
 
                                       /// cart page...
+                                      _homeScreenProvider.selectedBottomIndex ==
+                                          4 ?
                                       _homeScreenProvider.selectedString ==
                                           "Cart"
                                           ? Cart()
@@ -1205,7 +1219,7 @@ class _HomePageState extends State<HomePage> {
                                               EditAddress(
                                                 userAddressId: _userProvider
                                                     .selectedUserAddressId,))
-                                          : ChangeAddress(),
+                                          : ChangeAddress() :
 
                                       /// notification page...
                                       NotificationPage(),

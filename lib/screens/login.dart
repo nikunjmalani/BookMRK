@@ -114,8 +114,7 @@ class _LoginState extends State<Login> {
                             context: context,
                             onClick: () async {
                               _loginProvider.isPasswordChecking = true;
-                              print(_loginEmailAddress.text);
-                              print(_loginPassword.text);
+
                               dynamic response = await LoginAPI.checkLogin(
                                   email: _loginEmailAddress.text,
                                   password: _loginPassword.text);
@@ -159,7 +158,7 @@ class _LoginState extends State<Login> {
                                         deviceId = value.toString();
                                   });
 
-                                  // print("deviceId : $deviceId");
+
                                   int userId = prefs.read<int>('userId');
                                   dynamic updateAppResponse =
                                       await HomePageApi.updateApplicationInfo(
@@ -170,7 +169,7 @@ class _LoginState extends State<Login> {
                                           kAppVersion.toString(),
                                           moreInfo.toString());
 
-                                  print(updateAppResponse);
+
                                   _loginProvider.isPasswordChecking = false;
 
                                   Navigator.pushReplacement(

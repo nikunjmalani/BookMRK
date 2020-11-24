@@ -51,7 +51,21 @@ class _CategoryInfoState extends State<CategoryInfo> {
     }
   }
 
+
   ColorPalette colorPalette = ColorPalette();
+
+
+  makeDefault(){
+    Provider.of<CategoryProvider>(context, listen: false).selectedCategoryNameToShow = "";
+    Provider.of<CategoryProvider>(context, listen: false).selectedSubCategory = "";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    makeDefault();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +330,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                   description:
                                       "${snapshot.data.response[0].product[index].vendorCompanyName}",
                                   price: snapshot.data.response[0]
-                                      .product[index].productPrice,
+                                      .product[index].productSalePrice,
                                   stock:
                                       "${snapshot.data.response[0].product[index].productStockStatus}",
                                   discount: "${snapshot.data.response[0].product[index].productDiscount}"
@@ -388,7 +402,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                           description:
                                               "${subSnap.data.response[0].product[index].vendorCompanyName}",
                                           price: subSnap.data.response[0]
-                                              .product[index].productPrice,
+                                              .product[index].productSalePrice,
                                           stock:
                                               "${subSnap.data.response[0].product[index].productStockStatus}",
                                           discount: "${subSnap.data.response[0].product[index].productDiscount}"

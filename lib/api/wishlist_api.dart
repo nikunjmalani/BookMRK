@@ -64,8 +64,7 @@ class WishListAPI {
       "status": "REMOVE"
     };
 
-    print("userId : $userId");
-    print("productId : $productId");
+
 
     http.Response response = await http.post(
       url,
