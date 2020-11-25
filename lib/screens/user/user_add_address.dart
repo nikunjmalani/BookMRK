@@ -93,10 +93,40 @@ class _UserAddAddressState extends State<UserAddAddress> {
     }
   }
 
+  void resetControllers(){
+    Provider.of<LocationProvider>(context,
+        listen: false)
+        .selectedCountryName = "";
+    Provider.of<LocationProvider>(context, listen: false).selectedCountryId =
+    null;
+    Provider.of<LocationProvider>(context,
+        listen: false)
+        .selectedStateName = "";
+    Provider.of<LocationProvider>(context, listen: false).selectedStateId =
+    null;
+    Provider.of<LocationProvider>(context,
+        listen: false)
+        .selectedCityName = "";
+    Provider.of<LocationProvider>(context, listen: false).selectedCityId =
+    null;
+    _zipCodeAddressController.text =
+    "";
+
+    _firstAddressController.text = "";
+
+
+
+    Provider.of<LocationProvider>(context, listen: false).isLocationSelectedFromMap =
+    false;
+  }
+
+
+
   @override
   void initState() {
     super.initState();
     getLocation();
+    resetControllers();
   }
 
   @override
@@ -155,7 +185,32 @@ class _UserAddAddressState extends State<UserAddAddress> {
                               controller: _firstAddressController),
                           Spacer(),
                           GestureDetector(
-                            onTap: () {
+                            onTap:_locationProvider.isLocationSelectedFromMap ? (){
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedCountryName = "";
+                              Provider.of<LocationProvider>(context, listen: false).selectedCountryId =
+                              null;
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedStateName = "";
+                              Provider.of<LocationProvider>(context, listen: false).selectedStateId =
+                              null;
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedCityName = "";
+                              Provider.of<LocationProvider>(context, listen: false).selectedCityId =
+                              null;
+                              _zipCodeAddressController.text =
+                              "";
+
+                              _firstAddressController.text = "";
+
+
+
+                              _locationProvider.isLocationSelectedFromMap =
+                              false;
+                            } : () {
                               showDialog(
                                   context: context,
                                   builder: (context) {
@@ -201,6 +256,71 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                                     .text =
                                                                 _mapProvider
                                                                     .addressLine1FromLatLng;
+                                                            dynamic
+                                                                locationDataResponse =
+                                                                await LocationNameAPI.getStateCityPin(
+                                                                    _mapProvider
+                                                                        .addressSelectedLatLng
+                                                                        .latitude
+                                                                        .toString(),
+                                                                    _mapProvider
+                                                                        .addressSelectedLatLng
+                                                                        .longitude
+                                                                        .toString());
+                                                            print(
+                                                                locationDataResponse);
+
+                                                            GetStateCityPinModel
+                                                                _getStateCityPinModel =
+                                                                GetStateCityPinModel
+                                                                    .fromJson(
+                                                                        locationDataResponse);
+                                                            Provider.of<LocationProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .selectedCountryName =
+                                                                "${_getStateCityPinModel.response[0].country}";
+                                                            Provider.of<LocationProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .selectedCountryId =
+                                                                int.parse(
+                                                                    "${_getStateCityPinModel.response[0].countryId == "" || _getStateCityPinModel.response[0].countryId == null ?  "0" : _getStateCityPinModel.response[0].countryId}");
+                                                            Provider.of<LocationProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .selectedStateName =
+                                                                "${_getStateCityPinModel.response[0].state}";
+                                                            Provider.of<LocationProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .selectedStateId =
+                                                                int.parse(
+                                                                    "${_getStateCityPinModel.response[0].stateId == "" || _getStateCityPinModel.response[0].stateId == null ?  "0" : _getStateCityPinModel.response[0].stateId}");
+                                                            Provider.of<LocationProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .selectedCityName =
+                                                                "${_getStateCityPinModel.response[0].city}";
+                                                            Provider.of<LocationProvider>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .selectedCityId =
+                                                                int.parse(
+                                                                    "${_getStateCityPinModel.response[0].cityId == "" || _getStateCityPinModel.response[0].cityId == null ?  "0" : _getStateCityPinModel.response[0].cityId}");
+                                                            _zipCodeAddressController
+                                                                    .text =
+                                                                "${_getStateCityPinModel.response[0].pincode}";
+
+                                                            _locationProvider
+                                                                    .isLocationSelectedFromMap =
+                                                                true;
                                                             Navigator.pop(
                                                                 context);
                                                           } else {
@@ -249,7 +369,8 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                                   .longitude),
                                                           zoom: 14,
                                                         ),
-                                                        onTap: (position) {
+                                                        onTap:
+                                                            (position) async {
                                                           _mapProvider
                                                                   .addressSelectedLatLng =
                                                               position;
@@ -286,33 +407,31 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                                             placeholder:
                                                                 "Your current location",
 
-                                                            onSelected:
-                                                                (Place place) {
-                                                              print(place
-                                                                  .description);
-                                                              place.geolocation
-                                                                  .then(
-                                                                      (value)  async {
-                                                                _mapProvider
-                                                                        .addressSelectedLatLng =
-                                                                    value
-                                                                        .coordinates;
+                                                            onSelected: (Place
+                                                                        place) {
+                                                                        print(place
+                                                                            .description);
+                                                                        place
+                                                                            .geolocation
+                                                                            .then((value) async {
+                                                                          _mapProvider.addressSelectedLatLng =
+                                                                              value.coordinates;
 
-
-                                                                dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(value.coordinates.latitude.toString(), value.coordinates.longitude.toString());
-                                                                print(locationDataResponse);
-
-                                                                GetStateCityPinModel _getStateCityPinModel = GetStateCityPinModel.fromJson(locationDataResponse);
-                                                                Provider.of<LocationProvider>(context, listen: false).selectedCountryName = "${_getStateCityPinModel.response[0].country}";
-                                                                Provider.of<LocationProvider>(context, listen: false).selectedCountryId = int.parse("${_getStateCityPinModel.response[0].countryId}");
-                                                                Provider.of<LocationProvider>(context, listen: false).selectedStateName = "${_getStateCityPinModel.response[0].state}";
-                                                                Provider.of<LocationProvider>(context, listen: false).selectedStateId = int.parse("${_getStateCityPinModel.response[0].stateId}");
-                                                                Provider.of<LocationProvider>(context, listen: false).selectedCityName = "${_getStateCityPinModel.response[0].city}";
-                                                                Provider.of<LocationProvider>(context, listen: false).selectedCityId = int.parse("${_getStateCityPinModel.response[0].cityId}");
-                                                                _zipCodeAddressController.text = "${_getStateCityPinModel.response[0].pincode}";
-
-                                                              });
-                                                            },
+                                                                          // dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(value.coordinates.latitude.toString(), value.coordinates.longitude.toString());
+                                                                          // print(locationDataResponse);
+                                                                          //
+                                                                          // GetStateCityPinModel _getStateCityPinModel = GetStateCityPinModel.fromJson(locationDataResponse);
+                                                                          // Provider.of<LocationProvider>(context, listen: false).selectedCountryName = "${_getStateCityPinModel.response[0].country}";
+                                                                          // Provider.of<LocationProvider>(context, listen: false).selectedCountryId = int.parse("${_getStateCityPinModel.response[0].countryId}");
+                                                                          // Provider.of<LocationProvider>(context, listen: false).selectedStateName = "${_getStateCityPinModel.response[0].state}";
+                                                                          // Provider.of<LocationProvider>(context, listen: false).selectedStateId = int.parse("${_getStateCityPinModel.response[0].stateId}");
+                                                                          // Provider.of<LocationProvider>(context, listen: false).selectedCityName = "${_getStateCityPinModel.response[0].city}";
+                                                                          // Provider.of<LocationProvider>(context, listen: false).selectedCityId = int.parse("${_getStateCityPinModel.response[0].cityId}");
+                                                                          // _zipCodeAddressController.text = "${_getStateCityPinModel.response[0].pincode}";
+                                                                          //
+                                                                          // _locationProvider.isLocationSelectedFromMap = true;
+                                                                        });
+                                                                      },
                                                           ),
                                                         ),
                                                       ),
@@ -337,7 +456,9 @@ class _UserAddAddressState extends State<UserAddAddress> {
                                       width: 1.2, color: Color(0x80515c6f))),
                               alignment: Alignment.center,
                               child: Icon(
-                                Icons.map,
+                                _locationProvider.isLocationSelectedFromMap
+                                    ? Icons.autorenew_outlined
+                                    : Icons.map,
                                 size: 30.0,
                                 color: colorPalette.navyBlue,
                               ),
@@ -348,129 +469,135 @@ class _UserAddAddressState extends State<UserAddAddress> {
                       SizedBox(
                         height: width / 20,
                       ),
-                      AddressTextFields(
-                          width: width,
-                          title: "Full Address / House Number",
-                          controller: _secondAddressController),
+                      _locationProvider.isLocationSelectedFromMap
+                          ? AddressTextFields(
+                              width: width,
+                              title: "Full Address / House Number",
+                              controller: _secondAddressController)
+                          : SizedBox(),
                       SizedBox(
                         height: width / 20,
                       ),
-                      AddressTextFields(
-                          width: width,
-                          title: "Zip Code",
-                          controller: _zipCodeAddressController),
+                      _locationProvider.isLocationSelectedFromMap
+                          ? AddressTextFields(
+                              width: width,
+                              title: "Zip Code",
+                              controller: _zipCodeAddressController)
+                          : SizedBox(),
                       SizedBox(
                         height: width / 20,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: width / 2.25,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      _locationProvider.isLocationSelectedFromMap
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  'State',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 13,
-                                    color: const Color(0x80515c6f),
-                                    letterSpacing: 0.9100000000000001,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
                                 Container(
-                                  width: width,
-                                  padding: EdgeInsets.only(
-                                      top: 16.0,
-                                      bottom: 17.0,
-                                      left: 5.0,
-                                      right: 5.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black.withOpacity(0.3),
-                                        width: 1.5,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(15.0)),
-                                  child: Row(
+                                  width: width / 2.25,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${_locationProvider.selectedStateName}',
+                                        'State',
                                         style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black.withOpacity(0.2),
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13,
+                                          color: const Color(0x80515c6f),
+                                          letterSpacing: 0.9100000000000001,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.black.withOpacity(0.4),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: width,
+                                        padding: EdgeInsets.only(
+                                            top: 16.0,
+                                            bottom: 17.0,
+                                            left: 5.0,
+                                            right: 5.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                              width: 1.5,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '${_locationProvider.selectedStateName}',
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                              ),
+                                            ),
+                                            Spacer(),
+
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: width / 2.25,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'City',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 13,
-                                    color: const Color(0x80515c6f),
-                                    letterSpacing: 0.9100000000000001,
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
                                 Container(
-                                  width: width,
-                                  padding: EdgeInsets.only(
-                                      top: 16.0,
-                                      bottom: 17.0,
-                                      left: 5.0,
-                                      right: 5.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.black.withOpacity(0.3),
-                                        width: 1.5,
-                                      ),
-                                      borderRadius:
-                                          BorderRadius.circular(15.0)),
-                                  child: Row(
+                                  width: width / 2.25,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '${_locationProvider.selectedCityName}',
+                                        'City',
                                         style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black.withOpacity(0.2),
+                                          fontFamily: 'Roboto',
+                                          fontSize: 13,
+                                          color: const Color(0x80515c6f),
+                                          letterSpacing: 0.9100000000000001,
                                         ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      Spacer(),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.black.withOpacity(0.4),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: width,
+                                        padding: EdgeInsets.only(
+                                            top: 16.0,
+                                            bottom: 17.0,
+                                            left: 5.0,
+                                            right: 5.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                              width: 1.5,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(15.0)),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              '${_locationProvider.selectedCityName}',
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                              ),
+                                            ),
+                                            Spacer(),
+
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                ),
+                                )
                               ],
-                            ),
-                          )
-                        ],
-                      ),
+                            )
+                          : SizedBox(),
                       SizedBox(
                         width: 10.0,
                       ),
@@ -490,11 +617,12 @@ class _UserAddAddressState extends State<UserAddAddress> {
                       int userId = prefs.read<int>('userId');
 
                       print(_secondAddressController.text);
-                      if(_secondAddressController.text == "" || _secondAddressController.text == null){
+                      if (_secondAddressController.text == "" ||
+                          _secondAddressController.text == null) {
                         _userProvider.isAddAddressInProcess = false;
-                        Scaffold.of(context)
-                            .showSnackBar(getSnackBar('Please fill House number and full address!'));
-                      }else{
+                        Scaffold.of(context).showSnackBar(getSnackBar(
+                            'Please fill House number and full address!'));
+                      } else {
                         dynamic response = await UserAPI.addNewUserAddress(
                           userId.toString(),
                           _firstNameAddressController.text,
@@ -507,8 +635,10 @@ class _UserAddAddressState extends State<UserAddAddress> {
                           _secondAddressController.text,
                           _zipCodeAddressController.text,
                           '${_locationProvider.selectedCountryId ?? 0}',
-                          _mapProvider.addressSelectedLatLng.latitude.toString(),
-                          _mapProvider.addressSelectedLatLng.longitude.toString(),
+                          _mapProvider.addressSelectedLatLng.latitude
+                              .toString(),
+                          _mapProvider.addressSelectedLatLng.longitude
+                              .toString(),
                         );
 
                         if (response['status'] == 200) {
@@ -517,12 +647,10 @@ class _UserAddAddressState extends State<UserAddAddress> {
                               .showSnackBar(getSnackBar('Address is added.'));
                         } else {
                           _userProvider.isAddAddressInProcess = false;
-                          Scaffold.of(context)
-                              .showSnackBar(getSnackBar('${response['message']}'));
+                          Scaffold.of(context).showSnackBar(
+                              getSnackBar('${response['message']}'));
                         }
                       }
-
-
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,

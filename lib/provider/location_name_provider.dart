@@ -70,4 +70,15 @@ class LocationProvider extends ChangeNotifier {
     _isLocationSheetOpen = value;
     notifyListeners();
   }
+
+
+  /// true when location selected from map...
+  bool _isLocationSelectedFromMap = false;
+
+  bool get isLocationSelectedFromMap => _isLocationSelectedFromMap;
+
+  set isLocationSelectedFromMap(bool value) {
+    _isLocationSelectedFromMap = value;
+    notifyListeners();
+  }
 }
