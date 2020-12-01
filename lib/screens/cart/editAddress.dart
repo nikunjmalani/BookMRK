@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bookmrk/api/location_name_api.dart';
 import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
@@ -121,6 +123,9 @@ class _EditAddressState extends State<EditAddress> {
     }
   }
 
+  Completer<GoogleMapController> _controller = Completer();
+
+
   @override
   void initState() {
     super.initState();
@@ -174,62 +179,60 @@ class _EditAddressState extends State<EditAddress> {
                       height: width / 20,
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AddressTextFields(
-                            width: width / 1.43,
-                            title: "Address Line 1",
-                            controller: _firstAddressEdit),
-                        Spacer(),
                         GestureDetector(
-                          onTap:_locationProvider.isLocationSelectedFromMap ? (){
+                          onTap: _locationProvider.isLocationSelectedFromMap
+                              ? () {
                             Provider.of<LocationProvider>(context,
                                 listen: false)
                                 .selectedCountryName = "";
-                            Provider.of<LocationProvider>(context, listen: false).selectedCountryId =
-                            null;
+                            Provider.of<LocationProvider>(context,
+                                listen: false)
+                                .selectedCountryId = null;
                             Provider.of<LocationProvider>(context,
                                 listen: false)
                                 .selectedStateName = "";
-                            Provider.of<LocationProvider>(context, listen: false).selectedStateId =
-                            null;
+                            Provider.of<LocationProvider>(context,
+                                listen: false)
+                                .selectedStateId = null;
                             Provider.of<LocationProvider>(context,
                                 listen: false)
                                 .selectedCityName = "";
-                            Provider.of<LocationProvider>(context, listen: false).selectedCityId =
-                            null;
-                            _zipEditAddress.text =
-                            "";
-
+                            Provider.of<LocationProvider>(context,
+                                listen: false)
+                                .selectedCityId = null;
+                            _zipEditAddress.text = "";
                             _firstAddressEdit.text = "";
-
-
-
-                            _locationProvider.isLocationSelectedFromMap =
-                            false;
-                          } : () {
+                            _locationProvider
+                                .isLocationSelectedFromMap = false;
+                          }
+                              : () {
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return Container(
                                     margin: EdgeInsets.symmetric(
-                                        horizontal: 40.0, vertical: 150.0),
+                                        horizontal: 40.0,
+                                        vertical: 150.0),
                                     color: colorPalette.navyBlue,
                                     child: Material(
                                       child: Column(
                                         children: [
                                           Container(
                                             height: 50,
-                                            color: colorPalette.navyBlue,
+                                            color:
+                                            colorPalette.navyBlue,
                                             child: Row(
                                               children: [
                                                 Spacer(),
                                                 Consumer<MapProvider>(
-                                                  builder: (_, _mapProvider,
+                                                  builder: (_,
+                                                      _mapProvider,
                                                       child) {
                                                     return GestureDetector(
                                                       onTap: () async {
-                                                        dynamic response = await MapAPI
-                                                            .getAddressFromLatLng(
+                                                        dynamic response = await MapAPI.getAddressFromLatLng(
                                                             _mapProvider
                                                                 .addressSelectedLatLng
                                                                 .latitude,
@@ -241,9 +244,9 @@ class _EditAddressState extends State<EditAddress> {
                                                         'status'] ==
                                                             "OK") {
                                                           _mapProvider
-                                                              .addressLine1FromLatLng =
-                                                          response['results']
-                                                          [0][
+                                                              .addressLine1FromLatLng = response[
+                                                          'results'][0]
+                                                          [
                                                           'formatted_address'];
                                                           _mapProvider
                                                               .isLatLngSelected =
@@ -252,9 +255,7 @@ class _EditAddressState extends State<EditAddress> {
                                                               .text =
                                                               _mapProvider
                                                                   .addressLine1FromLatLng;
-                                                          dynamic
-                                                          locationDataResponse =
-                                                          await LocationNameAPI.getStateCityPin(
+                                                          dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(
                                                               _mapProvider
                                                                   .addressSelectedLatLng
                                                                   .latitude
@@ -275,41 +276,38 @@ class _EditAddressState extends State<EditAddress> {
                                                               context,
                                                               listen:
                                                               false)
-                                                              .selectedCountryName =
-                                                          "${_getStateCityPinModel.response[0].country}";
+                                                              .selectedCountryName = "${_getStateCityPinModel.response[0].country}";
                                                           Provider.of<LocationProvider>(
                                                               context,
                                                               listen:
                                                               false)
                                                               .selectedCountryId =
                                                               int.parse(
-                                                                  "${_getStateCityPinModel.response[0].countryId == "" || _getStateCityPinModel.response[0].countryId == null ?  "0" : _getStateCityPinModel.response[0].countryId}");
+                                                                  "${_getStateCityPinModel.response[0].countryId == "" || _getStateCityPinModel.response[0].countryId == null ? "0" : _getStateCityPinModel.response[0].countryId}");
                                                           Provider.of<LocationProvider>(
                                                               context,
                                                               listen:
                                                               false)
-                                                              .selectedStateName =
-                                                          "${_getStateCityPinModel.response[0].state}";
+                                                              .selectedStateName = "${_getStateCityPinModel.response[0].state}";
                                                           Provider.of<LocationProvider>(
                                                               context,
                                                               listen:
                                                               false)
                                                               .selectedStateId =
                                                               int.parse(
-                                                                  "${_getStateCityPinModel.response[0].stateId == "" || _getStateCityPinModel.response[0].stateId == null ?  "0" : _getStateCityPinModel.response[0].stateId}");
+                                                                  "${_getStateCityPinModel.response[0].stateId == "" || _getStateCityPinModel.response[0].stateId == null ? "0" : _getStateCityPinModel.response[0].stateId}");
                                                           Provider.of<LocationProvider>(
                                                               context,
                                                               listen:
                                                               false)
-                                                              .selectedCityName =
-                                                          "${_getStateCityPinModel.response[0].city}";
+                                                              .selectedCityName = "${_getStateCityPinModel.response[0].city}";
                                                           Provider.of<LocationProvider>(
                                                               context,
                                                               listen:
                                                               false)
                                                               .selectedCityId =
                                                               int.parse(
-                                                                  "${_getStateCityPinModel.response[0].cityId == "" || _getStateCityPinModel.response[0].cityId == null ?  "0" : _getStateCityPinModel.response[0].cityId}");
+                                                                  "${_getStateCityPinModel.response[0].cityId == "" || _getStateCityPinModel.response[0].cityId == null ? "0" : _getStateCityPinModel.response[0].cityId}");
                                                           _zipEditAddress
                                                               .text =
                                                           "${_getStateCityPinModel.response[0].pincode}";
@@ -333,9 +331,10 @@ class _EditAddressState extends State<EditAddress> {
                                                       child: Text(
                                                         'Done',
                                                         style: TextStyle(
-                                                            color:
-                                                            Colors.white,
-                                                            fontSize: 18.0),
+                                                            color: Colors
+                                                                .white,
+                                                            fontSize:
+                                                            18.0),
                                                       ),
                                                     );
                                                   },
@@ -348,8 +347,10 @@ class _EditAddressState extends State<EditAddress> {
                                           ),
                                           Expanded(
                                             child: Container(
-                                              child: Consumer<MapProvider>(
-                                                builder: (_, _mapProvider,
+                                              child:
+                                              Consumer<MapProvider>(
+                                                builder: (_,
+                                                    _mapProvider,
                                                     child) =>
                                                     Stack(
                                                       children: [
@@ -370,16 +371,25 @@ class _EditAddressState extends State<EditAddress> {
                                                             _mapProvider
                                                                 .addressSelectedLatLng =
                                                                 position;
-                                                          },
+                                                          },onMapCreated:
+                                                            (GoogleMapController
+                                                        controller) {
+                                                          _controller
+                                                              .complete(
+                                                              controller);
+                                                        },
                                                           minMaxZoomPreference:
                                                           MinMaxZoomPreference(
                                                               9, 20),
                                                           markers: {
                                                             Marker(
                                                                 markerId:
-                                                                MarkerId("1"),
-                                                                visible: true,
-                                                                position: LatLng(
+                                                                MarkerId(
+                                                                    "1"),
+                                                                visible:
+                                                                true,
+                                                                position:
+                                                                LatLng(
                                                                   _mapProvider
                                                                       .addressSelectedLatLng
                                                                       .latitude,
@@ -394,39 +404,66 @@ class _EditAddressState extends State<EditAddress> {
                                                             child:
                                                             SearchPlaceAutoCompleteWidget(
                                                               // YOUR GOOGLE MAPS API KEY
-                                                              apiKey: kMapKey,
+                                                              apiKey:
+                                                              kMapKey,
                                                               // Language that you want. Default is English='en'
-                                                              language: 'en',
+                                                              language:
+                                                              'en',
                                                               // Country that you want to filter for. Default is Ethopia='ET'
-                                                              components: "IN",
+                                                              components:
+                                                              "IN",
 
                                                               placeholder:
                                                               "Your current location",
 
-                                                              onSelected: (Place
-                                                              place) {
+                                                              onSelected:
+                                                                  (Place
+                                                              place) async {
                                                                 print(place
                                                                     .description);
                                                                 place
                                                                     .geolocation
-                                                                    .then((value) async {
-                                                                  _mapProvider.addressSelectedLatLng =
-                                                                      value.coordinates;
+                                                                    .then(
+                                                                        (value) async {
+                                                                      _mapProvider
+                                                                          .addressSelectedLatLng =
+                                                                          value
+                                                                              .coordinates;
 
-                                                                  // dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(value.coordinates.latitude.toString(), value.coordinates.longitude.toString());
-                                                                  // print(locationDataResponse);
-                                                                  //
-                                                                  // GetStateCityPinModel _getStateCityPinModel = GetStateCityPinModel.fromJson(locationDataResponse);
-                                                                  // Provider.of<LocationProvider>(context, listen: false).selectedCountryName = "${_getStateCityPinModel.response[0].country}";
-                                                                  // Provider.of<LocationProvider>(context, listen: false).selectedCountryId = int.parse("${_getStateCityPinModel.response[0].countryId}");
-                                                                  // Provider.of<LocationProvider>(context, listen: false).selectedStateName = "${_getStateCityPinModel.response[0].state}";
-                                                                  // Provider.of<LocationProvider>(context, listen: false).selectedStateId = int.parse("${_getStateCityPinModel.response[0].stateId}");
-                                                                  // Provider.of<LocationProvider>(context, listen: false).selectedCityName = "${_getStateCityPinModel.response[0].city}";
-                                                                  // Provider.of<LocationProvider>(context, listen: false).selectedCityId = int.parse("${_getStateCityPinModel.response[0].cityId}");
-                                                                  // _zipCodeAddressController.text = "${_getStateCityPinModel.response[0].pincode}";
-                                                                  //
-                                                                  // _locationProvider.isLocationSelectedFromMap = true;
-                                                                });
+                                                                      // dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(value.coordinates.latitude.toString(), value.coordinates.longitude.toString());
+                                                                      // print(locationDataResponse);
+                                                                      //
+                                                                      // GetStateCityPinModel _getStateCityPinModel = GetStateCityPinModel.fromJson(locationDataResponse);
+                                                                      // Provider.of<LocationProvider>(context, listen: false).selectedCountryName = "${_getStateCityPinModel.response[0].country}";
+                                                                      // Provider.of<LocationProvider>(context, listen: false).selectedCountryId = int.parse("${_getStateCityPinModel.response[0].countryId}");
+                                                                      // Provider.of<LocationProvider>(context, listen: false).selectedStateName = "${_getStateCityPinModel.response[0].state}";
+                                                                      // Provider.of<LocationProvider>(context, listen: false).selectedStateId = int.parse("${_getStateCityPinModel.response[0].stateId}");
+                                                                      // Provider.of<LocationProvider>(context, listen: false).selectedCityName = "${_getStateCityPinModel.response[0].city}";
+                                                                      // Provider.of<LocationProvider>(context, listen: false).selectedCityId = int.parse("${_getStateCityPinModel.response[0].cityId}");
+                                                                      // _zipCodeAddressController.text = "${_getStateCityPinModel.response[0].pincode}";
+                                                                      //
+                                                                      // _locationProvider.isLocationSelectedFromMap = true;
+                                                                      final GoogleMapController
+                                                                      controller =
+                                                                      await _controller
+                                                                          .future;
+                                                                      controller
+                                                                          .animateCamera(
+                                                                        CameraUpdate
+                                                                            .newCameraPosition(
+                                                                          CameraPosition(
+                                                                            target: LatLng(
+                                                                                _mapProvider
+                                                                                    .addressSelectedLatLng
+                                                                                    .latitude,
+                                                                                _mapProvider
+                                                                                    .addressSelectedLatLng
+                                                                                    .longitude),
+                                                                            zoom: 14,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    });
                                                               },
                                                             ),
                                                           ),
@@ -444,24 +481,37 @@ class _EditAddressState extends State<EditAddress> {
                           },
                           child: Container(
                             height: 60,
-                            width: width / 5.5,
+                            width: width / 1.1,
                             margin: EdgeInsets.only(top: 23.0),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
                                     width: 1.2, color: Color(0x80515c6f))),
                             alignment: Alignment.center,
-                            child: Icon(
-                              _locationProvider.isLocationSelectedFromMap
-                                  ? Icons.autorenew_outlined
-                                  : Icons.map,
-                              size: 30.0,
-                              color: colorPalette.navyBlue,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  _locationProvider.isLocationSelectedFromMap
+                                      ? Icons.autorenew_outlined
+                                      : Icons.map,
+                                  size: 30.0,
+                                  color: colorPalette.navyBlue,
+                                ),
+                                SizedBox(width: 20.0,),
+                                Text(
+                                  _locationProvider.isLocationSelectedFromMap
+                                      ? 'Reset your Location.' :'Search Your Location',
+                                  style: TextStyle(fontSize: 18, color: colorPalette.navyBlue),
+                                ),
+                              ],
                             ),
                           ),
                         ),
+
                       ],
                     ),
+
                     SizedBox(
                       height: width / 20,
                     ),
@@ -470,6 +520,16 @@ class _EditAddressState extends State<EditAddress> {
                         width: width,
                         title: "Full Address / House Number",
                         controller: _secondAddressEdit)
+                        : SizedBox(),
+                    SizedBox(
+                      height: width / 20,
+                    ),
+                    _locationProvider.isLocationSelectedFromMap
+                        ? AddressTextFields(
+                        readOnly: true,
+                        width: width,
+                        title: "Address / city / state",
+                        controller: _firstAddressEdit)
                         : SizedBox(),
                     SizedBox(
                       height: width / 20,
@@ -532,7 +592,6 @@ class _EditAddressState extends State<EditAddress> {
                                       ),
                                     ),
                                     Spacer(),
-
                                   ],
                                 ),
                               ),
@@ -584,7 +643,6 @@ class _EditAddressState extends State<EditAddress> {
                                       ),
                                     ),
                                     Spacer(),
-
                                   ],
                                 ),
                               ),
@@ -598,7 +656,7 @@ class _EditAddressState extends State<EditAddress> {
                       width: 10.0,
                     ),
                     SizedBox(
-                      height: width / 2,
+                      height: width / 1.5,
                     ),
                   ],
                 ),

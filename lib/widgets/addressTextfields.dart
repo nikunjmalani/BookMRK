@@ -1,7 +1,7 @@
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:flutter/material.dart';
 
-Widget AddressTextFields({width, title, suffixIcon, prefixIcon, controller}) {
+Widget AddressTextFields({width, title, suffixIcon, prefixIcon, controller, readOnly = false}) {
   ColorPalette colorPalette = ColorPalette();
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,6 +22,7 @@ Widget AddressTextFields({width, title, suffixIcon, prefixIcon, controller}) {
       Container(
         width: width,
         child: TextField(
+          readOnly: readOnly,
           controller: controller,
           decoration: InputDecoration(
             prefixIcon: prefixIcon,

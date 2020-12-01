@@ -47,4 +47,13 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// is address selected in cart ....
+  bool _isAddressSelectedInCart = true;
+
+  bool get isAddressSelectedInCart => _isAddressSelectedInCart;
+
+  set isAddressSelectedInCart(bool value) {
+    _isAddressSelectedInCart = value;
+    notifyListeners();
+  }
 }
