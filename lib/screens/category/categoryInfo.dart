@@ -51,7 +51,21 @@ class _CategoryInfoState extends State<CategoryInfo> {
     }
   }
 
+
   ColorPalette colorPalette = ColorPalette();
+
+
+  makeDefault(){
+    Provider.of<CategoryProvider>(context, listen: false).selectedCategoryNameToShow = "";
+    Provider.of<CategoryProvider>(context, listen: false).selectedSubCategory = "";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    makeDefault();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +286,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                           listen: false)
                           .totalCategoryProduct =
                           int.parse(snapshot.data.response[0].category[0]
-                              .allProductsCount);
+                              .allProductsCount ?? "0");
                       return Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -316,9 +330,10 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                   description:
                                       "${snapshot.data.response[0].product[index].vendorCompanyName}",
                                   price: snapshot.data.response[0]
-                                      .product[index].productPrice,
+                                      .product[index].productSalePrice,
                                   stock:
                                       "${snapshot.data.response[0].product[index].productStockStatus}",
+                                  discount: "${snapshot.data.response[0].product[index].productDiscount}"
                                 ),
                               );
                             },
@@ -337,7 +352,7 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                             listen: false)
                                         .totalCategoryProduct =
                                     int.parse(subSnap.data.response[0]
-                                        .category[0].allProductsCount);
+                                        .category[0].allProductsCount ?? "0");
                               }catch(e){
                                 Provider.of<CategoryProvider>(context,
                                     listen: false)
@@ -345,8 +360,8 @@ class _CategoryInfoState extends State<CategoryInfo> {
                               }
                               return Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, bottom: 70),
                                   child: GridView.builder(
                                     gridDelegate:
                                         SliverGridDelegateWithMaxCrossAxisExtent(
@@ -387,9 +402,10 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                           description:
                                               "${subSnap.data.response[0].product[index].vendorCompanyName}",
                                           price: subSnap.data.response[0]
-                                              .product[index].productPrice,
+                                              .product[index].productSalePrice,
                                           stock:
                                               "${subSnap.data.response[0].product[index].productStockStatus}",
+                                          discount: "${subSnap.data.response[0].product[index].productDiscount}"
                                         ),
                                       );
                                     },

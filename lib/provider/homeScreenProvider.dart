@@ -213,4 +213,24 @@ class HomeScreenProvider extends ChangeNotifier {
     _selectedTitle = value;
     notifyListeners();
   }
+
+  /// when do not showing map..
+  bool _showMapInTrackingPage = true;
+
+  bool get showMapInTrackingPage => _showMapInTrackingPage;
+
+  set showMapInTrackingPage(bool value) {
+    _showMapInTrackingPage = value;
+    notifyListeners();
+  }
+
+  /// when cart page is open.....
+  bool _selectAddressFirstTime = false;
+
+  bool get selectAddressFirstTime => _selectAddressFirstTime;
+
+  set selectAddressFirstTime(bool value) {
+    _selectAddressFirstTime = value;
+    notifyListeners();
+  }
 }

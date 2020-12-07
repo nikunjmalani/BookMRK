@@ -34,7 +34,7 @@ class PrivacyPolicyState extends State<PrivacyPolicy> {
           ),
         ),
         body: WebView(
-          initialUrl: '$kSiteURL/terms_and_conditions',
+          initialUrl: '$kSiteURL/privacy_policy/m',
         ),
       ),
     );

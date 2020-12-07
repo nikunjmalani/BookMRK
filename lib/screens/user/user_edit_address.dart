@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:bookmrk/api/location_name_api.dart';
 import 'package:bookmrk/api/map_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/model/edit_address_info_model.dart';
+import 'package:bookmrk/model/get_state_city_pin_model.dart';
 import 'package:bookmrk/provider/city_model.dart';
 import 'package:bookmrk/provider/country_model.dart';
 import 'package:bookmrk/provider/location_name_provider.dart';
@@ -121,6 +124,8 @@ class _UserEditAddressState extends State<UserEditAddress> {
       });
     }
   }
+  Completer<GoogleMapController> _controller = Completer();
+
 
   @override
   void initState() {
@@ -179,51 +184,74 @@ class _UserEditAddressState extends State<UserEditAddress> {
                         height: width / 20,
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          AddressTextFields(
-                              width: width / 1.43,
-                              title: "Address Line 1",
-                              controller: _firstAddressEdit),
-                          Spacer(),
                           GestureDetector(
-                            onTap: () {
+                            onTap: _locationProvider.isLocationSelectedFromMap
+                                ? () {
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedCountryName = "";
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedCountryId = null;
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedStateName = "";
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedStateId = null;
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedCityName = "";
+                              Provider.of<LocationProvider>(context,
+                                  listen: false)
+                                  .selectedCityId = null;
+                              _zipEditAddress.text = "";
+                              _firstAddressEdit.text = "";
+                              _locationProvider
+                                  .isLocationSelectedFromMap = false;
+                            }
+                                : () {
                               showDialog(
                                   context: context,
                                   builder: (context) {
                                     return Container(
                                       margin: EdgeInsets.symmetric(
-                                          horizontal: 40.0, vertical: 150.0),
+                                          horizontal: 40.0,
+                                          vertical: 150.0),
                                       color: colorPalette.navyBlue,
                                       child: Material(
                                         child: Column(
                                           children: [
                                             Container(
                                               height: 50,
-                                              color: colorPalette.navyBlue,
+                                              color:
+                                              colorPalette.navyBlue,
                                               child: Row(
                                                 children: [
                                                   Spacer(),
                                                   Consumer<MapProvider>(
-                                                    builder: (_, _mapProvider,
+                                                    builder: (_,
+                                                        _mapProvider,
                                                         child) {
                                                       return GestureDetector(
                                                         onTap: () async {
-
-                                                          dynamic response = await MapAPI
-                                                              .getAddressFromLatLng(
+                                                          dynamic response = await MapAPI.getAddressFromLatLng(
                                                               _mapProvider
                                                                   .addressSelectedLatLng
                                                                   .latitude,
                                                               _mapProvider
                                                                   .addressSelectedLatLng
                                                                   .longitude);
+
                                                           if (response[
                                                           'status'] ==
                                                               "OK") {
                                                             _mapProvider
-                                                                .addressLine1FromLatLng =
-                                                            response['results']
-                                                            [0][
+                                                                .addressLine1FromLatLng = response[
+                                                            'results'][0]
+                                                            [
                                                             'formatted_address'];
                                                             _mapProvider
                                                                 .isLatLngSelected =
@@ -232,6 +260,66 @@ class _UserEditAddressState extends State<UserEditAddress> {
                                                                 .text =
                                                                 _mapProvider
                                                                     .addressLine1FromLatLng;
+                                                            dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .latitude
+                                                                    .toString(),
+                                                                _mapProvider
+                                                                    .addressSelectedLatLng
+                                                                    .longitude
+                                                                    .toString());
+                                                            print(
+                                                                locationDataResponse);
+
+                                                            GetStateCityPinModel
+                                                            _getStateCityPinModel =
+                                                            GetStateCityPinModel
+                                                                .fromJson(
+                                                                locationDataResponse);
+                                                            Provider.of<LocationProvider>(
+                                                                context,
+                                                                listen:
+                                                                false)
+                                                                .selectedCountryName = "${_getStateCityPinModel.response[0].country}";
+                                                            Provider.of<LocationProvider>(
+                                                                context,
+                                                                listen:
+                                                                false)
+                                                                .selectedCountryId =
+                                                                int.parse(
+                                                                    "${_getStateCityPinModel.response[0].countryId == "" || _getStateCityPinModel.response[0].countryId == null ? "0" : _getStateCityPinModel.response[0].countryId}");
+                                                            Provider.of<LocationProvider>(
+                                                                context,
+                                                                listen:
+                                                                false)
+                                                                .selectedStateName = "${_getStateCityPinModel.response[0].state}";
+                                                            Provider.of<LocationProvider>(
+                                                                context,
+                                                                listen:
+                                                                false)
+                                                                .selectedStateId =
+                                                                int.parse(
+                                                                    "${_getStateCityPinModel.response[0].stateId == "" || _getStateCityPinModel.response[0].stateId == null ? "0" : _getStateCityPinModel.response[0].stateId}");
+                                                            Provider.of<LocationProvider>(
+                                                                context,
+                                                                listen:
+                                                                false)
+                                                                .selectedCityName = "${_getStateCityPinModel.response[0].city}";
+                                                            Provider.of<LocationProvider>(
+                                                                context,
+                                                                listen:
+                                                                false)
+                                                                .selectedCityId =
+                                                                int.parse(
+                                                                    "${_getStateCityPinModel.response[0].cityId == "" || _getStateCityPinModel.response[0].cityId == null ? "0" : _getStateCityPinModel.response[0].cityId}");
+                                                            _zipEditAddress
+                                                                .text =
+                                                            "${_getStateCityPinModel.response[0].pincode}";
+
+                                                            _locationProvider
+                                                                .isLocationSelectedFromMap =
+                                                            true;
                                                             Navigator.pop(
                                                                 context);
                                                           } else {
@@ -248,9 +336,10 @@ class _UserEditAddressState extends State<UserEditAddress> {
                                                         child: Text(
                                                           'Done',
                                                           style: TextStyle(
-                                                              color:
-                                                              Colors.white,
-                                                              fontSize: 18.0),
+                                                              color: Colors
+                                                                  .white,
+                                                              fontSize:
+                                                              18.0),
                                                         ),
                                                       );
                                                     },
@@ -263,8 +352,10 @@ class _UserEditAddressState extends State<UserEditAddress> {
                                             ),
                                             Expanded(
                                               child: Container(
-                                                child: Consumer<MapProvider>(
-                                                  builder: (_, _mapProvider,
+                                                child:
+                                                Consumer<MapProvider>(
+                                                  builder: (_,
+                                                      _mapProvider,
                                                       child) =>
                                                       Stack(
                                                         children: [
@@ -280,20 +371,30 @@ class _UserEditAddressState extends State<UserEditAddress> {
                                                                       .longitude),
                                                               zoom: 14,
                                                             ),
-                                                            onTap: (position) {
+                                                            onTap:
+                                                                (position) async {
                                                               _mapProvider
                                                                   .addressSelectedLatLng =
                                                                   position;
-                                                            },
+                                                            },onMapCreated:
+                                                              (GoogleMapController
+                                                          controller) {
+                                                            _controller
+                                                                .complete(
+                                                                controller);
+                                                          },
                                                             minMaxZoomPreference:
                                                             MinMaxZoomPreference(
                                                                 9, 20),
                                                             markers: {
                                                               Marker(
                                                                   markerId:
-                                                                  MarkerId("1"),
-                                                                  visible: true,
-                                                                  position: LatLng(
+                                                                  MarkerId(
+                                                                      "1"),
+                                                                  visible:
+                                                                  true,
+                                                                  position:
+                                                                  LatLng(
                                                                     _mapProvider
                                                                         .addressSelectedLatLng
                                                                         .latitude,
@@ -308,23 +409,66 @@ class _UserEditAddressState extends State<UserEditAddress> {
                                                               child:
                                                               SearchPlaceAutoCompleteWidget(
                                                                 // YOUR GOOGLE MAPS API KEY
-                                                                apiKey: kMapKey,
+                                                                apiKey:
+                                                                kMapKey,
                                                                 // Language that you want. Default is English='en'
-                                                                language: 'en',
+                                                                language:
+                                                                'en',
                                                                 // Country that you want to filter for. Default is Ethopia='ET'
-                                                                components: "IN",
+                                                                components:
+                                                                "IN",
 
                                                                 placeholder:
                                                                 "Your current location",
 
                                                                 onSelected:
-                                                                    (Place place) {
+                                                                    (Place
+                                                                place) async {
                                                                   print(place
                                                                       .description);
-                                                                  place.geolocation.then((value){
-                                                                    _mapProvider.addressSelectedLatLng = value.coordinates;
-                                                                  });
+                                                                  place
+                                                                      .geolocation
+                                                                      .then(
+                                                                          (value) async {
+                                                                        _mapProvider
+                                                                            .addressSelectedLatLng =
+                                                                            value
+                                                                                .coordinates;
 
+                                                                        // dynamic locationDataResponse = await LocationNameAPI.getStateCityPin(value.coordinates.latitude.toString(), value.coordinates.longitude.toString());
+                                                                        // print(locationDataResponse);
+                                                                        //
+                                                                        // GetStateCityPinModel _getStateCityPinModel = GetStateCityPinModel.fromJson(locationDataResponse);
+                                                                        // Provider.of<LocationProvider>(context, listen: false).selectedCountryName = "${_getStateCityPinModel.response[0].country}";
+                                                                        // Provider.of<LocationProvider>(context, listen: false).selectedCountryId = int.parse("${_getStateCityPinModel.response[0].countryId}");
+                                                                        // Provider.of<LocationProvider>(context, listen: false).selectedStateName = "${_getStateCityPinModel.response[0].state}";
+                                                                        // Provider.of<LocationProvider>(context, listen: false).selectedStateId = int.parse("${_getStateCityPinModel.response[0].stateId}");
+                                                                        // Provider.of<LocationProvider>(context, listen: false).selectedCityName = "${_getStateCityPinModel.response[0].city}";
+                                                                        // Provider.of<LocationProvider>(context, listen: false).selectedCityId = int.parse("${_getStateCityPinModel.response[0].cityId}");
+                                                                        // _zipCodeAddressController.text = "${_getStateCityPinModel.response[0].pincode}";
+                                                                        //
+                                                                        // _locationProvider.isLocationSelectedFromMap = true;
+                                                                        final GoogleMapController
+                                                                        controller =
+                                                                        await _controller
+                                                                            .future;
+                                                                        controller
+                                                                            .animateCamera(
+                                                                          CameraUpdate
+                                                                              .newCameraPosition(
+                                                                            CameraPosition(
+                                                                              target: LatLng(
+                                                                                  _mapProvider
+                                                                                      .addressSelectedLatLng
+                                                                                      .latitude,
+                                                                                  _mapProvider
+                                                                                      .addressSelectedLatLng
+                                                                                      .longitude),
+                                                                              zoom: 14,
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      });
                                                                 },
                                                               ),
                                                             ),
@@ -342,284 +486,182 @@ class _UserEditAddressState extends State<UserEditAddress> {
                             },
                             child: Container(
                               height: 60,
-                              width: width / 5.5,
+                              width: width / 1.1,
                               margin: EdgeInsets.only(top: 23.0),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.0),
                                   border: Border.all(
                                       width: 1.2, color: Color(0x80515c6f))),
                               alignment: Alignment.center,
-                              child: Icon(
-                                Icons.map,
-                                size: 30.0,
-                                color: colorPalette.navyBlue,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    _locationProvider.isLocationSelectedFromMap
+                                        ? Icons.autorenew_outlined
+                                        : Icons.map,
+                                    size: 30.0,
+                                    color: colorPalette.navyBlue,
+                                  ),
+                                  SizedBox(width: 20.0,),
+                                  Text(
+                                    _locationProvider.isLocationSelectedFromMap
+                                        ? 'Reset your Location.' :'Search Your Location',
+                                    style: TextStyle(fontSize: 18, color: colorPalette.navyBlue),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: width / 20,
-                      ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AddressTextFields(
-                              width: width / 2.25,
-                              title: "Zip Code",
-                              controller: _zipEditAddress),
-                          FutureBuilder(
-                            future: getAllCountry(),
-                            builder: (context, countryData) {
-                              if (countryData.hasData) {
-                                return getLocationBottomSheet(
-                                    context,
-                                    List.generate(
-                                        countryData.data.response.length,
-                                        (index) => {
-                                              "name":
-                                                  "${countryData.data.response[index].name}",
-                                              "id":
-                                                  "${countryData.data.response[index].countryId}"
-                                            }),
-                                    width / 2.25,
-                                    type: locationType.Country);
-                              } else {
-                                return Container(
-                                  width: width / 2.25,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'country',
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontSize: 13,
-                                          color: const Color(0x80515c6f),
-                                          letterSpacing: 0.9100000000000001,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: width,
-                                        padding: EdgeInsets.only(
-                                            top: 16.0,
-                                            bottom: 17.0,
-                                            left: 5.0,
-                                            right: 5.0),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors.black.withOpacity(0.3),
-                                              width: 1.5,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(15.0)),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Loading ..',
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color:
-                                                  Colors.black.withOpacity(0.4),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: width / 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          FutureBuilder(
-                            future: getAllStateOfSelectedCountry(
-                                _locationProvider.selectedCountryId),
-                            builder: (context, stateData) {
-                              if (stateData.hasData) {
-                                return getLocationBottomSheet(
-                                    context,
-                                    List.generate(
-                                        stateData.data.response.length,
-                                        (index) => {
-                                              "name":
-                                                  "${stateData.data.response[index].name}",
-                                              "id":
-                                                  "${stateData.data.response[index].stateId}"
-                                            }),
-                                    width / 2.25,
-                                    type: locationType.State);
-                              } else {
-                                return Container(
-                                  width: width / 2.25,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'state',
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontSize: 13,
-                                          color: const Color(0x80515c6f),
-                                          letterSpacing: 0.9100000000000001,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: width,
-                                        padding: EdgeInsets.only(
-                                            top: 16.0,
-                                            bottom: 17.0,
-                                            left: 5.0,
-                                            right: 5.0),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors.black.withOpacity(0.3),
-                                              width: 1.5,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(15.0)),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Loading ..',
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color:
-                                                  Colors.black.withOpacity(0.4),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          FutureBuilder(
-                            future: getAllCityOfSelectedState(
-                                _locationProvider.selectedStateId),
-                            builder: (context, cityData) {
-                              if (cityData.hasData &&
-                                  _locationProvider.selectedStateId != null) {
-                                return getLocationBottomSheet(
-                                    context,
-                                    List.generate(
-                                        cityData.data.response.length,
-                                        (index) => {
-                                              "name":
-                                                  "${cityData.data.response[index].name}",
-                                              "id":
-                                                  "${cityData.data.response[index].cityId}"
-                                            }),
-                                    width / 2.25,
-                                    type: locationType.City);
-                              } else {
-                                return Container(
-                                  width: width / 2.25,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'city',
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontSize: 13,
-                                          color: const Color(0x80515c6f),
-                                          letterSpacing: 0.9100000000000001,
-                                        ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: width,
-                                        padding: EdgeInsets.only(
-                                            top: 16.0,
-                                            bottom: 17.0,
-                                            left: 5.0,
-                                            right: 5.0),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color:
-                                                  Colors.black.withOpacity(0.3),
-                                              width: 1.5,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(15.0)),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Loading ..',
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Icon(
-                                              Icons.arrow_drop_down,
-                                              color:
-                                                  Colors.black.withOpacity(0.4),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                          ),
                         ],
                       ),
 
                       SizedBox(
                         height: width / 20,
                       ),
-                      AddressTextFields(
+                      _locationProvider.isLocationSelectedFromMap
+                          ? AddressTextFields(
                           width: width,
-                          title: "Address Line 2",
-                          controller: _secondAddressEdit),
+                          title: "Full Address / House Number",
+                          controller: _secondAddressEdit)
+                          : SizedBox(),
                       SizedBox(
-                        height: width / 3,
+                        height: width / 20,
+                      ),
+                      _locationProvider.isLocationSelectedFromMap
+                          ? AddressTextFields(
+                          readOnly: true,
+                          width: width,
+                          title: "Address / city / state",
+                          controller: _firstAddressEdit)
+                          : SizedBox(),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      _locationProvider.isLocationSelectedFromMap
+                          ? AddressTextFields(
+                          width: width,
+                          title: "Zip Code",
+                          controller: _zipEditAddress)
+                          : SizedBox(),
+                      SizedBox(
+                        height: width / 20,
+                      ),
+                      _locationProvider.isLocationSelectedFromMap
+                          ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            width: width / 2.25,
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'State',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 13,
+                                    color: const Color(0x80515c6f),
+                                    letterSpacing: 0.9100000000000001,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  width: width,
+                                  padding: EdgeInsets.only(
+                                      top: 16.0,
+                                      bottom: 17.0,
+                                      left: 5.0,
+                                      right: 5.0),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color:
+                                        Colors.black.withOpacity(0.3),
+                                        width: 1.5,
+                                      ),
+                                      borderRadius:
+                                      BorderRadius.circular(15.0)),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${_locationProvider.selectedStateName}',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black
+                                              .withOpacity(0.2),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: width / 2.25,
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'City',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 13,
+                                    color: const Color(0x80515c6f),
+                                    letterSpacing: 0.9100000000000001,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  width: width,
+                                  padding: EdgeInsets.only(
+                                      top: 16.0,
+                                      bottom: 17.0,
+                                      left: 5.0,
+                                      right: 5.0),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color:
+                                        Colors.black.withOpacity(0.3),
+                                        width: 1.5,
+                                      ),
+                                      borderRadius:
+                                      BorderRadius.circular(15.0)),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${_locationProvider.selectedCityName}',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black
+                                              .withOpacity(0.2),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                          : SizedBox(),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      SizedBox(
+                        height: width / 1.5,
                       ),
                     ],
                   ),
@@ -636,34 +678,41 @@ class _UserEditAddressState extends State<UserEditAddress> {
                         /// change address from user profile..
 
                         int userId = prefs.read<int>('userId');
+                        if(_secondAddressEdit.text != null && _secondAddressEdit.text != ""){
+                          dynamic response = await UserAPI.editUserAddress(
+                            userId.toString(),
+                            _userProvider.selectedUserAddressId,
+                            _firstNameEditAddress.text,
+                            _lastNameEditAddress.text,
+                            _emailEditAddress.text,
+                            _contactEditAddress.text,
+                            '${_locationProvider.selectedStateId ?? 0}',
+                            '${_locationProvider.selectedCityId ?? 0}',
+                            _firstAddressEdit.text,
+                            _secondAddressEdit.text,
+                            _zipEditAddress.text,
+                            _mapProvider.addressSelectedLatLng.latitude
+                                .toString(),
+                            _mapProvider.addressSelectedLatLng.longitude
+                                .toString(),
+                          );
 
-                        dynamic response = await UserAPI.editUserAddress(
-                          userId.toString(),
-                          _userProvider.selectedUserAddressId,
-                          _firstNameEditAddress.text,
-                          _lastNameEditAddress.text,
-                          _emailEditAddress.text,
-                          _contactEditAddress.text,
-                          '${_locationProvider.selectedStateId ?? 0}',
-                          '${_locationProvider.selectedCityId ?? 0}',
-                          _firstAddressEdit.text,
-                          _secondAddressEdit.text,
-                          _zipEditAddress.text,
-                          _mapProvider.addressSelectedLatLng.latitude
-                              .toString(),
-                          _mapProvider.addressSelectedLatLng.longitude
-                              .toString(),
-                        );
-
-                        if (response['status'] == 200) {
-                          _userProvider.userAddressEditInProgress = false;
-                          Scaffold.of(context)
-                              .showSnackBar(getSnackBar('record Changed !'));
-                        } else {
+                          if (response['status'] == 200) {
+                            _userProvider.userAddressEditInProgress = false;
+                            Scaffold.of(context)
+                                .showSnackBar(getSnackBar('record Changed !'));
+                          } else {
+                            _userProvider.userAddressEditInProgress = false;
+                            Scaffold.of(context).showSnackBar(
+                                getSnackBar('${response['message']}'));
+                          }
+                        }else{
                           _userProvider.userAddressEditInProgress = false;
                           Scaffold.of(context).showSnackBar(
-                              getSnackBar('${response['message']}'));
+                              getSnackBar('Please fill House Number and full address !'));
                         }
+
+
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -861,10 +910,7 @@ class _UserEditAddressState extends State<UserEditAddress> {
                               color: Colors.black.withOpacity(0.4)),
                         ),
                         Spacer(),
-                        Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black.withOpacity(0.4),
-                        )
+
                       ],
                     )),
               )),

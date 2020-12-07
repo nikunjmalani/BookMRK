@@ -34,7 +34,7 @@ class TermsAndConditionState extends State<TermsAndCondition> {
           ),
         ),
         body: WebView(
-          initialUrl: '$kSiteURL/terms_and_conditions',
+          initialUrl: '$kSiteURL/terms_and_conditions/m',
         ),
       ),
     );

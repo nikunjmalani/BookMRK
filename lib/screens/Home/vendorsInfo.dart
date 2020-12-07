@@ -212,7 +212,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                       ),
                                                       Consumer<HomeScreenProvider>(
                                                           builder: (_, _homeScreenProvider, child) {
-                                                            return CircleAvatar(
+                                                            return _homeScreenProvider.totalNewNotifications == 0 ? SizedBox() : CircleAvatar(
                                                               radius: 10,
                                                               child: Text(
                                                                 '${_homeScreenProvider.totalNewNotifications}',
@@ -490,11 +490,14 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                                     description:
                                                                     "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
                                                                     price:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
                                                                     stock:
                                                                     "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
                                                                     image:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
+                                                                    discount: "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+
+                                                                ),
                                                               ),
                                                             );
                                                           } else {
@@ -574,11 +577,14 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                                         description:
                                                         "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
                                                         price:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productPrice}",
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
                                                         stock:
                                                         "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
                                                         image:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productImg}"),
+                                                        "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
+                                                   discount: "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+                                                    ),
+
                                                   );
                                                 },
                                                 itemCount: snapshot

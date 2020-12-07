@@ -93,19 +93,25 @@ class _OrderTrackingState extends State<OrderTracking> {
     );
     Provider.of<MapProvider>(context, listen: false).pathPointsList =
         result.points;
+  }
 
+  void initialization() {
+    if (Provider.of<HomeScreenProvider>(context, listen: false)
+        .showMapInTrackingPage) {
+      getPoints();
+      getDeliveryBoyLocation();
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    getPoints();
-    getDeliveryBoyLocation();
+    initialization();
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -128,7 +134,9 @@ class _OrderTrackingState extends State<OrderTracking> {
                       child: Text(
                         snapshot.data.response[0].inTransit == "1"
                             ? 'Live Tracking'
-                            : 'Live tracking will be enable when order will in transit',
+                            : !homeProvider.showMapInTrackingPage
+                                ? 'Proper address not found!'
+                                : 'Live tracking will be enable when order will in transit',
                         style: TextStyle(
                           fontFamily: 'Roboto',
                           fontSize: 18,
@@ -138,7 +146,8 @@ class _OrderTrackingState extends State<OrderTracking> {
                         textAlign: TextAlign.left,
                       ),
                     ),
-                    snapshot.data.response[0].inTransit == "1"
+                    snapshot.data.response[0].inTransit == "1" &&
+                            data.showMapInTrackingPage
                         ? GestureDetector(
                             onTap: () {},
                             child: Container(

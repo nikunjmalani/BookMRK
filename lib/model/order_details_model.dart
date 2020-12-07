@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final orderDetailsModel = orderDetailsModelFromJson(jsonString);
+
 import 'dart:convert';
 
 OrderDetailsModel orderDetailsModelFromJson(String str) => OrderDetailsModel.fromJson(json.decode(str));
@@ -114,6 +118,11 @@ class OrderDatum {
     this.orderPackedDate,
     this.delivered,
     this.deliveredDate,
+    this.trackingNumber,
+    this.shippingInfo,
+    this.shippingInfoDate,
+    this.isInvoiceMade,
+    this.invoiceLink,
     this.orderDetail,
   });
 
@@ -125,6 +134,11 @@ class OrderDatum {
   String orderPackedDate;
   String delivered;
   String deliveredDate;
+  String trackingNumber;
+  String shippingInfo;
+  String shippingInfoDate;
+  String isInvoiceMade;
+  String invoiceLink;
   List<OrderDetail> orderDetail;
 
   factory OrderDatum.fromJson(Map<String, dynamic> json) => OrderDatum(
@@ -136,6 +150,11 @@ class OrderDatum {
     orderPackedDate: json["order_packed_date"],
     delivered: json["delivered"],
     deliveredDate: json["delivered_date"],
+    trackingNumber: json["tracking_number"],
+    shippingInfo: json["shipping_info"],
+    shippingInfoDate: json["shipping_info_date"],
+    isInvoiceMade: json["is_invoice_made"],
+    invoiceLink: json["invoice_link"],
     orderDetail: List<OrderDetail>.from(json["order_detail"].map((x) => OrderDetail.fromJson(x))),
   );
 
@@ -148,6 +167,11 @@ class OrderDatum {
     "order_packed_date": orderPackedDate,
     "delivered": delivered,
     "delivered_date": deliveredDate,
+    "tracking_number": trackingNumber,
+    "shipping_info": shippingInfo,
+    "shipping_info_date": shippingInfoDate,
+    "is_invoice_made": isInvoiceMade,
+    "invoice_link": invoiceLink,
     "order_detail": List<dynamic>.from(orderDetail.map((x) => x.toJson())),
   };
 }

@@ -63,10 +63,11 @@ class _UserState extends State<User> {
                     padding: const EdgeInsets.only(left: 15, top: 25),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         snapshot.data.response[0].profilePic == ""
                             ? CircleAvatar(
-                                radius: height / 10,
+                                radius: height / 12,
                                 backgroundColor: Colors.transparent,
                                 child: Icon(
                                   Icons.person_outline,
@@ -85,7 +86,7 @@ class _UserState extends State<User> {
                                 ),
                                 errorWidget: (context, string, stackTrace) =>
                                     CircleAvatar(
-                                  radius: height / 10,
+                                  radius: height / 12,
                                   backgroundColor: Colors.transparent,
                                   child: Icon(
                                     Icons.person_outline,
@@ -94,7 +95,7 @@ class _UserState extends State<User> {
                                   ),
                                 ),
                                 placeholder: (context, str) => CircleAvatar(
-                                  radius: height / 10,
+                                  radius: height / 12,
                                   backgroundColor: Colors.transparent,
                                   child: Icon(
                                     Icons.person_outline,
@@ -104,71 +105,76 @@ class _UserState extends State<User> {
                                 ),
                               ),
                         SizedBox(
-                          width: 30.0,
+                          width: 10.0,
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${snapshot.data.response[0].fname}',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 30,
-                                color: const Color(0xff515c6f),
-                                fontWeight: FontWeight.w700,
+                        Container(
+                          width: width/1.8,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${snapshot.data.response[0].fname}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 30,
+                                  color: const Color(0xff515c6f),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                textAlign: TextAlign.left,
                               ),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              '${snapshot.data.response[0].email}',
-                              style: TextStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 15,
-                                color: const Color(0xff515c6f),
+                              SizedBox(
+                                height: 5,
                               ),
-                              textAlign: TextAlign.left,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Provider.of<HomeScreenProvider>(context,
-                                        listen: false)
-                                    .selectedString = "EditProfile";
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: height / 26,
-                                width: width / 3.5,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                    width: 2.8,
-                                    color: colorPalette.navyBlue,
+                              Text(
+                                '${snapshot.data.response[0].email}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 15,
+                                  color: const Color(0xff515c6f),
+                                ),
+                                textAlign: TextAlign.left,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Provider.of<HomeScreenProvider>(context,
+                                          listen: false)
+                                      .selectedString = "EditProfile";
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: height / 26,
+                                  width: width / 3.5,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                      width: 2.8,
+                                      color: colorPalette.navyBlue,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'EDIT PROFILE',
+                                    style: TextStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 13,
+                                      color: const Color(0xff301869),
+                                      letterSpacing: 0.72,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                                child: Text(
-                                  'EDIT PROFILE',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 13,
-                                    color: const Color(0xff301869),
-                                    letterSpacing: 0.72,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                          ],
+                              SizedBox(
+                                height: 25,
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),

@@ -296,7 +296,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                                       price: subCatSnapshot
                                                           .data
                                                           .response[index]
-                                                          .productPrice,
+                                                          .productSalePrice,
                                                       stock:
                                                           "${subCatSnapshot.data.response[index].productStockStatus}",
                                                       discount:
@@ -353,7 +353,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                                       price: subCatSnapshot
                                                           .data
                                                           .response[index]
-                                                          .productPrice,
+                                                          .productSalePrice,
                                                       stock:
                                                           "${subCatSnapshot.data.response[index].productStockStatus}",
                                                       discount:
@@ -403,7 +403,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                                     price: subCatSnapshot
                                                         .data
                                                         .response[index]
-                                                        .productPrice,
+                                                        .productSalePrice,
                                                     stock:
                                                         "${subCatSnapshot.data.response[index].productStockStatus}",
                                                     discount:
@@ -514,7 +514,7 @@ class _SchoolInfoState extends State<SchoolInfo> {
                                               .data
                                               .response[0]
                                               .schoolAllProduct[index]
-                                              .productPrice,
+                                              .productSalePrice,
                                           stock:
                                               "${snapshot.data.response[0].schoolAllProduct[index].productStockStatus}",
                                           discount:

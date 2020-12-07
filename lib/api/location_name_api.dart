@@ -47,4 +47,32 @@ class LocationNameAPI {
     http.Response response = await http.get(url, headers: header);
     return jsonDecode(response.body);
   }
+
+  /// get state city and pincode.......
+  static getStateCityPin(String lat, String lng) async {
+    String url = "$kBaseURL/user/get_state_city_pincode_from_latlng";
+
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+//      "User-ID": "$userId",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "latitudes":"$lat",
+      "longitude":"$lng"
+    };
+
+    http.Response response = await http.post(
+      url,
+      headers: header,
+      body: body,
+      encoding: Encoding.getByName("utf-8"),
+    );
+
+    return jsonDecode(response.body);
+  }
 }
