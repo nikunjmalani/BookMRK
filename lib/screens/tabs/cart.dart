@@ -59,7 +59,7 @@ class _CartState extends State<Cart> {
 
   setDefault() {
     Provider.of<HomeScreenProvider>(context, listen: false)
-        .selectAddressFirstTime = false;
+        .selectAddressFirstTimeInit = false;
   }
 
   @override
@@ -89,7 +89,7 @@ class _CartState extends State<Cart> {
                                 int selectedAddressIndex = 0;
                                 Provider.of<OrderProvider>(context,
                                         listen: false)
-                                    .isAddressSelectedInCart = true;
+                                    .isAddressSelectedInCartInit = true;
                                 for (int i = 0;
                                     i < snapshot.data.response.length;
                                     i++) {
@@ -163,7 +163,7 @@ class _CartState extends State<Cart> {
                               } else {
                                 Provider.of<OrderProvider>(context,
                                         listen: false)
-                                    .isAddressSelectedInCart = false;
+                                    .isAddressSelectedInCartInit = false;
                                 return Padding(
                                   padding: EdgeInsets.only(top: 30.0),
                                   child: GestureDetector(

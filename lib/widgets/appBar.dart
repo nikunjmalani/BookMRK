@@ -17,6 +17,7 @@ Widget CustomAppBar(BuildContext context,
     onCartTap,
     onBellTap}) {
   return AppBar(
+    brightness: Brightness.light,
     automaticallyImplyLeading: false,
     elevation: 0.5,
     backgroundColor: color,
@@ -48,27 +49,31 @@ Widget CustomAppBar(BuildContext context,
                     width: 30,
                     color: whiteIcon == true
                         ? Colors.white
-                        : blueCartIcon == true ? colorPalette.navyBlue : null,
+                        : blueCartIcon == true
+                            ? colorPalette.navyBlue
+                            : null,
                   ),
                   radius: 25,
                   backgroundColor: Colors.transparent,
                 ),
-               Consumer<HomeScreenProvider>(
-                   builder: (_, _homeScreenProvider, child) {
-                 return _homeScreenProvider.totalNumberOfOrdersInCart == 0 ? SizedBox() : CircleAvatar(
-                   radius: 10,
-                   child: Text(
-                     '${_homeScreenProvider.totalNumberOfOrdersInCart}',
-                     style: TextStyle(
-                       fontFamily: 'Roboto',
-                       fontSize: 13,
-                       color: const Color(0xffffffff),
-                     ),
-                     textAlign: TextAlign.left,
-                   ),
-                   backgroundColor: colorPalette.pinkOrange,
-                 );
-               })
+                Consumer<HomeScreenProvider>(
+                    builder: (_, _homeScreenProvider, child) {
+                  return _homeScreenProvider.totalNumberOfOrdersInCart == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          radius: 10,
+                          child: Text(
+                            '${_homeScreenProvider.totalNumberOfOrdersInCart}',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 13,
+                              color: const Color(0xffffffff),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          backgroundColor: colorPalette.pinkOrange,
+                        );
+                })
               ],
             ),
           ),
@@ -87,26 +92,30 @@ Widget CustomAppBar(BuildContext context,
                     width: 30,
                     color: whiteIcon == true
                         ? Colors.white
-                        : blueBellIcon == true ? colorPalette.navyBlue : null,
+                        : blueBellIcon == true
+                            ? colorPalette.navyBlue
+                            : null,
                   ),
                   radius: 25,
                   backgroundColor: Colors.transparent,
                 ),
                 Consumer<HomeScreenProvider>(
                     builder: (_, _homeScreenProvider, child) {
-                  return _homeScreenProvider.totalNewNotifications == 0 ? SizedBox() :CircleAvatar(
-                    radius: 10,
-                    child: Text(
-                      '${_homeScreenProvider.totalNewNotifications}',
-                      style: TextStyle(
-                        fontFamily: 'Roboto',
-                        fontSize: 13,
-                        color: const Color(0xffffffff),
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    backgroundColor: colorPalette.pinkOrange,
-                  );
+                  return _homeScreenProvider.totalNewNotifications == 0
+                      ? SizedBox()
+                      : CircleAvatar(
+                          radius: 10,
+                          child: Text(
+                            '${_homeScreenProvider.totalNewNotifications}',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              fontSize: 13,
+                              color: const Color(0xffffffff),
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                          backgroundColor: colorPalette.pinkOrange,
+                        );
                 })
               ],
             ),

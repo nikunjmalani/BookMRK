@@ -42,7 +42,7 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void orderTrackExpandListSingleUpdate(int index, bool value){
+  void orderTrackExpandListSingleUpdate(int index, bool value) {
     _orderTrackExpandList[index] = value;
     notifyListeners();
   }
@@ -55,5 +55,9 @@ class OrderProvider extends ChangeNotifier {
   set isAddressSelectedInCart(bool value) {
     _isAddressSelectedInCart = value;
     notifyListeners();
+  }
+
+  set isAddressSelectedInCartInit(bool value) {
+    _isAddressSelectedInCart = value;
   }
 }

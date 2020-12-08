@@ -148,11 +148,11 @@ class HomeScreenProvider extends ChangeNotifier {
   }
 
   getCartCount() async {
-    int counter  = 0;
+    int counter = 0;
     int userId = prefs.read<int>('userId');
     dynamic response = await CartAPI.getCartData(userId.toString());
-    if(response['status'] == 200){
-      response['response'][0]['cart'].forEach((cart){
+    if (response['status'] == 200) {
+      response['response'][0]['cart'].forEach((cart) {
         counter += int.parse(cart['qty']);
       });
     }
@@ -232,5 +232,9 @@ class HomeScreenProvider extends ChangeNotifier {
   set selectAddressFirstTime(bool value) {
     _selectAddressFirstTime = value;
     notifyListeners();
+  }
+
+  set selectAddressFirstTimeInit(bool value) {
+    _selectAddressFirstTime = value;
   }
 }

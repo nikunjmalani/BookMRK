@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
 class CategoryProvider extends ChangeNotifier {
-
   /// selected category name...
   String _selectedCategoryName;
 
@@ -52,6 +51,10 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set selectedSubCategoryInit(String value) {
+    _selectedSubCategory = value;
+  }
+
   /// selected subcategory id....
   int _selectedSubCategoryId;
 
@@ -72,6 +75,10 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set totalCategoryProductInit(int value) {
+    _totalCategoryProduct = value;
+  }
+
   /// selected category name....
   String _selectedCategoryNameToShow;
 
@@ -80,5 +87,9 @@ class CategoryProvider extends ChangeNotifier {
   set selectedCategoryNameToShow(String value) {
     _selectedCategoryNameToShow = value;
     notifyListeners();
+  }
+
+  set selectedCategoryNameToShowInit(String value) {
+    _selectedCategoryNameToShow = value;
   }
 }

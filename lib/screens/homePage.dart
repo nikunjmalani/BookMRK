@@ -467,6 +467,8 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.response[0].appScreen[0].show == "1") {
+
+
                 return Scaffold(
                   appBar: MaintananceAppBar(
                       context, imagePath.logo
@@ -499,36 +501,44 @@ class _HomePageState extends State<HomePage> {
               } else {
                 if (snapshot.data.response[0].maintenanceScreen[0].show ==
                     "1") {
-                  return Scaffold(appBar: MaintananceAppBar(
-                      context, imagePath.logo
-                  ),
-                    body: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Container(
-                            child: SvgPicture.asset(
-                              'assets/icons/maintanance.svg',
-                              height: 150.0,
+
+                  return AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: SystemUiOverlayStyle(
+                      statusBarColor: Colors.black,
+                      statusBarBrightness: Brightness.light
+                    ),
+                    child: Scaffold(appBar: MaintananceAppBar(
+                        context, imagePath.logo
+                    ),
+                      body: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              child: SvgPicture.asset(
+                                'assets/icons/maintanance.svg',
+                                height: 150.0,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30.0),
-                        Text(
-                          '${snapshot.data.response[0].maintenanceScreen[0]
-                              .message == ""
-                              ? "Application under maintenance !"
-                              : snapshot.data.response[0].maintenanceScreen[0]
-                              .message}',
-                          style: TextStyle(
-                            color: colorPalette.navyBlue,
-                            fontSize: 18.0,
-                          ),
-                        )
-                      ],
+                          SizedBox(height: 30.0),
+                          Text(
+                            '${snapshot.data.response[0].maintenanceScreen[0]
+                                .message == ""
+                                ? "Application under maintenance !"
+                                : snapshot.data.response[0].maintenanceScreen[0]
+                                .message}',
+                            style: TextStyle(
+                              color: colorPalette.navyBlue,
+                              fontSize: 18.0,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
+
                 } else {
                   return Stack(
                     children: [
