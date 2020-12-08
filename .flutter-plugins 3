@@ -1,0 +1,25 @@
+# This is a generated file; do not edit or check into version control.
+device_info=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/device_info-1.0.0/
+file_picker=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-2.0.7/
+firebase_core=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-0.5.2/
+firebase_core_web=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.2.1/
+firebase_messaging=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-7.0.3/
+flutter_plugin_android_lifecycle=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-1.0.11/
+geocoder=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/geocoder-0.2.1/
+geolocator=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/geolocator-6.1.7/
+google_maps_flutter=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.33/
+location=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/location-3.0.2/
+location_web=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/location_web-1.0.0/
+path_provider=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.18/
+path_provider_linux=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_linux-0.0.1+2/
+path_provider_macos=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+4/
+path_provider_windows=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_windows-0.0.4+1/
+permission_handler=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-5.0.1+1/
+share=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/share-0.6.5+4/
+sqflite=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-1.3.1+1/
+url_launcher=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-5.7.10/
+url_launcher_linux=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_linux-0.0.1+4/
+url_launcher_macos=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-0.0.1+9/
+url_launcher_web=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-0.1.5+1/
+url_launcher_windows=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_windows-0.0.1+3/
+webview_flutter=/Users/nikunjmalani/Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-0.3.24/

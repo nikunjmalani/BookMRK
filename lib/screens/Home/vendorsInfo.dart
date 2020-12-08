@@ -7,7 +7,6 @@ import 'package:bookmrk/provider/product_order_provider.dart';
 import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
-import 'package:bookmrk/widgets/appBar.dart';
 import 'package:bookmrk/widgets/schoolImageBox.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:bookmrk/widgets/widgets.dart';
@@ -46,16 +45,16 @@ class _VendorsInfoState extends State<VendorsInfo> {
   /// scroll capture
   getScrollDetails() {
     Provider.of<VendorProvider>(context, listen: false)
-        .customScrollCurrentPixels = 0.0;
+        .customScrollCurrentPixelsInit = 0.0;
     _scrollController.addListener(() {
       Provider.of<VendorProvider>(context, listen: false)
-          .customScrollCurrentPixels = _scrollController.position.pixels;
+          .customScrollCurrentPixelsInit = _scrollController.position.pixels;
       if (_scrollController.position.pixels > 70) {
         Provider.of<VendorProvider>(context, listen: false)
-            .isCustomScrollAtLimit = true;
+            .isCustomScrollAtLimitInit = true;
       } else {
         Provider.of<VendorProvider>(context, listen: false)
-            .isCustomScrollAtLimit = false;
+            .isCustomScrollAtLimitInit = false;
       }
     });
   }
@@ -74,96 +73,112 @@ class _VendorsInfoState extends State<VendorsInfo> {
 
     return Scaffold(
       body: FutureBuilder(
-        future: getVendorProductInfo(),
-        builder: (context, snapshot) {
-          return Consumer<HomeScreenProvider>(
-            builder: (context, _homeScreenProvider, child) {
-              return Consumer<SchoolProvider>(
-                builder: (_, _schoolProvider, child) {
-                  return Consumer<CategoryProvider>(
-                    builder: (_, _categoryProvider, child) {
-                      return Consumer<VendorProvider>(
-                        builder: (_, _vendorProvider, child) {
-                          if (snapshot.hasError) {
-                            return Container(
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation(
-                                      colorPalette.navyBlue),
+          future: getVendorProductInfo(),
+          builder: (context, snapshot) {
+            return Consumer<HomeScreenProvider>(
+              builder: (context, _homeScreenProvider, child) {
+                return Consumer<SchoolProvider>(
+                  builder: (_, _schoolProvider, child) {
+                    return Consumer<CategoryProvider>(
+                      builder: (_, _categoryProvider, child) {
+                        return Consumer<VendorProvider>(
+                          builder: (_, _vendorProvider, child) {
+                            if (snapshot.hasError) {
+                              return Container(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                        colorPalette.navyBlue),
+                                  ),
                                 ),
-                              ),
-                            );
-                          } else if (snapshot.hasData) {
-                            return Stack(
-                              children: [
-                                SingleChildScrollView(
-                                  controller: _scrollController,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 60,
-                                        color: colorPalette.purple,
-                                        child: AppBar(
-                                          automaticallyImplyLeading: false,
-                                          elevation: 0.5,
-                                          backgroundColor: colorPalette.purple,
-                                          flexibleSpace: Container(
-                                            padding: EdgeInsets.only(left: 16, right: 16, top: 35),
-                                            decoration: BoxDecoration(boxShadow: [
-                                              BoxShadow(
-                                                offset: Offset(0, 1),
-                                                blurRadius: 8,
-                                                color: Color(0xff676767).withOpacity(0.05),
-                                              ),
-                                            ], color: colorPalette.purple),
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  width: width / 1.9,
-                                                  child: Row(
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: (){
-                                                          _homeScreenProvider.selectedString = "Home";
-
-
-                                                        },
-                                                        child: Icon(
-                                                          Icons.arrow_back_ios,
-                                                          color: _homeScreenProvider
-                                                              .selectedString ==
-                                                              "VendorInfo"
-                                                              ? Colors.white
-                                                              : colorPalette.navyBlue,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
+                              );
+                            } else if (snapshot.hasData) {
+                              return Stack(
+                                children: [
+                                  SingleChildScrollView(
+                                    controller: _scrollController,
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 60,
+                                          color: colorPalette.purple,
+                                          child: AppBar(
+                                            automaticallyImplyLeading: false,
+                                            elevation: 0.5,
+                                            backgroundColor:
+                                                colorPalette.purple,
+                                            flexibleSpace: Container(
+                                              padding: EdgeInsets.only(
+                                                  left: 16, right: 16, top: 35),
+                                              decoration:
+                                                  BoxDecoration(boxShadow: [
+                                                BoxShadow(
+                                                  offset: Offset(0, 1),
+                                                  blurRadius: 8,
+                                                  color: Color(0xff676767)
+                                                      .withOpacity(0.05),
                                                 ),
-                                                Spacer(),
-                                                GestureDetector(
-                                                  onTap: (){
+                                              ], color: colorPalette.purple),
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: width / 1.9,
+                                                    child: Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            _homeScreenProvider
+                                                                    .selectedString =
+                                                                "Home";
+                                                          },
+                                                          child: Icon(
+                                                            Icons
+                                                                .arrow_back_ios,
+                                                            color: _homeScreenProvider
+                                                                        .selectedString ==
+                                                                    "VendorInfo"
+                                                                ? Colors.white
+                                                                : colorPalette
+                                                                    .navyBlue,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      _homeScreenProvider
+                                                          .pageController
+                                                          .jumpToPage(4);
 
-                                                    _homeScreenProvider.pageController.jumpToPage(4);
-
-                                                    _homeScreenProvider.selectedString = "Cart";
-                                                    _homeScreenProvider.selectedBottomIndex = 4;
-                                                    _homeScreenProvider.blueCartIcon = true;
-                                                    _homeScreenProvider.blueBellIcon = false;
-                                                  },
-                                                  child: Stack(
-                                                    alignment: Alignment.topRight,
-                                                    children: [
-                                                      CircleAvatar(
-                                                        child: SvgPicture.asset(
-                                                          "assets/icons/Cart.svg",
-                                                          height: 30,
-                                                          width: 30,
-                                                          color:Colors.white,
+                                                      _homeScreenProvider
+                                                              .selectedString =
+                                                          "Cart";
+                                                      _homeScreenProvider
+                                                          .selectedBottomIndex = 4;
+                                                      _homeScreenProvider
+                                                          .blueCartIcon = true;
+                                                      _homeScreenProvider
+                                                          .blueBellIcon = false;
+                                                    },
+                                                    child: Stack(
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      children: [
+                                                        CircleAvatar(
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            "assets/icons/Cart.svg",
+                                                            height: 30,
+                                                            width: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                          radius: 25,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
                                                         ),
-                                                        radius: 25,
-                                                        backgroundColor: Colors.transparent,
-                                                      ),
 //                Consumer<HomeScreenProvider>(
 //                    builder: (_, _homeScreenProvider, child) {
 //                  return CircleAvatar(
@@ -180,602 +195,640 @@ class _VendorsInfoState extends State<VendorsInfo> {
 //                    backgroundColor: colorPalette.pinkOrange,
 //                  );
 //                })
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: (){
-
-                                                    _homeScreenProvider.pageController.jumpToPage(5);
-
-                                                    _homeScreenProvider.selectedString =
-                                                    "Notifications";
-                                                    _homeScreenProvider.selectedBottomIndex = 5;
-                                                    _homeScreenProvider.blueCartIcon = false;
-                                                    _homeScreenProvider.blueBellIcon = true;
-                                                  },
-                                                  child: Stack(
-                                                    alignment: Alignment.topRight,
-                                                    children: [
-                                                      CircleAvatar(
-                                                        child: SvgPicture.asset(
-                                                          "assets/icons/bell.svg",
-                                                          height: 30,
-                                                          width: 30,
-                                                          color: Colors.white,
-                                                        ),
-                                                        radius: 25,
-                                                        backgroundColor: Colors.transparent,
-                                                      ),
-                                                      Consumer<HomeScreenProvider>(
-                                                          builder: (_, _homeScreenProvider, child) {
-                                                            return _homeScreenProvider.totalNewNotifications == 0 ? SizedBox() : CircleAvatar(
-                                                              radius: 10,
-                                                              child: Text(
-                                                                '${_homeScreenProvider.totalNewNotifications}',
-                                                                style: TextStyle(
-                                                                  fontFamily: 'Roboto',
-                                                                  fontSize: 13,
-                                                                  color: const Color(0xffffffff),
-                                                                ),
-                                                                textAlign: TextAlign.left,
-                                                              ),
-                                                              backgroundColor: colorPalette.pinkOrange,
-                                                            );
-                                                          })
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: height / 4.5,
-                                        decoration: BoxDecoration(
-                                            color: colorPalette.purple,
-                                            borderRadius: BorderRadius.only(
-                                                bottomRight: Radius.lerp(
-                                                    Radius.elliptical(50, 50),
-                                                    Radius.elliptical(
-                                                        70 -
-                                                            (_vendorProvider
-                                                                .customScrollCurrentPixels /
-                                                                5),
-                                                        70 -
-                                                            (_vendorProvider
-                                                                .customScrollCurrentPixels /
-                                                                5)),
-                                                    5.0))),
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              margin:
-                                              EdgeInsets.only(left: 15),
-                                              height: height / 7,
-                                              width: height / 7,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: Colors.white,
-                                                image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      "${snapshot.data[0].response[0].vendor.companyLogo}"),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              margin: EdgeInsets.only(
-                                                  left: 15, bottom: 15),
-                                              height: height / 5,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                                children: [
-                                                  Container(
-                                                    width:
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                        0.5,
-                                                    child: Text(
-                                                      '${snapshot.data[0].response[0].vendor.companyName} ',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Roboto',
-                                                        fontSize: 20,
-                                                        color: const Color(
-                                                            0xffffffff),
-                                                        fontWeight:
-                                                        FontWeight.w700,
-                                                      ),
-                                                      textAlign:
-                                                      TextAlign.left,
+                                                      ],
                                                     ),
                                                   ),
                                                   SizedBox(
-                                                    height: 7,
+                                                    width: 5,
                                                   ),
-                                                  Container(
-                                                    width: width / 2,
-                                                    child: Text(
-                                                      '${snapshot.data[0].response[0].vendor.allProductsCount} Products, ${snapshot.data[0].response[0].vendor.allSchoolCount} schools',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Roboto',
-                                                        fontSize: 17,
-                                                        color: const Color(
-                                                            0xffe5e5e5),
-                                                      ),
-                                                      textAlign:
-                                                      TextAlign.left,
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: width / 2,
-                                                    child: Text(
-                                                      '${snapshot.data[0].response[0].vendor.vendorName}',
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                      style: TextStyle(
-                                                        fontFamily: 'Roboto',
-                                                        fontSize: 17,
-                                                        color: const Color(
-                                                            0xffe5e5e5),
-                                                      ),
-                                                      textAlign:
-                                                      TextAlign.left,
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      _homeScreenProvider
+                                                          .pageController
+                                                          .jumpToPage(5);
+
+                                                      _homeScreenProvider
+                                                              .selectedString =
+                                                          "Notifications";
+                                                      _homeScreenProvider
+                                                          .selectedBottomIndex = 5;
+                                                      _homeScreenProvider
+                                                          .blueCartIcon = false;
+                                                      _homeScreenProvider
+                                                          .blueBellIcon = true;
+                                                    },
+                                                    child: Stack(
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      children: [
+                                                        CircleAvatar(
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            "assets/icons/bell.svg",
+                                                            height: 30,
+                                                            width: 30,
+                                                            color: Colors.white,
+                                                          ),
+                                                          radius: 25,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                        ),
+                                                        Consumer<
+                                                                HomeScreenProvider>(
+                                                            builder: (_,
+                                                                _homeScreenProvider,
+                                                                child) {
+                                                          return _homeScreenProvider
+                                                                      .totalNewNotifications ==
+                                                                  0
+                                                              ? SizedBox()
+                                                              : CircleAvatar(
+                                                                  radius: 10,
+                                                                  child: Text(
+                                                                    '${_homeScreenProvider.totalNewNotifications}',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontFamily:
+                                                                          'Roboto',
+                                                                      fontSize:
+                                                                          13,
+                                                                      color: const Color(
+                                                                          0xffffffff),
+                                                                    ),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                  ),
+                                                                  backgroundColor:
+                                                                      colorPalette
+                                                                          .pinkOrange,
+                                                                );
+                                                        })
+                                                      ],
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Tabs(
-                                        firstTitle: "All Products",
-                                        secondTitle: "Schools",
-                                        height: height,
-                                        width: width,
-                                        currentIndex: _homeScreenProvider
-                                            .vendorSchoolIndex,
-                                        firstTap: () => homeProvider
-                                            .vendorSchoolIndex = 0,
-                                        secondTap: () => homeProvider
-                                            .vendorSchoolIndex = 1,
-                                      ),
-
-                                      /// when all product tab selected then show filter icon....
-                                      _homeScreenProvider.vendorSchoolIndex ==
-                                          0
-                                          ? GestureDetector(
-                                        onTap: () {
-                                          Provider.of<HomeScreenProvider>(
-                                              context,
-                                              listen: false)
-                                              .selectedString =
-                                          "Filter";
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.only(
-                                              right: 10,
-                                              top: 15,
-                                              bottom: 10),
-                                          alignment:
-                                          Alignment.centerRight,
-                                          child: SvgPicture.asset(
-                                            "assets/icons/filter.svg",
+                                            ),
                                           ),
                                         ),
-                                      )
-                                          :
+                                        Container(
+                                          height: height / 4.5,
+                                          decoration: BoxDecoration(
+                                              color: colorPalette.purple,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight: Radius.lerp(
+                                                      Radius.elliptical(50, 50),
+                                                      Radius.elliptical(
+                                                          70 -
+                                                              (_vendorProvider
+                                                                      .customScrollCurrentPixels /
+                                                                  5),
+                                                          70 -
+                                                              (_vendorProvider
+                                                                      .customScrollCurrentPixels /
+                                                                  5)),
+                                                      5.0))),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(left: 15),
+                                                height: height / 7,
+                                                width: height / 7,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        "${snapshot.data[0].response[0].vendor.companyLogo}"),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: 15, bottom: 15),
+                                                height: height / 5,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.5,
+                                                      child: Text(
+                                                        '${snapshot.data[0].response[0].vendor.companyName} ',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 20,
+                                                          color: const Color(
+                                                              0xffffffff),
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 7,
+                                                    ),
+                                                    Container(
+                                                      width: width / 2,
+                                                      child: Text(
+                                                        '${snapshot.data[0].response[0].vendor.allProductsCount} Products, ${snapshot.data[0].response[0].vendor.allSchoolCount} schools',
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 17,
+                                                          color: const Color(
+                                                              0xffe5e5e5),
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width: width / 2,
+                                                      child: Text(
+                                                        '${snapshot.data[0].response[0].vendor.vendorName}',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontFamily: 'Roboto',
+                                                          fontSize: 17,
+                                                          color: const Color(
+                                                              0xffe5e5e5),
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Tabs(
+                                          firstTitle: "All Products",
+                                          secondTitle: "Schools",
+                                          height: height,
+                                          width: width,
+                                          currentIndex: _homeScreenProvider
+                                              .vendorSchoolIndex,
+                                          firstTap: () => homeProvider
+                                              .vendorSchoolIndex = 0,
+                                          secondTap: () => homeProvider
+                                              .vendorSchoolIndex = 1,
+                                        ),
 
-                                      /// when schools tab selected then show search bar....
-                                      SearchBar(
-                                        width: width,
-                                        title: "Search Schools",
-                                        onChanged: (value) {
-                                          if (value.length < 1) {
-                                            _schoolProvider
-                                                .isSearchSchoolTabSelected =
-                                            false;
-                                          } else {
-                                            _schoolProvider
-                                                .isSearchSchoolTabSelected =
-                                            true;
-                                            _schoolProvider
-                                                .schoolsToFilter
-                                                .clear();
+                                        /// when all product tab selected then show filter icon....
+                                        _homeScreenProvider.vendorSchoolIndex ==
+                                                0
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  Provider.of<HomeScreenProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedString =
+                                                      "Filter";
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.only(
+                                                      right: 10,
+                                                      top: 15,
+                                                      bottom: 10),
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: SvgPicture.asset(
+                                                    "assets/icons/filter.svg",
+                                                  ),
+                                                ),
+                                              )
+                                            :
 
-                                            snapshot.data[1].response[0]
-                                                .vendorSchool
-                                                .forEach((e) {
-                                              if (e.schoolName
-                                                  .toString()
-                                                  .toLowerCase()
-                                                  .contains(value
-                                                  .toLowerCase())) {
-                                                _schoolProvider
-                                                    .schoolsToFilterAddSingleSchool(
-                                                    e);
-                                              }
-                                            });
-                                          }
-                                        },
-                                      ),
+                                            /// when schools tab selected then show search bar....
+                                            SearchBar(
+                                                width: width,
+                                                title: "Search Schools",
+                                                onChanged: (value) {
+                                                  if (value.length < 1) {
+                                                    _schoolProvider
+                                                            .isSearchSchoolTabSelected =
+                                                        false;
+                                                  } else {
+                                                    _schoolProvider
+                                                            .isSearchSchoolTabSelected =
+                                                        true;
+                                                    _schoolProvider
+                                                        .schoolsToFilter
+                                                        .clear();
 
-                                      /// when all product tab selected then show products....
-                                      _homeScreenProvider.vendorSchoolIndex ==
-                                          0
-                                          ? _categoryProvider
-                                          .selectedFilterCategoryList
-                                          .length >
-                                          0
-                                          ?
+                                                    snapshot.data[1].response[0]
+                                                        .vendorSchool
+                                                        .forEach((e) {
+                                                      if (e.schoolName
+                                                          .toString()
+                                                          .toLowerCase()
+                                                          .contains(value
+                                                              .toLowerCase())) {
+                                                        _schoolProvider
+                                                            .schoolsToFilterAddSingleSchool(
+                                                                e);
+                                                      }
+                                                    });
+                                                  }
+                                                },
+                                              ),
 
-                                      /// when filter is selected then show filtered list of product...
-                                      Column(
-                                        children: [
-                                          Container(
-                                              child: Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    horizontal: 10),
-                                                child:
-                                                SingleChildScrollView(
-                                                  physics: NeverScrollableScrollPhysics(),
-                                                  child: Wrap(
-                                                      direction:
-                                                      Axis.horizontal,
-                                                      children:
-                                                      List.generate(
-                                                        snapshot
+                                        /// when all product tab selected then show products....
+                                        _homeScreenProvider.vendorSchoolIndex ==
+                                                0
+                                            ? _categoryProvider
+                                                        .selectedFilterCategoryList
+                                                        .length >
+                                                    0
+                                                ?
+
+                                                /// when filter is selected then show filtered list of product...
+                                                Column(
+                                                    children: [
+                                                      Container(
+                                                          child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 10),
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          physics:
+                                                              NeverScrollableScrollPhysics(),
+                                                          child: Wrap(
+                                                              direction: Axis
+                                                                  .horizontal,
+                                                              children:
+                                                                  List.generate(
+                                                                snapshot
+                                                                    .data[0]
+                                                                    .response[0]
+                                                                    .vendorProduct
+                                                                    .length,
+                                                                (index) {
+                                                                  if (_categoryProvider
+                                                                      .selectedFilterCategoryList
+                                                                      .contains(snapshot
+                                                                          .data[
+                                                                              0]
+                                                                          .response[
+                                                                              0]
+                                                                          .vendorProduct[
+                                                                              index]
+                                                                          .categoryName)) {
+                                                                    return GestureDetector(
+                                                                      onTap:
+                                                                          () async {
+                                                                        _homeScreenProvider.selectedTitle =
+                                                                            "${snapshot.data[0].response[0].vendorProduct[index].productName}";
+                                                                        Provider.of<ProductOrderProvider>(context, listen: false).selectedVariation2Option =
+                                                                            null;
+                                                                        _homeScreenProvider.selectedProductSlug =
+                                                                            "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
+                                                                        _vendorProvider.selectedVendorName =
+                                                                            "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
+                                                                        _homeScreenProvider.selectedString =
+                                                                            "ProductInfo";
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        width: (width /
+                                                                                2) -
+                                                                            30.0,
+                                                                        margin: EdgeInsets.only(
+                                                                            right:
+                                                                                10.0,
+                                                                            bottom:
+                                                                                10.0),
+                                                                        height:
+                                                                            230,
+                                                                        child:
+                                                                            ProductBox(
+                                                                          expanded:
+                                                                              true,
+                                                                          height:
+                                                                              height,
+                                                                          width:
+                                                                              width,
+                                                                          title:
+                                                                              "${snapshot.data[0].response[0].vendorProduct[index].productName}",
+                                                                          description:
+                                                                              "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
+                                                                          price:
+                                                                              "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
+                                                                          stock:
+                                                                              "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
+                                                                          image:
+                                                                              "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
+                                                                          discount:
+                                                                              "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  } else {
+                                                                    return SizedBox();
+                                                                  }
+                                                                },
+                                                              )),
+                                                        ),
+                                                      )),
+                                                      SizedBox(
+                                                        height: 70,
+                                                      )
+                                                    ],
+                                                  )
+                                                :
+
+                                                /// when any filter is not selected then show list of all products...
+                                                snapshot
                                                             .data[0]
                                                             .response[0]
                                                             .vendorProduct
-                                                            .length,
-                                                            (index) {
-                                                          if (_categoryProvider
-                                                              .selectedFilterCategoryList
-                                                              .contains(snapshot
-                                                              .data[0]
-                                                              .response[
-                                                          0]
-                                                              .vendorProduct[
-                                                          index]
-                                                              .categoryName)) {
-                                                            return GestureDetector(
-                                                              onTap:
-                                                                  () async {
-                                                                _homeScreenProvider.selectedTitle = "${snapshot.data[0].response[0].vendorProduct[index].productName}";
-                                                                Provider.of<ProductOrderProvider>(
-                                                                    context,
-                                                                    listen: false)
-                                                                    .selectedVariation2Option = null;
-                                                                _homeScreenProvider
-                                                                    .selectedProductSlug =
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
-                                                                _vendorProvider
-                                                                    .selectedVendorName =
-                                                                "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
-                                                                _homeScreenProvider
-                                                                    .selectedString =
-                                                                "ProductInfo";
-                                                              },
-                                                              child:
-                                                              Container(
-                                                                width: (width /
-                                                                    2) -
-                                                                    30.0,
-                                                                margin: EdgeInsets.only(
-                                                                    right:
-                                                                    10.0,
-                                                                    bottom:
-                                                                    10.0),
-                                                                height:
-                                                                230,
-                                                                child: ProductBox(
-                                                                    expanded:
+                                                            .length >
+                                                        0
+                                                    ? Column(
+                                                        children: [
+                                                          Container(
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      10),
+                                                              child: GridView
+                                                                  .builder(
+                                                                shrinkWrap:
                                                                     true,
-                                                                    height:
-                                                                    height,
-                                                                    width:
-                                                                    width,
-                                                                    title:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productName}",
-                                                                    description:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
-                                                                    price:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
-                                                                    stock:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
-                                                                    image:
-                                                                    "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
-                                                                    discount: "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                                                    maxCrossAxisExtent:
+                                                                        300,
+                                                                    childAspectRatio:
+                                                                        0.75,
+                                                                    crossAxisSpacing:
+                                                                        10,
+                                                                    mainAxisSpacing:
+                                                                        10),
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index) {
+                                                                  return GestureDetector(
+                                                                    onTap:
+                                                                        () async {
+                                                                      _homeScreenProvider
+                                                                              .selectedTitle =
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productName}";
 
-                                                                ),
+                                                                      Provider.of<ProductOrderProvider>(
+                                                                              context,
+                                                                              listen: false)
+                                                                          .selectedVariation2Option = null;
+                                                                      _homeScreenProvider
+                                                                              .selectedProductSlug =
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
+                                                                      _vendorProvider
+                                                                              .selectedVendorName =
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
+                                                                      _homeScreenProvider
+                                                                              .selectedString =
+                                                                          "ProductInfo";
+                                                                    },
+                                                                    child:
+                                                                        ProductBox(
+                                                                      expanded:
+                                                                          true,
+                                                                      height:
+                                                                          height,
+                                                                      width:
+                                                                          width,
+                                                                      title:
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productName}",
+                                                                      description:
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
+                                                                      price:
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
+                                                                      stock:
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
+                                                                      image:
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
+                                                                      discount:
+                                                                          "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                itemCount: snapshot
+                                                                    .data[0]
+                                                                    .response[0]
+                                                                    .vendorProduct
+                                                                    .length,
                                                               ),
-                                                            );
-                                                          } else {
-                                                            return SizedBox();
-                                                          }
-                                                        },
-                                                      )),
-                                                ),
-                                              )),
-                                          SizedBox(height: 70,)
-                                        ],
-                                      )
-                                          :
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 70.0)
+                                                        ],
+                                                      )
+                                                    : Column(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                              'assets/icons/no_data.svg',
+                                                              height: 100),
+                                                          SizedBox(
+                                                            height: 20.0,
+                                                          ),
+                                                          Text(
+                                                            '0 Products',
+                                                            style: TextStyle(
+                                                                color:
+                                                                    colorPalette
+                                                                        .navyBlue,
+                                                                fontSize: 20),
+                                                          )
+                                                        ],
+                                                      )
+                                            :
 
-                                      /// when any filter is not selected then show list of all products...
-                                      snapshot
-                                          .data[0]
-                                          .response[0]
-                                          .vendorProduct
-                                          .length >
-                                          0
-                                          ? Column(
-                                            children: [
-                                              Container(
-                                        child: Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .symmetric(
-                                                  horizontal:
-                                                  10),
-                                              child:
-                                              GridView.builder(
-                                                shrinkWrap: true,
-                                                physics:
-                                                NeverScrollableScrollPhysics(),
-                                                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                                                    maxCrossAxisExtent:
-                                                    300,
-                                                    childAspectRatio:
-                                                    0.75,
-                                                    crossAxisSpacing:
-                                                    10,
-                                                    mainAxisSpacing:
-                                                    10),
-                                                itemBuilder:
-                                                    (context,
-                                                    index) {
-                                                  return GestureDetector(
-                                                    onTap:
-                                                        () async {
-                                                          _homeScreenProvider.selectedTitle = "${snapshot.data[0].response[0].vendorProduct[index].productName}";
-
-                                                          Provider.of<ProductOrderProvider>(
-                                                          context,
-                                                          listen:
-                                                          false)
-                                                          .selectedVariation2Option = null;
-                                                      _homeScreenProvider
-                                                          .selectedProductSlug =
-                                                      "${snapshot.data[0].response[0].vendorProduct[index].productSlug}";
-                                                      _vendorProvider
-                                                          .selectedVendorName =
-                                                      "${snapshot.data[0].response[0].vendorProduct[index].vendorSlug}";
-                                                      _homeScreenProvider
-                                                          .selectedString =
-                                                      "ProductInfo";
-                                                    },
-                                                    child: ProductBox(
-                                                        expanded:
-                                                        true,
-                                                        height:
-                                                        height,
-                                                        width:
-                                                        width,
-                                                        title:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productName}",
-                                                        description:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].vendorCompanyName}",
-                                                        price:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productSalePrice}",
-                                                        stock:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productStockStatus}",
-                                                        image:
-                                                        "${snapshot.data[0].response[0].vendorProduct[index].productImg}",
-                                                   discount: "${snapshot.data[0].response[0].vendorProduct[index].productDiscount}",
-                                                    ),
-
-                                                  );
-                                                },
-                                                itemCount: snapshot
-                                                    .data[0]
-                                                    .response[0]
-                                                    .vendorProduct
-                                                    .length,
+                                            /// when school tab selected then show school list...
+                                            Column(
+                                                children: [
+                                                  Container(
+                                                    child: _schoolProvider
+                                                            .isSearchSchoolTabSelected
+                                                        ? ListView.builder(
+                                                            shrinkWrap: true,
+                                                            physics:
+                                                                NeverScrollableScrollPhysics(),
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return Padding(
+                                                                padding: index ==
+                                                                        14
+                                                                    ? EdgeInsets.only(
+                                                                        bottom:
+                                                                            70)
+                                                                    : EdgeInsets
+                                                                        .all(0),
+                                                                child:
+                                                                    SchoolImageBox(
+                                                                        height:
+                                                                            height,
+                                                                        image:
+                                                                            "${_schoolProvider.schoolsToFilter[index].schoolLogo}",
+                                                                        description:
+                                                                            "${_schoolProvider.schoolsToFilter[index].address}, ${_schoolProvider.schoolsToFilter[index].city}, ${_schoolProvider.schoolsToFilter[index].pincode}",
+                                                                        title:
+                                                                            "${_schoolProvider.schoolsToFilter[index].schoolName}",
+                                                                        onTap:
+                                                                            () {
+                                                                          Provider.of<SchoolProvider>(context, listen: false).selectedSchoolSlug =
+                                                                              "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
+                                                                          Provider.of<HomeScreenProvider>(context, listen: false).selectedString =
+                                                                              "SchoolInfo";
+                                                                        }),
+                                                              );
+                                                            },
+                                                            itemCount:
+                                                                _schoolProvider
+                                                                    .schoolsToFilter
+                                                                    .length,
+                                                          )
+                                                        : snapshot
+                                                                    .data[1]
+                                                                    .response[0]
+                                                                    .vendorSchool
+                                                                    .length >
+                                                                0
+                                                            ? ListView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                physics:
+                                                                    NeverScrollableScrollPhysics(),
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index) {
+                                                                  return Padding(
+                                                                    padding: index ==
+                                                                            14
+                                                                        ? EdgeInsets.only(
+                                                                            bottom:
+                                                                                70)
+                                                                        : EdgeInsets
+                                                                            .all(0),
+                                                                    child: SchoolImageBox(
+                                                                        height: height,
+                                                                        image: "${snapshot.data[1].response[0].vendorSchool[index].schoolLogo}",
+                                                                        description: "${snapshot.data[1].response[0].vendorSchool[index].address}, ${snapshot.data[1].response[0].vendorSchool[index].city}, ${snapshot.data[1].response[0].vendorSchool[index].pincode}",
+                                                                        title: "${snapshot.data[1].response[0].vendorSchool[index].schoolName}",
+                                                                        onTap: () {
+                                                                          Provider.of<SchoolProvider>(context, listen: false).selectedSchoolSlug =
+                                                                              "${snapshot.data[1].response[0].vendorSchool[index].schoolSlug}";
+                                                                          Provider.of<HomeScreenProvider>(context, listen: false).selectedString =
+                                                                              "SchoolInfo";
+                                                                        }),
+                                                                  );
+                                                                },
+                                                                itemCount: snapshot
+                                                                    .data[1]
+                                                                    .response[0]
+                                                                    .vendorSchool
+                                                                    .length,
+                                                              )
+                                                            : Column(
+                                                                children: [
+                                                                  SvgPicture.asset(
+                                                                      'assets/icons/no_data.svg',
+                                                                      height:
+                                                                          100),
+                                                                  SizedBox(
+                                                                    height:
+                                                                        20.0,
+                                                                  ),
+                                                                  Text(
+                                                                    '0 School',
+                                                                    style: TextStyle(
+                                                                        color: colorPalette
+                                                                            .navyBlue,
+                                                                        fontSize:
+                                                                            20),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 80,
+                                                  )
+                                                ],
                                               ),
-                                        ),
-                                      ),
-                                              SizedBox(height: 70.0)
-                                            ],
-                                          )
-                                          : Column(
-                                        children: [
-                                          SvgPicture.asset(
-                                              'assets/icons/no_data.svg',
-                                              height: 100),
-                                          SizedBox(
-                                            height: 20.0,
-                                          ),
-                                          Text(
-                                            '0 Products',
-                                            style: TextStyle(
-                                                color:
-                                                colorPalette
-                                                    .navyBlue,
-                                                fontSize: 20),
-                                          )
-                                        ],
-                                      )
-                                          :
-
-                                      /// when school tab selected then show school list...
-                                      Column(
-                                        children: [
-                                          Container(
-                                            child: _schoolProvider
-                                                .isSearchSchoolTabSelected
-                                                ? ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                              NeverScrollableScrollPhysics(),
-                                              itemBuilder:
-                                                  (context, index) {
-                                                return Padding(
-                                                  padding: index == 14
-                                                      ? EdgeInsets
-                                                      .only(
-                                                      bottom:
-                                                      70)
-                                                      : EdgeInsets
-                                                      .all(0),
-                                                  child:
-                                                  SchoolImageBox(
-                                                      height:
-                                                      height,
-                                                      image:
-                                                      "${_schoolProvider.schoolsToFilter[index].schoolLogo}",
-                                                      description:
-                                                      "${_schoolProvider.schoolsToFilter[index].address}, ${_schoolProvider.schoolsToFilter[index].city}, ${_schoolProvider.schoolsToFilter[index].pincode}",
-                                                      title:
-                                                      "${_schoolProvider.schoolsToFilter[index].schoolName}",
-                                                      onTap: () {
-                                                        Provider.of<SchoolProvider>(
-                                                            context,
-                                                            listen: false)
-                                                            .selectedSchoolSlug = "${_schoolProvider.schoolsToFilter[index].schoolSlug}";
-                                                        Provider.of<HomeScreenProvider>(
-                                                            context,
-                                                            listen: false)
-                                                            .selectedString = "SchoolInfo";
-                                                      }),
-                                                );
-                                              },
-                                              itemCount:
-                                              _schoolProvider
-                                                  .schoolsToFilter
-                                                  .length,
-                                            )
-                                                : snapshot
-                                                .data[1]
-                                                .response[0]
-                                                .vendorSchool
-                                                .length >
-                                                0
-                                                ? ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                              NeverScrollableScrollPhysics(),
-                                              itemBuilder:
-                                                  (context,
-                                                  index) {
-                                                return Padding(
-                                                  padding: index ==
-                                                      14
-                                                      ? EdgeInsets.only(
-                                                      bottom:
-                                                      70)
-                                                      : EdgeInsets
-                                                      .all(0),
-                                                  child:
-                                                  SchoolImageBox(
-                                                      height:
-                                                      height,
-                                                      image:
-                                                      "${snapshot.data[1].response[0].vendorSchool[index].schoolLogo}",
-                                                      description:
-                                                      "${snapshot.data[1].response[0].vendorSchool[index].address}, ${snapshot.data[1].response[0].vendorSchool[index].city}, ${snapshot.data[1].response[0].vendorSchool[index].pincode}",
-                                                      title:
-                                                      "${snapshot.data[1].response[0].vendorSchool[index].schoolName}",
-                                                      onTap:
-                                                          () {
-                                                        Provider.of<SchoolProvider>(context, listen: false).selectedSchoolSlug =
-                                                        "${snapshot.data[1].response[0].vendorSchool[index].schoolSlug}";
-                                                        Provider.of<HomeScreenProvider>(context, listen: false).selectedString =
-                                                        "SchoolInfo";
-                                                      }),
-                                                );
-                                              },
-                                              itemCount: snapshot
-                                                  .data[1]
-                                                  .response[0]
-                                                  .vendorSchool
-                                                  .length,
-                                            )
-                                                : Column(
-                                              children: [
-                                                SvgPicture.asset(
-                                                    'assets/icons/no_data.svg',
-                                                    height: 100),
-                                                SizedBox(
-                                                  height: 20.0,
-                                                ),
-                                                Text(
-                                                  '0 School',
-                                                  style: TextStyle(
-                                                      color: colorPalette
-                                                          .navyBlue,
-                                                      fontSize:
-                                                      20),
-                                                )
-                                              ],
+                                      ],
+                                    ),
+                                  ),
+                                  _vendorProvider.customScrollCurrentPixels <
+                                          150
+                                      ? SizedBox()
+                                      : Opacity(
+                                          opacity: _vendorProvider
+                                                      .customScrollCurrentPixels <
+                                                  150
+                                              ? 0
+                                              : _vendorProvider
+                                                          .customScrollCurrentPixels <
+                                                      200
+                                                  ? (_vendorProvider
+                                                          .customScrollCurrentPixels /
+                                                      201)
+                                                  : 1,
+                                          child: Container(
+                                            color: colorPalette.purple,
+                                            height: 60,
+                                            width: width,
+                                            alignment: Alignment.centerLeft,
+                                            padding: EdgeInsets.only(left: 20),
+                                            child: Text(
+                                              '${snapshot.data[0].response[0].vendor.companyName}',
+                                              style: TextStyle(
+                                                fontFamily: 'Roboto',
+                                                fontSize: 25,
+                                                color: const Color(0xffffffff),
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
                                           ),
-                                          SizedBox(height: 80,)
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                ],
+                              );
+                            } else {
+                              return Container(
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation(
+                                        colorPalette.navyBlue),
                                   ),
                                 ),
-                                _vendorProvider.customScrollCurrentPixels < 150 ? SizedBox() : Opacity(
-                                  opacity: _vendorProvider.customScrollCurrentPixels < 150 ? 0 : _vendorProvider.customScrollCurrentPixels < 200 ? (_vendorProvider.customScrollCurrentPixels / 201) : 1,
-                                  child: Container(
-                                    color: colorPalette.purple,
-                                    height: 60,
-                                    width: width,
-                                    alignment: Alignment.centerLeft,
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Text('${snapshot.data[0].response[0].vendor.companyName}', style: TextStyle(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 25,
-                                      color: const Color(
-                                          0xffffffff),
-                                      fontWeight:
-                                      FontWeight.w700,
-                                    ),),
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return Container(
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation(
-                                      colorPalette.navyBlue),
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                      );
-                    },
-                  );
-                },
-              );
-            },
-          );
-        }
-      ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          }),
     );
   }
 }

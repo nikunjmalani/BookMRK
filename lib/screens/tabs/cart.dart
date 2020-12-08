@@ -59,7 +59,7 @@ class _CartState extends State<Cart> {
 
   setDefault() {
     Provider.of<HomeScreenProvider>(context, listen: false)
-        .selectAddressFirstTime = false;
+        .selectAddressFirstTimeInit = false;
   }
 
   @override
@@ -89,7 +89,7 @@ class _CartState extends State<Cart> {
                                 int selectedAddressIndex = 0;
                                 Provider.of<OrderProvider>(context,
                                         listen: false)
-                                    .isAddressSelectedInCart = true;
+                                    .isAddressSelectedInCartInit = true;
                                 for (int i = 0;
                                     i < snapshot.data.response.length;
                                     i++) {
@@ -163,7 +163,7 @@ class _CartState extends State<Cart> {
                               } else {
                                 Provider.of<OrderProvider>(context,
                                         listen: false)
-                                    .isAddressSelectedInCart = false;
+                                    .isAddressSelectedInCartInit = false;
                                 return Padding(
                                   padding: EdgeInsets.only(top: 30.0),
                                   child: GestureDetector(
@@ -610,237 +610,263 @@ class _CartState extends State<Cart> {
                                                                 .hideCheckoutButton ==
                                                             "NO"
                                                         ? () async {
+                                                            try {
+                                                              _productOrderProvider
+                                                                      .isProductRemovingFromCartInProgress =
+                                                                  true;
 
-                                                           try{
-                                                             _productOrderProvider
-                                                                 .isProductRemovingFromCartInProgress =
-                                                             true;
+                                                              int userId = prefs
+                                                                  .read<int>(
+                                                                      'userId');
+                                                              dynamic response =
+                                                                  await ProductAPI.prePaymentAPICall(
+                                                                      userId
+                                                                          .toString(),
+                                                                      kAppVersion,
+                                                                      'online',
+                                                                      'online');
 
-                                                             int userId =
-                                                             prefs.read<int>(
-                                                                 'userId');
-                                                             dynamic response = await ProductAPI
-                                                                 .prePaymentAPICall(
-                                                                 userId
-                                                                     .toString(),
-                                                                 kAppVersion,
-                                                                 'online',
-                                                                 'online');
+                                                              if (response[
+                                                                      'status'] ==
+                                                                  200) {
+                                                                /// method channel call for payment......
+                                                                String txnid =
+                                                                    "${response['response'][0]['order_no']}"; //This txnid should be unique every time.
+                                                                String amount =
+                                                                    "${double.parse("${response['response'][0]['order_total_cost']}").roundToDouble()}";
+//                                                                String amount =
+//                                                                    "1.0";
+                                                                String
+                                                                    productinfo =
+                                                                    "Books";
+                                                                String
+                                                                    firstname =
+                                                                    "${response['response'][0]['user_name']}";
+                                                                String email =
+                                                                    "${response['response'][0]['user_email']}";
+                                                                String phone =
+                                                                    "${response['response'][0]['user_mobile']}";
+                                                                String s_url =
+                                                                    "https://www.bookmrk.in/";
+                                                                String f_url =
+                                                                    "https://www.bookmrk.in/";
+                                                                String key =
+                                                                    "$easeBuzzKey";
+                                                                String udf1 =
+                                                                    "";
+                                                                String udf2 =
+                                                                    "";
+                                                                String udf3 =
+                                                                    "";
+                                                                String udf4 =
+                                                                    "";
+                                                                String udf5 =
+                                                                    "";
+                                                                String
+                                                                    address1 =
+                                                                    "${response['response'][0]['user_address1']}";
+                                                                String
+                                                                    address2 =
+                                                                    "${response['response'][0]['user_address2']}";
+                                                                String city =
+                                                                    "${response['response'][0]['user_countries']}";
+                                                                String state =
+                                                                    "${response['response'][0]['user_state']}";
+                                                                String country =
+                                                                    "${response['response'][0]['user_city']}";
+                                                                String zipcode =
+                                                                    "${response['response'][0]['user_pincode']}";
+                                                                String salt =
+                                                                    "$easeBuzzSalt";
+                                                                String hash =
+                                                                    "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
+                                                                String
+                                                                    pay_mode =
+                                                                    "production";
+                                                                String
+                                                                    unique_id =
+                                                                    "11345";
 
-                                                             if (response[
-                                                             'status'] ==
-                                                                 200) {
-                                                               /// method channel call for payment......
-                                                               String txnid =
-                                                                   "${response['response'][0]['order_no']}"; //This txnid should be unique every time.
-                                                               String amount =
-                                                                   "${double.parse("${response['response'][0]['order_total_cost']}").roundToDouble()}";
-                                                               // String amount = "1.0";
-                                                               String
-                                                               productinfo =
-                                                                   "Books";
-                                                               String firstname =
-                                                                   "${response['response'][0]['user_name']}";
-                                                               String email =
-                                                                   "${response['response'][0]['user_email']}";
-                                                               String phone =
-                                                                   "${response['response'][0]['user_mobile']}";
-                                                               String s_url = "";
-                                                               String f_url = "";
-                                                               String key =
-                                                                   "$easeBuzzKey";
-                                                               String udf1 = "";
-                                                               String udf2 = "";
-                                                               String udf3 = "";
-                                                               String udf4 = "";
-                                                               String udf5 = "";
-                                                               String address1 =
-                                                                   "${response['response'][0]['user_address1']}";
-                                                               String address2 =
-                                                                   "${response['response'][0]['user_address2']}";
-                                                               String city =
-                                                                   "${response['response'][0]['user_countries']}";
-                                                               String state =
-                                                                   "${response['response'][0]['user_state']}";
-                                                               String country =
-                                                                   "${response['response'][0]['user_city']}";
-                                                               String zipcode =
-                                                                   "${response['response'][0]['user_pincode']}";
-                                                               String salt =
-                                                                   "$easeBuzzSalt";
-                                                               String hash =
-                                                                   "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
-                                                               String pay_mode =
-                                                                   "production";
-                                                               String unique_id =
-                                                                   "11345";
+                                                                Object
+                                                                    parameters =
+                                                                    {
+                                                                  "txnid":
+                                                                      txnid,
+                                                                  "amount":
+                                                                      amount,
+                                                                  "productinfo":
+                                                                      productinfo,
+                                                                  "firstname":
+                                                                      firstname,
+                                                                  "email":
+                                                                      email,
+                                                                  "phone":
+                                                                      phone,
+                                                                  "surl": s_url,
+                                                                  "furl": f_url,
+                                                                  "key": key,
+                                                                  "udf1": udf1,
+                                                                  "udf2": udf2,
+                                                                  "udf3": udf3,
+                                                                  "udf4": udf4,
+                                                                  "udf5": udf5,
+                                                                  "address1":
+                                                                      address1,
+                                                                  "address2":
+                                                                      address2,
+                                                                  "city": city,
+                                                                  "state":
+                                                                      state,
+                                                                  "country":
+                                                                      country,
+                                                                  "zipcode":
+                                                                      zipcode,
+                                                                  "hash": hash,
+                                                                  "isMobile":
+                                                                      "1",
+                                                                  "pay_mode":
+                                                                      pay_mode,
+                                                                  "unique_id":
+                                                                      unique_id
+                                                                };
 
-                                                               Object
-                                                               parameters = {
-                                                                 "txnid": txnid,
-                                                                 "amount":
-                                                                 amount,
-                                                                 "productinfo":
-                                                                 productinfo,
-                                                                 "firstname":
-                                                                 firstname,
-                                                                 "email": email,
-                                                                 "phone": phone,
-                                                                 "s_url": s_url,
-                                                                 "f_url": f_url,
-                                                                 "key": key,
-                                                                 "udf1": udf1,
-                                                                 "udf2": udf2,
-                                                                 "udf3": udf3,
-                                                                 "udf4": udf4,
-                                                                 "udf5": udf5,
-                                                                 "address1":
-                                                                 address1,
-                                                                 "address2":
-                                                                 address2,
-                                                                 "city": city,
-                                                                 "state": state,
-                                                                 "country":
-                                                                 country,
-                                                                 "zipcode":
-                                                                 zipcode,
-                                                                 "hash": hash,
-                                                                 "pay_mode":
-                                                                 pay_mode,
-                                                                 "unique_id":
-                                                                 unique_id
-                                                               };
+                                                                final payment_response =
+                                                                    await _channel.invokeMethod(
+                                                                        "payWithEasebuzz",
+                                                                        parameters);
+                                                                print(
+                                                                    payment_response);
+                                                                if (payment_response[
+                                                                        'result'] ==
+                                                                    "payment_failed") {
+                                                                  Scaffold.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          getSnackBar(
+                                                                              'Transaction Failed !'));
+                                                                  print('11');
 
-                                                               final payment_response =
-                                                               await _channel
-                                                                   .invokeMethod(
-                                                                   "payWithEasebuzz",
-                                                                   parameters);
-                                                               print(
-                                                                   payment_response);
-                                                               if (payment_response[
-                                                               'result'] ==
-                                                                   "payment_failed") {
-                                                                 Scaffold.of(
-                                                                     context)
-                                                                     .showSnackBar(
-                                                                     getSnackBar(
-                                                                         'Transaction Failed !'));
-                                                                 print('11');
+                                                                  _productOrderProvider
+                                                                          .isProductRemovingFromCartInProgress =
+                                                                      false;
+                                                                  print('12');
+                                                                } else if (payment_response[
+                                                                        'result'] ==
+                                                                    "user_cancelled") {
+                                                                  print(
+                                                                      'calleds');
+                                                                  Scaffold.of(
+                                                                          context)
+                                                                      .showSnackBar(
+                                                                          getSnackBar(
+                                                                              'Transaction Failed !'));
+                                                                  print('13');
+                                                                  _productOrderProvider
+                                                                          .isProductRemovingFromCartInProgress =
+                                                                      false;
+                                                                  print('14');
+                                                                }
 
-                                                                 _productOrderProvider
-                                                                     .isProductRemovingFromCartInProgress =
-                                                                 false;
-                                                                 print('12');
-                                                               } else if (payment_response[
-                                                               'result'] ==
-                                                                   "user_cancelled") {
-                                                                 print(
-                                                                     'calleds');
-                                                                 Scaffold.of(
-                                                                     context)
-                                                                     .showSnackBar(
-                                                                     getSnackBar(
-                                                                         'Transaction Failed !'));
-                                                                 print('13');
-                                                                 _productOrderProvider
-                                                                     .isProductRemovingFromCartInProgress =
-                                                                 false;
-                                                                 print('14');
-                                                               }
+                                                                /// call final payment status api....
+                                                                dynamic finalPaymentResponse = await ProductAPI.finalPaymentStatus(
+                                                                    userId
+                                                                        .toString(),
+                                                                    "${response['response'][0]['order_total_cost']}",
+                                                                    "${response['response'][0]['order_no']}",
+                                                                    payment_response[
+                                                                            'payment_response']
+                                                                        [
+                                                                        'status'],
+                                                                    payment_response);
 
-                                                               /// call final payment status api....
-                                                               dynamic finalPaymentResponse = await ProductAPI.finalPaymentStatus(
-                                                                   userId
-                                                                       .toString(),
-                                                                   "${response['response'][0]['order_total_cost']}",
-                                                                   "${response['response'][0]['order_no']}",
-                                                                   payment_response[
-                                                                   'payment_response']
-                                                                   [
-                                                                   'status'],
-                                                                   payment_response);
+                                                                print(
+                                                                    "from api : ${finalPaymentResponse}");
 
-                                                               print(
-                                                                   "from api : ${finalPaymentResponse}");
+                                                                if (finalPaymentResponse[
+                                                                        'status'] ==
+                                                                    200) {
+                                                                  /// show final payment success dialog...
+                                                                  CoolAlert
+                                                                      .show(
+                                                                    context:
+                                                                        context,
+                                                                    type: CoolAlertType
+                                                                        .success,
+                                                                    text:
+                                                                        "Your transaction was successful !",
+                                                                    confirmBtnColor:
+                                                                        colorPalette
+                                                                            .navyBlue,
+                                                                    title:
+                                                                        "Payment Done.",
+                                                                    animType:
+                                                                        CoolAlertAnimType
+                                                                            .scale,
+                                                                  );
 
-                                                               if (finalPaymentResponse[
-                                                               'status'] ==
-                                                                   200) {
-                                                                 /// show final payment success dialog...
-                                                                 CoolAlert.show(
-                                                                   context:
-                                                                   context,
-                                                                   type: CoolAlertType
-                                                                       .success,
-                                                                   text:
-                                                                   "Your transaction was successful !",
-                                                                   confirmBtnColor:
-                                                                   colorPalette
-                                                                       .navyBlue,
-                                                                   title:
-                                                                   "Payment Done.",
-                                                                   animType:
-                                                                   CoolAlertAnimType
-                                                                       .scale,
-                                                                 );
-
-                                                                 try {
-                                                                   Provider.of<HomeScreenProvider>(
-                                                                       context,
-                                                                       listen:
-                                                                       false)
-                                                                       .pageController
-                                                                       .jumpToPage(
-                                                                       3);
-                                                                   Provider.of<OrderProvider>(
-                                                                       context,
-                                                                       listen:
-                                                                       false)
-                                                                       .orderId = "${response['response'][0]['order_no']}";
-                                                                   print('15');
-                                                                   _productOrderProvider
-                                                                       .isProductRemovingFromCartInProgress =
-                                                                   false;
-                                                                   print('16');
-                                                                   Provider.of<HomeScreenProvider>(
-                                                                       context,
-                                                                       listen:
-                                                                       false)
-                                                                       .selectedString = "OrderDetails";
-                                                                   Provider.of<HomeScreenProvider>(
-                                                                       context,
-                                                                       listen:
-                                                                       false)
-                                                                       .selectedBottomIndex = 3;
-                                                                 } catch (e) {
-                                                                   print('17');
-                                                                   _productOrderProvider
-                                                                       .isProductRemovingFromCartInProgress =
-                                                                   false;
-                                                                   print('18');
-                                                                   print(e);
-                                                                 }
-                                                               } else {
-                                                                 print('19');
-                                                                 _productOrderProvider
-                                                                     .isProductRemovingFromCartInProgress =
-                                                                 false;
-                                                                 print('20');
-                                                               }
-                                                             } else {
-                                                               _productOrderProvider
-                                                                   .isProductRemovingFromCartInProgress =
-                                                               false;
-                                                               Scaffold.of(
-                                                                   context)
-                                                                   .showSnackBar(
-                                                                   getSnackBar(
-                                                                       '${response['message']}'));
-                                                             }
-                                                           }catch(e){
-                                                             Scaffold.of(context).showSnackBar(getSnackBar('Order Failed !'));
-                                                           }
+                                                                  try {
+                                                                    Provider.of<HomeScreenProvider>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .pageController
+                                                                        .jumpToPage(
+                                                                            3);
+                                                                    Provider.of<OrderProvider>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .orderId = "${response['response'][0]['order_no']}";
+                                                                    print('15');
+                                                                    _productOrderProvider
+                                                                            .isProductRemovingFromCartInProgress =
+                                                                        false;
+                                                                    print('16');
+                                                                    Provider.of<HomeScreenProvider>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .selectedString = "OrderDetails";
+                                                                    Provider.of<HomeScreenProvider>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .selectedBottomIndex = 3;
+                                                                  } catch (e) {
+                                                                    print('17');
+                                                                    _productOrderProvider
+                                                                            .isProductRemovingFromCartInProgress =
+                                                                        false;
+                                                                    print('18');
+                                                                    print(e);
+                                                                  }
+                                                                } else {
+                                                                  print('19');
+                                                                  _productOrderProvider
+                                                                          .isProductRemovingFromCartInProgress =
+                                                                      false;
+                                                                  print('20');
+                                                                }
+                                                              } else {
+                                                                _productOrderProvider
+                                                                        .isProductRemovingFromCartInProgress =
+                                                                    false;
+                                                                Scaffold.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                        getSnackBar(
+                                                                            '${response['message']}'));
+                                                              }
+                                                            } catch (e) {
+                                                              _productOrderProvider
+                                                                      .isProductRemovingFromCartInProgress =
+                                                                  false;
+                                                              Scaffold.of(
+                                                                      context)
+                                                                  .showSnackBar(
+                                                                      getSnackBar(
+                                                                          'Order Failed !'));
+                                                            }
                                                           }
                                                         : null,
                                               )

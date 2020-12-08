@@ -43,6 +43,10 @@ class VendorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set isCustomScrollAtLimitInit(bool value) {
+    _isCustomScrollAtLimit = value;
+  }
+
   /// scroll pixels...
   double _customScrollCurrentPixels = 0.0;
 
@@ -51,5 +55,9 @@ class VendorProvider extends ChangeNotifier {
   set customScrollCurrentPixels(double value) {
     _customScrollCurrentPixels = value;
     notifyListeners();
+  }
+
+  set customScrollCurrentPixelsInit(double value) {
+    _customScrollCurrentPixels = value;
   }
 }

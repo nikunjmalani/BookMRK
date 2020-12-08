@@ -11,6 +11,10 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set selectedCountryIdInit(int value) {
+    _selectedCountryId = value;
+  }
+
   /// selected country name ..
   String _selectedCountryName = "";
 
@@ -19,6 +23,10 @@ class LocationProvider extends ChangeNotifier {
   set selectedCountryName(String value) {
     _selectedCountryName = value;
     notifyListeners();
+  }
+
+  set selectedCountryNameInit(String value) {
+    _selectedCountryName = value;
   }
 
   /// selected state id...
@@ -31,6 +39,10 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set selectedStateIdInit(int value) {
+    _selectedStateId = value;
+  }
+
   /// selected state name...
   String _selectedStateName = "Select State";
 
@@ -39,6 +51,10 @@ class LocationProvider extends ChangeNotifier {
   set selectedStateName(String value) {
     _selectedStateName = value;
     notifyListeners();
+  }
+
+  set selectedStateNameInit(String value) {
+    _selectedStateName = value;
   }
 
   /// selected city id...
@@ -51,6 +67,10 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set selectedCityIdInit(int value) {
+    _selectedCityId = value;
+  }
+
   /// selected city name ...
   String _selectedCityName = "Select City";
 
@@ -59,6 +79,10 @@ class LocationProvider extends ChangeNotifier {
   set selectedCityName(String value) {
     _selectedCityName = value;
     notifyListeners();
+  }
+
+  set selectedCityNameInit(String value) {
+    _selectedCityName = value;
   }
 
   /// true when any location sheet is open...
@@ -71,7 +95,6 @@ class LocationProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   /// true when location selected from map...
   bool _isLocationSelectedFromMap = false;
 
@@ -80,5 +103,9 @@ class LocationProvider extends ChangeNotifier {
   set isLocationSelectedFromMap(bool value) {
     _isLocationSelectedFromMap = value;
     notifyListeners();
+  }
+
+  set isLocationSelectedFromMapInit(bool value) {
+    _isLocationSelectedFromMap = value;
   }
 }

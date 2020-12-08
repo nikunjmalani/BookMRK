@@ -52,9 +52,11 @@ class _SchoolTabState extends State<SchoolTab> {
 
   autoFillFields() {
     Provider.of<SchoolProvider>(context, listen: false)
-        .isFindSchoolByLocationSelected = false;
-    Provider.of<SchoolProvider>(context, listen: false).isSearchSchoolTabSelected = false;
-    Provider.of<SchoolProvider>(context, listen: false).selectedCountryIdForSchool = 101;
+        .isFindSchoolByLocationSelectedInit = false;
+    Provider.of<SchoolProvider>(context, listen: false)
+        .isSearchSchoolTabSelectedInit = false;
+    Provider.of<SchoolProvider>(context, listen: false)
+        .selectedCountryIdForSchoolInit = 101;
   }
 
   @override
@@ -811,92 +813,94 @@ Widget LocationDialog(
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         int index1 = 0;
-                        snapshot.data.response.forEach((e){
-                          if((e.name.toString().toLowerCase()) == "india"){
-                            Provider.of<SchoolProvider>(context, listen: false).selectedCountryIndexForSchool = index1;
+                        snapshot.data.response.forEach((e) {
+                          if ((e.name.toString().toLowerCase()) == "india") {
+                            Provider.of<SchoolProvider>(context, listen: false)
+                                .selectedCountryIndexForSchool = index1;
 
-                            Provider.of<SchoolProvider>(context, listen: false).selectedCountryIdForSchool =
-                                int.parse(snapshot.data
-                                    .response[index1].countryId);
+                            Provider.of<SchoolProvider>(context, listen: false)
+                                    .selectedCountryIdForSchool =
+                                int.parse(
+                                    snapshot.data.response[index1].countryId);
                           }
                           index1++;
                         });
                         return Container(
-                          // height: 60.0,
-                          // decoration: BoxDecoration(
-                          //   borderRadius: BorderRadius.circular(13.0),
-                          //   border: Border.all(
-                          //     color: Colors.black.withOpacity(0.4),
-                          //   ),
-                          // ),
-                          // alignment: Alignment.center,
-                          // padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          // child: DropdownButton(
-                          //   onChanged: (v){},
-                          //   underline: Container(),
-                          //   isExpanded: true,
-                          //   style: TextStyle(
-                          //     color: colorPalette.lightGrey,
-                          //     fontSize: 16,
-                          //   ),
-                          //   value: snapshot
-                          //       .data
-                          //       .response[_schoolProvider
-                          //           .selectedCountryIndexForSchool]
-                          //       .name,
-                          //   items: List.generate(
-                          //       snapshot.data.response.length,
-                          //       (index) => DropdownMenuItem(
-                          //             child: Text(
-                          //               '${snapshot.data.response[index].name}',
-                          //               overflow: TextOverflow.ellipsis,
-                          //               style: TextStyle(
-                          //                 color: Colors.black,
-                          //                 fontSize: 16,
-                          //               ),
-                          //             ),
-                          //             value:
-                          //                 '${snapshot.data.response[index].name}',
-                          //             onTap: () {
-                          //               _schoolProvider
-                          //                       .selectedCountryIndexForSchool =
-                          //                   index;
-                          //               _schoolProvider
-                          //                       .selectedCountryIdForSchool =
-                          //                   int.parse(snapshot.data
-                          //                       .response[index].countryId);
-                          //             },
-                          //           )),
-                          // ),
-                        );
+                            // height: 60.0,
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(13.0),
+                            //   border: Border.all(
+                            //     color: Colors.black.withOpacity(0.4),
+                            //   ),
+                            // ),
+                            // alignment: Alignment.center,
+                            // padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            // child: DropdownButton(
+                            //   onChanged: (v){},
+                            //   underline: Container(),
+                            //   isExpanded: true,
+                            //   style: TextStyle(
+                            //     color: colorPalette.lightGrey,
+                            //     fontSize: 16,
+                            //   ),
+                            //   value: snapshot
+                            //       .data
+                            //       .response[_schoolProvider
+                            //           .selectedCountryIndexForSchool]
+                            //       .name,
+                            //   items: List.generate(
+                            //       snapshot.data.response.length,
+                            //       (index) => DropdownMenuItem(
+                            //             child: Text(
+                            //               '${snapshot.data.response[index].name}',
+                            //               overflow: TextOverflow.ellipsis,
+                            //               style: TextStyle(
+                            //                 color: Colors.black,
+                            //                 fontSize: 16,
+                            //               ),
+                            //             ),
+                            //             value:
+                            //                 '${snapshot.data.response[index].name}',
+                            //             onTap: () {
+                            //               _schoolProvider
+                            //                       .selectedCountryIndexForSchool =
+                            //                   index;
+                            //               _schoolProvider
+                            //                       .selectedCountryIdForSchool =
+                            //                   int.parse(snapshot.data
+                            //                       .response[index].countryId);
+                            //             },
+                            //           )),
+                            // ),
+                            );
                       } else {
                         return Container(
-                          // height: 60.0,
-                          // decoration: BoxDecoration(
-                          //   borderRadius: BorderRadius.circular(13.0),
-                          //   border: Border.all(
-                          //     color: Colors.black.withOpacity(0.4),
-                          //   ),
-                          // ),
-                          // alignment: Alignment.center,
-                          // padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          // child: DropdownButton(
-                          //   underline: Container(),
-                          //   isExpanded: true,
-                          //   onChanged: (value) {},
-                          //   value: 'loading',
-                          //   style: TextStyle(
-                          //     color: colorPalette.lightGrey,
-                          //     fontSize: 16,
-                          //   ),
-                          //   items: [
-                          //     DropdownMenuItem(
-                          //       child: Text('Loading'),
-                          //       value: 'loading',
-                          //     )
-                          //   ],
-                          // ),
-                        );
+                            // height: 60.0,
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(13.0),
+                            //   border: Border.all(
+                            //     color: Colors.black.withOpacity(0.4),
+                            //   ),
+                            // ),
+                            // alignment: Alignment.center,
+                            // padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            // child: DropdownButton(
+                            //   underline: Container(),
+                            //   isExpanded: true,
+                            //   onChanged: (value) {},
+                            //   value: 'loading',
+                            //   style: TextStyle(
+                            //     color: colorPalette.lightGrey,
+                            //     fontSize: 16,
+                            //   ),
+                            //   items: [
+                            //     DropdownMenuItem(
+                            //       child: Text('Loading'),
+                            //       value: 'loading',
+                            //     )
+                            //   ],
+                            // ),
+                            );
                       }
                     }),
                 SizedBox(height: 20.0),
@@ -917,7 +921,7 @@ Widget LocationDialog(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: DropdownButton(
-                            onChanged: (v){},
+                            onChanged: (v) {},
                             underline: Container(),
                             isExpanded: true,
                             style: TextStyle(
@@ -950,7 +954,8 @@ Widget LocationDialog(
                                                 .selectedStateIdForSchool =
                                             int.parse(snapshot
                                                 .data.response[index].stateId);
-                                        _schoolProvider.selectedCityIndexForSchool = 0;
+                                        _schoolProvider
+                                            .selectedCityIndexForSchool = 0;
                                       },
                                     )),
                           ),
@@ -1003,7 +1008,7 @@ Widget LocationDialog(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: DropdownButton(
-                            onChanged: (v){},
+                            onChanged: (v) {},
                             underline: Container(),
                             isExpanded: true,
                             style: TextStyle(

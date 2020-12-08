@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bookmrk/api/home_page_api.dart';
 import 'package:bookmrk/model/home_page_model.dart';
 import 'package:bookmrk/provider/category_provider.dart';
@@ -10,14 +8,11 @@ import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
 import 'package:bookmrk/widgets/buttons.dart';
-import 'package:bookmrk/widgets/cached_image_view.dart';
 import 'package:bookmrk/widgets/carasoul.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -72,8 +67,9 @@ class _HomeState extends State<Home> {
                                   Provider.of<HomeScreenProvider>(context,
                                           listen: false)
                                       .selectedString = "SearchProducts";
-                                  Provider.of<HomeScreenProvider>(context, listen: false).findHomeScreenProduct = "";
-
+                                  Provider.of<HomeScreenProvider>(context,
+                                          listen: false)
+                                      .findHomeScreenProduct = "";
                                 },
                               ),
                               Carasoul(
@@ -111,7 +107,7 @@ class _HomeState extends State<Home> {
                               Container(
                                 height:
                                     snapshot.data.response[0].product.length > 0
-                                        ? height / 2.45
+                                        ? height / 2.2
                                         : height / 9,
                                 margin: EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 5),
@@ -124,61 +120,67 @@ class _HomeState extends State<Home> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      physics: BouncingScrollPhysics(),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: List.generate(
-                                            snapshot.data.response[0].category
-                                                .length,
-                                            (index) =>
-                                                Consumer<CategoryProvider>(
-                                                  builder: (_,
-                                                          _categoryProvider,
-                                                          child) =>
-                                                      GestureDetector(
-                                                    onTap: () {
-                                                      Provider.of<HomeScreenProvider>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .selectedTitle =
-                                                          "${snapshot.data.response[0].category[index].categoryName}";
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(22),
+                                          topLeft: Radius.circular(22)),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        physics: BouncingScrollPhysics(),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: List.generate(
+                                              snapshot.data.response[0].category
+                                                  .length,
+                                              (index) =>
+                                                  Consumer<CategoryProvider>(
+                                                    builder: (_,
+                                                            _categoryProvider,
+                                                            child) =>
+                                                        GestureDetector(
+                                                      onTap: () {
+                                                        Provider.of<HomeScreenProvider>(
+                                                                    context,
+                                                                    listen: false)
+                                                                .selectedTitle =
+                                                            "${snapshot.data.response[0].category[index].categoryName}";
 
-                                                      Provider.of<HomeScreenProvider>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .selectedString =
-                                                          "CategoryInfo";
-                                                      _categoryProvider
-                                                              .selectedCategoryName =
-                                                          snapshot
-                                                              .data
-                                                              .response[0]
-                                                              .category[index]
-                                                              .catSlug;
-                                                    },
-                                                    child: CategoryButtons(
-                                                      "${snapshot.data.response[0].category[index].categoryName}",
-                                                      index == 0
-                                                          ? colorPalette.orange
-                                                          : colorPalette
-                                                              .navyBlue,
-                                                      index == 0
-                                                          ? colorPalette
-                                                              .pinkOrange
-                                                          : Color(0xff6A4B9C),
+                                                        Provider.of<HomeScreenProvider>(
+                                                                    context,
+                                                                    listen: false)
+                                                                .selectedString =
+                                                            "CategoryInfo";
+                                                        _categoryProvider
+                                                                .selectedCategoryName =
+                                                            snapshot
+                                                                .data
+                                                                .response[0]
+                                                                .category[index]
+                                                                .catSlug;
+                                                      },
+                                                      child: CategoryButtons(
+                                                        "${snapshot.data.response[0].category[index].categoryName}",
+                                                        index == 0
+                                                            ? colorPalette
+                                                                .orange
+                                                            : colorPalette
+                                                                .navyBlue,
+                                                        index == 0
+                                                            ? colorPalette
+                                                                .pinkOrange
+                                                            : Color(0xff6A4B9C),
+                                                      ),
                                                     ),
-                                                  ),
-                                                )),
+                                                  )),
+                                        ),
                                       ),
                                     ),
                                     Container(
                                       height: snapshot.data.response[0].product
                                                   .length >
                                               0
-                                          ? height / 3.2
+                                          ? height / 3
                                           : 0.0,
                                       child: ListView.builder(
                                         physics: BouncingScrollPhysics(),
@@ -191,9 +193,10 @@ class _HomeState extends State<Home> {
                                                 (_, _vendorProvider, child) =>
                                                     GestureDetector(
                                               onTap: () {
-
                                                 // _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].product[index].vendorSlug}";3
-                                                _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].product[index].productName}";
+                                                _homeScreenProvider
+                                                        .selectedTitle =
+                                                    "${snapshot.data.response[0].product[index].productName}";
                                                 _vendorProvider
                                                         .selectedVendorName =
                                                     "${snapshot.data.response[0].product[index].vendorSlug}";
@@ -216,25 +219,27 @@ class _HomeState extends State<Home> {
                                                   right: 10,
                                                   bottom: 0,
                                                 ),
-                                                height: height / 3.8,
+                                                height: height / 3.5,
                                                 width: width / 2.3,
-
-                                                child:ProductBox(
+                                                child: ProductBox(
                                                     expanded: true,
                                                     height: height,
                                                     width: width,
                                                     title:
-                                                    "${snapshot.data.response[0].product[index].productName}",
+                                                        "${snapshot.data.response[0].product[index].productName}",
                                                     image:
-                                                    "${snapshot.data.response[0].product[index].productImg}",
+                                                        "${snapshot.data.response[0].product[index].productImg}",
                                                     description:
-                                                    "${snapshot.data.response[0].product[index].vendorCompanyName}",
+                                                        "${snapshot.data.response[0].product[index].vendorCompanyName}",
                                                     price: snapshot
-                                                        .data.response[0].product[index].productSalePrice,
+                                                        .data
+                                                        .response[0]
+                                                        .product[index]
+                                                        .productSalePrice,
                                                     stock:
-                                                    "${snapshot.data.response[0].product[index].productStockStatus}",
-                                                    discount: "${snapshot.data.response[0].product[index].productDiscount}"
-                                                ),
+                                                        "${snapshot.data.response[0].product[index].productStockStatus}",
+                                                    discount:
+                                                        "${snapshot.data.response[0].product[index].productDiscount}"),
                                               ),
                                             ),
                                           );
@@ -267,8 +272,9 @@ class _HomeState extends State<Home> {
                                       builder: (_, _categoryProvider, child) =>
                                           GestureDetector(
                                         onTap: () {
+                                          _homeScreenProvider.selectedTitle =
+                                              "${snapshot.data.response[0].responseClass[index].className}";
 
-                                          _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].responseClass[index].className}";
                                           /// set the selected class to filter....
                                           Provider.of<FilterCategoryProvider>(
                                                       context,
@@ -311,7 +317,6 @@ class _HomeState extends State<Home> {
                                     Header2("Shop by Subject"),
                                     Spacer(),
                                     ViewAll(onClick: () {
-
                                       /// set the subject list..
                                       Provider.of<FilterCategoryProvider>(
                                                   context,
@@ -355,8 +360,10 @@ class _HomeState extends State<Home> {
                                                           child) =>
                                                       GestureDetector(
                                                     onTap: () {
+                                                      _homeScreenProvider
+                                                              .selectedTitle =
+                                                          "${snapshot.data.response[0].subject[index].subjectName}";
 
-                                                      _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].subject[index].subjectName}";
                                                       /// set the subject slug..
                                                       Provider.of<FilterCategoryProvider>(
                                                                   context,
@@ -429,7 +436,8 @@ class _HomeState extends State<Home> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-                                        _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].school[index].schoolName}";
+                                        _homeScreenProvider.selectedTitle =
+                                            "${snapshot.data.response[0].school[index].schoolName}";
                                         Provider.of<HomeScreenProvider>(context,
                                                 listen: false)
                                             .selectedString = "SchoolInfo";
@@ -488,8 +496,8 @@ class _HomeState extends State<Home> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-
-                                        _homeScreenProvider.selectedTitle = "${snapshot.data.response[0].publisher[index].publisherName}";
+                                        _homeScreenProvider.selectedTitle =
+                                            "${snapshot.data.response[0].publisher[index].publisherName}";
 
                                         /// set the selected publisher slug....
                                         Provider.of<FilterCategoryProvider>(

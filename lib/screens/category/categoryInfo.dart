@@ -51,13 +51,13 @@ class _CategoryInfoState extends State<CategoryInfo> {
     }
   }
 
-
   ColorPalette colorPalette = ColorPalette();
 
-
-  makeDefault(){
-    Provider.of<CategoryProvider>(context, listen: false).selectedCategoryNameToShow = "";
-    Provider.of<CategoryProvider>(context, listen: false).selectedSubCategory = "";
+  makeDefault() {
+    Provider.of<CategoryProvider>(context, listen: false)
+        .selectedCategoryNameToShowInit = "";
+    Provider.of<CategoryProvider>(context, listen: false)
+        .selectedSubCategoryInit = "";
   }
 
   @override
@@ -65,7 +65,6 @@ class _CategoryInfoState extends State<CategoryInfo> {
     super.initState();
     makeDefault();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -282,11 +281,10 @@ class _CategoryInfoState extends State<CategoryInfo> {
                       builder: (_, _categoryProvider, child) {
                     if (_categoryProvider.selectedSubCategory == "" ||
                         _categoryProvider.selectedSubCategory == null) {
-                      Provider.of<CategoryProvider>(context,
-                          listen: false)
-                          .totalCategoryProduct =
-                          int.parse(snapshot.data.response[0].category[0]
-                              .allProductsCount ?? "0");
+                      Provider.of<CategoryProvider>(context, listen: false)
+                          .totalCategoryProductInit = int.parse(snapshot
+                              .data.response[0].category[0].allProductsCount ??
+                          "0");
                       return Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(
@@ -320,21 +318,21 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                       .selectedString = "ProductInfo";
                                 },
                                 child: ProductBox(
-                                  expanded: true,
-                                  height: height,
-                                  width: width,
-                                  title:
-                                      "${snapshot.data.response[0].product[index].productName}",
-                                  image:
-                                      "${snapshot.data.response[0].product[index].productImg}",
-                                  description:
-                                      "${snapshot.data.response[0].product[index].vendorCompanyName}",
-                                  price: snapshot.data.response[0]
-                                      .product[index].productSalePrice,
-                                  stock:
-                                      "${snapshot.data.response[0].product[index].productStockStatus}",
-                                  discount: "${snapshot.data.response[0].product[index].productDiscount}"
-                                ),
+                                    expanded: true,
+                                    height: height,
+                                    width: width,
+                                    title:
+                                        "${snapshot.data.response[0].product[index].productName}",
+                                    image:
+                                        "${snapshot.data.response[0].product[index].productImg}",
+                                    description:
+                                        "${snapshot.data.response[0].product[index].vendorCompanyName}",
+                                    price: snapshot.data.response[0]
+                                        .product[index].productSalePrice,
+                                    stock:
+                                        "${snapshot.data.response[0].product[index].productStockStatus}",
+                                    discount:
+                                        "${snapshot.data.response[0].product[index].productDiscount}"),
                               );
                             },
                             itemCount: snapshot.data.response[0].product.length,
@@ -347,16 +345,17 @@ class _CategoryInfoState extends State<CategoryInfo> {
                               _categoryProvider.selectedSubCategory),
                           builder: (context, subSnap) {
                             if (subSnap.hasData) {
-                              try{
+                              try {
                                 Provider.of<CategoryProvider>(context,
                                             listen: false)
-                                        .totalCategoryProduct =
+                                        .totalCategoryProductInit =
                                     int.parse(subSnap.data.response[0]
-                                        .category[0].allProductsCount ?? "0");
-                              }catch(e){
+                                            .category[0].allProductsCount ??
+                                        "0");
+                              } catch (e) {
                                 Provider.of<CategoryProvider>(context,
-                                    listen: false)
-                                    .totalCategoryProduct = 0;
+                                        listen: false)
+                                    .totalCategoryProductInit = 0;
                               }
                               return Expanded(
                                 child: Padding(
@@ -392,21 +391,24 @@ class _CategoryInfoState extends State<CategoryInfo> {
                                               .selectedString = "ProductInfo";
                                         },
                                         child: ProductBox(
-                                          expanded: true,
-                                          height: height,
-                                          width: width,
-                                          title:
-                                              "${subSnap.data.response[0].product[index].productName}",
-                                          image:
-                                              "${subSnap.data.response[0].product[index].productImg}",
-                                          description:
-                                              "${subSnap.data.response[0].product[index].vendorCompanyName}",
-                                          price: subSnap.data.response[0]
-                                              .product[index].productSalePrice,
-                                          stock:
-                                              "${subSnap.data.response[0].product[index].productStockStatus}",
-                                          discount: "${subSnap.data.response[0].product[index].productDiscount}"
-                                        ),
+                                            expanded: true,
+                                            height: height,
+                                            width: width,
+                                            title:
+                                                "${subSnap.data.response[0].product[index].productName}",
+                                            image:
+                                                "${subSnap.data.response[0].product[index].productImg}",
+                                            description:
+                                                "${subSnap.data.response[0].product[index].vendorCompanyName}",
+                                            price: subSnap
+                                                .data
+                                                .response[0]
+                                                .product[index]
+                                                .productSalePrice,
+                                            stock:
+                                                "${subSnap.data.response[0].product[index].productStockStatus}",
+                                            discount:
+                                                "${subSnap.data.response[0].product[index].productDiscount}"),
                                       );
                                     },
                                     itemCount:

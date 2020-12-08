@@ -35,6 +35,10 @@ class SchoolProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set isSearchSchoolTabSelectedInit(bool value) {
+    _isSearchSchoolTabSelected = value;
+  }
+
   /// selected type in school info page....
   String _selectedSchoolProductType = "All";
 
@@ -86,6 +90,10 @@ class SchoolProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set isFindSchoolByLocationSelectedInit(bool value) {
+    _isFindSchoolByLocationSelected = value;
+  }
+
   /// selected school country index...
   int _selectedCountryIndexForSchool = 0;
 
@@ -106,6 +114,10 @@ class SchoolProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set selectedCountryIdForSchoolInit(int value) {
+    _selectedCountryIdForSchool = value;
+  }
+
   /// selected school state index...
   int _selectedStateIndexForSchool = 0;
 
@@ -115,7 +127,6 @@ class SchoolProvider extends ChangeNotifier {
     _selectedStateIndexForSchool = value;
     notifyListeners();
   }
-
 
   /// selected school state id .....
   int _selectedStateIdForSchool;

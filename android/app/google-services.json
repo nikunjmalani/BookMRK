@@ -1,35 +1,74 @@
 {
   "project_info": {
-    "project_number": "900667127033",
-    "firebase_url": "https://bookmrkapp.firebaseio.com",
-    "project_id": "bookmrkapp",
-    "storage_bucket": "bookmrkapp.appspot.com"
+    "project_number": "456753896392",
+    "firebase_url": "https://bookmrk-live.firebaseio.com",
+    "project_id": "bookmrk-live",
+    "storage_bucket": "bookmrk-live.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:900667127033:android:7c608c156c75e5022bde28",
+        "mobilesdk_app_id": "1:456753896392:android:6f9e068a06a892c7897efd",
         "android_client_info": {
           "package_name": "com.solutioncone.bookmrk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "900667127033-45ei1qrfb48otbg1dje11t8a78p79npv.apps.googleusercontent.com",
+          "client_id": "456753896392-4v3r14aqlpb6m54igs185dkh3286g2qj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solutioncone.bookmrk",
+            "certificate_hash": "f54af61a9c3199275b51eaec3723c487c087dcd9"
+          }
+        },
+        {
+          "client_id": "456753896392-8bg99dnv3mgo4gl202ivbipbfo5qq8jh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solutioncone.bookmrk",
+            "certificate_hash": "12a1b79d2f59da3e73a9495f20054450642f82a3"
+          }
+        },
+        {
+          "client_id": "456753896392-ait0ai2g3gpiq2lj8kcs8vlprsmq3kdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solutioncone.bookmrk",
+            "certificate_hash": "11000185ade8b0731d7901b7881abb0ac6dae0af"
+          }
+        },
+        {
+          "client_id": "456753896392-t6a7h1csb8bvuhlb0nldr5obvqbj7lls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.solutioncone.bookmrk",
+            "certificate_hash": "f860a570ac2c96357043204a9086dba708943d78"
+          }
+        },
+        {
+          "client_id": "456753896392-mpb1ae5c0nhn9a91sqvcnv16rt4f6s7r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDIbNLY8rEAuxFKURdtKL7XyQDE7URLnKY"
+          "current_key": "AIzaSyCw5hAyeaWaXiVesvVsATbg2KldqVdiJ4M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "900667127033-45ei1qrfb48otbg1dje11t8a78p79npv.apps.googleusercontent.com",
+              "client_id": "456753896392-mpb1ae5c0nhn9a91sqvcnv16rt4f6s7r.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "456753896392-177v5ahff05geccoocb8a5p61t8497ed.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.solutioncone.bookmrk"
+              }
             }
           ]
         }

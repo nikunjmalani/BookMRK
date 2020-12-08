@@ -9,7 +9,6 @@ import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
-import 'package:bookmrk/screens/Home/allVendors.dart';
 import 'package:bookmrk/screens/Home/filter.dart';
 import 'package:bookmrk/screens/Home/filter_category_class.dart';
 import 'package:bookmrk/screens/Home/filter_category_publisher.dart';
@@ -22,7 +21,6 @@ import 'package:bookmrk/screens/Home/vendorsInfo.dart';
 import 'package:bookmrk/screens/cart/addAddress.dart';
 import 'package:bookmrk/screens/cart/changeAddress.dart';
 import 'package:bookmrk/screens/cart/editAddress.dart';
-import 'package:bookmrk/screens/category/subcategory_info.dart';
 import 'package:bookmrk/screens/tabs/all_publisher_page.dart';
 import 'package:bookmrk/screens/tabs/all_subjects_page.dart';
 import 'package:bookmrk/screens/tabs/cart.dart';
@@ -65,7 +63,6 @@ class _HomePageState extends State<HomePage> {
   ImagePath imagePath = ImagePath();
   HomeScreenProvider _setHomeScreenProvider;
 
-
   /// get data for home page..
   Future<HomePageModel> getHomePageDetails() async {
     dynamic data = await HomePageApi.getHomePageDetails();
@@ -74,9 +71,248 @@ class _HomePageState extends State<HomePage> {
   }
 
   notificationAction() {
-    FirebaseMessaging().configure(onLaunch: (data) async {
 
+    FirebaseMessaging().requestNotificationPermissions();
+
+    FirebaseMessaging().configure(onLaunch: (value) async {
+      print('on resume');
+      print(value['data']['open_page']);
+      print(value);
+      if (value['data']['open_page'] == "user") {
+        print('redirect');
+        try {
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .pageController
+              .jumpToPage(3);
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedBottomIndex =
+          3;
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedString =
+          "User";
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .blueCartIcon =
+          false;
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .blueBellIcon =
+          false;
+          print('redirect2');
+        } catch (e) {
+          print(e);
+        }
+      } else if (value['data']['open_page'] == "order_details") {
+        print('order details called');
+        print(value['data']['detail_id']);
+        try {
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .pageController
+              .jumpToPage(3);
+          Provider
+              .of<OrderProvider>(context,
+              listen: false)
+              .orderId =
+          "${value['data']['detail_id']}";
+
+
+          Provider
+              .of<HomeScreenProvider>(context,
+              listen: false)
+              .selectedString =
+          "OrderDetails";
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedBottomIndex =
+          3;
+        } catch (e) {
+          print(e);
+        }
+      } else if (value['data']['open_page'] == "cart") {
+        print('cart called');
+        try {
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .pageController
+              .jumpToPage(4);
+
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedString = "Cart";
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedBottomIndex = 4;
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .blueCartIcon = true;
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .blueBellIcon = false;
+        } catch (e) {
+          print(e);
+        }
+      } else if (value['data']['open_page'] == "order") {
+        /// redirect to order page....
+        try {
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .pageController
+              .jumpToPage(3);
+
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedBottomIndex = 3;
+
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedString = "MyOrders";
+        } catch (e) {
+          print(e);
+        }
+      } else if (value['data']['open_page'] == "home") {
+        /// redirect to home page from notification....
+        try {
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .pageController
+              .jumpToPage(0);
+
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedBottomIndex = 0;
+
+          Provider
+              .of<HomeScreenProvider>(context, listen: false)
+              .selectedString = "Home";
+        } catch (e) {
+          print(e);
+        }
+      }
     },
+
+        onMessage: (value) async {
+          print('on resume');
+          print(value['data']['open_page']);
+          print(value);
+          if (value['data']['open_page'] == "user") {
+            print('redirect');
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex =
+              3;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString =
+              "User";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueCartIcon =
+              false;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueBellIcon =
+              false;
+              print('redirect2');
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "order_details") {
+            print('order details called');
+            print(value['data']['detail_id']);
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+              Provider
+                  .of<OrderProvider>(context,
+                  listen: false)
+                  .orderId =
+              "${value['data']['detail_id']}";
+
+
+              Provider
+                  .of<HomeScreenProvider>(context,
+                  listen: false)
+                  .selectedString =
+              "OrderDetails";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex =
+              3;
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "cart") {
+            print('cart called');
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(4);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "Cart";
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 4;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueCartIcon = true;
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .blueBellIcon = false;
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "order") {
+            /// redirect to order page....
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(3);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 3;
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "MyOrders";
+            } catch (e) {
+              print(e);
+            }
+          } else if (value['data']['open_page'] == "home") {
+            /// redirect to home page from notification....
+            try {
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .pageController
+                  .jumpToPage(0);
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedBottomIndex = 0;
+
+              Provider
+                  .of<HomeScreenProvider>(context, listen: false)
+                  .selectedString = "Home";
+            } catch (e) {
+              print(e);
+            }
+          }
+        },
 
         onResume: (value) async {
           print('on resume');
@@ -231,6 +467,8 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data.response[0].appScreen[0].show == "1") {
+
+
                 return Scaffold(
                   appBar: MaintananceAppBar(
                       context, imagePath.logo
@@ -263,36 +501,44 @@ class _HomePageState extends State<HomePage> {
               } else {
                 if (snapshot.data.response[0].maintenanceScreen[0].show ==
                     "1") {
-                  return Scaffold(appBar: MaintananceAppBar(
-                      context, imagePath.logo
-                  ),
-                    body: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Container(
-                            child: SvgPicture.asset(
-                              'assets/icons/maintanance.svg',
-                              height: 150.0,
+
+                  return AnnotatedRegion<SystemUiOverlayStyle>(
+                    value: SystemUiOverlayStyle(
+                      statusBarColor: Colors.black,
+                      statusBarBrightness: Brightness.light
+                    ),
+                    child: Scaffold(appBar: MaintananceAppBar(
+                        context, imagePath.logo
+                    ),
+                      body: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Container(
+                              child: SvgPicture.asset(
+                                'assets/icons/maintanance.svg',
+                                height: 150.0,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 30.0),
-                        Text(
-                          '${snapshot.data.response[0].maintenanceScreen[0]
-                              .message == ""
-                              ? "Application under maintenance !"
-                              : snapshot.data.response[0].maintenanceScreen[0]
-                              .message}',
-                          style: TextStyle(
-                            color: colorPalette.navyBlue,
-                            fontSize: 18.0,
-                          ),
-                        )
-                      ],
+                          SizedBox(height: 30.0),
+                          Text(
+                            '${snapshot.data.response[0].maintenanceScreen[0]
+                                .message == ""
+                                ? "Application under maintenance !"
+                                : snapshot.data.response[0].maintenanceScreen[0]
+                                .message}',
+                            style: TextStyle(
+                              color: colorPalette.navyBlue,
+                              fontSize: 18.0,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   );
+
                 } else {
                   return Stack(
                     children: [
