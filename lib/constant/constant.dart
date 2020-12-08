@@ -14,8 +14,8 @@ GetStorage prefs;
 final String easeBuzzKey = "DDACQ4S667";
 final String easeBuzzSalt = "B9RSMMOVG4";
 
-final String easeBuzzKeyTest = "EC5JN2NB7Q";
-final String easeBuzzSaltTest = "NMWDQJ2D1S";
+// final String easeBuzzKeyTest = "EC5JN2NB7Q";
+// final String easeBuzzSaltTest = "NMWDQJ2D1S";
 
 /// app version.....
 final String kAppVersion = "1.0.0";

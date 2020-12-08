@@ -651,7 +651,7 @@ class _CartState extends State<Cart> {
                                                                 String f_url =
                                                                     "https://www.bookmrk.in/";
                                                                 String key =
-                                                                    "$easeBuzzKeyTest";
+                                                                    "$easeBuzzKey";
                                                                 String udf1 =
                                                                     "";
                                                                 String udf2 =
@@ -677,12 +677,12 @@ class _CartState extends State<Cart> {
                                                                 String zipcode =
                                                                     "${response['response'][0]['user_pincode']}";
                                                                 String salt =
-                                                                    "$easeBuzzSaltTest";
+                                                                    "$easeBuzzSalt";
                                                                 String hash =
                                                                     "${sha512.convert(utf8.encode("$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt|$key"))}";
                                                                 String
                                                                     pay_mode =
-                                                                    "test";
+                                                                    "production";
                                                                 String
                                                                     unique_id =
                                                                     "11345";
