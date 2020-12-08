@@ -132,7 +132,9 @@ class _ProductInfoState extends State<ProductInfo> {
                               children: [
                                 _productCarasoul(context,
                                     "${snapshot.data.response[0].productName}",
-                                    url: snapshot.data.response[0].productShareLink.toString(),
+                                    url: snapshot
+                                        .data.response[0].productShareLink
+                                        .toString(),
                                     isInwishlist: snapshot.data.response[0]
                                                 .productInUserWishlist ==
                                             "1"
@@ -156,49 +158,63 @@ class _ProductInfoState extends State<ProductInfo> {
                                   height: 15,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
                                   child: BlueHeader(
                                       "${snapshot.data.response[0].productName}"),
                                 ),
                                 descrip(
                                     "${snapshot.data.response[0].vendorCompanyName}"),
-                                Text(
-                                  'Published By : Alpha bate Publication ',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 14,
-                                    color: const Color(0xffa4a4a4),
-                                  ),
-                                  textAlign: TextAlign.left,
-                                ),
+                                if (snapshot.data.response[0].publisher.length >
+                                    0) ...{
+                                  if (snapshot.data.response[0].publisher[0]
+                                              ['publisher_name'] !=
+                                          "" &&
+                                      snapshot.data.response[0].publisher[0]
+                                              ['publisher_name'] !=
+                                          null) ...{
+                                    Text(
+                                      'Published By : ${snapshot.data.response[0].publisher[0]['publisher_name']}',
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 14,
+                                        color: const Color(0xffa4a4a4),
+                                      ),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  }
+                                },
                                 SizedBox(
                                   height: 15,
                                 ),
-                                snapshot.data.response[0].productDiscount == "" ? SizedBox():Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '₹ ${snapshot.data.response[0].productSalePrice}',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 17,
-                                        color: const Color(0xff000000),
-                                        fontWeight: FontWeight.w700,
+                                snapshot.data.response[0].productDiscount == ""
+                                    ? SizedBox()
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '₹ ${snapshot.data.response[0].productSalePrice}',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 17,
+                                              color: const Color(0xff000000),
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                          Text(
+                                            ' Save ${snapshot.data.response[0].productDiscount}',
+                                            style: TextStyle(
+                                              fontFamily: 'Roboto',
+                                              fontSize: 17,
+                                              color: const Color(0xff000000),
+                                              fontWeight: FontWeight.w200,
+                                            ),
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ],
                                       ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                    Text(
-                                      ' Save ${snapshot.data.response[0].productDiscount}',
-                                      style: TextStyle(
-                                        fontFamily: 'Roboto',
-                                        fontSize: 17,
-                                        color: const Color(0xff000000),
-                                        fontWeight: FontWeight.w200,
-                                      ),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ],
-                                ),
                                 Text(
                                   '₹ ${snapshot.data.response[0].productPrice}',
                                   style: TextStyle(
@@ -211,7 +227,6 @@ class _ProductInfoState extends State<ProductInfo> {
                                   ),
                                   textAlign: TextAlign.left,
                                 ),
-
                                 title("Specifications"),
                                 SizedBox(
                                   height: 15,
@@ -568,11 +583,12 @@ class _ProductInfoState extends State<ProductInfo> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 20.0, vertical: 5),
                                         child: TextFormField(
-                                          controller: _productQuantityController,
+                                          controller:
+                                              _productQuantityController,
                                           decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                               borderRadius:
-                                              BorderRadius.circular(10.0),
+                                                  BorderRadius.circular(10.0),
                                               borderSide: BorderSide(
                                                   color: colorPalette.navyBlue,
                                                   width: 1.0),
@@ -586,16 +602,20 @@ class _ProductInfoState extends State<ProductInfo> {
                                             if (value == null) {
                                               return "Amount must contains only digits !";
                                             }
-                                            if (!(double.tryParse(value) != null)) {
+                                            if (!(double.tryParse(value) !=
+                                                null)) {
                                               return "Amount must contains only digits !";
                                             }
                                             return null;
                                           },
                                         ),
                                       ),
-                                      "${snapshot.data.response[0].additionalSet}" == "NO" ? Container() : Container(
-                                        color: Colors.transparent,
-                                      ),
+                                      "${snapshot.data.response[0].additionalSet}" ==
+                                              "NO"
+                                          ? Container()
+                                          : Container(
+                                              color: Colors.transparent,
+                                            ),
                                     ],
                                   ),
                                 ),
@@ -1257,7 +1277,7 @@ Widget _addToCartDialog(
 
 Widget _productCarasoul(BuildContext context, String pName,
     {height,
-      String url,
+    String url,
     pageController,
     onChange,
     currentPage,
@@ -1344,7 +1364,8 @@ Widget _productCarasoul(BuildContext context, String pName,
             ),
             IconButton(
               onPressed: () {
-                Share.share('Product Name : $pName\n$url', subject: 'Share Product');
+                Share.share('Product Name : $pName\n$url',
+                    subject: 'Share Product');
               },
               icon: Icon(
                 Icons.share,

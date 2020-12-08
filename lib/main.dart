@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:bookmrk/constant/constant.dart';
 import 'package:bookmrk/provider/category_provider.dart';
 import 'package:bookmrk/provider/filter_category_provider.dart';
 import 'package:bookmrk/provider/forgot_password_provider.dart';
@@ -17,7 +15,6 @@ import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/user_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/screens/splash.dart';
-import 'package:device_info/device_info.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +33,10 @@ void main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging().getToken().then((value) => print(value));
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -97,9 +93,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class MyApp2 extends StatelessWidget {
   @override

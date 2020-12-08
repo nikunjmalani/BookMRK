@@ -122,13 +122,11 @@ class _LoginState extends State<Login> {
                               if (response['status'] == 200) {
                                 if (response['data'][0]['is_mobile_verified'] ==
                                     "1") {
-
                                   prefs.write('isLogin', true);
                                   prefs.write(
                                       'userId',
                                       int.parse(response['data'][0]['user_id']
                                           .toString()));
-
 
                                   /// get device information....
                                   DeviceInfoPlugin deviceInfo =
@@ -136,7 +134,9 @@ class _LoginState extends State<Login> {
                                   dynamic deviceId;
                                   dynamic osInfo;
                                   dynamic modelName;
-                                  dynamic moreInfo = {"date":"${DateTime.now()}"};
+                                  dynamic moreInfo = {
+                                    "date": "${DateTime.now()}"
+                                  };
 
                                   if (Platform.isAndroid) {
                                     AndroidDeviceInfo androidInfo =
@@ -150,14 +150,14 @@ class _LoginState extends State<Login> {
                                     modelName = iosInfo.model;
                                   }
 
-
-
                                   /// get firebase token....
                                   await FirebaseMessaging()
-                                      .getToken().then((value){
-                                        deviceId = value.toString();
+                                      .getToken()
+                                      .then((value) {
+                                    deviceId = value.toString();
                                   });
 
+                                  debugPrint('emulator device id : $deviceId');
 
                                   int userId = prefs.read<int>('userId');
                                   dynamic updateAppResponse =
@@ -168,7 +168,6 @@ class _LoginState extends State<Login> {
                                           modelName.toString(),
                                           kAppVersion.toString(),
                                           moreInfo.toString());
-
 
                                   _loginProvider.isPasswordChecking = false;
 
