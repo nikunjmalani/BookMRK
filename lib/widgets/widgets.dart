@@ -113,10 +113,10 @@ Widget ImageBox({height, width, image, title}) {
           decoration: BoxDecoration(
             border: Border.all(color: Color(0xffcfcfcf)),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15.0),
-                // bottomLeft: Radius.circular(5),
-                // bottomRight: Radius.circular(5.0)
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15.0),
+              // bottomLeft: Radius.circular(5),
+              // bottomRight: Radius.circular(5.0)
             ),
           ),
           padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 20),
@@ -226,10 +226,10 @@ Widget ProductBox(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 30, bottom: 25.0),
+              padding: const EdgeInsets.only(top: 23, bottom: 15.0),
               child: CachedNetworkImage(
                 imageUrl: image,
-                height: height / 8,
+                height: height / 8.5,
                 fit: BoxFit.fill,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
@@ -244,21 +244,16 @@ Widget ProductBox(
                     Center(child: Image.asset('assets/images/preload.png')),
               ),
             ),
-            Spacer(),
-            Container(
-              height: 20.0,
-              child: Text(
-                title,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 16,
-                  color: const Color(0xff000000),
-                ),
-                textAlign: TextAlign.left,
+            // Spacer(),
+            Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontFamily: 'Roboto',
+                fontSize: 16,
+                color: const Color(0xff000000),
               ),
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left: 5),
+              textAlign: TextAlign.left,
             ),
             SizedBox(
               height: 3,

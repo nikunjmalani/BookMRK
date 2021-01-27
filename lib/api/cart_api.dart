@@ -82,4 +82,41 @@ class CartAPI {
 
     return jsonDecode(response.body);
   }
+
+  static Future updateQty(
+    String userId,
+    String productId,
+    String qty,
+    String studentName,
+    String studentRoll,
+    String cartId,
+  ) async {
+    String url = "$kBaseURL/purchase/update_cart";
+    Map<String, String> header = {
+      "Authorization": "\$1\$aRkFpEz3\$qGGbgw/.xtfSv8rvK/j5y0",
+      "Client-Service": "frontend-client",
+      "Auth-Key": "simplerestapi",
+      "Content-Type": "application/x-www-form-urlencoded",
+    };
+
+    Map<String, dynamic> body = {
+      "client_key": "1595922619X5f1fd8bb5f332",
+      "device_type": "MOB",
+      "user_id": "$userId",
+      "product_id": "$productId",
+      "cart_id": "$cartId",
+      "qty": "$qty",
+      "student_name": "$studentName",
+      "student_roll": "$studentRoll",
+    };
+
+    http.Response response = await http.post(
+      url,
+      headers: header,
+      body: body,
+      encoding: Encoding.getByName('utf-8'),
+    );
+
+    return jsonDecode(response.body);
+  }
 }

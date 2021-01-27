@@ -24,6 +24,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'constant/constant.dart';
+
 /// new push from the backend branch...
 void main() async {
   await GetStorage.init();

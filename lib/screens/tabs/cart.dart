@@ -40,6 +40,7 @@ class _CartState extends State<Cart> {
   Future getCartDetails() async {
     int userId = prefs.read<int>('userId');
     dynamic response = await CartAPI.getCartData(userId.toString());
+
     if (response['response'][0].length == 0) {
       NoDataCartModel _noDataCart = NoDataCartModel.fromJson(response);
       return _noDataCart;
@@ -436,6 +437,68 @@ class _CartState extends State<Cart> {
                                                         ),
                                                       ),
                                                       SizedBox(width: 10.0),
+                                                      IconButton(
+                                                        icon: Icon(Icons.add),
+                                                        onPressed: () async {
+                                                          dynamic userId = prefs
+                                                              .read("userId");
+                                                          String productId =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .productId
+                                                                  .toString();
+                                                          String studentName =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .studentName;
+                                                          String studentRoll =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .studentRoll
+                                                                  .toString();
+                                                          String cartId =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .cartId
+                                                                  .toString();
+                                                          int qty = (int.parse(
+                                                                  snapshot
+                                                                      .data
+                                                                      .response[
+                                                                          0]
+                                                                      .cart[
+                                                                          index]
+                                                                      .qty
+                                                                      .toString()) +
+                                                              1);
+
+                                                          dynamic response =
+                                                              await CartAPI
+                                                                  .updateQty(
+                                                            userId.toString(),
+                                                            productId,
+                                                            qty.toString(),
+                                                            studentName,
+                                                            studentRoll,
+                                                            cartId,
+                                                          );
+
+                                                          Scaffold.of(context)
+                                                              .showSnackBar(
+                                                                  getSnackBar(
+                                                                      "${response['message']}"));
+
+                                                          setState(() {});
+                                                        },
+                                                      ),
                                                       snapshot
                                                                   .data
                                                                   .response[0]
@@ -459,6 +522,70 @@ class _CartState extends State<Cart> {
                                                                       .left,
                                                             )
                                                           : SizedBox(),
+                                                      IconButton(
+                                                        icon:
+                                                            Icon(Icons.remove),
+                                                        onPressed: () async {
+                                                          dynamic userId = prefs
+                                                              .read("userId");
+                                                          String productId =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .productId
+                                                                  .toString();
+                                                          String studentName =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .studentName;
+                                                          String studentRoll =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .studentRoll
+                                                                  .toString();
+                                                          String cartId =
+                                                              snapshot
+                                                                  .data
+                                                                  .response[0]
+                                                                  .cart[index]
+                                                                  .cartId
+                                                                  .toString();
+                                                          int qty = (int.parse(
+                                                                  snapshot
+                                                                      .data
+                                                                      .response[
+                                                                          0]
+                                                                      .cart[
+                                                                          index]
+                                                                      .qty
+                                                                      .toString()) -
+                                                              1);
+
+                                                          dynamic response =
+                                                              await CartAPI
+                                                                  .updateQty(
+                                                            userId.toString(),
+                                                            productId,
+                                                            qty.toString(),
+                                                            studentName,
+                                                            studentRoll,
+                                                            cartId,
+                                                          );
+
+                                                          Scaffold.of(context)
+                                                              .showSnackBar(
+                                                                  getSnackBar(
+                                                                      "${response['message']}"));
+
+                                                          print(response);
+                                                          setState(() {});
+                                                        },
+                                                      ),
                                                       // Text(
                                                       //   '₹ ${snapshot.data.response[0].cart[index].productSalePrice}',
                                                       //   style: TextStyle(

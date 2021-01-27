@@ -128,6 +128,7 @@ class _ProductInfoState extends State<ProductInfo> {
                         Expanded(
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical,
+                            physics: BouncingScrollPhysics(),
                             child: Column(
                               children: [
                                 _productCarasoul(context,
@@ -1041,7 +1042,7 @@ class _ProductInfoState extends State<ProductInfo> {
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 110,
+                                  height: 260,
                                 ),
                               ],
                             ),

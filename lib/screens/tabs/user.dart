@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bookmrk/api/forgot_password_api.dart';
 import 'package:bookmrk/api/user_api.dart';
 import 'package:bookmrk/constant/constant.dart';
@@ -14,6 +16,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class User extends StatefulWidget {
   @override
@@ -108,7 +111,7 @@ class _UserState extends State<User> {
                           width: 10.0,
                         ),
                         Container(
-                          width: width/1.8,
+                          width: width / 1.8,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,7 +307,22 @@ class _UserState extends State<User> {
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        _customDivider(),
+                        _profileMenus(
+                          title: "share",
+                          width: width,
+                          asset: "share",
+                          onClick: () {
+                            if (Platform.isAndroid) {
+                              Share.share(
+                                  "Hi, you have been invited to Download BOOKMRK App.\nDownload for free on Google Playstore: \nhttps://play.google.com/store/apps/details?id=com.solutioncone.bookmrk");
+                            } else if (Platform.isIOS) {
+                              Share.share(
+                                  "Hi, you have been invited to Download BOOKMRK App.\nDownload for free on IOS App Store: \nhttps://apps.apple.com/in/app/bookmrk/id1543839623");
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
