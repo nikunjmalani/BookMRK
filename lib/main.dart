@@ -36,8 +36,14 @@ void main() async {
     statusBarColor: Colors.black,
     statusBarBrightness: Brightness.light,
   ));
-  runApp(MyApp());
+  runApp(
+    MyApp()
+  );
 }
+
+
+
+
 
 class MyApp extends StatelessWidget {
   @override

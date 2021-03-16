@@ -656,7 +656,10 @@ class _HomePageState extends State<HomePage> {
                               ? "AllPublishers" :
                           _homeScreenProvider.selectedString ==
                               "SubCategoryInfo"
-                              ? "CategoryInfo" : "Home"
+                              ? "CategoryInfo" :  _homeScreenProvider.selectedString ==
+                              "ProductInfoSearch1"
+                              ? "SearchProducts" : "Home"
+
 
                           /// check when category page is selected......
                               : _homeScreenProvider.selectedBottomIndex == 1 &&
@@ -667,14 +670,18 @@ class _HomePageState extends State<HomePage> {
                                   .selectedString ==
                                   "SubCategoryInfo" ||
                                   _homeScreenProvider.selectedString ==
-                                      "ProductInfo")
+                                      "ProductInfo" ||  _homeScreenProvider.selectedString ==
+                                  "ProductInfoSearch2" ||  _homeScreenProvider.selectedString ==
+                                  "SearchProducts2")
                               ? _setHomeScreenProvider.selectedString =
                           _homeScreenProvider.selectedString == "CategoryInfo"
                               ? "Category"
                               : _homeScreenProvider.selectedString ==
                               "SubCategoryInfo"
                               ? "CategoryInfo"
-                              : "Category"
+                              :  _homeScreenProvider.selectedString ==
+                              "ProductInfoSearch2"
+                              ? "SearchProducts2" : "Category"
 
                           /// check when school page is selected.......
                               : _homeScreenProvider.selectedBottomIndex == 2 &&
@@ -924,7 +931,7 @@ class _HomePageState extends State<HomePage> {
                                           ? "AllPublishers" :
                                       _homeScreenProvider.selectedString ==
                                           "SubCategoryInfo"
-                                          ? "CategoryInfo" : "Home";
+                                          ? "CategoryInfo" : _homeScreenProvider.selectedString == "ProductInfoSearch1" ? "SearchProducts" : "Home";
                                     },
                                     iconSize: 30,
                                   ),
@@ -936,7 +943,9 @@ class _HomePageState extends State<HomePage> {
                                           ? ""
                                           : _homeScreenProvider
                                           .selectedString ==
-                                          "ProductInfo" ? "${_homeScreenProvider
+                                          "ProductInfo"   || _homeScreenProvider
+                                          .selectedString ==
+                                          "ProductInfoSearch1"  ? "${_homeScreenProvider
                                           .selectedTitle}" :
                                       _homeScreenProvider.selectedString ==
                                           "SchoolInfo"
@@ -998,7 +1007,8 @@ class _HomePageState extends State<HomePage> {
                                       _homeScreenProvider.selectedString ==
                                           "SubCategoryInfo" ||
                                       _homeScreenProvider.selectedString ==
-                                          "ProductInfo")
+                                          "ProductInfo" ||  _homeScreenProvider.selectedString ==
+                                      "ProductInfoSearch2")
                                   ? leadingAppBar(
                                   title: _homeScreenProvider.selectedString ==
                                       "Category"
@@ -1019,7 +1029,9 @@ class _HomePageState extends State<HomePage> {
                                         ? "Category"
                                         : _homeScreenProvider.selectedString ==
                                         "SubCategoryInfo"
-                                        ? "CategoryInfo" : "Category";
+                                        ? "CategoryInfo" :  _homeScreenProvider.selectedString ==
+                                        "ProductInfoSearch2" ? "SearchProducts2":  _homeScreenProvider.selectedString ==
+                                        "ProductInfo" ? "CategoryInfo":"Category";
                                   })
 
                               /// school page appbar ....
@@ -1277,25 +1289,27 @@ class _HomePageState extends State<HomePage> {
                                           ? Consumer<CategoryProvider>(
                                         builder: (_, _categoryProvider,
                                             child) =>
+
                                             CategoryInfo(
                                                 _categoryProvider
-                                                    .selectedCategoryName),)
+                                                    .selectedCategoryName),
+                                      )
                                           :
                                       _homeScreenProvider
                                           .selectedString ==
                                           "SearchProducts2"
                                           ? Search2()
                                           :
-                                      // _homeScreenProvider
-                                      //     .selectedString ==
-                                      //     "SubCategoryInfo"
-                                      //     ? Consumer<CategoryProvider>(
-                                      //   builder: (_, _categoryProvider,
-                                      //       child) =>
-                                      //       SubCategoryInfo(
-                                      //           _categoryProvider
-                                      //               .selectedSubCategory),)
-                                      //     :
+                                      _homeScreenProvider
+                                          .selectedString ==
+                                          "ProductInfoSearch1"
+                                          ? Consumer<HomeScreenProvider>(
+                                          builder: (_, _homeScreenProvider,
+                                              child) =>
+                                              ProductInfo(
+                                                  selectedProductSlug: _homeScreenProvider
+                                                      .selectedProductSlug))
+                                          :
                                       Home() :
 
                                       /// category page...
@@ -1306,7 +1320,9 @@ class _HomePageState extends State<HomePage> {
                                           ? CategoryTab()
                                           : _homeScreenProvider
                                           .selectedString ==
-                                          "ProductInfo"
+                                          "ProductInfo" ||  _homeScreenProvider
+                                          .selectedString ==
+                                          "ProductInfoSearch2"
                                           ? Consumer<HomeScreenProvider>(
                                           builder: (_, _homeScreenProvider,
                                               child) =>
@@ -1314,16 +1330,7 @@ class _HomePageState extends State<HomePage> {
                                                   selectedProductSlug: _homeScreenProvider
                                                       .selectedProductSlug))
                                           :
-                                      // _homeScreenProvider
-                                      //     .selectedString ==
-                                      //     "SubCategoryInfo"
-                                      //     ? Consumer<CategoryProvider>(
-                                      //   builder: (_, _categoryProvider,
-                                      //       child) =>
-                                      //       SubCategoryInfo(
-                                      //           _categoryProvider
-                                      //               .selectedSubCategory),)
-                                      //     :
+
                                       _homeScreenProvider
                                           .selectedString ==
                                           "SearchProducts2"
@@ -1332,9 +1339,11 @@ class _HomePageState extends State<HomePage> {
                                           CategoryProvider>(
                                         builder: (_, _categoryProvider,
                                             child) =>
+                                            //Search2()
                                             CategoryInfo(
                                                 _categoryProvider
-                                                    .selectedCategoryName),) :
+                                                    .selectedCategoryName),
+                                      ) :
 
 
                                       /// school page...

@@ -49,6 +49,7 @@ class Response {
     this.city,
     this.pincode,
     this.landmark,
+    this.isSchoolSecure,
     this.schoolBanners,
   });
 
@@ -62,6 +63,7 @@ class Response {
   String state;
   String city;
   String pincode;
+  String isSchoolSecure;
   String landmark;
   List<dynamic> schoolBanners;
 
@@ -77,6 +79,7 @@ class Response {
         city: json["city"],
         pincode: json["pincode"],
         landmark: json["landmark"],
+        isSchoolSecure: json["is_school_secure"],
         schoolBanners: List<dynamic>.from(json["school_banners"].map((x) => x)),
       );
 

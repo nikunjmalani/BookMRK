@@ -25,6 +25,8 @@ class _AllVendorsState extends State<AllVendors> {
     return _vendorModel;
   }
 
+  TextEditingController _searchProductController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -42,10 +44,27 @@ class _AllVendorsState extends State<AllVendors> {
                     SearchBar(
                       width: width,
                       title: "Search Vendors",
+                      controller: _searchProductController,
+                      onSearchTap: () {
+                        if (_searchProductController.text.length < 1) {
+                          _vendorProvider.isVendorBarSelected = false;
+                        } else {
+                          _vendorProvider.isVendorBarSelected = true;
+                          _vendorProvider.vendorFilterList.clear();
+
+                          snapshot.data.response.forEach((e) {
+                            if (e.vendorName.toString().toLowerCase().contains(
+                                _searchProductController.text.toLowerCase())) {
+                              _vendorProvider.vendorFilterListAddSingle(e);
+                            }
+                          });
+                        }
+                      },
                       onChanged: (value) {
                         if (value.length < 1) {
                           _vendorProvider.isVendorBarSelected = false;
-                        } else {
+                        }
+                        else {
                           _vendorProvider.isVendorBarSelected = true;
                           _vendorProvider.vendorFilterList.clear();
 
@@ -97,7 +116,6 @@ class _AllVendorsState extends State<AllVendors> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
-
                                     _vendorProvider.selectedVendorName =
                                         snapshot
                                             .data.response[index].vendorSlug;

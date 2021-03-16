@@ -22,16 +22,21 @@ class CategoryInfo extends StatefulWidget {
 
 class _CategoryInfoState extends State<CategoryInfo> {
   Future getCategoryProductsDetails() async {
+    print('calling...');
     int userId = prefs.read<int>('userId');
+
     dynamic categoryProductsDetails = await CategoryAPI.getCategoryProducts(
         widget.categoryName, userId.toString());
+    print('res+>>${categoryProductsDetails['response']}');
     if (categoryProductsDetails['response'].length == "0") {
       NoDataOrderModel _noDataModel =
           NoDataOrderModel.fromJson(categoryProductsDetails);
+      print('if response');
       return _noDataModel;
     } else {
       CategoryProductsModel _categoryProductModelDetails =
           CategoryProductsModel.fromJson(categoryProductsDetails);
+      print('else response.....');
       return _categoryProductModelDetails;
     }
   }
@@ -73,7 +78,8 @@ class _CategoryInfoState extends State<CategoryInfo> {
     return FutureBuilder(
         future: getCategoryProductsDetails(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          print("DATA=>>> ${snapshot.hasData}");
+          if (snapshot.connectionState==ConnectionState.done) {
             if (snapshot.data.response.length <= 0) {
               return Center(
                 child: Text(

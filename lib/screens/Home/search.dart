@@ -57,6 +57,11 @@ class _SearchState extends State<Search> {
               title: "Search Products",
               width: width,
               controller: _searchProductController,
+            // searchClick: true,
+            onSearchTap: (){
+              print('pr+>>${_searchProductController.text}');
+              _homeScreenProvider.findHomeScreenProduct = _searchProductController.text;
+            },
               onChanged: (value) {
                 _homeScreenProvider.findHomeScreenProduct = value;
               }),
@@ -92,7 +97,7 @@ class _SearchState extends State<Search> {
                                     _homeScreenProvider.selectedProductSlug =
                                         "${snapshot.data.response[index].productSlug}";
                                     _homeScreenProvider.selectedString =
-                                        "ProductInfo";
+                                        "ProductInfoSearch1";
                                   },
                                   child: Container(
                                     height: height / 3,

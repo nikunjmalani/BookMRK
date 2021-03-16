@@ -36,12 +36,26 @@ Widget CustomAppBar(BuildContext context,
             width: width / 1.9,
             child: child,
           ),
+
           Spacer(),
+          InkWell(
+            child:           Icon(Icons.search,size: 30,color: Colors.black45,),
+
+            onTap: (){
+              Provider.of<HomeScreenProvider>(context,
+                  listen: false)
+                  .selectedString = "SearchProducts";
+              Provider.of<HomeScreenProvider>(context,
+                  listen: false)
+                  .findHomeScreenProduct = "";
+            },
+          ),
           GestureDetector(
             onTap: onCartTap,
             child: Stack(
               alignment: Alignment.topRight,
               children: [
+
                 CircleAvatar(
                   child: SvgPicture.asset(
                     "assets/icons/Cart.svg",

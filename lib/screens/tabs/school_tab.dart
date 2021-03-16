@@ -10,10 +10,13 @@ import 'package:bookmrk/provider/homeScreenProvider.dart';
 import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/state_model.dart';
 import 'package:bookmrk/res/colorPalette.dart';
+import 'package:bookmrk/widgets/access_dialog.dart';
 import 'package:bookmrk/widgets/textfields.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class SchoolTab extends StatefulWidget {
@@ -584,17 +587,43 @@ class _SchoolTabState extends State<SchoolTab> {
                                   itemCount: snapshot.data.response.length,
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
-                                      onTap: () {
-                                        Provider.of<HomeScreenProvider>(context,
-                                                    listen: false)
+                                      onTap: () async {
+                                        print(
+                                            'access=>${snapshot.data.response[index].isSchoolSecure}');
+                                        if (snapshot.data.response[index]
+                                                .isSchoolSecure ==
+                                            '1') {
+                                          bool status =await Get.dialog(accessDialog(
+                                              schoolSlug: snapshot.data
+                                                  .response[index].schoolSlug));
+                                          if(status){
+                                            Provider.of<HomeScreenProvider>(
+                                                context,
+                                                listen: false)
                                                 .selectedTitle =
                                             "${snapshot.data.response[index].schoolName}";
-                                        _schoolProvider.selectedSchoolSlug =
+                                            _schoolProvider.selectedSchoolSlug =
                                             "${snapshot.data.response[index].schoolSlug}";
 
-                                        Provider.of<HomeScreenProvider>(context,
+                                            Provider.of<HomeScreenProvider>(
+                                                context,
                                                 listen: false)
-                                            .selectedString = "SchoolInfo";
+                                                .selectedString = "SchoolInfo";
+                                          }
+                                        } else {
+                                          Provider.of<HomeScreenProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .selectedTitle =
+                                              "${snapshot.data.response[index].schoolName}";
+                                          _schoolProvider.selectedSchoolSlug =
+                                              "${snapshot.data.response[index].schoolSlug}";
+
+                                          Provider.of<HomeScreenProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .selectedString = "SchoolInfo";
+                                        }
                                       },
                                       child: Stack(
                                         children: [
@@ -650,11 +679,12 @@ class _SchoolTabState extends State<SchoolTab> {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               color:
-                                                  Colors.black.withOpacity(0.7),
+                                                  Colors.black.withOpacity(0.5),
                                             ),
                                             width: width,
                                             child: Column(
                                               children: [
+                                                Spacer(),
                                                 Container(
                                                   padding:
                                                       EdgeInsets.only(left: 15),
@@ -662,7 +692,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                                     '${snapshot.data.response[index].schoolName}',
                                                     style: TextStyle(
                                                       fontFamily: 'Roboto',
-                                                      fontSize: 17,
+                                                      fontSize: 14,
                                                       color: const Color(
                                                           0xffffffff),
                                                       fontWeight:
@@ -672,54 +702,7 @@ class _SchoolTabState extends State<SchoolTab> {
                                                   ),
                                                 ),
                                                 SizedBox(
-                                                  height: 7,
-                                                ),
-                                                Container(
-                                                  width: width * 0.4,
-                                                  child: Text(
-                                                    '${snapshot.data.response[index].address}, ${snapshot.data.response[index].city}, ${snapshot.data.response[index].pincode}',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Roboto',
-                                                      fontSize: 14,
-                                                      color: const Color(
-                                                          0xfff5f5f5),
-                                                    ),
-                                                    textAlign: TextAlign.left,
-                                                  ),
-                                                ),
-                                                SizedBox(
                                                   height: 10,
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.only(
-                                                      right: 10),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      border: Border.all(
-                                                        color: Colors.white,
-                                                        width: 2,
-                                                      ),
-                                                    ),
-                                                    height: 22,
-                                                    width: 90,
-                                                    child: Text(
-                                                      'View Products',
-                                                      style: TextStyle(
-                                                        fontFamily: 'Roboto',
-                                                        fontSize: 12,
-                                                        color: const Color(
-                                                            0xffffffff),
-                                                      ),
-                                                      textAlign: TextAlign.left,
-                                                    ),
-                                                    padding: EdgeInsets.only(
-                                                        left: 5, top: 3),
-                                                  ),
                                                 ),
                                               ],
                                               mainAxisAlignment:
@@ -956,6 +939,7 @@ Widget LocationDialog(
                                                 .data.response[index].stateId);
                                         _schoolProvider
                                             .selectedCityIndexForSchool = 0;
+
                                       },
                                     )),
                           ),
@@ -1008,7 +992,8 @@ Widget LocationDialog(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: DropdownButton(
-                            onChanged: (v) {},
+                            onChanged: (v) {
+                            },
                             underline: Container(),
                             isExpanded: true,
                             style: TextStyle(
@@ -1116,7 +1101,13 @@ Widget LocationDialog(
                     ),
                   ],
                 ),
-                SizedBox(height: 30)
+                SizedBox(height: 30),
+                TextField(
+                  keyboardType: TextInputType.,
+                  decoration: InputDecoration(
+
+                  ),
+                ),
               ],
             ),
           ),

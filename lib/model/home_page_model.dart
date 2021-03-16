@@ -218,6 +218,7 @@ class Product {
     this.vendorCompanyName,
     this.productStockStatus,
     this.productInUserWishlist,
+    this.productShareLink,
   });
 
   String productId;
@@ -232,8 +233,8 @@ class Product {
   String productImg;
   String productName;
   List<dynamic> author;
-  List<dynamic> publisher;
-  List<dynamic> productClass;
+  List<Publisher> publisher;
+  List<Class> productClass;
   List<Subject> subject;
   String language;
   String bookType;
@@ -244,6 +245,7 @@ class Product {
   String vendorCompanyName;
   String productStockStatus;
   String productInUserWishlist;
+  String productShareLink;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
     productId: json["product_id"],
@@ -258,8 +260,8 @@ class Product {
     productImg: json["Product_img"],
     productName: json["product_name"],
     author: List<dynamic>.from(json["author"].map((x) => x)),
-    publisher: List<dynamic>.from(json["publisher"].map((x) => x)),
-    productClass: List<dynamic>.from(json["class"].map((x) => x)),
+    publisher: List<Publisher>.from(json["publisher"].map((x) => Publisher.fromJson(x))),
+    productClass: List<Class>.from(json["class"].map((x) => Class.fromJson(x))),
     subject: List<Subject>.from(json["subject"].map((x) => Subject.fromJson(x))),
     language: json["language"],
     bookType: json["book_type"],
@@ -270,6 +272,7 @@ class Product {
     vendorCompanyName: json["vendor_company_name"],
     productStockStatus: json["product_stock_status"],
     productInUserWishlist: json["product_in_user_wishlist"],
+    productShareLink: json["product_share_link"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -278,15 +281,15 @@ class Product {
     "vendor_slug": vendorSlug,
     "school_slug": schoolSlug,
     "type": type,
-    "product_type":productType,
+    "product_type": productType,
     "variation": variation,
     "additional_set": additionalSet,
     "category_name": categoryName,
     "Product_img": productImg,
     "product_name": productName,
     "author": List<dynamic>.from(author.map((x) => x)),
-    "publisher": List<dynamic>.from(publisher.map((x) => x)),
-    "class": List<dynamic>.from(productClass.map((x) => x)),
+    "publisher": List<dynamic>.from(publisher.map((x) => x.toJson())),
+    "class": List<dynamic>.from(productClass.map((x) => x.toJson())),
     "subject": List<dynamic>.from(subject.map((x) => x.toJson())),
     "language": language,
     "book_type": bookType,
@@ -297,76 +300,9 @@ class Product {
     "vendor_company_name": vendorCompanyName,
     "product_stock_status": productStockStatus,
     "product_in_user_wishlist": productInUserWishlist,
+    "product_share_link": productShareLink,
   };
 }
-
-
-class Subject {
-  Subject({
-    this.subjectId,
-    this.subjectSlug,
-    this.subjectName,
-    this.subjectImg,
-    this.filterType,
-  });
-
-  String subjectId;
-  String subjectSlug;
-  String subjectName;
-  String subjectImg;
-  String filterType;
-
-  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
-    subjectId: json["subject_id"],
-    subjectSlug: json["subject_slug"],
-    subjectName: json["subject_name"],
-    subjectImg: json["subject_img"],
-    filterType: json["filter_type"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "subject_id": subjectId,
-    "subject_slug": subjectSlug,
-    "subject_name": subjectName,
-    "subject_img": subjectImg,
-    "filter_type": filterType,
-  };
-}
-
-
-
-class Publisher {
-  Publisher({
-    this.publisherId,
-    this.publisherSlug,
-    this.publisherName,
-    this.publisherImg,
-    this.filterType,
-  });
-
-  String publisherId;
-  String publisherSlug;
-  String publisherName;
-  String publisherImg;
-  String filterType;
-
-  factory Publisher.fromJson(Map<String, dynamic> json) => Publisher(
-    publisherId: json["publisher_id"],
-    publisherSlug: json["publisher_slug"],
-    publisherName: json["publisher_name"],
-    publisherImg: json["publisher_img"],
-    filterType: json["filter_type"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "publisher_id": publisherId,
-    "publisher_slug": publisherSlug,
-    "publisher_name": publisherName,
-    "publisher_img": publisherImg,
-    "filter_type": filterType,
-  };
-}
-
 
 class Class {
   Class({
@@ -381,14 +317,14 @@ class Class {
   String classSlug;
   String className;
   String classImg;
-  String filterType;
+  ClassFilterType filterType;
 
   factory Class.fromJson(Map<String, dynamic> json) => Class(
     classId: json["class_id"],
     classSlug: json["class_slug"],
     className: json["class_name"],
     classImg: json["class_img"],
-    filterType: json["filter_type"],
+    filterType: classFilterTypeValues.map[json["filter_type"]],
   );
 
   Map<String, dynamic> toJson() => {
@@ -396,9 +332,91 @@ class Class {
     "class_slug": classSlug,
     "class_name": className,
     "class_img": classImg,
-    "filter_type": filterType,
+    "filter_type": classFilterTypeValues.reverse[filterType],
   };
 }
+
+enum ClassFilterType { CLASS }
+
+final classFilterTypeValues = EnumValues({
+  "class": ClassFilterType.CLASS
+});
+
+class Publisher {
+  Publisher({
+    this.publisherId,
+    this.publisherSlug,
+    this.publisherName,
+    this.publisherImg,
+    this.filterType,
+  });
+
+  String publisherId;
+  String publisherSlug;
+  String publisherName;
+  String publisherImg;
+  PublisherFilterType filterType;
+
+  factory Publisher.fromJson(Map<String, dynamic> json) => Publisher(
+    publisherId: json["publisher_id"],
+    publisherSlug: json["publisher_slug"],
+    publisherName: json["publisher_name"],
+    publisherImg: json["publisher_img"],
+    filterType: publisherFilterTypeValues.map[json["filter_type"]],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "publisher_id": publisherId,
+    "publisher_slug": publisherSlug,
+    "publisher_name": publisherName,
+    "publisher_img": publisherImg,
+    "filter_type": publisherFilterTypeValues.reverse[filterType],
+  };
+}
+
+enum PublisherFilterType { PUBLISHER }
+
+final publisherFilterTypeValues = EnumValues({
+  "publisher": PublisherFilterType.PUBLISHER
+});
+
+class Subject {
+  Subject({
+    this.subjectId,
+    this.subjectSlug,
+    this.subjectName,
+    this.subjectImg,
+    this.filterType,
+  });
+
+  String subjectId;
+  String subjectSlug;
+  String subjectName;
+  String subjectImg;
+  SubjectFilterType filterType;
+
+  factory Subject.fromJson(Map<String, dynamic> json) => Subject(
+    subjectId: json["subject_id"],
+    subjectSlug: json["subject_slug"],
+    subjectName: json["subject_name"],
+    subjectImg: json["subject_img"],
+    filterType: subjectFilterTypeValues.map[json["filter_type"]],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "subject_id": subjectId,
+    "subject_slug": subjectSlug,
+    "subject_name": subjectName,
+    "subject_img": subjectImg,
+    "filter_type": subjectFilterTypeValues.reverse[filterType],
+  };
+}
+
+enum SubjectFilterType { SUBJECT }
+
+final subjectFilterTypeValues = EnumValues({
+  "subject": SubjectFilterType.SUBJECT
+});
 
 class School {
   School({
@@ -407,6 +425,7 @@ class School {
     this.schoolLogo,
     this.schoolName,
     this.board,
+    this.isSchoolSecure,
     this.schoolBanners,
   });
 
@@ -414,7 +433,8 @@ class School {
   String schoolSlug;
   String schoolLogo;
   String schoolName;
-  String board;
+  Board board;
+  String isSchoolSecure;
   List<SchoolBanner> schoolBanners;
 
   factory School.fromJson(Map<String, dynamic> json) => School(
@@ -422,7 +442,8 @@ class School {
     schoolSlug: json["school_slug"],
     schoolLogo: json["school_logo"],
     schoolName: json["school_name"],
-    board: json["board"],
+    board: boardValues.map[json["board"]],
+    isSchoolSecure: json["is_school_secure"],
     schoolBanners: List<SchoolBanner>.from(json["school_banners"].map((x) => SchoolBanner.fromJson(x))),
   );
 
@@ -431,11 +452,18 @@ class School {
     "school_slug": schoolSlug,
     "school_logo": schoolLogo,
     "school_name": schoolName,
-    "board": board,
+    "board": boardValues.reverse[board],
+    "is_school_secure": isSchoolSecure,
     "school_banners": List<dynamic>.from(schoolBanners.map((x) => x.toJson())),
   };
 }
 
+enum Board { ICSE, CBSE }
+
+final boardValues = EnumValues({
+  "CBSE": Board.CBSE,
+  "ICSE": Board.ICSE
+});
 
 class SchoolBanner {
   SchoolBanner({
@@ -487,4 +515,18 @@ class Vendor {
     "company_name": companyName,
     "company_logo": companyLogo,
   };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    if (reverseMap == null) {
+      reverseMap = map.map((k, v) => new MapEntry(v, k));
+    }
+    return reverseMap;
+  }
 }

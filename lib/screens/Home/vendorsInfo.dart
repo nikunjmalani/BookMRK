@@ -27,6 +27,7 @@ class _VendorsInfoState extends State<VendorsInfo> {
   ColorPalette colorPalette = ColorPalette();
   ScrollController _scrollController =
       ScrollController(initialScrollOffset: 0.0);
+  TextEditingController _searchProductController = TextEditingController();
 
   Future getVendorProductInfo() async {
     dynamic response =
@@ -417,6 +418,40 @@ class _VendorsInfoState extends State<VendorsInfo> {
                                             SearchBar(
                                                 width: width,
                                                 title: "Search Schools",
+                                                controller:
+                                                    _searchProductController,
+                                                onSearchTap: () {
+                                                  if (_searchProductController
+                                                          .text.length <
+                                                      1) {
+                                                    _schoolProvider
+                                                            .isSearchSchoolTabSelected =
+                                                        false;
+                                                  } else {
+                                                    _schoolProvider
+                                                            .isSearchSchoolTabSelected =
+                                                        true;
+                                                    _schoolProvider
+                                                        .schoolsToFilter
+                                                        .clear();
+
+                                                    snapshot.data[1].response[0]
+                                                        .vendorSchool
+                                                        .forEach((e) {
+                                                      if (e.schoolName
+                                                          .toString()
+                                                          .toLowerCase()
+                                                          .contains(
+                                                              _searchProductController
+                                                                  .text
+                                                                  .toLowerCase())) {
+                                                        _schoolProvider
+                                                            .schoolsToFilterAddSingleSchool(
+                                                                e);
+                                                      }
+                                                    });
+                                                  }
+                                                },
                                                 onChanged: (value) {
                                                   if (value.length < 1) {
                                                     _schoolProvider

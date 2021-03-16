@@ -56,9 +56,14 @@ class _Search2State extends State<Search2> {
               title: "Search Products",
               width: width,
               controller: _searchProductController,
+              onSearchTap: (){
+                print('pr+>>${_searchProductController.text}');
+                _homeScreenProvider.findHomeScreenProduct = _searchProductController.text;
+              },
               onChanged: (value) {
                 _homeScreenProvider.findHomeScreenProduct = value;
-              }),
+              }
+              ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, bottom: 75.0),
@@ -92,7 +97,7 @@ class _Search2State extends State<Search2> {
                                     _homeScreenProvider.selectedProductSlug =
                                         "${snapshot.data.response[index].productSlug}";
                                     _homeScreenProvider.selectedString =
-                                        "ProductInfo";
+                                        "ProductInfoSearch2";
                                   },
                                   child: Container(
                                     height: height / 3,

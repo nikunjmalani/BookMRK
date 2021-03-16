@@ -215,7 +215,7 @@ Widget ProductBox(
     fit: expanded == true ? StackFit.expand : StackFit.loose,
     children: [
       Container(
-        height: height / 2.9,
+        height: height / 1.5,
         width: width / 2,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -224,14 +224,16 @@ Widget ProductBox(
           ),
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 23, bottom: 15.0),
+              padding: const EdgeInsets.only(top: 0, bottom: 10),
               child: CachedNetworkImage(
                 imageUrl: image,
-                height: height / 8.5,
+                height: height / 5,
                 fit: BoxFit.fill,
                 imageBuilder: (context, imageProvider) => Container(
+
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: imageProvider,
@@ -245,35 +247,38 @@ Widget ProductBox(
               ),
             ),
             // Spacer(),
-            Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontFamily: 'Roboto',
-                fontSize: 16,
-                color: const Color(0xff000000),
+            Expanded(
+              child: Text(
+                title,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontSize: 16,
+                  color: const Color(0xff000000),
+                ),
+                textAlign: TextAlign.left,
               ),
-              textAlign: TextAlign.left,
             ),
             SizedBox(
               height: 3,
             ),
-            Container(
-              height: 16.0,
-              child: Text(
-                description,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 14,
-                  color: const Color(0xff777777),
-                  fontWeight: FontWeight.w300,
-                ),
-                textAlign: TextAlign.left,
-              ),
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left: 5),
-            ),
+            // Container(
+            //   height: 16.0,
+            //   child: Text(
+            //     description,
+            //     overflow: TextOverflow.ellipsis,
+            //     style: TextStyle(
+            //       fontFamily: 'Roboto',
+            //       fontSize: 14,
+            //       color: const Color(0xff777777),
+            //       fontWeight: FontWeight.w300,
+            //     ),
+            //     textAlign: TextAlign.left,
+            //   ),
+            //   alignment: Alignment.centerLeft,
+            //   padding: EdgeInsets.only(left: 5),
+            // ),
             Padding(
               padding: const EdgeInsets.only(
                 top: 5,

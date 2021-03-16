@@ -7,12 +7,14 @@ import 'package:bookmrk/provider/school_provider.dart';
 import 'package:bookmrk/provider/vendor_provider.dart';
 import 'package:bookmrk/res/colorPalette.dart';
 import 'package:bookmrk/res/images.dart';
+import 'package:bookmrk/widgets/access_dialog.dart';
 import 'package:bookmrk/widgets/buttons.dart';
 import 'package:bookmrk/widgets/carasoul.dart';
 import 'package:bookmrk/widgets/searchBar.dart';
 import 'package:bookmrk/widgets/testStyle.dart';
 import 'package:bookmrk/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -31,6 +33,7 @@ class _HomeState extends State<Home> {
   Future<HomePageModel> getHomePageDetails() async {
     dynamic data = await HomePageApi.getHomePageDetails();
 
+    print('responase ${data}');
     HomePageModel _homePageDetails = HomePageModel.fromJson(data);
     return _homePageDetails;
   }
@@ -54,25 +57,26 @@ class _HomeState extends State<Home> {
                 children: [
                   Column(
                     children: [
+                      SearchBar(
+                        width: width,
+                        showSearchTap: false,
+                        title: "Search Products",
+                        onTap: () {
+                          Provider.of<HomeScreenProvider>(context,
+                                  listen: false)
+                              .selectedString = "SearchProducts";
+                          Provider.of<HomeScreenProvider>(context,
+                                  listen: false)
+                              .findHomeScreenProduct = "";
+                        },
+                      ),
                       Expanded(
                         child: SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           child: Column(
                             children: [
-                              SearchBar(
-                                width: width,
-                                title: "Search Products",
-                                onTap: () {
-                                  Provider.of<HomeScreenProvider>(context,
-                                          listen: false)
-                                      .selectedString = "SearchProducts";
-                                  Provider.of<HomeScreenProvider>(context,
-                                          listen: false)
-                                      .findHomeScreenProduct = "";
-                                },
-                              ),
-                              Carasoul(
+                              Carosal(
                                 height: height,
                                 width: width,
                                 colorPalette: colorPalette,
@@ -435,16 +439,43 @@ class _HomeState extends State<Home> {
                                   physics: BouncingScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
-                                      onTap: () {
-                                        _homeScreenProvider.selectedTitle =
-                                            "${snapshot.data.response[0].school[index].schoolName}";
-                                        Provider.of<HomeScreenProvider>(context,
-                                                listen: false)
-                                            .selectedString = "SchoolInfo";
-                                        Provider.of<SchoolProvider>(context,
+                                      onTap: () async {
+                                        if ((snapshot.data.response[0]
+                                                    .school[index] as School)
+                                                .isSchoolSecure ==
+                                            "1") {
+                                          print('not access');
+                                          bool status = await Get.dialog(
+                                              accessDialog(
+                                                  schoolSlug: snapshot
+                                                      .data
+                                                      .response[0]
+                                                      .school[index]
+                                                      .schoolSlug));
+                                          if (status) {
+                                            _homeScreenProvider.selectedTitle =
+                                                "${snapshot.data.response[0].school[index].schoolName}";
+                                            Provider.of<HomeScreenProvider>(
+                                                    context,
                                                     listen: false)
-                                                .selectedSchoolSlug =
-                                            "${snapshot.data.response[0].school[index].schoolSlug}";
+                                                .selectedString = "SchoolInfo";
+                                            Provider.of<SchoolProvider>(context,
+                                                        listen: false)
+                                                    .selectedSchoolSlug =
+                                                "${snapshot.data.response[0].school[index].schoolSlug}";
+                                          }
+                                        } else {
+                                          _homeScreenProvider.selectedTitle =
+                                              "${snapshot.data.response[0].school[index].schoolName}";
+                                          Provider.of<HomeScreenProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .selectedString = "SchoolInfo";
+                                          Provider.of<SchoolProvider>(context,
+                                                      listen: false)
+                                                  .selectedSchoolSlug =
+                                              "${snapshot.data.response[0].school[index].schoolSlug}";
+                                        }
                                       },
                                       child: ImageBox(
                                           height: height,
@@ -538,53 +569,61 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               SizedBox(height: 30.0),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Row(
-                                  children: [
-                                    Header2("Top Vendors"),
-                                    Spacer(),
-                                    ViewAll(
-                                      onClick: () {
-                                        Provider.of<HomeScreenProvider>(context,
-                                                listen: false)
-                                            .selectedString = "Vendors";
-                                      },
+                              snapshot.data.response[0].vendor.length > 0
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15),
+                                      child: Row(
+                                        children: [
+                                          Header2("Top Vendors"),
+                                          Spacer(),
+                                          ViewAll(
+                                            onClick: () {
+                                              Provider.of<HomeScreenProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .selectedString = "Vendors";
+                                            },
+                                          )
+                                        ],
+                                      ),
                                     )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 110),
-                                height: height / 5,
-                                child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Provider.of<VendorProvider>(context,
-                                                    listen: false)
-                                                .selectedVendorName =
-                                            "${snapshot.data.response[0].vendor[index].vendorSlug}";
-                                        Provider.of<HomeScreenProvider>(context,
-                                                listen: false)
-                                            .selectedString = "VendorInfo";
-                                      },
-                                      child: ImageBox(
-                                          height: height,
-                                          width: width,
-                                          image:
-                                              "${snapshot.data.response[0].vendor[index].companyLogo}",
-                                          title:
-                                              "${snapshot.data.response[0].vendor[index].companyName}"),
-                                    );
-                                  },
-                                  itemCount:
-                                      snapshot.data.response[0].vendor.length,
-                                  scrollDirection: Axis.horizontal,
-                                ),
-                              ),
+                                  : SizedBox(),
+                              snapshot.data.response[0].vendor.length > 0
+                                  ? Container(
+                                      margin: EdgeInsets.only(bottom: 110),
+                                      height: height / 5,
+                                      child: ListView.builder(
+                                        physics: BouncingScrollPhysics(),
+                                        itemBuilder: (context, index) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Provider.of<VendorProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .selectedVendorName =
+                                                  "${snapshot.data.response[0].vendor[index].vendorSlug}";
+                                              Provider.of<HomeScreenProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .selectedString =
+                                                  "VendorInfo";
+                                            },
+                                            child: ImageBox(
+                                                height: height,
+                                                width: width,
+                                                image:
+                                                    "${snapshot.data.response[0].vendor[index].companyLogo}",
+                                                title:
+                                                    "${snapshot.data.response[0].vendor[index].companyName}"),
+                                          );
+                                        },
+                                        itemCount: snapshot
+                                            .data.response[0].vendor.length,
+                                        scrollDirection: Axis.horizontal,
+                                      ),
+                                    )
+                                  : SizedBox(),
                             ],
                           ),
                         ),

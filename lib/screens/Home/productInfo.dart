@@ -53,6 +53,8 @@ class _ProductInfoState extends State<ProductInfo> {
     dynamic response = await ProductAPI.getProductDetails(
         widget.selectedProductSlug, userId.toString());
 
+    print('response=>>>$response');
+
     if (response['response'][0]['variation'] == "NO") {
       ProductDetailsNoVariationModel _productDetailsNoVariationModel =
           ProductDetailsNoVariationModel.fromJson(response);
@@ -222,7 +224,7 @@ class _ProductInfoState extends State<ProductInfo> {
                                     fontFamily: 'Roboto',
                                     fontSize: 17,
                                     color: Colors.black,
-                                    decoration: TextDecoration.lineThrough,
+                                    decoration:  snapshot.data.response[0].productDiscount == ""?TextDecoration.none:TextDecoration.lineThrough,
                                     decorationColor: Colors.black,
                                     fontWeight: FontWeight.w700,
                                   ),
@@ -1195,7 +1197,7 @@ Widget _addToCartDialog(
                   borderSide:
                       BorderSide(color: colorPalette.navyBlue, width: 1.0),
                 ),
-                labelText: "Student's Roll Number",
+                labelText: "Mobile Number",
                 labelStyle: TextStyle(color: colorPalette.navyBlue),
               ),
             ),

@@ -54,6 +54,7 @@ class _CategoryTabState extends State<CategoryTab> {
                               builder: (_, _categoryProvider, child) {
                             return GestureDetector(
                               onTap: () {
+                                print("ON TAP ${snapshot.data.response[index].categoryName}");
                                 data.selectedTitle = "${snapshot.data.response[index].categoryName}";
                                 data.selectedString = "CategoryInfo";
                                 _categoryProvider.selectedCategoryName =
